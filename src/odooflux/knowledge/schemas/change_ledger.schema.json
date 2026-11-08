@@ -1,0 +1,259 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ChangeLedger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "step",
+    "from",
+    "to",
+    "entries",
+    "ledger_digest"
+  ],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "pattern": "^odooflux\\.change_ledger/\\d+$"
+    },
+    "step": {
+      "type": "string",
+      "pattern": "^\\d{2}-\\d{2}$"
+    },
+    "from": {
+      "type": "string",
+      "pattern": "^ss-[0-9a-f]{12}$"
+    },
+    "to": {
+      "type": "string",
+      "pattern": "^ss-[0-9a-f]{12}$"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "change_id",
+          "step",
+          "domain",
+          "kind",
+          "subject_key",
+          "class",
+          "detail",
+          "confirmed",
+          "locations",
+          "disposition",
+          "disposition_data",
+          "proposed_by",
+          "history"
+        ],
+        "properties": {
+          "change_id": {
+            "type": "string",
+            "pattern": "^CH-[0-9a-f]{16}$"
+          },
+          "step": {
+            "type": "string",
+            "pattern": "^\\d{2}-\\d{2}$"
+          },
+          "domain": {
+            "enum": [
+              "python_orm",
+              "xml_view",
+              "xml_data",
+              "security",
+              "manifest",
+              "js_owl",
+              "assets",
+              "data",
+              "report_controller",
+              "migration_script",
+              "docs",
+              "other"
+            ]
+          },
+          "kind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "subject_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "class": {
+            "enum": [
+              "ADDED",
+              "REMOVED",
+              "RENAMED_CANDIDATE",
+              "MOVED",
+              "SIGNATURE_CHANGED",
+              "BEHAVIOUR_CHANGED",
+              "DEPRECATED",
+              "REPLACEMENT_CANDIDATE",
+              "UNKNOWN"
+            ]
+          },
+          "detail": {
+            "type": "object"
+          },
+          "confirmed": {
+            "type": "boolean"
+          },
+          "locations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "snapshot_id",
+                "path",
+                "line",
+                "sha256"
+              ],
+              "properties": {
+                "snapshot_id": {
+                  "type": "string",
+                  "pattern": "^ss-[0-9a-f]{12}$"
+                },
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "line": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              }
+            }
+          },
+          "disposition": {
+            "enum": [
+              "RULE_CREATED",
+              "EXISTING_RULE_LINKED",
+              "NO_CUSTOM_MODULE_IMPACT",
+              "DETECTION_ONLY",
+              "HUMAN_REVIEW",
+              "UNSUPPORTED",
+              "UNRESOLVED"
+            ]
+          },
+          "disposition_data": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "rule_ids",
+              "evidence_ids",
+              "rationale",
+              "reviewer",
+              "decided_at"
+            ],
+            "properties": {
+              "rule_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "evidence_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "rationale": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1
+              },
+              "reviewer": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "decided_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+              }
+            }
+          },
+          "proposed_by": {
+            "enum": [
+              "DETERMINISTIC",
+              "AI_PROPOSED",
+              "MANUAL"
+            ]
+          },
+          "history": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "seq",
+                "at",
+                "actor",
+                "action",
+                "from",
+                "to",
+                "prev_hash"
+              ],
+              "properties": {
+                "seq": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "at": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+                },
+                "actor": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "action": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "from": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "to": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "prev_hash": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "ledger_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

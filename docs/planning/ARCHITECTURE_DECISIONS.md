@@ -300,3 +300,26 @@ still holds: provider SDKs remain optional adapters.
 **Defaults assumed for the open plan decisions** (revisable; recorded in the register): validation path 17.0→18.0 (OD-2); 002 reconciled, not re-executed (OD-6); knowledge data packaged in the wheel (OD-5); version-prefix stays opt-in, REQ-MAN-002 wording change left to the owner (OD-4); only the provisional path is described as supported, with a provisional label (OD-7); Docker check on 18.0 runs once, source-side behavioural comparison reports UNAVAILABLE if no 17.0 image (OD-8).
 
 **Consequences.** The work-state vocabulary lives in task notes and docs, not in code statuses, so no schema or status-model change is required.
+
+## ADR-020 — Knowledge Acquisition Pipeline: releases, packages and offline-first knowledge
+
+**Status:** PROPOSED (planning only; not approved by the project owner). Spec: `specs/011-knowledge-acquisition-pipeline/`. Open owner decisions OD-K1 to OD-K12 are listed in its research.md; the defaults below are recommendations, not decisions.
+
+**Decision.**
+1. A *knowledge release* is an immutable, complete knowledge tree plus `release.json`, identified by a sha256 digest (`kr-` + 12 hex). The packaged knowledge tree is the implicit *built-in release*; with no active release every layout, loader behaviour and output stays byte-identical.
+2. Installed releases live in a kb-home directory outside the package (default XDG data dir, `ODOOFLUX_KB_HOME`), with an atomically written `active.json` pointer, rollback, and a hash-chained audit log. This extends ADR-009 (KB as JSON under `src/odooflux/knowledge/`); JSON remains the only record format. YAML and SQLite are rejected (SQLite only above a stated measured threshold).
+3. The portable knowledge package is a deterministic ZIP (`.ofkp`) with a sha256 manifest, read through a hardened extractor (canonical relative paths, no links, no duplicates, size and ratio caps, staging then atomic move). Import recomputes gates locally; an imported package never enables an unverified FIX_ENABLED rule (default: refuse).
+4. Knowledge acquisition is offline-first: pinned immutable revisions (SHA), content-addressed snapshots, structural diff extraction with full file accounting, a change ledger with stable ids and dispositions, deterministic data-driven candidate rules (always DETECT_ONLY or DRAFT), coverage with eight separately denominated metrics, and gates that block a "complete" claim. Only `source fetch --allow-network` may use the network. AI may only propose (D-08 grants, never evidence, never confirms renames).
+5. `migrate` resolves the active release read-only, fails closed on a corrupt release, surfaces missing or partial transition coverage, never treats missing knowledge as success, and records release id and digest in the report through an optional additive `knowledge_release` field.
+
+**Not decided here.** Automatic FIX_ENABLED, automatic rename confirmation (ADR-018 stays), package signing, hosted distribution. Certification of any built release stays `PENDING_HUMAN_REVIEW` (ADR-019).
+
+**Points of tension with existing ADRs (for the owner).**
+- ADR-009 places the KB under `src/odooflux/knowledge/`; installed releases live elsewhere (extension, needs owner confirmation).
+- The report schema pins `schema_version` to `1.0.0` and REPORTING_AND_UX says it increments on breaking changes; the additive field needs a `1.1.0` value (OD-K4).
+- Ten built-in FIX_ENABLED rules have no VERIFIED evidence today (0 of 200); the stricter KAP gate applies to releases only, built-in rules are grandfathered.
+- ADR-002 is still "Proposed" while the constitution applies it; KAP relies on it.
+
+**Open owner decisions (recommended defaults):** OD-K1 kb-home location and env var (`ODOOFLUX_KB_HOME`, XDG); OD-K2 package container (ZIP, DEFLATE); OD-K3 unverified FIX_ENABLED on import (refuse, opt-in downgrade); OD-K4 report schema bump (1.1.0 only when field present); OD-K5 package authenticity (digest pin only); OD-K6 Enterprise/OCA/OpenUpgrade scope (local inputs only, derived Enterprise data not exported); OD-K7 audit log reuse; OD-K8 named benchmark sets (golden corpus, synthetic); OD-K9 redaction module (`utils/redaction.py`); OD-K10 activating PARTIAL releases (allowed with warning); OD-K11 rule history sidecar and built-in dup checks opt-in; OD-K12 SQLite revisit threshold.
+
+**Scope clarification (project owner message, KAP round): approval identity deferred.** Authenticated approver identity, identity verification, RBAC and human approval workflows are out of scope for the current release (backlog item FE-1 in `docs/planning/kap/FUTURE_ENHANCEMENTS.md`). The approval reference taken by `knowledge rule promote` is recorded metadata only and is not authenticated approval. No task, release activation or KAP completion is blocked on it. All technical gates (provenance verification, rule validation, conflict detection, FIX_ENABLED eligibility, package integrity) are unchanged. ADR-020 itself remains PROPOSED.

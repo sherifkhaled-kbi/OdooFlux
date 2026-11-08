@@ -14,7 +14,10 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "1.0.0"
+      "enum": [
+        "1.0.0",
+        "1.1.0"
+      ]
     },
     "run": {
       "type": "object",
@@ -569,6 +572,65 @@
           "type": "array",
           "items": {
             "type": "string"
+          }
+        }
+      }
+    },
+    "knowledge_release": {
+      "type": "object",
+      "required": [
+        "release_id",
+        "digest",
+        "builtin",
+        "completeness",
+        "steps_covered"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "release_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "digest": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "builtin": {
+          "type": "boolean"
+        },
+        "completeness": {
+          "enum": [
+            "COMPLETE",
+            "PARTIAL",
+            "FAILED",
+            null
+          ]
+        },
+        "steps_covered": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "step",
+              "completeness"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "step": {
+                "type": "string",
+                "minLength": 1
+              },
+              "completeness": {
+                "enum": [
+                  "COMPLETE",
+                  "PARTIAL",
+                  "FAILED"
+                ]
+              }
+            }
           }
         }
       }

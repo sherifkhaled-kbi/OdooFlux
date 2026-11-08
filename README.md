@@ -15,6 +15,9 @@ with static validation layers, and writes reports you can keep as evidence.
 > - **Runtime validation (install and behaviour checks in Docker) is not reachable from the CLI.** Every
 >   analysis run reports layers L4 and L5 as skipped. See [Section 9](#9-verification-and-statuses).
 > - **Optional AI assistance is off by default**, and no knowledge-base rule is currently marked as eligible for it.
+> - **Knowledge Base releases (KAP, Section 11) are built and installed locally and offline.** Normal `migrate` runs
+>   never download anything. No real Odoo corpus build has been run; every automated test uses synthetic fixtures,
+>   and the live (network, real clone, Docker) tests are opt-in and have not been run.
 >
 > Command behaviour, options, defaults and exit codes in this document were checked against the 0.2.0
 > implementation on Linux with Python 3.12.3.
@@ -66,7 +69,17 @@ with static validation layers, and writes reports you can keep as evidence.
 8. [AI configuration](#8-ai-configuration)
 9. [Verification and statuses](#9-verification-and-statuses)
 10. [Troubleshooting](#10-troubleshooting)
-11. [Project documentation](#11-project-documentation)
+11. [Knowledge Base releases and acquisition (KAP)](#11-knowledge-base-releases-and-acquisition-kap)
+   - [11.1 What KAP is and is not](#111-what-kap-is-and-is-not)
+   - [11.2 Offline first: migrate and the active release](#112-offline-first-migrate-and-the-active-release)
+   - [11.3 Manual rule workflow (worked example)](#113-manual-rule-workflow-worked-example)
+   - [11.4 Package and release lifecycle (worked example)](#114-package-and-release-lifecycle-worked-example)
+   - [11.5 Command reference and exit codes](#115-command-reference-and-exit-codes)
+   - [11.6 The release build pipeline at a glance](#116-the-release-build-pipeline-at-a-glance)
+   - [11.7 Coverage metrics and gates](#117-coverage-metrics-and-gates)
+   - [11.8 Security and limits](#118-security-and-limits)
+   - [11.9 Where to read more](#119-where-to-read-more)
+12. [Project documentation](#12-project-documentation)
 
 ---
 
@@ -132,6 +145,9 @@ dependencies between modules. OdooFlux makes that work repeatable and auditable:
 | Deterministic rules | Code under `src/odooflux/rules/` and rules in the knowledge data (`src/odooflux/knowledge/`). Each knowledge rule has a maturity: `DETECT_ONLY`, `FIX_ENABLED` or `DRAFT`. The 0.2.0 knowledge data has 91 rules: 78 `DETECT_ONLY`, 10 `FIX_ENABLED`, 3 `DRAFT` (not runnable). | Only findings tagged `[AUTO-FIX]`, and only in `--fix` mode |
 | Knowledge Base | Evidence records (200 in 0.2.0) that tie each rule to an official source location, plus compatibility data per step. `odooflux knowledge validate` checks it. | No |
 | Optional AI assistance | Off unless you enable it. It can only propose edits for findings that a rule marks `ai_eligible` and that have no deterministic fix. In 0.2.0 no rule is marked eligible. | Only in write mode, and only after validation |
+
+Knowledge Base releases are built, packaged and activated with the KAP commands in [Section 11](#11-knowledge-base-releases-and-acquisition-kap).
+They are maintainer tools. A normal `migrate` run uses only the active release in the kb-home, or the built-in knowledge when none is active.
 
 ### What OdooFlux does not guarantee
 
@@ -544,6 +560,10 @@ BLOCKED. See [Section 9](#9-verification-and-statuses) and the troubleshooting e
 The `rollback`, `resume`, `plan`, `versions`, `knowledge` and `support-statement` commands have their own codes,
 given in their sections.
 
+The KAP commands under `odooflux knowledge` (`release`, `package`, `source`, `ledger`, `extract`, `rule`, `candidates`,
+`coverage` and `ai`) use their own exit codes, 0 to 5. They are not the codes above. See
+[Section 11.5](#115-command-reference-and-exit-codes).
+
 ### 6.2 migrate
 
 Analyzes the modules, optionally fixes them, and writes the outputs. It is the default command.
@@ -664,6 +684,11 @@ Limitations:
 - `--dry-run` only has an effect together with `--fix`.
 - A module without `__manifest__.py` is analyzed when given with `--module`, but its L3 layer is `UNAVAILABLE`.
 
+**Knowledge release options.** `--kb-home PATH` selects the kb-home (default: `$ODOOFLUX_KB_HOME`, then the user data
+directory). `--require-complete-kb` refuses an active release that is not COMPLETE. Both are resolved once per run. A
+missing, corrupt or refused release exits 4 and never falls back to the built-in knowledge. See
+[Section 11.2](#112-offline-first-migrate-and-the-active-release). These two options are not counted in Section 6.10.
+
 ### 6.3 plan
 
 Prints the steps and module order for a path. It writes nothing and does not analyze files.
@@ -750,6 +775,10 @@ classification, given in the support statement. Exit code 0.
 
 Maintainer commands for the Knowledge Base. Run them from a source checkout, because the default paths point into
 the repository. Exit codes: 0 success, 1 validation findings, drift or overclaim, 2 usage error, 3 tool error.
+
+The `knowledge` group also has the KAP verbs (`release`, `package`, `source`, `extract`, `ledger`, `rule`, `candidates`,
+`coverage`, `ai`). They have their own exit codes (0 to 5) and their own command reference in
+[Section 11.5](#115-command-reference-and-exit-codes). The three subcommands below are the ones documented here.
 
 #### knowledge validate
 
@@ -840,7 +869,7 @@ Analysis and dry-run runs create only `state.json` and `log/`. The incremental i
 under the state directory.
 
 **Report formats.** See [Step 4](#step-4-read-the-reports) for the summary. The v1 JSON report (`--report-format json`)
-has these top-level keys: `schema_version` (1.0.0), `run`, `modules`, `verification_scope`, `recovery`, `severities`,
+has these top-level keys: `schema_version` (1.1.0 for a run that records the knowledge release, see [Section 11.2](#112-offline-first-migrate-and-the-active-release)), `knowledge_release`, `run`, `modules`, `verification_scope`, `recovery`, `severities`,
 `summary`, `ai_usage`, `warnings`, and `provisional` when the run is provisional. Each module has `status`,
 `status_reasons`, `status_row`, `layers` (L1 to L5), `findings`, `edits`, `promoted_files` and `rejections`; it also
 has a `risk_inventory` section when the run recorded one. Each finding has `rule_id`, `path`, `line`, `severity`, `status` (`OPEN`, `FIXED`, `REJECTED` or
@@ -850,6 +879,10 @@ The `recovery.rollback_cmd` in the JSON report does not include `--state-dir`. A
 non-default state directory.
 
 ### 6.10 Option count
+
+> This count predates the KAP verbs and the two `migrate` knowledge options (`--kb-home`, `--require-complete-kb`).
+> The KAP verbs are listed in [Section 11.5](#115-command-reference-and-exit-codes). The count below was not
+> recomputed for this release.
 
 **10 commands** (7 top-level: `migrate`, `plan`, `rollback`, `resume`, `versions`, `knowledge`,
 `support-statement`; plus the three `knowledge` subcommands `validate`, `refresh`, `matrix`), and **77 options**
@@ -975,6 +1008,9 @@ Two cautions for CI:
 
 AI assistance is **off unless you pass `--ai`** (or `--ai-fix`). A plain run never contacts a provider. OdooFlux
 does not pick a provider or a model for you.
+
+The KAP command `odooflux knowledge ai propose` is a separate, maintainer-only path. It also needs `--ai`, explicit
+consent and grants, and it stores proposals only. See [Section 11.8](#118-security-and-limits).
 
 ### Two paths
 
@@ -1250,11 +1286,408 @@ The plugin could not be imported or registered. The run continues without it.
 
 ---
 
-## 11. Project documentation
+**`migrate` exits 4 with `ERROR: knowledge release: ...`.** The active knowledge release is missing, has changed since it
+was installed, or (with `--require-complete-kb`) is not COMPLETE. The run stops and does not use the built-in knowledge.
+Activate a valid release, or run `odooflux knowledge release deactivate` if you want the built-in knowledge on purpose.
+(Reproduced with the KAP commands in Section 11.)
+
+**A package import exits 3 with `P10: unverified FIX_ENABLED rule(s) refused`.** This is the default safety gate. Nothing is
+installed. Use `--downgrade-unverified` to cap those rules to `DETECT_ONLY`. The downgraded release has a new digest and
+id. (Reproduced.)
+
+## 11. Knowledge Base releases and acquisition (KAP)
+
+> **Offline first.** A normal `odooflux migrate` run is offline. It never downloads source code, and it never
+> contacts an AI provider unless you pass `--ai` and grant the provider. The commands in this section are
+> maintainer tools for building, checking, packaging and activating Knowledge Base releases. You do not need
+> them to run a migration.
+>
+> **Production certification is not granted, and no real Odoo corpus build has been run.** All tests use
+> synthetic fixtures. The live tests (network, real clone, Docker) are opt-in, and they have not been run.
+
+The examples below were run in a temporary directory, against synthetic 16.0 to 17.0 repositories built by the
+test fixtures, with the 0.2.0 code. Paths, identifiers, digests and timestamps are shortened or replaced with
+placeholders. The command syntax is exact.
+
+### 11.1 What KAP is and is not
+
+KAP (the Knowledge Acquisition Pipeline, feature 011) is the set of `odooflux knowledge` groups that:
+
+- register source snapshots of an Odoo version pair (a local git clone, or one allow-listed remote retrieval
+  through `knowledge source fetch --allow-network`);
+- diff the two snapshots into a change ledger, generate candidate rules and their evidence, and validate them;
+- build a knowledge release, with coverage gates that decide whether it is COMPLETE or PARTIAL;
+- package a release (`.ofkp`), validate and import it into another local home, and activate it.
+
+KAP is **not**:
+
+- a source of migration truth. A release is only as complete as its gates say. A PARTIAL release is allowed,
+  and it is labelled as PARTIAL everywhere it appears;
+- a certification, and it does not change the review status in
+  [docs/reviews/FINAL_HUMAN_REVIEW_REGISTER.md](docs/reviews/FINAL_HUMAN_REVIEW_REGISTER.md);
+- an automatic author of unreviewed rules. Generated candidates are reviewed through the `candidates` verbs.
+  AI proposals are optional, off by default, and are stored as proposals only;
+- a way for `migrate` to fetch anything, or to contact an AI provider on its own.
+
+### 11.2 Offline first: migrate and the active release
+
+`migrate` resolves one knowledge release per run. The kb-home is chosen in this order:
+
+1. `--kb-home PATH` on `migrate`;
+2. the `ODOOFLUX_KB_HOME` environment variable;
+3. the default: `$XDG_DATA_HOME/odooflux/kb` when `XDG_DATA_HOME` is an absolute path, otherwise
+   `~/.local/share/odooflux/kb` (on Windows, `%LOCALAPPDATA%\odooflux\kb`). The default is computed; nothing is
+   created until a KAP command writes to it.
+
+If the kb-home has no `active.json`, `migrate` uses the built-in knowledge (report release id `builtin`). **This includes a
+kb-home path that does not exist or is mistyped: `migrate` then uses the built-in knowledge without an error.** Check
+the `knowledge_release` object in the report (`"builtin": true`) when you need to confirm which release ran. If the
+kb-home has an active release, `migrate` verifies that release once per run and uses only that release. If the release is
+missing, corrupt, or (with `--require-complete-kb`) not COMPLETE, the run exits **4** and does not fall back to
+the built-in knowledge. Real messages from the test kb-home:
+
+```text
+ERROR: knowledge release: active release kr-8b81bbde3476 is PARTIAL, not COMPLETE          # --require-complete-kb
+ERROR: knowledge release: changed file, sha256 or size differs from manifest: knowledge/compatibility/16-17.rules.json
+ERROR: knowledge release: active release kr-8b81bbde3476 is missing from <kb-home>
+```
+
+Each `migrate` report records the release that was used, in a `knowledge_release` object:
+
+- `release_id` and `digest` (the built-in tree has its computed digest, and `release_id` is `builtin`);
+- `builtin` (true or false), `completeness`, and `steps_covered` (one entry per migration step: `step`, `completeness`).
+
+A report that carries this object has `schema_version` **1.1.0**. The object is present for built-in runs too.
+
+### 11.3 Manual rule workflow (worked example)
+
+This example adds a `DETECT_ONLY` rule to a copy of the knowledge tree, using `--path`. It never edits the
+shipped tree. The rule identifier must be `NN-NN.<domain>.<slug>`, and `--step` must match its prefix.
+
+```bash
+WORK=$(mktemp -d)
+cp -r src/odooflux/knowledge "$WORK/tree"
+odooflux knowledge rule create --path "$WORK/tree" --author you \
+  --id 16-17.python.kap-demo-flag-name --step 16-17 --category python_runtime \
+  --detector-ref odooflux.rules.python.generic:flag_name \
+  --params '{"qualified": "odoo.exceptions.Warning"}' --file-kinds python \
+  --severity WARNING --risk LOW --message "Demo rule." --suggestion "Demo suggestion." \
+  --evidence EV-110
+odooflux knowledge rule validate --path "$WORK/tree" --id 16-17.python.kap-demo-flag-name
+odooflux knowledge rule history  --path "$WORK/tree" --id 16-17.python.kap-demo-flag-name
+odooflux knowledge rule link-evidence --path "$WORK/tree" --author you \
+  --id 16-17.python.kap-demo-flag-name --evidence EV-111
+```
+
+Real output (shortened):
+
+```text
+created 16-17.python.kap-demo-flag-name (origin MANUAL, maturity DETECT_ONLY)
+records=200 rules=92 errors=0 warnings=1           # the warning is A005: the rule shares a selector with an existing rule
+rev=1 action=create at=<time> actor=you summary=created
+chain: verified
+linked EV-111 to 16-17.python.kap-demo-flag-name (rev 2)
+```
+
+Notes:
+
+- `--author` defaults to `git config user.name`. Pass it explicitly in scripts.
+- A rule created through the CLI is `MANUAL`, with maturity `DRAFT` or `DETECT_ONLY` (default `DETECT_ONLY`). It never
+  carries a fixer. Its detector must be in the bindable detector table (see
+  [docs/TECHNICAL_USAGE.md, section 7.13](docs/TECHNICAL_USAGE.md#713-templates-and-the-detector-table)).
+- `rule promote` is the only path to `FIX_ENABLED`. On this rule it is refused with five gate failures (no
+  official evidence, tests not registered, a selector conflict, no fixer, and review still required). `--approval`
+  is a **recorded reference, not an authenticated approval** (deferred to a future release, FE-1).
+- Other verbs: `edit`, `disable`, `enable`, `retire`, `inspect`, `add-test`, `resolve`. Their syntax is in
+  section 11.5. The `rule` verbs run the whole tree validation and undo their own change if it creates a new error.
+
+### 11.4 Package and release lifecycle (worked example)
+
+The steps below use two local kb-homes, `KB1` (the build) and `KB2` (the consumer). A built release is always
+`INSTALLED`, never `ACTIVE`. Activation is a separate command.
+
+```bash
+odooflux knowledge release build --plan plan.json --kb-home "$KB1"          # installs kr-XXXXXXXXXXXX
+odooflux knowledge release list --kb-home "$KB1"
+odooflux knowledge package export kr-XXXXXXXXXXXX -o release.ofkp --kb-home "$KB1"
+odooflux knowledge package validate release.ofkp                             # reader checks only
+odooflux knowledge package inspect release.ofkp                              # declared, not verified
+odooflux knowledge package import release.ofkp --kb-home "$KB2" --downgrade-unverified --activate
+odooflux knowledge release rollback --kb-home "$KB2"
+```
+
+Real output (shortened):
+
+```text
+exported kr-19e3219c0c11 sha256=7209ef2e... entries=247
+valid kr-19e3219c0c11 19e3219c0c11...
+declared by package.json (not verified; run `package validate`)
+imported kr-121d875564e4 installed=True activated=True
+downgraded to DETECT_ONLY: 12-13.python.api-multi-removed, 14-15.qweb.t-esc-deprecated, ...
+rolled back; active: kr-8b81bbde3476 8b81bbde3476...
+```
+
+What to expect from the import:
+
+- A release built from the shipped tree carries the built-in `FIX_ENABLED` rules. Those rules have no release
+  provenance, so a default `package import` **refuses** them: `P10: unverified FIX_ENABLED rule(s) refused: ...`,
+  exit **3**. Nothing is installed.
+- `--downgrade-unverified` caps those rules to `DETECT_ONLY` instead. The downgraded content has a new digest, so the
+  import installs a **new release id** (the source id is not kept). Keep this in mind when you compare ids.
+- `--expect-digest SHA` on `validate` or `import` rejects a package whose release digest differs (`P06`, exit 3).
+- A byte-level change to a package entry is caught by the archive checks (for example `P04: manifest size differs
+  from archive header`, exit 3). A change to an installed release is caught when you activate it (exit **5**,
+  `changed file, sha256 or size differs from manifest`). `migrate` refuses a changed active release with exit 4.
+- `release remove` refuses a release that is ACTIVE (exit 1), and a release in the previous stack unless you pass
+  `--force-previous`.
+- `release list` and `release show` read the kb-home metadata and do not re-hash the files. A changed file in an
+  installed release is found by `release activate` and by `migrate` (for the active release). `package validate` checks
+  a package file, not an installed release.
+
+### 11.5 Command reference and exit codes
+
+Every verb below is in `odooflux knowledge <group> <verb>`. Run `--help` on any verb for the complete option list.
+The `release`, `package`, `source`, `ledger`, `extract` and `coverage` groups take `--kb-home` (default: see
+Section 11.2), `--json` (canonical JSON output) and `--quiet`. The `rule`, `candidates` and `ai` groups work on a
+knowledge tree given with `--path`, and `--json` is available on some of their verbs only.
+
+**Exit codes for `knowledge` (KAP) commands.** These are not the migrate codes:
+
+| Code | KAP meaning | Migrate meaning (Section 6.1) |
+|---|---|---|
+| 0 | success (a PARTIAL release is success with warnings) | success |
+| 1 | validation or gate failure, or a refused operation (unknown id, ACTIVE release removed, ledger findings) | open findings at or above `--fail-on` |
+| 2 | usage error: a missing or invalid flag, an unreadable build plan, `ai propose` without `--ai`, `source fetch` without `--allow-network` | usage or configuration error |
+| 3 | **package rejected** (any `P..` check, `--expect-digest` mismatch, export refused) | rejected edit in write mode |
+| 4 | **source unavailable** (a required source failed or is not verified, a pinned revision is missing, a fetch failed) | blocked module or internal error; also a knowledge release that is missing or not loadable |
+| 5 | **release integrity failure** (checksum, manifest or provenance mismatch, audit chain broken, a blob hash mismatch in `source verify`) | not used |
+
+`migrate` uses 3 for rejected edits and 4 for blocked modules. KAP uses 3 for package rejection and 4 for source
+unavailability, and it adds 5. The per-verb codes in the tables below are the codes the modules return, read from the
+code and checked on the examples in this section.
+
+**`release`** (installed releases in the kb-home, and the build pipeline)
+
+| Command | Purpose | Key options | Exit codes |
+|---|---|---|---|
+| `release list` | List installed releases with state and digest | `--kb-home`, `--json` | 0 |
+| `release show ID` | One installed release: label, completeness, parent, file count | `--kb-home` | 0; 1 unknown id |
+| `release activate ID` | Make an installed release ACTIVE (atomic, with a pointer write) | `--kb-home` | 0; 1 unknown or not installed; 5 integrity |
+| `release deactivate` | Return to the built-in knowledge; the release stays installed | `--kb-home` | 0 |
+| `release rollback` | Activate the previous release | `--kb-home` | 0; 1 no active or no previous release; 5 |
+| `release remove ID` | Delete an installed release that is not ACTIVE | `--force-previous`, `--kb-home` | 0; 1 ACTIVE, or in the previous stack without `--force-previous` |
+| `release diff A B` | Compare two installed releases | `--kb-home` | 0; 1 unknown id |
+| `release audit-verify` | Verify the kb-home audit hash chain | `--kb-home` | 0; 5 broken chain |
+| `release build` | Run the 17-step build pipeline from a plan file (Section 11.6) | `--plan FILE` (required), `--dry-run`, `--from-step N`, `--parent ID`, `--supersede ID`, `--allow-failed` (development only; never exportable), `--kb-home` | 0 OK or PLAN; 1 FAILED or other; 2 unreadable or invalid plan; 3 package check; 4 required source; 5 integrity |
+
+**`package`** (`.ofkp` archives)
+
+| Command | Purpose | Key options | Exit codes |
+|---|---|---|---|
+| `package export ID -o FILE` | Write a deterministic package for an installed release | `-o FILE` (required), `--include-enterprise-derived`, `--kb-home` | 0; 3 refused; 5 integrity |
+| `package validate FILE` | Check a package; installs nothing | `--expect-digest SHA`, `--kb-home` | 0; 3 rejected (any `P..`) |
+| `package import FILE` | Verify, gate and install a package, atomically. Activates only with `--activate` | `--activate`, `--downgrade-unverified`, `--expect-digest SHA`, `--kb-home` | 0; 1 kb-home locked; 3 rejected (`P..`, including P10); 5 integrity |
+| `package list FILE` | List entries: sha256, size, path | `--kb-home`, `--json` | 0; 3 unreadable package |
+| `package inspect FILE` | Summary from `package.json`: declared, not verified | `--kb-home`, `--json` | 0; 3 unreadable package |
+
+**`source`** (the source registry and offline acquisition; the registry defaults to `./sources.json`)
+
+| Command | Purpose | Key options | Exit codes |
+|---|---|---|---|
+| `source add --file SPEC` | Register a source from a spec file (status DECLARED) | `--registry FILE`, `--kb-home` | 0; 1 invalid spec |
+| `source list` | List registered sources | `--registry`, `--kb-home` | 0 |
+| `source show ID` | Show one source | `--registry`, `--kb-home` | 0; 1 unknown source |
+| `source remove ID` | Remove a source from the registry | `--registry`, `--kb-home` | 0; 1 unknown source |
+| `source acquire [ID ...]` | Snapshot sources from local inputs, offline | `--i-am-entitled` (for ENTERPRISE_LOCAL), `--registry`, `--kb-home` | 0; 1 unknown source; 4 a required source failed |
+| `source verify [ID ...]` | Re-hash the stored blobs | `--registry`, `--kb-home` | 0; 5 a blob hash does not match |
+| `source fetch ID` | Retrieve one allow-listed remote source. **The only KAP command that retrieves source code from the network.** `ai propose` can also make a network call, but only with an external AI provider, explicit grants, and the kill switch off | `--allow-network` (mandatory; exit 2 without it), `--sha256 HEX`, `--registry`, `--kb-home` | 0; 1 unknown source; 2 `--allow-network` missing or bad `--sha256`; 4 retrieval failed |
+
+**`extract`, `ledger`** (the change ledger)
+
+| Command | Purpose | Key options | Exit codes |
+|---|---|---|---|
+| `extract` | Diff two snapshot manifests into a change ledger and accounting | `--from SNAP`, `--to SNAP` (manifest file paths), `--step NN-NN`, `--blobs DIR` (blob root), `--out DIR`, `--scope GLOB` | 0; 1 ledger, accounting or input error; 2 usage |
+| `ledger list` | List changes | `--ledger FILE` (required), `--class`, `--disposition` | 0 |
+| `ledger show CHANGE` | Show one change | `--ledger FILE` | 0; 1 unknown change |
+| `ledger set-disposition CHANGE DISP` | Set a disposition. `NO_CUSTOM_MODULE_IMPACT` and `HUMAN_REVIEW` need `--rationale` | `--actor` (required), `--rationale`, `--reviewer`, `--rule-id`, `--evidence-id`, `--known-rules FILE`, `--ledger FILE` | 0; 1 refused |
+| `ledger confirm CHANGE` | Confirm a rename or replacement candidate. Human only | `--reviewer NAME` (required), `--ledger FILE` | 0; 1 refused (an AI actor or `MANUAL` as reviewer) |
+| `ledger verify` | Check the ledger invariants and its history chain | `--ledger FILE` | 0; 1 findings |
+
+**`rule`** (manual rules in a knowledge tree; all verbs take `--path TREE`)
+
+| Command | Purpose | Key options | Exit codes |
+|---|---|---|---|
+| `rule create` | Create a MANUAL rule (`DETECT_ONLY` by default) | `--id`, `--step`, `--category`, `--detector-ref`, `--params JSON`, `--evidence EV-ID`, `--file-kinds`, `--severity`, `--risk`, `--maturity`, `--message`, `--suggestion`, `--from-file RULE.json`, `--author` | 0; 1 refused; 2 missing flags |
+| `rule edit` | Change fields; creates a new revision | `--id`, `--set KEY=VALUE`, `--from-file CHANGES.json`, `--author` | 0; 1 refused |
+| `rule disable` | Park a rule as DRAFT with a reason | `--id`, `--reason` (required), `--author` | 0; 1 refused |
+| `rule enable` | Restore a disabled rule | `--id`, `--author` | 0; 1 refused |
+| `rule retire` | Retire a rule with a reason | `--id`, `--reason` (required), `--superseded-by`, `--author` | 0; 1 refused |
+| `rule inspect` | Show the rule, its evidence, the history head and validation | `--id`, `--json`, `--strict-builtin` | 0; 1 unknown rule |
+| `rule validate` | Validate the tree, or one rule | `--id`, `--strict-builtin` | 0; 1 errors |
+| `rule history` | List revisions and verify the hash chain | `--id`, `--json` | 0; 1 unknown rule |
+| `rule link-evidence` | Link an existing evidence record | `--id`, `--evidence EV-ID`, `--author` | 0; 1 refused |
+| `rule add-test` | Register a positive, negative or idempotence fixture | `--id`, `--kind {positive,negative,idempotence}`, `--fixture FILE`, `--author` | 0; 1 refused |
+| `rule promote` | The only path to `FIX_ENABLED`: gates 1 to 5 and a recorded approval reference | `--id`, `--to FIX_ENABLED`, `--approval REF` (required), `--author` | 0; 1 gate refusal |
+| `rule resolve` | Record a generated-versus-manual conflict decision | `--candidate CR-ID`, `--keep {manual,candidate,both-renamed}`, `--build-dir DIR` | 0; 1 refused |
+
+**`candidates`** (candidate rules generated from a ledger; all verbs take `--path TREE`)
+
+| Command | Purpose | Key options | Exit codes |
+|---|---|---|---|
+| `candidates generate` | Turn a ledger into candidate rules (`DETECT_ONLY` or `DRAFT`) and their evidence. Existing candidates are skipped, never overwritten or revived. Refused while any candidate is still PROPOSED | `--ledger FILE`, `--source FILE` (source spec JSON; its identity is a `repository` slug `owner/name`, or, for an official local clone, the `expected_origin` URL that acquisition verified: with neither, the command exits 2 and writes nothing. A local path is never used as the identity and never appears in evidence), `--checked-on YYYY-MM-DD`, `--author`, `--at` | 0; 1 refused (for example pending candidates); 2 missing `repository` |
+| `candidates list` | List candidates and their status | `--json` | 0 |
+| `candidates accept CR-ID` | Accept one PROPOSED candidate (validator, checks, rule and history) | `--ledger FILE`, `--author`, `--at` | 0; 1 refused |
+| `candidates reject CR-ID` | Reject a PROPOSED or CONFLICT candidate | `--reason` (required), `--author` | 0; 1 refused |
+| `candidates resolve CR-ID` | Record the decision for a candidate in conflict | `--keep {manual,candidate,both-renamed}`, `--author` | 0; 1 refused |
+
+**`coverage`** (metrics and gates; see Section 11.7)
+
+| Command | Purpose | Key options | Exit codes |
+|---|---|---|---|
+| `coverage show` | Print the eight metrics, each with its own fraction | `--release ID` or `--path DIR`, `--kb-home`, `--json`, `--quiet` | 0; 1 FAILED completeness or consistency findings |
+| `coverage gates` | Print each gate, its status and the completeness decision | `--release ID` or `--path DIR`, `--kb-home`, `--json`, `--quiet` | 0; 1 FAILED completeness or consistency findings |
+
+**`ai`** (optional; off unless `--ai` is passed)
+
+| Command | Purpose | Key options | Exit codes |
+|---|---|---|---|
+| `ai propose` | Store AI rationales and template hints as `AI_PROPOSED` proposals under `candidates/ai/`. Proposals never change a rule | `--ai` (required), `--ai-consent-send-code`, `--ai-provider NAME`, `--ai-model ID`, `--ai-authorize PROVIDER=evidence_excerpt`, `--ai-disable-external`, `--ai-budget-job-tokens N`, `--ledger FILE`, `--path TREE` | 0; 1 kill switch, missing grant or provider error; 2 `--ai` missing or AI options invalid |
+
+The `migrate` options that select the knowledge release are `--kb-home PATH` and `--require-complete-kb`. They are
+described in Section 6.2 and in Section 11.2.
+
+### 11.6 The release build pipeline at a glance
+
+`knowledge release build --plan FILE` runs seventeen steps under `<kb-home>/staging/<label>/`:
+
+1. acquire, 2. verify, 3. extract, 4. classify, 5. evidence, 6. candidates, 7. schema-validate,
+8. dup-conflict, 9. rule-tests, 10. coverage, 11. gates, 12. build-package, 13. validate-package,
+14. publish-local, 15. export, 16. import-activate, 17. provenance.
+
+Steps 15 (export) and 16 (import-activate) are **not** run by the build. They are reported as SKIPPED. You run
+`package export` and `package import` yourself, as in Section 11.4.
+
+**Plan file.** The plan is one JSON object. It must have `label`, `sources` and `pairs`. Each entry of `sources` is a
+source spec (the same shape as `source add --file`; abbreviated in the example below), and each `pairs` entry names
+one step and its two source identifiers:
+
+```json
+{
+  "label": "community-17.0-18.0-2026.11",
+  "created_at": "2026-11-08T10:00:00Z",
+  "checked_on": "2026-11-08",
+  "author": "maintainer",
+  "sources": [{"source_id": "odoo-community-16.0", "kind": "GIT_COMMUNITY", "...": "..."}],
+  "pairs": [{"step": "16-17", "from": "odoo-community-16.0", "to": "odoo-community-17.0"}],
+  "source_meta": {"odoo-community-16.0": {"repository": "odoo/odoo"}}
+}
+```
+
+Optional keys are `created_at` (default: now), `checked_on` (default: the date of `created_at`), `author` (default
+`cli`) and `source_meta`. The candidates step needs `source_meta` with a `repository` (`owner/name`) for each source.
+The build constructs only the `GIT_COMMUNITY` (local clone) adapter.
+
+**Dry run and resume.**
+
+```text
+$ odooflux knowledge release build --plan plan.json --dry-run --kb-home "$KB1"
+01 acquire          -        RUN
+...
+17 provenance       -        RUN
+outcome PLAN                       # nothing is created in the kb-home
+```
+
+A real run prints one line per step with its status and action. A second run of the same plan reuses every step whose
+recorded input digest still matches (`REUSE`). `--from-step N` forces steps N onwards to run again. Editing a ledger
+outside the pipeline is not detected by resume, so use `--from-step` after such an edit.
+
+```text
+outcome OK completeness PARTIAL
+release kr-19e3219c0c11
+```
+
+**PARTIAL and COMPLETE.** The gates in Section 11.7 decide the completeness. A release is COMPLETE when every
+blocking gate passes. The gate `G-XCHECK` only warns. A release may be PARTIAL, but only when each failing blocking
+gate is one of the allowed partial cases (an optional source not verified, files that failed or are unsupported, or
+changes left undisposed), and the release names each of them as a limit. Any other failure makes the release FAILED.
+A FAILED release is staged only: it is not published, not exported and never reported as complete. A release built by
+the pipeline is INSTALLED, never ACTIVE.
+
+**Supersede and parent.** `--parent ID` builds on an installed release. A build with destructive changes against that
+parent stops unless you pass `--supersede ID` for each approved removal. A supersede entry is a recorded flag, **not an
+authenticated approval**.
+
+### 11.7 Coverage metrics and gates
+
+`knowledge coverage show --release ID` (or `--path DIR`) prints eight metrics, M1 to M8. Each metric has its own
+numerator and denominator. A metric with a zero denominator is `n/a` (`NOT_APPLICABLE`), not 100 percent. There is
+**no combined score**. The percentages in the text output are display only. Real output (one release, shortened):
+
+```text
+M1 source_retrieval  2/2   (100.0%)  [required sources VERIFIED / required sources declared]
+M2 file_scan         8/10  (80.0%)   [changed files ANALYZED / all changed files of the pairs]
+M7 fix_verification  n/a   (denominator 0: FIX_ENABLED rules passing G-SAFE / FIX_ENABLED rules)
+M8 version_transition 1/1  (100.0%)  [declared transitions with verified sources, complete accounting and a ledger]
+completeness PARTIAL
+```
+
+`knowledge coverage gates` prints the ten gates (`G-SRC`, `G-FILES`, `G-CLASS`, `G-DISP`, `G-EVID`, `G-MANIFEST`,
+`G-RULES`, `G-SAFE`, `G-XCHECK`, `G-SECRETS`), each with PASS, FAIL, WARN or NOT_RUN, then the completeness decision,
+the reasons and the named limits. The command exits 1 only when the completeness is FAILED or the stored manifest is
+inconsistent. A PARTIAL release exits 0.
+
+**Open question (M8).** The contract does not say whether a declared version transition that is not COMPLETE must
+downgrade a release. No gate reads transition coverage today, so M8 is reported and checked for consistency, but it
+does not block a release. This is an open item in `specs/011-knowledge-acquisition-pipeline/contracts/coverage-and-gates.md`.
+
+### 11.8 Security and limits
+
+- **FIX_ENABLED is never produced by the pipeline.** Only `rule promote` can set it, and promotion re-checks gates 1 to 5
+  at promote, import and load time. An imported package never enables an unverified FIX_ENABLED rule. The default
+  `package import` refuses them (P10). `--downgrade-unverified` caps them to DETECT_ONLY instead.
+- **Official source identity is a declared identity, not authenticity.** A source marked official must have an `origin`
+  remote that matches its declared origin and is allow-listed. That is a check on a local clone's configuration. It is
+  not a signature, and it proves nothing about who published the code.
+- **URL credentials are refused.** A source URL that contains credentials is a configuration error (code `URL_CREDENTIALS`).
+  It is never normalised or stored.
+- **Snapshots ship only as manifests.** A package contains snapshot manifests (file lists and digests), never the blobs.
+- **Redaction runs before hashing.** Registered secrets and credential-shaped strings are masked before a release
+  manifest is hashed. Export scans each entry for secrets and absolute paths, and `package validate` and `import`
+  check the scan status again (P09).
+- **AI proposals need explicit consent and grants.** `knowledge ai propose` needs `--ai`, `--ai-consent-send-code`, a job
+  token budget, and an explicit grant per provider and category (for example `--ai-authorize PROVIDER=evidence_excerpt`).
+  The kill switch (`--ai-disable-external` or `ODOOFLUX_AI_DISABLE_EXTERNAL=1`) blocks all external transmission.
+  Only the packaged `fake` provider has been exercised. No external provider has been tested.
+- **The approval reference is not an approval.** `rule promote --approval REF` records a reference in the rule history.
+  It is not authenticated and no approver identity is verified. Authenticated approval is deferred to a future release
+  (FE-1, see `docs/planning/kap/FUTURE_ENHANCEMENTS.md`).
+- **Known limits.** The git adapter has been tested only with git 2.43.0. A known `insteadOf` gap is recorded in the
+  test suite as an expected failure. The owner decisions that are still open (OD-K1 to OD-K13) are listed in
+  [docs/TECHNICAL_USAGE.md, section 13.8](docs/TECHNICAL_USAGE.md#138-kap-limitations-and-open-owner-decisions).
+
+### 11.9 Where to read more
+
+- [docs/TECHNICAL_USAGE.md](docs/TECHNICAL_USAGE.md): the KAP architecture, the release layout on disk, the package
+  format, the trust chain, the security contracts, how to add content, and the test commands.
+- [docs/planning/kap/INTEGRATION_NOTES.md](docs/planning/kap/INTEGRATION_NOTES.md) and
+  [docs/planning/kap/FUTURE_ENHANCEMENTS.md](docs/planning/kap/FUTURE_ENHANCEMENTS.md): the integration decisions and deferred work.
+- [specs/011-knowledge-acquisition-pipeline/](specs/011-knowledge-acquisition-pipeline/): the specification, plan, data model
+  and the contracts (`contracts/cli-surface.md` is the intended command surface).
+- [specs/011-knowledge-acquisition-pipeline/quickstart.md](specs/011-knowledge-acquisition-pipeline/quickstart.md): the maintainer and consumer
+  workflows with the real commands, checked by `tests/integration/kap/test_quickstart.py`, and the notes on what does not work yet.
+- [specs/011-knowledge-acquisition-pipeline/verification.md](specs/011-knowledge-acquisition-pipeline/verification.md): the final
+  verification record (exact commands, counts, skipped and unexecuted tests).
+- [docs/reviews/fragments/kap.md](docs/reviews/fragments/kap.md): the KAP review fragment: every open decision and review item, all `PENDING_HUMAN_REVIEW`.
+
+## 12. Project documentation
 
 | Document | What it covers |
 |---|---|
 | [docs/TECHNICAL_USAGE.md](docs/TECHNICAL_USAGE.md) | Technical usage guide (in preparation). |
+| [docs/planning/kap/INTEGRATION_NOTES.md](docs/planning/kap/INTEGRATION_NOTES.md) | KAP integration decisions, open items and the owner decisions OD-K1 to OD-K13 (see the register). |
+| [docs/planning/kap/FUTURE_ENHANCEMENTS.md](docs/planning/kap/FUTURE_ENHANCEMENTS.md) | KAP enhancements deferred from the current release, such as authenticated approval (FE-1). |
+| [specs/011-knowledge-acquisition-pipeline/](specs/011-knowledge-acquisition-pipeline/) | The KAP specification, plan, data model and command contracts. |
+| [docs/reviews/fragments/kap.md](docs/reviews/fragments/kap.md) | The KAP review fragment (being written). |
 | [docs/changes/P2_CUTOVER.md](docs/changes/P2_CUTOVER.md) | Differences between the P2 command interface and the earlier P0 script. |
 | [docs/changes/P0_CHANGE_RECORD.md](docs/changes/P0_CHANGE_RECORD.md) | The earlier P0 change record. |
 | [docs/guides/ADDING_A_VERSION.md](docs/guides/ADDING_A_VERSION.md) | How to add a new Odoo version to the registry and knowledge data. |

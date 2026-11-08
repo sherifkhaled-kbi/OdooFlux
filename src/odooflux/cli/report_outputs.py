@@ -46,7 +46,12 @@ def _write(path, text: str) -> None:
 
 def finish(state: dict, run, args, registries, reports: list, legacy_done: bool) -> int:
     """Write the requested outputs from the model and return the exit code."""
-    document = build_report(state, reports, run_log_path=str(run.log.path))
+    view = state
+    if state.get("knowledge_unverified"):  # a step not covered by the active release: same input as an unverified plan
+        view = {**state, "plan": {**state["plan"], "allow_unverified": True}}
+    document = build_report(view, reports, run_log_path=str(run.log.path),
+                            warnings=state.get("knowledge_warnings"),
+                            knowledge_release=state.get("knowledge_release"))
     write_mode = state["mode"] == "fix"
     try:
         policy = ExitPolicy(fail_on=state["options"]["fail_on"],

@@ -27,6 +27,27 @@
       "type": "string",
       "pattern": "^EV-\\d{3}$"
     },
+    "origin": {
+      "enum": [
+        "LEGACY_BUILTIN",
+        "KAP_DETERMINISTIC",
+        "KAP_MANUAL"
+      ]
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,63}$"
+    },
+    "change_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^CH-[0-9a-f]{16}$"
+      }
+    },
+    "official": {
+      "type": "boolean"
+    },
     "rule_ids": {
       "type": "array",
       "items": {
@@ -126,6 +147,14 @@
           "kind"
         ],
         "properties": {
+          "content_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "snapshot_ref": {
+            "type": "string",
+            "pattern": "^ss-[0-9a-f]{12}$"
+          },
           "branch": {
             "type": "string",
             "pattern": "^(\\d+\\.0|master)$"

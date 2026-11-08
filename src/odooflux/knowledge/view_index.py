@@ -58,10 +58,16 @@ class ViewIndex:
         return None if root is None else frozenset(self._anchors.get(root, ()))
 
 
-def load_view_index(version, root: Path = None):
-    """The shipped index for ``version``, or None when none exists (never an error)."""
+def load_view_index(version, root: Path = None, *, knowledge_root=None):
+    """The shipped index for ``version``, or None when none exists (never an error).
+
+    `knowledge_root` (a knowledge tree, e.g. an installed release's `knowledge/`) selects its
+    `compatibility/view_index/`; without it the built-in directory is used.
+    """
     if not isinstance(version, str) or not version.replace(".", "").isdigit():
         return None
+    if knowledge_root is not None:
+        root = Path(knowledge_root) / "compatibility" / "view_index"
     path = (Path(root) if root else VIEW_INDEX_DIR) / f"{version}.json"
     if not path.is_file():
         return None

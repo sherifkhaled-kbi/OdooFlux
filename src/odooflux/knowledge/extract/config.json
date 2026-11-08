@@ -1,0 +1,41 @@
+{
+  "schema": "odooflux.extract_config/1",
+  "rename_threshold": 0.8,
+  "max_file_bytes": 2097152,
+  "parse_token_cap": 500000,
+  "domains": [
+    "python_orm",
+    "xml_view",
+    "xml_data",
+    "security",
+    "manifest",
+    "js_owl",
+    "assets",
+    "data",
+    "report_controller",
+    "migration_script",
+    "docs"
+  ],
+  "classes_by_stage": {
+    "classify": [
+      "ADDED",
+      "REMOVED",
+      "SIGNATURE_CHANGED",
+      "BEHAVIOUR_CHANGED",
+      "MOVED",
+      "DEPRECATED",
+      "UNKNOWN"
+    ],
+    "rename": [
+      "RENAMED_CANDIDATE",
+      "REPLACEMENT_CANDIDATE"
+    ]
+  },
+  "signature_keys": {
+    "method": ["args", "defaults"],
+    "field": ["type", "keywords"],
+    "tag": ["attrs"],
+    "route": ["path", "type", "auth", "methods"]
+  },
+  "deprecation_keys": ["deprecated"]
+}

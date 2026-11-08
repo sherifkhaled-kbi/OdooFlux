@@ -15,7 +15,11 @@ FORBIDDEN_MODULES = {"runpy"}
 # cli/plugins.py is the explicit allow-list entry for ``--plugin`` (see tests/unit/test_no_code_execution.py).
 PLUGIN_LOADER = {"cli/plugins.py"}
 IMPORTLIB_ALLOW = PLUGIN_LOADER
-SUBPROCESS_ALLOW_PREFIX = ("validation/runtime/", "validation/behavioral/", "knowledge/refresh.py")
+# knowledge/acquisition/adapters/git_local.py: the same pattern as knowledge/refresh.py: read-only git plumbing against a
+# LOCAL clone, shell=False, cleared environment, no system or global git config, core.fsmonitor off; the exact command set
+# is pinned by tests/unit/knowledge/kap/test_git_local_readonly.py. It never executes scanned code.
+SUBPROCESS_ALLOW_PREFIX = ("validation/runtime/", "validation/behavioral/", "knowledge/refresh.py",
+                           "knowledge/acquisition/adapters/git_local.py")
 
 
 def violations(source: str, rel: str) -> list:

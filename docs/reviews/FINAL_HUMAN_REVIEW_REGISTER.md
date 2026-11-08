@@ -719,3 +719,45 @@ Full text in `docs/reviews/fragments/ws-i-orchestrator.md`. All decisions below 
 
 ### Appendix addendum: documentation round (2026-11-07)
 Code defects found while documenting (tracebacks for `plan` with bad versions, `rollback` unknown run ID or `--no-backup` run, missing `--addons-path`; planner not blocking RESEARCH_SEEDED; FIX_ENABLED rules citing review-only evidence; L4/L5 not wired into `migrate`) are listed in `docs/reviews/automated/DOC-verification.md`. All are PENDING (human) triage; none was changed in this round.
+
+## Appendix: KAP (feature 011)
+
+Full text for each item is in [`docs/reviews/fragments/kap.md`](fragments/kap.md). Every item is **PENDING (human)**; reviewer name and review date are empty. No agent recorded approval, and nothing here is certified or production-ready. Owner-decision defaults are assumed recommendations (ADR-020, research.md), not decisions.
+
+| ID | Item | Mandatory for production | Decision |
+|---|---|---|---|
+| KAP-OD-K1 | kb-home location and `ODOOFLUX_KB_HOME` (OD-K1) | Decision | PENDING (human) |
+| KAP-OD-K2 | Package container: ZIP, DEFLATE vs stored (OD-K2) | Decision | PENDING (human) |
+| KAP-OD-K3 | Unverified FIX_ENABLED on import: refuse or downgrade (OD-K3) | Decision | PENDING (human) |
+| KAP-OD-K4 | Report schema bump and built-in release in reports (OD-K4; note 45, 60) | Decision | PENDING (human) |
+| KAP-OD-K5 | Package authenticity: digest pin only (OD-K5) | Decision | PENDING (human) |
+| KAP-OD-K6 | Enterprise and OCA/OpenUpgrade scope (OD-K6; note 35) | Decision | PENDING (human) |
+| KAP-OD-K7 | Audit log reuse (OD-K7; note 3) | Decision | PENDING (human) |
+| KAP-OD-K8 | Named benchmark sets for recall (OD-K8) | Decision | PENDING (human) |
+| KAP-OD-K9 | Redaction module (OD-K9; note 57) | Decision | PENDING (human) |
+| KAP-OD-K10 | Activating PARTIAL releases (OD-K10) | Decision | PENDING (human) |
+| KAP-OD-K11 | Rule history sidecar; built-in duplicate checks opt-in (OD-K11) | Decision | PENDING (human) |
+| KAP-OD-K12 | Revisit SQLite and the threshold (OD-K12) | Decision | PENDING (human) |
+| KAP-OD-K13 | Built-in FIX_ENABLED rules in a built release (notes 4, 32) | Decision | PENDING (human) |
+| KAP-M8 | Weakest declared step for release completeness (contracts/coverage-and-gates.md) | Decision | PENDING (human) |
+| KAP-AI-AUDIT | Audit trail for AI proposals (note 55) | Decision | PENDING (human) |
+| KAP-DEACTIVATE | Meaning of `deactivate` (note 6) | Decision | PENDING (human) |
+| KAP-TRUST-ORIGIN | Trusted-origin limit and external trust anchor (notes 14, 16, 36, 50) | Decision | PENDING (human) |
+| KAP-AUTO-ACCEPT | Pipeline auto-accepts verified candidates without human review | Decision | PENDING (human) |
+| KAP-CORPUS-CERT | SC-005-style certification of the first real-corpus build (not yet run) | Yes | PENDING (human) |
+| KAP-LIVE-TESTS | Opt-in live and Docker tests never run (`ODOOFLUX_KAP_*`) | Decision | PENDING (human) |
+| KAP-JS-ADAPTER | JS structural extractor: tree-sitter branch unverified | Decision | PENDING (human) |
+| KAP-GIT-IDENTITY | `insteadOf` identity gap; git versions other than 2.43.0 (notes 50, 51) | Decision | PENDING (human) |
+| KAP-ROOT-GUARD | Sign-off on the 21-module knowledge-root guard allow-list (notes 38, 63) | Decision | PENDING (human) |
+| KAP-FE-1 | Approval identity deferred (FE-1; not a blocker) | No | PENDING (human) |
+
+Totals: 24 items. Mandatory: Yes 1, Decision 23, No 1.
+
+### KAP closure additions (feature 011)
+Full text in `docs/reviews/fragments/kap.md`. All PENDING (human); no agent recorded a decision.
+
+| ID | Item | Mandatory for production | Decision |
+|---|---|---|---|
+| KAP-CL-1 | Mistyped or empty `--kb-home` runs the built-in release (contract-consistent; report names it) | No | PENDING (human) |
+| KAP-CL-2 | Unofficial evidence cannot be packaged; registry schema lacks `repository` | No | PENDING (human) |
+| KAP-CL-3 | Smaller KAP behaviours to confirm (show re-hash, extract exit, generate refusals, resume, downgrade id, conflicts history) | No | PENDING (human) |

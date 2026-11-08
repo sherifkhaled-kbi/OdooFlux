@@ -1,0 +1,15 @@
+{
+  "template_id": "py-renamed-method",
+  "description": "A method that may have been renamed. Detect-only candidate; the rename is never assumed.",
+  "match": {"domain": "python_orm", "class": "RENAMED_CANDIDATE", "kind": "method"},
+  "rule": {
+    "category": "python_orm",
+    "detector_ref": "odooflux.rules.python.generic:flag_method_call",
+    "fixer_ref": null,
+    "params_from": {"method": "subject.name"},
+    "risk": "MEDIUM",
+    "review_required": true
+  },
+  "confidence": "LOW",
+  "tests": {"generate_skeleton": true}
+}

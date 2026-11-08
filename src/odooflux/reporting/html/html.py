@@ -247,6 +247,10 @@ def render_html(report: dict) -> str:
     overall = (f"<p>{len(report['modules'])} module(s); open findings "
                f"{sum(s['open_findings'].values())}; fixed {s['findings_by_status']['fixed']}; rejected "
                f"{s['findings_by_status']['rejected']}</p>")
+    if report.get("knowledge_release"):
+        release = report["knowledge_release"]
+        overall += (f"<p>Knowledge release <code>{esc(release['release_id'])}</code> digest "
+                    f"<code>{esc(release['digest'] or 'unavailable')}</code></p>")
     sections = "\n".join((_summary(report), _plan(report), _modules(report), _rejected(report), _scope(report),
                           _ai(report), _recovery(report)))
     return PAGE.substitute(

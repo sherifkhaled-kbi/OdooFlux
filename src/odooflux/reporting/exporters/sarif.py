@@ -86,6 +86,10 @@ def export_sarif(report: dict, *, include_fixed: bool = False, exit_code=None) -
              "runId": report["run"]["run_id"], "mode": report["run"]["mode"]}
     if report.get("provisional"):
         props["provisional"] = report["provisional"]
+    if report.get("knowledge_release"):
+        release = report["knowledge_release"]
+        props["knowledgeRelease"] = {"releaseId": release["release_id"], "digest": release["digest"],
+                                     "builtin": release["builtin"], "completeness": release["completeness"]}
     document = {
         "$schema": SARIF_SCHEMA,
         "version": "2.1.0",

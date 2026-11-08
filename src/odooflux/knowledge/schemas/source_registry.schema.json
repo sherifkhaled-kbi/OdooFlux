@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SourceSpec",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "source_id",
+    "kind",
+    "official",
+    "url",
+    "licence_access",
+    "licence_id",
+    "branch",
+    "revision",
+    "scope",
+    "retrieved_at",
+    "checksum",
+    "status",
+    "failure_reason",
+    "required"
+  ],
+  "properties": {
+    "source_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,63}$"
+    },
+    "kind": {
+      "enum": [
+        "GIT_COMMUNITY",
+        "DOCS",
+        "UPGRADE_SCRIPTS",
+        "ENTERPRISE_LOCAL",
+        "OCA",
+        "OPENUPGRADE",
+        "SNAPSHOT_PACK",
+        "DIRECTORY"
+      ]
+    },
+    "official": {
+      "type": "boolean"
+    },
+    "url": {
+      "type": "string",
+      "minLength": 1
+    },
+    "licence_access": {
+      "enum": [
+        "PUBLIC_OPEN",
+        "ENTERPRISE_AUTHORIZED",
+        "UNKNOWN"
+      ]
+    },
+    "licence_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "branch": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision": {
+      "type": "string",
+      "pattern": "^(?:[0-9a-f]{40}|sha256:[0-9a-f]{64})$"
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "modules",
+        "include",
+        "exclude",
+        "file_kinds"
+      ],
+      "properties": {
+        "modules": {
+          "type": [
+            "array",
+            "string"
+          ]
+        },
+        "include": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "exclude": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "pattern",
+              "reason"
+            ],
+            "properties": {
+              "pattern": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "file_kinds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "retrieved_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+    },
+    "checksum": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "status": {
+      "enum": [
+        "DECLARED",
+        "RETRIEVED",
+        "VERIFIED",
+        "UNAVAILABLE",
+        "FAILED",
+        "SKIPPED_UNAUTHORIZED"
+      ]
+    },
+    "failure_reason": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "required": {
+      "type": "boolean"
+    },
+    "expected_origin": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^https://[^\\s]+$"
+    },
+    "origin_url": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^https://[^\\s]+$"
+    }
+  }
+}

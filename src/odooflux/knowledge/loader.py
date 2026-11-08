@@ -58,6 +58,14 @@ def _read(kb: KnowledgeBase, path: Path):
         return None
 
 
+def is_builtin_path(path) -> bool:
+    """True when `path` is the shipped knowledge tree or inside it. The one place that answers "is this the built-in
+    tree?", so CLI verbs that must refuse to write into it need not reference KNOWLEDGE_ROOT themselves."""
+    resolved = Path(path).resolve()
+    root = KNOWLEDGE_ROOT.resolve()
+    return resolved == root or root in resolved.parents
+
+
 def load_knowledge(root=KNOWLEDGE_ROOT) -> KnowledgeBase:
     root = Path(root)
     kb = KnowledgeBase(root=root)
@@ -98,4 +106,36 @@ def load_knowledge(root=KNOWLEDGE_ROOT) -> KnowledgeBase:
     runs = root / "compatibility" / "runtime_runs.json"
     data = _read(kb, runs) if runs.exists() else None
     kb.runtime_runs = data if isinstance(data, dict) else {}
+    return kb
+
+
+RELEASE_TREE = "knowledge"  # an installed release keeps its complete knowledge tree in <release>/knowledge/
+KAP_FIX_CAPPED = "KAP_FIX_CAPPED"
+
+
+def load_active_knowledge(handle) -> KnowledgeBase:
+    """Load the knowledge tree of a resolved `KnowledgeHandle` (contracts/migration-integration.md "Loader").
+
+    The built-in handle loads exactly what `load_knowledge(handle.root)` loads. Any other handle loads
+    `<handle.root>/knowledge`; a missing tree raises `KnowledgeReleaseError` and never falls back to the built-in tree.
+    FIX_ENABLED rules of a non-built-in release that fail promotion gates 1 to 5 are capped to DETECT_ONLY with a
+    `KAP_FIX_CAPPED` warning (REQ-KAP-039). Built-in rules are grandfathered and never capped here.
+    """
+    if handle.builtin:
+        return load_knowledge(handle.root)
+    from odooflux.knowledge.release.model import KnowledgeReleaseError  # lazy: release modules import this module
+    from odooflux.knowledge.release.safety import fix_gate_findings
+
+    tree = Path(handle.root) / RELEASE_TREE
+    if not tree.is_dir():
+        raise KnowledgeReleaseError(f"release {handle.release_id}: knowledge tree is missing ({tree})")
+    kb = load_knowledge(tree)
+    failing = {f["rule_id"]: f for f in fix_gate_findings(tree)}
+    for rule in kb.rules:
+        if isinstance(rule, dict) and rule.get("id") in failing and rule.get("maturity") == "FIX_ENABLED":
+            rule["maturity"] = "DETECT_ONLY"
+            kb.load_findings.append(Finding(
+                KAP_FIX_CAPPED, "compatibility/*.rules.json", str(rule["id"]),
+                f"FIX_ENABLED capped to DETECT_ONLY: gate {failing[rule['id']]['gate']} "
+                f"{failing[rule['id']]['code']}", severity="WARNING"))
     return kb

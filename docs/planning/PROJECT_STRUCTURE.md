@@ -74,6 +74,42 @@ Note: `parsers/` and `validation/dependency/` are refinements of the brief's pro
 `versions/graph`, `core/contracts`, and `knowledge/schemas` were added so that each responsibility
 has exactly one home.
 
+## Knowledge Acquisition Pipeline (feature 011, KAP)
+
+Added by [specs/011-knowledge-acquisition-pipeline](../../specs/011-knowledge-acquisition-pipeline/spec.md) under [ADR-020](ARCHITECTURE_DECISIONS.md#adr-020--knowledge-acquisition-pipeline-releases-packages-and-offline-first-knowledge) (PROPOSED). Stdlib only (REQ-KAP-004); no SQLite (REQ-KAP-003); network only in `knowledge/acquisition/fetch.py` (REQ-KAP-001). Implementation is technically complete and checked offline; nothing here is certified. Human items are in [docs/reviews/fragments/kap.md](../reviews/fragments/kap.md). Integration decisions and open items are in [kap/INTEGRATION_NOTES.md](kap/INTEGRATION_NOTES.md).
+
+| Path | Responsibility |
+|---|---|
+| `knowledge/release/` | Knowledge release model, canonical digests, kb-home store, read-only fail-closed resolver, promotion gates (`safety.py`), provenance writer and verifier (`provenance.py`), release diff, transition coverage check, built-in descriptor, kb-home audit log |
+| `knowledge/package/` | Deterministic `.ofkp` package builder, safe archive reader (`archive.py`), compatibility checks, staged validation, importer with atomic activation |
+| `knowledge/authoring/` | Manual rule verbs (`ops.py`, `promote.py`), authoring checks A001..A006, generated-versus-manual conflicts, rule history sidecars, byte-preserving rule store |
+| `knowledge/acquisition/` | Source registry and status machine (`sources.py`), explicit network fetch (`fetch.py`), content-addressed blob store, snapshot builder |
+| `knowledge/acquisition/adapters/` | Source adapters: directory, git local clone (`git_local.py`), snapshot pack, Enterprise local path, docs `.rst`, supplementary OCA and OpenUpgrade (`official: false`) |
+| `knowledge/extract/` | Diff extraction driver, file accounting with terminal states, fact diff and classification, rename and replacement candidate pairing |
+| `knowledge/extract/domains/` | Domain extractors: `python_orm`, `xml_views`, `js_owl`, `security`, `manifest`, `assets`, `data`, `migration_scripts`, `reports_controllers` |
+| `knowledge/ledger/` | Change ledger with stable change ids (`ids.py`), dispositions, confirm and merge |
+| `knowledge/candidates/` | Deterministic candidate generation, evidence builder for ledger changes, candidate acceptance (`accept.py`), AI proposer (`ai_proposer.py`, proposals only), extraction template loader |
+| `knowledge/extraction_templates/` | JSON candidate skeletons for Python change classes (data, not code) |
+| `knowledge/coverage/` | Eight coverage metrics (M1..M8), cross-checks against independent sources, release gates and completeness decision, coverage manifest and consistency check |
+| `knowledge/pipeline.py` | Release build pipeline: ordered, individually re-runnable steps |
+| `knowledge/schemas/` | KAP schemas: `active_pointer`, `change_ledger`, `coverage_manifest`, `package_manifest`, `release_manifest`, `rule_candidates`, `source_registry` |
+| `parsers/extract_toolkit.py` | Document-level adapters that give the extract domains parsers through the composition root (keeps the REQ-ARC-001 import guard) |
+
+CLI modules (`src/odooflux/cli/`), all reached through `odooflux knowledge ...`:
+
+| Module | Command group |
+|---|---|
+| `kap_common.py` | Shared wiring for the knowledge acquisition command groups |
+| `kap_source.py` | `knowledge source ...` (source registry and acquisition) |
+| `kap_extract.py` | `knowledge extract` and `knowledge ledger ...` |
+| `kap_candidates.py` | `knowledge candidates ...` and `knowledge ai propose` |
+| `kap_rule.py` | `knowledge rule ...` (manual rule verbs) |
+| `kap_release.py` | `knowledge release ...` (release lifecycle) |
+| `kap_package.py` | `knowledge package ...` (package build and validation) |
+| `kap_coverage.py` | `knowledge coverage show` and `knowledge coverage gates` |
+
+Tests and fixtures: `tests/unit/knowledge/kap/`, `tests/integration/kap/` (offline; live and Docker tests are opt-in, REQ-KAP-044), `tests/fixtures/kap/` (synthetic `fixture_release` and golden hashes).
+
 ## `tests/`
 
 | Directory | Contents | Owner phase |

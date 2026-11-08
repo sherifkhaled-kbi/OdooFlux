@@ -21,10 +21,15 @@ _REDACT_SHAPES = [
     re.compile(r"(?i)((?:x-)?api[_-]?key['\"]?\s*[:=]\s*['\"]?)[^'\"\s,}]{6,}"),
     re.compile(r"(?i)\bbearer\s+[A-Za-z0-9._~+/=\-]{12,}"),
     re.compile(r"\bsk-[A-Za-z0-9_\-]{12,}"),
+    # URL userinfo: `scheme://user:password@host` and `scheme://token@host` (REQ-KAP-046). Scheme is kept.
+    re.compile(r"(?i)(\b[a-z][a-z0-9+.\-]*://)[^\s/:@'\"]+:[^\s/@'\"]+@"),
+    re.compile(r"(?i)(\b[a-z][a-z0-9+.\-]*://)[A-Za-z0-9_\-]{20,}@"),
 ]
 _SCAN_SHAPES = {
     "provider_api_key": re.compile(rb"\bsk-(?:ant-)?[A-Za-z0-9_\-]{16,}"),
     "bearer_token": re.compile(rb"(?i)\bbearer\s+[A-Za-z0-9._~+/=\-]{20,}"),
+    "url_credentials": re.compile(
+        rb"(?i)\b[a-z][a-z0-9+.\-]*://(?:[^\s/:@'\"]+:[^\s/@'\"]+|[A-Za-z0-9_\-]{20,})@"),
 }
 
 

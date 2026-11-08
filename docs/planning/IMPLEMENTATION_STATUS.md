@@ -18,3 +18,7 @@ Analysis still about 6x slower than the P2 baseline (round 2 gained ~5%; a share
 
 ## Resume commands
 `PYTHONPATH=src python3 -m unittest discover -s tests -p 'test_*.py' -t .` · `... -m odooflux knowledge validate` · `... knowledge matrix --check` · `... support-statement --check`. Opt-in: ODOOFLUX_BENCH(MARKS), ODOOFLUX_RUNTIME_TESTS, ODOOFLUX_AI_TESTS, ODOOFLUX_PACKAGING_INSTALL.
+
+## Feature 011: Knowledge Acquisition Pipeline (KAP), 2026-11-08
+
+Technical work implemented, all 88 tasks of `specs/011-knowledge-acquisition-pipeline/tasks.md` checked. Final run (`tools/ci_check.sh all`): 2575 tests OK, 40 skipped (opt-in), 1 expected failure; gates, RTM (92 product + 47 KAP requirements) and wheel tests pass. Record: `specs/011-knowledge-acquisition-pipeline/verification.md`. Decisions and risks ledger: `docs/planning/kap/INTEGRATION_NOTES.md`. Human items: `docs/reviews/fragments/kap.md` (all PENDING_HUMAN_REVIEW). **Not production certified; no real Odoo corpus build, live AI, network or Docker run was performed; the JS structural path never ran.** Approval identity and authentication are deferred (`docs/planning/kap/FUTURE_ENHANCEMENTS.md`, FE-1).

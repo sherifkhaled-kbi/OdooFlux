@@ -191,21 +191,25 @@ def build_image_inspect_argv(reference: str) -> list:
     return ["docker", "image", "inspect", "--format", "{{json .RepoDigests}}", reference]
 
 
-def load_runtime_images(path: Path = IMAGES_FILE) -> dict:
+def load_runtime_images(path: Path = IMAGES_FILE, *, knowledge_root=None) -> dict:
+    """Runtime image map. `knowledge_root` (a knowledge tree, e.g. an installed release's `knowledge/`) selects its
+    `compatibility/runtime_images.json`; without it `path` is read (default: the built-in file)."""
+    if knowledge_root is not None:
+        path = Path(knowledge_root) / "compatibility" / "runtime_images.json"
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
-def image_for_version(version: str, images: Optional[dict] = None) -> Optional[str]:
+def image_for_version(version: str, images: Optional[dict] = None, *, knowledge_root=None) -> Optional[str]:
     """Tag reference (repository:tag) for a version, or None when the version has no runtime image."""
-    data = load_runtime_images() if images is None else images
+    data = load_runtime_images(knowledge_root=knowledge_root) if images is None else images
     entry = data.get("images", {}).get(version)
     if not entry:
         return None
     return f"{entry['repository']}:{entry['tag']}"
 
 
-def postgres_reference(images: Optional[dict] = None) -> str:
-    data = load_runtime_images() if images is None else images
+def postgres_reference(images: Optional[dict] = None, *, knowledge_root=None) -> str:
+    data = load_runtime_images(knowledge_root=knowledge_root) if images is None else images
     return data["postgres"]["reference"]
 
 
@@ -256,8 +260,10 @@ class DockerEnvironment:
     contract_version = CONTRACT_VERSION
 
     def __init__(self, runner=None, readiness_timeout_s: float = READINESS_TIMEOUT_S,
-                 excerpt_lines: int = DEFAULT_EXCERPT_LINES, sleep=time.sleep, clock=time.monotonic):
+                 excerpt_lines: int = DEFAULT_EXCERPT_LINES, sleep=time.sleep, clock=time.monotonic, *,
+                 knowledge_root=None):
         self._runner = runner or _default_runner
+        self._knowledge_root = knowledge_root  # None: built-in runtime_images.json (REQ-KAP-036)
         self.audit = None  # AuditLog: launch and teardown are recorded when set (REQ-SEC-005)
         self._readiness_timeout_s = readiness_timeout_s
         self._excerpt_lines = excerpt_lines
@@ -278,12 +284,12 @@ class DockerEnvironment:
 
     # --- contract: prepare --------------------------------------------------------------------------
     def prepare(self, version: str, modules_ro_path: Sequence, limits: Limits, *, state_dir) -> EnvHandle:
-        reference = image_for_version(version)
+        reference = image_for_version(version, knowledge_root=self._knowledge_root)
         if reference is None:
             raise EnvironmentUnavailable("image_unavailable", f"no runtime image is mapped for {version}")
         mounts = module_mounts(modules_ro_path)
         image = self._pinned(reference)
-        pg_image = self._pinned(postgres_reference())
+        pg_image = self._pinned(postgres_reference(knowledge_root=self._knowledge_root))
         run_id = "r" + secrets.token_hex(6)
         handle = EnvHandle(run_id=run_id, version=version, image=image, postgres_image=pg_image,
                            socket_volume=socket_volume_name(run_id), data_volume=data_volume_name(run_id),

@@ -17,12 +17,35 @@ from odooflux.core.orchestrator.provisional import provisional_for
 from odooflux.core.orchestrator.run import (
     RunOptions, SourceChangedError, new_state, report_from_dict, reports_from_state, run_pipeline)
 from odooflux.discovery.modules import find_modules, module_ref
+from odooflux.knowledge.release.coverage_check import check_transition_coverage
+from odooflux.knowledge.release.model import KnowledgeReleaseError
+from odooflux.knowledge.release.resolver import resolve_knowledge
 from odooflux.reporting.model.legacy_json import save_combined_json_report, save_json_report
 from odooflux.reporting.model.legacy_terminal import print_combined_summary, print_report
 from odooflux.reporting.model.model import build_report
 from odooflux.versions.graph.graph import normalize
 
 SEVERITY_FLOOR = {"critical": "CRITICAL", "warning": "WARNING", "info": "INFO"}
+
+
+def resolve_migrate_knowledge(args):
+    """The one knowledge resolution of a migrate run (contracts/migration-integration.md "Resolution").
+
+    Returns (handle, None), or (None, message) when the active release is corrupt, missing, or refused by
+    --require-complete-kb. The caller exits 4 (blocked) and never falls back to the built-in tree (REQ-KAP-036)."""
+    try:
+        handle = resolve_knowledge(getattr(args, "kb_home", None),
+                                   require_complete=bool(getattr(args, "require_complete_kb", False)))
+    except KnowledgeReleaseError as exc:
+        return None, f"ERROR: knowledge release: {exc}"
+    return handle, None
+
+
+def knowledge_release_block(handle) -> dict:
+    """The report's `knowledge_release` object (contracts/migration-integration.md "Report"); built-in included."""
+    return {"release_id": handle.release_id, "digest": handle.digest, "builtin": handle.builtin,
+            "completeness": handle.completeness,
+            "steps_covered": [{"step": step, "completeness": status} for step, status in sorted(handle.steps.items())]}
 
 
 def compute_exit_code(reports: list, write_mode: bool, fail_on: str, rejected: int) -> int:
@@ -160,6 +183,13 @@ def run_migrate(args, ctx, graph, failures) -> int:
         state["provisional"] = label
     if new_ai:
         state["ai_config"] = ai_cfg.to_dict()  # no credential is ever stored
+    handle = ctx.knowledge  # the single handle of this run (set by main.run from resolve_migrate_knowledge)
+    coverage = check_transition_coverage(handle, [s.id for s in plan.steps])
+    state["knowledge_release"] = knowledge_release_block(handle)
+    if coverage.warnings:
+        state["knowledge_warnings"] = list(coverage.warnings)
+    if not coverage.verified:
+        state["knowledge_unverified"] = True  # the report caps the run like an unverified plan (no new status)
     run.write_state(state)
 
     run.audit.add_secrets([api_key])
@@ -183,6 +213,10 @@ def run_migrate(args, ctx, graph, failures) -> int:
         grants = "; ".join(f"{p}={','.join(c)}" for p, c in sorted(ai_cfg.authorizations.items())) or "none"
         print(f"  AI auth : {grants}" + ("; EXTERNAL TRANSMISSION DISABLED (kill switch)" if ai_cfg.kill_switch else ""))
     print(f"  Run     : {run.run_id}  (state: {state_dir})")
+    if not handle.builtin:
+        print(f"  Knowledge: release {handle.release_id} (digest {handle.digest})")
+    for warning in coverage.warnings:
+        print(f"  Knowledge: {warning}")
     if write_mode:
         print("  Backup  : " + ("verified before each module's first write" if options.backup
                                 else "NONE (--no-backup): this run is not reversible"))

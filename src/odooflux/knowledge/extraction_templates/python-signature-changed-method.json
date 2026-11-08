@@ -1,0 +1,15 @@
+{
+  "template_id": "py-signature-changed-method",
+  "description": "A method whose signature changed. Flags the method definition for review; no edit is proposed.",
+  "match": {"domain": "python_orm", "class": "SIGNATURE_CHANGED", "kind": "method"},
+  "rule": {
+    "category": "python_orm",
+    "detector_ref": "odooflux.rules.python.generic:flag_method_override",
+    "fixer_ref": null,
+    "params_from": {"method": "subject.name"},
+    "risk": "HIGH",
+    "review_required": true
+  },
+  "confidence": "LOW",
+  "tests": {"generate_skeleton": true}
+}

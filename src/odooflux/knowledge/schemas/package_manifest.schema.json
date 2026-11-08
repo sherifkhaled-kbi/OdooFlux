@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KnowledgePackage",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "release_id",
+    "release_digest",
+    "created_with",
+    "compat",
+    "entries",
+    "entry_count",
+    "total_size",
+    "contains_enterprise_derived",
+    "redaction_scan"
+  ],
+  "properties": {
+    "format": {
+      "const": "odooflux.package/1"
+    },
+    "release_id": {
+      "type": "string",
+      "pattern": "^kr-[0-9a-f]{12}$"
+    },
+    "release_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "created_with": {
+      "type": "string",
+      "minLength": 1
+    },
+    "compat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "min_framework",
+        "max_framework",
+        "schemas"
+      ],
+      "properties": {
+        "min_framework": {
+          "type": "string",
+          "minLength": 1
+        },
+        "max_framework": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "schemas": {
+          "type": "object"
+        }
+      }
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "sha256",
+          "size"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "entry_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "total_size": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "contains_enterprise_derived": {
+      "type": "boolean"
+    },
+    "redaction_scan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "scanner_version"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "PASSED",
+            "FAILED"
+          ]
+        },
+        "scanner_version": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

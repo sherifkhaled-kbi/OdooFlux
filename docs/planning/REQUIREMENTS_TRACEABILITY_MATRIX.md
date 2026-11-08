@@ -24,6 +24,7 @@ Acceptance criteria and official-evidence requirements per requirement are in
 | Tasks without a requirement reference | 0 |
 | Unique test IDs | 196 |
 | References to undefined requirement IDs | 0 |
+| KAP requirements (feature 011, rows REQ-KAP-001..047) | 47 (evidence: test files citing the requirement id; REQ-KAP-043 by verification record) |
 | Missing mappings | none |
 
 ## Matrix
@@ -122,7 +123,53 @@ Acceptance criteria and official-evidence requirements per requirement are in
 | REQ-PRF-002 | OBJ-007 | P9 | 010:FR-004 | 010:T010, 010:T013 | TST-010-005 | IT | OK |
 | REQ-PRF-003 | OBJ-007 | P9 | 010:FR-005 | 010:T009, 010:T012 | TST-010-004 | IT | OK |
 | REQ-PRF-004 | OBJ-007 | P9 | 010:FR-006 | 010:T002, 010:T011, 010:T014 | TST-010-006 | BM | OK |
-
+| REQ-KAP-001 | OBJ-KAP | KAP | 011:REQ-KAP-001 | 011:T015, 011:T016, 011:T035, 011:T039, 011:T040, 011:T083 (+1) | test_adapter_git, test_cli_source, test_cli_wiring, test_fetch_offline (+3) | UT, IT | OK |
+| REQ-KAP-002 | OBJ-KAP | KAP | 011:REQ-KAP-002 | 011:T060, 011:T079 | test_ai_proposer, test_reader_ai_log | UT | Live provider runs never executed (offline FakeProvider only); D-08 grant, denial and kill-switch tests pass |
+| REQ-KAP-003 | OBJ-KAP | KAP | 011:REQ-KAP-003 | 011:T084 | test_kap_import_graph | UT | OK |
+| REQ-KAP-004 | OBJ-KAP | KAP | 011:REQ-KAP-004 | 011:T047, 011:T051, 011:T084 | test_domain_js, test_extract_driver, test_kap_import_graph | UT | OK |
+| REQ-KAP-005 | OBJ-KAP | KAP | 011:REQ-KAP-005 | 011:T001, 011:T015, 011:T016, 011:T020, 011:T022, 011:T055 (+4) | test_authoring_checks, test_builtin_digest, test_builtin_golden, test_cli_wiring (+6) | UT | OK |
+| REQ-KAP-006 | OBJ-KAP | KAP | 011:REQ-KAP-006 | 011:T031, 011:T032, 011:T040 | test_cli_source, test_p4_schemas, test_sources | UT | OK |
+| REQ-KAP-007 | OBJ-KAP | KAP | 011:REQ-KAP-007 | 011:T035, 011:T037, 011:T038 | test_adapter_docs, test_adapter_enterprise_supp, test_adapter_git, test_git_local_malicious_repo (+1) | UT | OK |
+| REQ-KAP-008 | OBJ-KAP | KAP | 011:REQ-KAP-008 | 011:T032, 011:T037, 011:T057 | test_adapter_enterprise_supp, test_evidence_builder, test_sources | UT | OK |
+| REQ-KAP-009 | OBJ-KAP | KAP | 011:REQ-KAP-009 | 011:T032, 011:T035, 011:T039, 011:T040, 011:T071, 011:T085 | test_adapter_git, test_cli_source, test_fetch_offline, test_live_sources (+1) | UT, IT | Live clone/fetch tests are opt-in and were never run; offline counterparts pass |
+| REQ-KAP-010 | OBJ-KAP | KAP | 011:REQ-KAP-010 | 011:T031, 011:T033, 011:T034, 011:T036 | test_adapter_dir_pack, test_blobstore, test_p4_schemas, test_snapshot | UT | OK |
+| REQ-KAP-011 | OBJ-KAP | KAP | 011:REQ-KAP-011 | 011:T030, 011:T038, 011:T045, 011:T047, 011:T048, 011:T049 (+3) | test_adapter_docs, test_classify, test_domain_js, test_domain_manifest_assets_data (+7) | UT | OK |
+| REQ-KAP-012 | OBJ-KAP | KAP | 011:REQ-KAP-012 | 011:T043, 011:T045, 011:T046, 011:T053, 011:T054 | test_classify, test_cli_extract_ledger, test_dispositions, test_extract_e2e (+1) | UT, IT | OK |
+| REQ-KAP-013 | OBJ-KAP | KAP | 011:REQ-KAP-013 | 011:T034, 011:T041, 011:T044, 011:T047, 011:T053, 011:T054 | test_accounting, test_cli_extract_ledger, test_extract_driver, test_extract_e2e (+2) | UT, IT | OK |
+| REQ-KAP-014 | OBJ-KAP | KAP | 011:REQ-KAP-014 | 011:T041, 011:T042, 011:T043, 011:T053, 011:T058 | test_cli_extract_ledger, test_dispositions, test_generator, test_ledger (+1) | UT | OK |
+| REQ-KAP-015 | OBJ-KAP | KAP | 011:REQ-KAP-015 | 011:T055, 011:T057 | test_evidence_builder, test_evidence_schema_ext | UT | OK |
+| REQ-KAP-016 | OBJ-KAP | KAP | 011:REQ-KAP-016 | 011:T056, 011:T058, 011:T059, 011:T061, 011:T062 | test_accept, test_candidates_e2e, test_cli_candidates, test_generator (+1) | UT, IT | OK |
+| REQ-KAP-017 | OBJ-KAP | KAP | 011:REQ-KAP-017 | 011:T060, 011:T061 | test_ai_proposer, test_cli_candidates, test_evidence_schema_ext, test_release_consistency | UT | OK |
+| REQ-KAP-018 | OBJ-KAP | KAP | 011:REQ-KAP-018 | 011:T009, 011:T025, 011:T027, 011:T062 | test_candidates_e2e, test_cli_rule, test_promote, test_release_safety | UT, IT | OK |
+| REQ-KAP-019 | OBJ-KAP | KAP | 011:REQ-KAP-019 | 011:T020, 011:T023, 011:T024, 011:T027 | test_authoring_ops, test_cli_rule, test_rule_schema_ext, test_rule_store | UT | OK |
+| REQ-KAP-020 | OBJ-KAP | KAP | 011:REQ-KAP-020 | 011:T022, 011:T026, 011:T059 | test_accept, test_authoring_checks, test_conflicts, test_knowledge_root_guard | UT | OK |
+| REQ-KAP-021 | OBJ-KAP | KAP | 011:REQ-KAP-021 | 011:T020, 011:T021, 011:T024, 011:T027, 011:T059 | test_accept, test_authoring_ops, test_cli_rule, test_rule_history (+1) | UT | OK |
+| REQ-KAP-022 | OBJ-KAP | KAP | 011:REQ-KAP-022 | 011:T002, 011:T004, 011:T005, 011:T006, 011:T011, 011:T012 (+2) | test_canonical, test_cli_package, test_p2_schemas, test_package_builder (+4) | UT | OK |
+| REQ-KAP-023 | OBJ-KAP | KAP | 011:REQ-KAP-023 | 011:T003, 011:T010 | _archives, test_archive_reader, test_package_limits | UT | OK |
+| REQ-KAP-024 | OBJ-KAP | KAP | 011:REQ-KAP-024 | 011:T002, 011:T006, 011:T011, 011:T018 | test_canonical, test_cli_package, test_package_builder, test_release_manifest | UT | OK |
+| REQ-KAP-025 | OBJ-KAP | KAP | 011:REQ-KAP-025 | 011:T007, 011:T013, 011:T017, 011:T019 | test_cli_release, test_package_importer, test_package_lifecycle, test_release_store | UT, IT | OK |
+| REQ-KAP-026 | OBJ-KAP | KAP | 011:REQ-KAP-026 | 011:T004, 011:T007, 011:T013, 011:T017, 011:T019 | test_cli_release, test_package_importer, test_package_lifecycle, test_release_model (+1) | UT, IT | OK |
+| REQ-KAP-027 | OBJ-KAP | KAP | 011:REQ-KAP-027 | 011:T009, 011:T013, 011:T018 | test_cli_package, test_loader_active, test_package_importer, test_promote (+1) | UT | Default import of a pipeline-built release is refused for carried-forward built-in FIX_ENABLED rows (open decision KAP-OD-K13) |
+| REQ-KAP-028 | OBJ-KAP | KAP | 011:REQ-KAP-028 | 011:T011, 011:T086 | test_kap_redaction, test_kap_redaction_boundaries, test_package_builder, test_package_snapshot_rule | UT | OK |
+| REQ-KAP-029 | OBJ-KAP | KAP | 011:REQ-KAP-029 | 011:T068, 011:T070, 011:T071, 011:T089 | test_cli_release_build, test_pipeline, test_pipeline_e2e, test_pipeline_release_usable (+1) | UT, IT | OK |
+| REQ-KAP-030 | OBJ-KAP | KAP | 011:REQ-KAP-030 | 011:T014, 011:T043, 011:T068 | test_dispositions, test_pipeline, test_release_diff, test_release_diff_layout | UT | OK |
+| REQ-KAP-031 | OBJ-KAP | KAP | 011:REQ-KAP-031 | 011:T026, 011:T043, 011:T059 | test_accept, test_conflicts, test_dispositions | UT | OK |
+| REQ-KAP-032 | OBJ-KAP | KAP | 011:REQ-KAP-032 | 011:T064, 011:T069, 011:T071 | test_cli_coverage, test_metrics | UT | OK |
+| REQ-KAP-033 | OBJ-KAP | KAP | 011:REQ-KAP-033 | 011:T065 | test_crosscheck | UT | Cross-checks run as NOT_RUN without inputs; no named benchmark set exists (OD-K8), so no recall is reported |
+| REQ-KAP-034 | OBJ-KAP | KAP | 011:REQ-KAP-034 | 011:T063, 011:T066, 011:T067, 011:T069, 011:T071 | test_cli_coverage, test_coverage_manifest, test_gates, test_p7_schemas | UT | M8 (transition coverage) has no gate: open owner question in the contract |
+| REQ-KAP-035 | OBJ-KAP | KAP | 011:REQ-KAP-035 | 011:T063, 011:T067 | test_cli_coverage, test_coverage_manifest, test_p7_schemas | UT | OK |
+| REQ-KAP-036 | OBJ-KAP | KAP | 011:REQ-KAP-036 | 011:T015, 011:T072, 011:T073, 011:T074, 011:T075, 011:T076 (+5) | test_builtin_digest, test_knowledge_root_guard, test_loader_active, test_migrate_with_release (+10) | UT, IT | OK |
+| REQ-KAP-037 | OBJ-KAP | KAP | 011:REQ-KAP-037 | 011:T082 | test_migrate_coverage | UT | OK |
+| REQ-KAP-038 | OBJ-KAP | KAP | 011:REQ-KAP-038 | 011:T082, 011:T083 | test_migrate_coverage, test_migrate_with_release | UT, IT | OK |
+| REQ-KAP-039 | OBJ-KAP | KAP | 011:REQ-KAP-039 | 011:T009, 011:T072 | test_loader_active, test_migrate_coverage, test_pipeline_release_usable, test_release_consistency (+1) | UT, IT | Carried-forward built-in rows are grandfathered by identity at load (open decision KAP-OD-K13) |
+| REQ-KAP-040 | OBJ-KAP | KAP | 011:REQ-KAP-040 | 011:T081 | test_report_release | UT | OK |
+| REQ-KAP-041 | OBJ-KAP | KAP | 011:REQ-KAP-041 | 011:T082 | test_migrate_coverage | UT | OK |
+| REQ-KAP-042 | OBJ-KAP | KAP | 011:REQ-KAP-042 | 011:T076, 011:T077, 011:T082, 011:T083 | test_migrate_coverage, test_migrate_with_release, test_reader_docker_env, test_reader_integrity | UT, IT | OK |
+| REQ-KAP-043 | OBJ-KAP | KAP | 011:REQ-KAP-043 | 011:T088, 011:T090 | — | RV | RECORD (no test): docs/reviews/fragments/kap.md; certification stays PENDING_HUMAN_REVIEW |
+| REQ-KAP-044 | OBJ-KAP | KAP | 011:REQ-KAP-044 | 011:T019, 011:T030, 011:T054, 011:T085, 011:T089, 011:T090 | test_extract_e2e, test_live_sources, test_package_lifecycle, test_quickstart (+1) | UT, IT | Opt-in live tests (ODOOFLUX_KAP_LIVE_TESTS, ODOOFLUX_KAP_CLONES, ODOOFLUX_KAP_DOCKER_TESTS) never run |
+| REQ-KAP-045 | OBJ-KAP | KAP | 011:REQ-KAP-045 | 011:T008, 011:T017, 011:T068 | test_cli_release, test_pipeline, test_release_audit | UT | OK |
+| REQ-KAP-046 | OBJ-KAP | KAP | 011:REQ-KAP-046 | 011:T008, 011:T086 | test_kap_redaction, test_kap_redaction_boundaries, test_release_audit | UT | OK |
+| REQ-KAP-047 | OBJ-KAP | KAP | 011:REQ-KAP-047 | 011:T005, 011:T012, 011:T019 | test_p2_schemas, test_package_lifecycle, test_package_validate | UT, IT | OK |
 
 ## Release gate data
 
@@ -146,7 +193,8 @@ count as tests for the framework mechanics, not as approved migration truth.
 ## Verification records
 
 Rows that satisfy the gate by a recorded verification (RV/EV) instead of a test. Each row names a file and an anchor
-text that must occur in it. No row is needed today: every requirement outside the table above has a mapped test.
+text that must occur in it. Feature 011 adds one row: REQ-KAP-043 is a documentation requirement (technical completion is separate from human certification) and is satisfied by the register fragment, not by a test.
 
 | REQ | Record | Anchor |
 |---|---|---|
+| REQ-KAP-043 | docs/reviews/fragments/kap.md | PENDING_HUMAN_REVIEW |

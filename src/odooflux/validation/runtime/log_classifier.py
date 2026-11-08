@@ -55,14 +55,20 @@ class ClassifiedError:
                 "message": self.message, "file": self.file, "xml_id": self.xml_id, "line": self.line}
 
 
-@functools.lru_cache(maxsize=1)
-def _knowledge_patterns() -> tuple:
-    return tuple(load_knowledge().runtime_patterns.get("patterns", []))
+@functools.lru_cache(maxsize=8)
+def _knowledge_patterns(knowledge_root: Optional[str] = None) -> tuple:
+    kb = load_knowledge() if knowledge_root is None else load_knowledge(knowledge_root)
+    return tuple(kb.runtime_patterns.get("patterns", []))
 
 
-def load_patterns() -> list:
-    """Runtime log patterns in file order (the first match wins)."""
-    return [dict(p) for p in _knowledge_patterns()]
+def load_patterns(*, knowledge_root=None) -> list:
+    """Runtime log patterns in file order (the first match wins).
+
+    `knowledge_root` (a release's knowledge tree) selects its `compatibility/runtime_log_patterns.json`; without it the
+    built-in tree is used (REQ-KAP-036).
+    """
+    key = None if knowledge_root is None else str(knowledge_root)
+    return [dict(p) for p in _knowledge_patterns(key)]
 
 
 def _version_key(value) -> Optional[tuple]:
@@ -148,9 +154,9 @@ def _matching_pattern(record: LogRecord, version: str, patterns: list):
 
 
 def classify_text(text: str, version: str, killed_reason: Optional[str] = None,
-                  patterns: Optional[list] = None) -> list:
+                  patterns: Optional[list] = None, *, knowledge_root=None) -> list:
     """ClassifiedError list for one log text. ``killed_reason`` (timeout or oom) is listed first."""
-    patterns = load_patterns() if patterns is None else patterns
+    patterns = load_patterns(knowledge_root=knowledge_root) if patterns is None else patterns
     errors = []
     if killed_reason:
         errors.append(ClassifiedError(error_class=killed_reason, pattern_id=None, level="KILLED",

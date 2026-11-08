@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FileAccounting",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "pair",
+    "files",
+    "totals",
+    "independent_count"
+  ],
+  "properties": {
+    "pair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from_snapshot",
+        "to_snapshot",
+        "step"
+      ],
+      "properties": {
+        "from_snapshot": {
+          "type": "string",
+          "pattern": "^ss-[0-9a-f]{12}$"
+        },
+        "to_snapshot": {
+          "type": "string",
+          "pattern": "^ss-[0-9a-f]{12}$"
+        },
+        "step": {
+          "type": "string",
+          "pattern": "^\\d{2}-\\d{2}$"
+        }
+      }
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "change_kind",
+          "state",
+          "reason_code",
+          "domain",
+          "parser",
+          "error"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "change_kind": {
+            "enum": [
+              "added",
+              "removed",
+              "modified",
+              "renamed_file"
+            ]
+          },
+          "state": {
+            "enum": [
+              "PENDING",
+              "ANALYZED",
+              "EXCLUDED",
+              "UNSUPPORTED",
+              "FAILED"
+            ]
+          },
+          "reason_code": {
+            "enum": [
+              null,
+              "OUT_OF_SCOPE_GLOB",
+              "GENERATED_FILE",
+              "BINARY",
+              "TOO_LARGE",
+              "NO_PARSER",
+              "NO_JS_ADAPTER",
+              "PARSE_ERROR",
+              "ENCODING_ERROR",
+              "TIMEOUT",
+              "OTHER"
+            ]
+          },
+          "domain": {
+            "enum": [
+              null,
+              "python_orm",
+              "xml_view",
+              "xml_data",
+              "security",
+              "manifest",
+              "js_owl",
+              "assets",
+              "data",
+              "report_controller",
+              "migration_script",
+              "docs"
+            ]
+          },
+          "parser": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "totals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "PENDING",
+        "ANALYZED",
+        "EXCLUDED",
+        "UNSUPPORTED",
+        "FAILED"
+      ],
+      "properties": {
+        "PENDING": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ANALYZED": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "EXCLUDED": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "UNSUPPORTED": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "FAILED": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "independent_count": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

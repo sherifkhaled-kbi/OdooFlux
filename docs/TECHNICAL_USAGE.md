@@ -11,18 +11,27 @@ For installation basics and the complete CLI reference, see [../README.md](../RE
 1. [System architecture](#1-system-architecture)
    1.1 [Principles](#11-principles) · 1.2 [Layer boundaries](#12-layer-boundaries) · 1.3 [Dependencies](#13-dependencies) · 1.4 [Extension mechanisms](#14-extension-mechanisms) · 1.5 [Deterministic and AI-assisted paths](#15-deterministic-and-ai-assisted-paths)
 2. [Complete directory structure](#2-complete-directory-structure)
-   2.1 [Repository root](#21-repository-root) · 2.2 [Package `src/odooflux`](#22-package-srcodooflux) · 2.3 [Other top-level directories](#23-other-top-level-directories)
+   2.1 [Repository root](#21-repository-root) · 2.2 [Package `src/odooflux`](#22-package-srcodooflux) · 2.3 [Other top-level directories](#23-other-top-level-directories) · 2.4 [KAP directory inventory](#24-kap-directory-inventory)
 3. [Execution lifecycle](#3-execution-lifecycle)
+   3.3 [Release build lifecycle (17 steps)](#33-release-build-lifecycle-17-steps)
 4. [Framework layers](#4-framework-layers)
+   4.12 [KAP injection design](#412-kap-injection-design)
 5. [Verification architecture](#5-verification-architecture)
+   5.7 [KAP coverage metrics and gates](#57-kap-coverage-metrics-and-gates)
 6. [Knowledge base architecture](#6-knowledge-base-architecture)
+   6.11 [Release layout on disk](#611-release-layout-on-disk) · 6.12 [Readers, loader and single-release resolution](#612-readers-loader-and-single-release-resolution) · 6.13 [Package format (.ofkp) and checks P01 to P11](#613-package-format-ofkp-and-checks-p01-to-p11)
 7. [How to add knowledge base content](#7-how-to-add-knowledge-base-content)
+   7.9 [A new version transition through a build plan](#79-a-new-version-transition-through-a-build-plan) · 7.10 [A manual rule through KAP](#710-a-manual-rule-through-kap) · 7.11 [Evidence with provenance](#711-evidence-with-provenance) · 7.12 [Candidates: generate, accept, reject](#712-candidates-generate-accept-reject) · 7.13 [Templates and the detector table](#713-templates-and-the-detector-table) · 7.14 [Adding an extractor domain or an adapter](#714-adding-an-extractor-domain-or-an-adapter)
 8. [Development guide](#8-development-guide)
 9. [Testing strategy](#9-testing-strategy)
+   9.5 [KAP test trees and opt-in variables](#95-kap-test-trees-and-opt-in-variables)
 10. [Error handling and recovery](#10-error-handling-and-recovery)
+   10.9 [KAP exit codes](#109-kap-exit-codes)
 11. [Performance architecture](#11-performance-architecture)
 12. [Security architecture](#12-security-architecture)
+   12.8 [KAP trust chain](#128-kap-trust-chain) · 12.9 [Git adapter security contract (REQ-SEC-001)](#129-git-adapter-security-contract-req-sec-001) · 12.10 [Architecture guards](#1210-architecture-guards) · 12.11 [Redaction before hashing](#1211-redaction-before-hashing) · 12.12 [KAP and AI](#1212-kap-and-ai)
 13. [Known limitations and roadmap](#13-known-limitations-and-roadmap)
+   13.8 [KAP limitations and open owner decisions](#138-kap-limitations-and-open-owner-decisions)
 
 Labels used throughout: **Implemented** means the code path exists and is reachable from the stated entry point. **Implemented, not wired** means the code exists and has tests but the `migrate` command never calls it. **Planned** means documented only.
 
@@ -230,6 +239,29 @@ Each feature directory also has a checklists directory. Specs describe intent. W
 
 **`.claude/`**: `settings.local.json` and `.claude/skills/` with nine Spec Kit skills (`speckit-analyze`, `speckit-checklist`, `speckit-clarify`, `speckit-constitution`, `speckit-converge`, `speckit-implement`, `speckit-plan`, `speckit-specify`, `speckit-tasks`). These support the spec-driven workflow and are not part of the runtime.
 
+### 2.4 KAP directory inventory
+
+The Knowledge Acquisition Pipeline (feature 011, "KAP") adds the packages below. The inventory was taken with `ls` on
+2026-11-08. The commands under `odooflux knowledge` are listed in [README section 11.5](../README.md#115-command-reference-and-exit-codes).
+
+| Path | Contents |
+|---|---|
+| `src/odooflux/knowledge/release/` | kb-home store and lock (`store.py`), release manifest (`manifest.py`), provenance writer and verifier (`provenance.py`), kb-home resolver (`resolver.py`), built-in release descriptor (`builtin.py`, `model.py`), release diff (`diff.py`), fix safety gates 1 to 5 (`safety.py`), kb-home audit chain (`audit.py`), canonical JSON and digests (`canonical.py`), coverage check (`coverage_check.py`) |
+| `src/odooflux/knowledge/package/` | `.ofkp` writer (`builder.py`), archive reader and entry checks (`archive.py`, `limits.py`), reader checks (`validate.py`), atomic importer with the FIX_ENABLED gate (`importer.py`), compatibility rules (`compat.py`) |
+| `src/odooflux/knowledge/authoring/` | Manual rule verbs (`ops.py`), byte-preserving rule file store (`rule_store.py`), rule history sidecars (`history.py`), rule checks (`checks.py`), generated-versus-manual conflicts (`conflicts.py`), promotion to FIX_ENABLED (`promote.py`) |
+| `src/odooflux/knowledge/acquisition/` | Source registry, allow-list and statuses (`sources.py`), snapshot manifests (`snapshot.py`), blob store (`blobstore.py`), the only network module (`fetch.py`), and `adapters/` (`git_local.py`, `directory.py`, `docs_rst.py`, `enterprise_local.py`, `snapshot_pack.py`, `supplementary.py`) |
+| `src/odooflux/knowledge/extract/` | Pair driver (`driver.py`), change classification (`classify.py`, `config.json`), rename refinement (`rename.py`), file accounting (`accounting.py`), and nine domain extractors in `domains/` (`assets`, `data`, `js_owl`, `manifest`, `migration_scripts`, `python_orm`, `reports_controllers`, `security`, `xml_views`) |
+| `src/odooflux/knowledge/ledger/` | Change ledger and its history chain (`ledger.py`), dispositions (`dispositions.py`), identifiers (`ids.py`) |
+| `src/odooflux/knowledge/candidates/` | Candidate generation (`generator.py`), template selection (`templates.py`), evidence for candidates (`evidence_builder.py`), acceptance (`accept.py`), AI proposals (`ai_proposer.py`) |
+| `src/odooflux/knowledge/coverage/` | Eight metrics (`metrics.py`), ten gates (`gates.py`), coverage manifest (`manifest.py`), cross-checks (`crosscheck.py`) |
+| `src/odooflux/knowledge/extraction_templates/` | Five JSON templates: `python-removed-field`, `python-removed-method`, `python-renamed-method`, `python-replacement-method`, `python-signature-changed-method` |
+| `src/odooflux/knowledge/pipeline.py` | The 17-step release build. Core module: it imports no adapter. |
+| `src/odooflux/parsers/extract_toolkit.py` | `ExtractToolkit` and `detector_table`, in the adapter layer. The composition root attaches them (section 4.12). |
+| `src/odooflux/cli/kap_*.py` | Eight command groups: `kap_release` (build and kb-home verbs), `kap_package`, `kap_source`, `kap_extract` (`extract` and `ledger`), `kap_rule`, `kap_candidates`, `kap_coverage`, and `kap_common` (shared exit codes and the attached-registry helper). |
+| `tests/unit/knowledge/kap/` | 89 test modules. 749 functions whose names start with `test` (AST count, not executed). |
+| `tests/integration/kap/` | 9 test modules, 60 `test` functions (AST count): the full pipeline, package lifecycle, `migrate` with a release, release usability (variant G), the provenance chain, and a scripted run of `specs/011-knowledge-acquisition-pipeline/quickstart.md`. |
+| `tests/fixtures/kap/` | `fixture_release/` (a synthetic release tree), `golden/builtin_hashes.json`, and `make_synth_repo.py`, which builds a synthetic 16.0 to 17.0 git repository. |
+
 ---
 
 ## 3. Execution lifecycle
@@ -304,6 +336,67 @@ Two different module-status vocabularies exist and must not be confused:
 ### 3.2 Resume and rollback
 
 `odooflux resume RUN_ID` re-enters `run_pipeline` for an existing run. `odooflux rollback RUN_ID` restores files from the run log. Both are described in section 10.
+
+### 3.3 Release build lifecycle (17 steps)
+
+`odooflux knowledge release build --plan FILE` runs the seventeen steps of `knowledge/pipeline.py` (`REAL_STEPS`) in
+order. Each step writes `steps/NN-name.json` under `<kb-home>/staging/<label>/` with `input_digest`, `output_digest`,
+`status` (OK, SKIPPED or FAILED) and its output. The input digest chains the plan fingerprint, the step's probe (for
+example the snapshot digests on disk) and the previous step's output digest.
+
+```mermaid
+flowchart TD
+    subgraph snap["Steps 1-2: snapshot and verify"]
+        s1["1 acquire<br/>snapshot each source"] --> s2["2 verify<br/>re-hash blobs"]
+    end
+    subgraph analyse["Steps 3-6: analyse each pair"]
+        s3["3 extract<br/>ledger and accounting"] --> s4["4 classify"] --> s5["5 evidence"] --> s6["6 candidates<br/>accept PROPOSED"]
+    end
+    subgraph validate["Steps 7-9: validate"]
+        s7["7 schema-validate"] --> s8["8 dup-conflict"] --> s9["9 rule-tests"]
+    end
+    subgraph decide["Steps 10-11: measure and decide"]
+        s10["10 coverage<br/>M1 to M8"] --> s11["11 gates<br/>G-SRC to G-SECRETS"]
+    end
+    subgraph pack["Steps 12-14 and 17: package and install"]
+        s12{"12 build-package<br/>completeness FAILED?"} -->|"no: COMPLETE or PARTIAL"| s13["13 validate-package"]
+        s13 --> s14["14 publish-local<br/>state INSTALLED"] --> s17["17 provenance<br/>verify provenance and tree"]
+    end
+    s2 --> s3
+    s6 --> s7
+    s9 --> s10
+    s11 --> s12
+    s12 -->|"FAILED, --allow-failed (development)"| staged["13 and 14 SKIPPED<br/>staged only, never exportable"]
+    s12 -.->|"FAILED, no --allow-failed"| stop(["STOPPED<br/>COMPLETENESS_FAILED"])
+    s15["15 export<br/>SKIPPED in the build"]
+    s16["16 import-activate<br/>SKIPPED in the build"]
+```
+
+Rules that matter when you read the code:
+
+- **Stop.** A `StepStop`, or any other exception (recorded as `STEP_ERROR`), marks the step FAILED and ends the run.
+  The audit log receives `build_started` and `build_completed`. Messages are masked with the plan's secrets.
+- **Resume.** A step is reused only when its recorded input digest still matches. The first changed or missing input
+  re-runs that step and every later step (the cascade). `--from-step N` forces steps N onward to run again. A ledger
+  edited outside the pipeline is not detected, so use `--from-step` after such an edit.
+- **Dry run.** `--dry-run` computes the same decisions and creates nothing, not even the kb-home layout.
+- **Completeness.** It comes only from the gates (step 11). A FAILED completeness stops the build at step 12 unless
+  `--allow-failed` is given. Then the release stays staged, and it is never published, exported or reported complete.
+- **INSTALLED, not ACTIVE.** Step 14 moves the release into `releases/<id>/` and sets its state to INSTALLED.
+  Activation is a separate command.
+- **Parent and destructive changes.** With `--parent`, `release/diff.py` lists the removed entries. Each one needs a
+  `--supersede ID`, or step 12 stops with `DESTRUCTIVE_NEEDS_SUPERSEDE`. The supersede list is a recorded flag, not an
+  authenticated approval (FE-1).
+- **Auto-accepted candidates.** Step 6 calls `candidates/accept.py` for every PROPOSED candidate. Acceptance runs the
+  validator, the checks, and the rule and history writes. A candidate that fails acceptance is listed under `refused`.
+  The others are accepted without a human step in between. Review the release's rules with `rule validate` and
+  `rule history` before you ship a release.
+- **Steps 15 and 16 are not run by the build.** `_export` and `_import_activate` return SKIPPED. Export and import are
+  explicit commands (README section 11.4).
+- **Step 17** re-verifies the provenance and the release tree. Failures stop the run with `PROVENANCE_INVALID` or
+  `RELEASE_INTEGRITY`.
+
+Exit codes for a build are in section 10.9.
 
 ---
 
@@ -463,6 +556,43 @@ Section 6 describes the data. Code: `src/odooflux/knowledge/`. Public interface:
 | Tests | `tests/unit/reporting/`, `tests/integration/reporting/`, `tests/regression/test_p0_reporting.py` |
 | Extension points | `renderers` registry; `register_default_renderers` |
 
+### 4.12 KAP injection design
+
+The KAP core is `src/odooflux/knowledge/` (pipeline, extract, candidates, release, package, coverage, ledger and
+authoring). Core packages import only the standard library and other core packages (`tests/unit/test_import_graph.py`).
+The code that KAP needs from the rest of the framework (the detector table in `parsers/`, the AI gateway in `ai/`, and
+the run-input rule binder in `rules/`) is attached by the composition root, `builtins.py`. It reaches the KAP code
+either through the registries or as parameters.
+
+```mermaid
+flowchart LR
+    CR["builtins.py<br/>composition root"]
+    ADP["adapters imported by the root<br/>parsers/extract_toolkit.py (ExtractToolkit)<br/>acquisition/adapters/git_local.py<br/>ai gateway factory (lazy)"]
+    REG["registries<br/>extract_toolkit<br/>ai_gateway_factory<br/>run_rule_binder"]
+    CLI["cli/kap_*.py<br/>KAP command groups"]
+    CORE["KAP core<br/>knowledge/pipeline.py, extract, candidates,<br/>release, package, coverage, ledger"]
+    ADP -->|"constructed for"| CR
+    CR -->|"attaches"| REG
+    REG -->|"attached(args, name)"| CLI
+    CLI -->|"passes adapters, extract callable<br/>and detector table as parameters"| CORE
+```
+
+What this means in the code:
+
+- `builtins.py` sets `registries.extract_toolkit = ExtractToolkit(detectors=detector_table(BINDABLE_MODULES))`,
+  `registries.ai_gateway_factory = ai_gateway_factory`, and `registries.run_rule_binder`. The AI gateway factory imports
+  `odooflux.ai` only when it is called.
+- `cli/knowledge.main` places the registries on the parsed arguments for the KAP groups only. Each group reads its
+  dependency with `attached(args, name)` (`cli/kap_common.py`). A command that needs a missing registry exits 2 with a
+  message, for example `build needs the bindable detector table`.
+- `cli/kap_release.py` builds the `BuildPlan`. It supplies the adapters (`GitLocalAdapter` for `GIT_COMMUNITY`), an
+  `extract` callable that calls `extract/driver.py` with the toolkit, and the detector table. The pipeline never imports
+  either.
+- `ExtractToolkit` lives in `parsers/extract_toolkit.py`, which is the adapter layer. It is not in core, so core never
+  imports `parsers`.
+- The AI gateway factory is used only by `knowledge ai propose` (section 12.12).
+- The boundary is enforced by `test_extract_boundary.py` and `test_kap_import_graph.py` (section 12.10).
+
 ---
 
 ## 5. Verification architecture
@@ -548,6 +678,39 @@ L1 to L3 are always required. L4 and L5 are not produced by the `migrate` CLI, s
 ### 5.6 Release gates and certification
 
 Release readiness and production certification are separate (ADR-019). The register in [reviews/FINAL_HUMAN_REVIEW_REGISTER.md](reviews/FINAL_HUMAN_REVIEW_REGISTER.md) lists 52 items, of which 15 are mandatory for production certification. The support statement lists **0 supported paths**, 16 experimental, and 12 unsupported out of 28 (`docs/planning/SUPPORT_STATEMENT.md`). A path becomes supported only when every step is `RULES_TESTED` and the target is `RUNTIME_VALIDATED` (the support statement's rule, `docs/planning/SUPPORT_STATEMENT.md`).
+
+### 5.7 KAP coverage metrics and gates
+
+`knowledge/coverage/metrics.py` computes eight metrics. Each metric has its own numerator and denominator, and there is
+no combined score.
+
+| ID | Name | Numerator / denominator |
+|---|---|---|
+| M1 | `source_retrieval` | required sources VERIFIED / required sources declared |
+| M2 | `file_scan` | changed files ANALYZED / all changed files of the pairs (sum of file states) |
+| M3 | `change_classification` | changes whose class is not UNKNOWN / all changes |
+| M4 | `change_disposition` | changes whose disposition is not UNRESOLVED / all changes |
+| M5 | `evidence` | changes needing evidence with a valid EvidenceRecord / changes needing evidence |
+| M6 | `rule_validation` | release rules new or changed, passing validation / release rules new or changed |
+| M7 | `fix_verification` | FIX_ENABLED rules passing G-SAFE / FIX_ENABLED rules (built-in rows excluded) |
+| M8 | `version_transition` | declared transitions with verified sources, complete accounting and a ledger / declared transitions |
+
+A zero denominator gives `NOT_APPLICABLE`, with no per-mille value. `coverage show` prints a percentage for display
+only.
+
+`knowledge/coverage/gates.py` evaluates ten gates: G-SRC, G-FILES, G-CLASS, G-DISP, G-EVID, G-MANIFEST, G-RULES, G-SAFE,
+G-XCHECK (non-blocking; it warns), and G-SECRETS. A gate reads only its own input key, and a missing key gives `NOT_RUN`.
+`decide(gates, limits)` returns:
+
+- COMPLETE when every blocking gate passes;
+- PARTIAL only when every failing blocking gate is in `PARTIAL_ALLOWED` (G-SRC: `OPTIONAL_SOURCE_NOT_VERIFIED`;
+  G-FILES: `FILES_FAILED`, `FILES_UNSUPPORTED`; G-DISP: `DISP_UNRESOLVED`) and the limits name each of them. Otherwise
+  the result is FAILED (`PARTIAL_WITHOUT_LIMITS` when the limits are missing);
+- FAILED in every other case.
+
+`coverage/manifest.py` recomputes the metrics and gates from the stored inputs (`check_consistency`). A stored value that
+differs is an inconsistency, and `coverage show` and `coverage gates` exit 1. M8 is reported and checked, but no gate reads
+it. The contract records this as an open question (`specs/011-knowledge-acquisition-pipeline/contracts/coverage-and-gates.md`).
 
 ---
 
@@ -727,6 +890,102 @@ Observed results on 2026-11-07 in this repository:
 
 The wheel ships every runtime asset the loaders read: `knowledge/**/*.json`, `reporting/model/*.json`, and `ai/catalog/*.json` (`pyproject.toml` `[tool.setuptools.package-data]`). The FRAMEWORK_COMPLETION_REPORT records 246 JSON assets in the wheel and one clean-venv install (opt-in test `ODOOFLUX_PACKAGING_INSTALL=1`).
 
+### 6.11 Release layout on disk
+
+The tree below was observed with `find` on a kb-home that held two installed releases, one of them active (2026-11-08).
+Hashed content is described in section 6.13.
+
+```text
+<kb-home>/
+  active.json                       pointer to the ACTIVE release; absent means built-in knowledge
+  audit.jsonl                       kb-home audit chain (release lifecycle actions only)
+  .lock                             single-writer lock; present only while a KAP command writes
+  releases/<release-id>/            one installed release; immutable after installation
+    release.json                    manifest: files (path, sha256, size), digest, label, completeness, sources, steps_covered
+    state.json                      lifecycle state (not part of the digest)
+    knowledge/                      the complete knowledge tree (compatibility, evidence, candidates, schemas, ...)
+    provenance/sources.json         one entry per verified source (source_id, revision, snapshot_digest, official, origin_url, ...)
+    snapshots/ss-<id>.json          snapshot manifests only, never blobs
+    coverage/coverage-manifest.json and coverage/inputs.json
+  snapshots/                        snapshot manifests and the blob store (objects/sha256/<aa>/<rest>)
+  staging/<label>/                  one build's working area: steps/, ledgers/, accounting/, snapshots/, store/, sources.json
+```
+
+- `release-id` is `kr-` followed by 12 hex digits, derived from the release digest. The digest is the SHA-256 of the
+  canonical JSON of the manifest, without `release_id` and `release_digest` (`release/manifest.py`).
+- `active.json` has the format `odooflux.active/1`. It names the active release and keeps a `previous` stack, which
+  `rollback` uses.
+- Readers do not take the lock. Only the lock holder writes `active.json` (`release/store.py`).
+- Snapshot blobs are stored once per digest, under `snapshots/objects/sha256/`. Releases carry only the manifests.
+
+---
+
+### 6.12 Readers, loader and single-release resolution
+
+- **Resolution.** `release/resolver.py:resolve_knowledge(kb_home, require_complete=...)` takes the explicit kb-home, else
+  `ODOOFLUX_KB_HOME`, else `default_kb_home()`. With no `active.json` it returns the built-in handle, which has its
+  computed digest. With an active pointer it checks that the release directory exists and is loadable, verifies every file
+  against `release.json` (`require_intact`), checks the pointer digest, and caches the verified result against a stat-only
+  tree fingerprint. Any failure raises `KnowledgeReleaseError`. Nothing falls back.
+- **One resolution per run.** `cli/migrate.py:resolve_migrate_knowledge` calls it once. The same handle is passed to every
+  reader.
+- **A missing kb-home is not an error.** A path that does not exist, or that has no `active.json`, resolves to the built-in
+  handle. A mistyped `--kb-home` therefore runs `migrate` on the built-in knowledge, and only the report's
+  `knowledge_release.builtin` shows it. This was observed with a non-existent path (2026-11-08).
+- **`release show` and `release list`** read kb-home metadata and do not re-hash the files of an installed release. A
+  changed file is detected by `release activate` and by `migrate` for the active release. `package validate` checks a
+  package file, not an installed release.
+- **Loader.** `load_knowledge(root)` (`knowledge/loader.py`) loads any tree given as `root`. Its default root is the
+  built-in tree. `load_active_knowledge(handle)` loads `<handle.root>/knowledge` for a non-built-in handle. A missing tree
+  raises instead of falling back. In a non-built-in release, a FIX_ENABLED rule that fails promotion gates 1 to 5 is
+  capped to DETECT_ONLY, with a `KAP_FIX_CAPPED` warning. Built-in rules are grandfathered and are not capped at load.
+- **Readers take a root.** Every knowledge reader takes a `knowledge_root` argument. The reviewed allow-list in
+  `tests/unit/knowledge/kap/test_knowledge_root_guard.py` names the only modules that may reference `KNOWLEDGE_ROOT`
+  directly (section 12.10).
+- **Cross-reader consistency.** `tests/unit/knowledge/kap/test_release_consistency.py` (TST-011-082b) wraps the readers
+  and checks that each reader reached by `migrate` gets the root of the same handle, that resolution happens once per run,
+  and that a reader without a root is detected while a release is active. `tests/integration/kap/test_pipeline_release_usable.py`
+  (variant G) builds a release through the pipeline, activates it and checks that `migrate` uses it offline.
+
+---
+
+### 6.13 Package format (.ofkp) and checks P01 to P11
+
+A `.ofkp` file is a ZIP archive with the format `odooflux.package/1`. `package export` writes it deterministically, and
+the provenance test suite checks that two builds from the same inputs give the same release digest. The entries of a
+PARTIAL release are listed below (one observed release had 247 entries; the count varies with the build):
+
+```text
+package.json                      declared summary: format, release_id, digest, compat, entry count (declared, not verified)
+release.json                      the release manifest; the digest is recomputed on read
+integrity/SHA256SUMS             sha256 line for every entry, sorted by path
+provenance/sources.json           the source identities bound to the release
+coverage/coverage-manifest.json   metrics, gates and limits
+coverage/inputs.json              the inputs the coverage manifest was computed from
+snapshots/ss-<id>.json            snapshot manifests (never blobs)
+knowledge/**                      the complete knowledge tree
+```
+
+Validation runs in the order P01 to P09 and P11 while the package is staged, then P10 at import. Nothing is installed
+unless every check passes.
+
+| Check | Rejects | Code |
+|---|---|---|
+| P01 | Unsafe entry names: not a string, empty, NUL byte, not UTF-8, not NFC, backslash, absolute path, drive letter (and the path-length and depth limits, `MAX_PATH_LEN` 240 and `MAX_DEPTH` 12) | `package/archive.py`, `package/limits.py` |
+| P02 | Duplicate names, including collisions after case or Unicode normalisation | `package/archive.py` |
+| P03 | Directory entries and any non-regular file | `package/archive.py` |
+| P04 | Entries missing from or not listed in the manifest, a missing `integrity/SHA256SUMS`, and sizes that differ from the archive header | `package/archive.py`, `package/validate.py` |
+| P05 | Entries above 64 MiB, more than 20,000 entries, more than 1 GiB in total, or a compression ratio above 200 | `package/archive.py`, `package/limits.py` |
+| P06 | A release digest that cannot be recomputed from `release.json`, an `--expect-digest` mismatch, a `SHA256SUMS` that does not match the manifest, or a missing `release.json` | `package/validate.py` |
+| P07 | `package.json` (or another checked document) that does not satisfy its JSON Schema | `package/validate.py` |
+| P08 | Encrypted entries and disallowed compression methods | `package/archive.py` |
+| P09 | A planted canary, a credential-shaped string, an absolute path, or a redaction status other than PASSED | `package/validate.py` (and `package/builder.py` at export) |
+| P10 | Unverified FIX_ENABLED rules (gates 1 to 5 at import). The default refuses; `--downgrade-unverified` caps the rules to DETECT_ONLY | `package/importer.py` |
+| P11 | A missing `knowledge/` tree, or any ERROR finding from knowledge validation | `package/validate.py` |
+
+The import is atomic. Its staging directory is published with one `os.replace`, and a failure leaves kb-home unchanged
+(`package/importer.py`). The importer holds the kb-home lock for the whole run.
+
 ---
 
 ## 7. How to add knowledge base content
@@ -821,6 +1080,105 @@ If `matrix --check` fails, regenerate with `PYTHONPATH=src python3 -m odooflux k
 | No evidence for a construct | Do not create a rule | Record a gap in `knowledge/gaps.json` or the backlog |
 | Construct needs model-aware analysis | Document as unmapped | Track in `docs/planning/KNOWLEDGE_BASE_BACKLOG.md` |
 | Runtime validation not done | Path stays `EXPERIMENTAL` or `UNSUPPORTED` in the support statement | Record a real run in `runtime_runs.json` only after it executed |
+
+### 7.9 A new version transition through a build plan
+
+Use this procedure to add or refresh a version pair. It was checked on synthetic repositories only (section 9.5).
+
+1. Register both sides with `knowledge source add --file SPEC`. Each spec names a revision. For a local clone the
+   revision must be a full 40-hex commit present in the clone; otherwise `source acquire` stops with `REVISION_UNAVAILABLE`.
+2. Snapshot the sources offline with `knowledge source acquire ID ...`. Check the blobs with `knowledge source verify`.
+3. Write the plan file described in [README section 11.6](../README.md#116-the-release-build-pipeline-at-a-glance). Its
+   `source_meta` needs a `repository` (`owner/name`) for each source. Run `release build --plan FILE --dry-run`, then the
+   real build.
+4. Read the ledger and settle what remains UNRESOLVED. Use `ledger list`, then `ledger set-disposition` with a
+   `--rationale` for `NO_CUSTOM_MODULE_IMPACT` or `HUMAN_REVIEW`. Then re-run with `--from-step` (resume does not detect
+   ledger edits made outside the pipeline).
+5. Review the candidates (section 7.12). A second build accepts any PROPOSED candidate that passes acceptance (section 3.3).
+6. Check the completeness and the limits with `coverage show --release ID` and `coverage gates --release ID`.
+7. Export, validate and import into the consumer kb-home, activate, and run `migrate --kb-home ... --require-complete-kb`
+   when you need a COMPLETE release.
+
+A PARTIAL release is valid. Its limits are part of the release and are shown by `coverage gates`.
+
+### 7.10 A manual rule through KAP
+
+Manual rules are written with the `rule` verbs, which take `--path TREE`. Work on a copy of the tree unless you are
+changing the shipped knowledge on purpose. The worked example is in [README section 11.3](../README.md#113-manual-rule-workflow-worked-example).
+
+- A rule lives in `compatibility/<step>.rules.json`. The store rewrites only the changed element, so untouched rows keep
+  their bytes.
+- Its history is in `history/rules/<rule-id>.json`, a hash chain of revisions. `rule history` verifies it.
+- The identifier must match `^(\d+-\d+|\*)\.[a-z_]+\.[a-z0-9-]+$`, and `--step` must equal its prefix.
+- A CLI-created rule is MANUAL. Its maturity is DRAFT or DETECT_ONLY, it has no `fixer_ref`, and its `detector_ref` must
+  resolve in the detector table (section 7.13).
+- The verbs validate the whole tree, and they undo their own change if it adds a new error.
+- `FIX_ENABLED` is set only by `rule promote`, which runs gates 1 to 5. The `--approval` value is a recorded reference, not
+  an authenticated approval (FE-1).
+
+### 7.11 Evidence with provenance
+
+Evidence records live in `knowledge/evidence/EV-*.json`. Candidate evidence carries the source identity: `source_id`,
+`official`, `url`, `repository` and `revision`. Attach an existing record to a rule with `rule link-evidence`. Do not
+create evidence for a claim you have not read in the official source.
+
+- A FIX_ENABLED rule needs at least one linked record that is official and not produced by AI, and whose `source_id` is
+  bound in the release provenance (gate 1, `release/safety.py`).
+- Each provenance entry carries `source_id`, `revision`, `snapshot_digest`, `official`, `status`, `origin_url` and
+  `snapshot_id` (`release/provenance.py`).
+- A local source is not on the public allow-list. Evidence built from one fails the evidence checks in this pass (`E002`,
+  an URL not in the allow-list, and `E003`, a revision not in the catalogue). Production evidence needs allow-listed
+  URLs and a revision catalogue entry.
+
+### 7.12 Candidates: generate, accept, reject
+
+`candidates generate --path TREE --ledger FILE --source SPEC --checked-on DATE` turns a ledger into candidate rules
+(`CR-<id>` files under `knowledge/candidates/`), with their evidence. It prints a summary such as
+`generated 2 candidate(s), 2 evidence record(s), 0 linked, 11 skipped, 0 existing, 0 conflict(s)`.
+
+- Candidates are DETECT_ONLY or DRAFT, with origin GENERATED. Their detectors are checked against the table (section 7.13).
+- Generation never overwrites, resets or revives a candidate of any status. A candidate that already exists is counted as
+  `existing`. A rejected candidate therefore stays rejected.
+- `--source` must give the source's `repository` as `owner/name` (for example `odoo/odoo`), or be an official source with an
+  `expected_origin`. Otherwise `generate` stops with exit 2 and asks for one of them. A local URL is not accepted as a repository.
+- `generate` refuses to run while any candidate in the tree is still PROPOSED (exit 1): accept or reject the pending ones first.
+- A ledger change confirmed as a replacement without a replacement entry makes `generate` refuse the whole ledger (exit 1).
+- `candidates accept CR-ID --path TREE --ledger FILE` runs the validator, the checks, and the rule and history writes.
+  `candidates reject CR-ID --reason ...` records a reason. `candidates resolve` records the decision for a CONFLICT.
+- `candidates list` shows the status of every candidate: PROPOSED, ACCEPTED, REJECTED or CONFLICT.
+
+### 7.13 Templates and the detector table
+
+An extraction template maps one kind of change to a candidate rule skeleton. Templates are JSON files in
+`knowledge/extraction_templates/`. Their keys are `template_id`, `description`, `match`, `rule`, `confidence`, `tests`
+and `replacement_suggestion` (optional).
+
+- `match` names the domain, the class and (optionally) the kind of change. `select_template` picks the single most
+  specific match. Two equally specific matches are an error.
+- `rule.detector_ref` is `module:function`. It must be in the **explicit detector table** that `parsers/extract_toolkit.py`
+  builds from `BINDABLE_MODULES` (`rules/bindable.py`). `detector_table` admits only public functions that follow the
+  signature rule (the first two parameters are the frame, and the rest are keyword-only).
+- `rule.params_from` maps each detector keyword to a dotted path in the change view. `subject.name` means the last
+  segment of the subject key.
+- Fixers are never candidates. A name that starts with `remove_`, `rename_`, `rewrite_`, `migrate_` or `fix_` is refused.
+- Verification fails closed. `verify_detector_ref` refuses a fixer or anything outside the table. `detector_params_problem`
+  refuses unknown or missing parameters. `check_detector_table` raises at composition time, so a malformed table never
+  reaches a template. A GENERATED rule is created only with `detectors_verified=True`.
+- To cover a new change shape, add template data or a new generic detector. The generator never gets new code for it
+  (`candidates/templates.py`).
+
+### 7.14 Adding an extractor domain or an adapter
+
+**An extractor domain.** Add a module under `knowledge/extract/domains/` that exports an `EXTRACTORS` tuple, then add the
+module to `default_registry()` in `knowledge/extract/driver.py`. The suite fails if a domain module is left out. The
+extractor reads the parsed documents that the toolkit provides. Core code must not import a parser directly
+(`test_extract_boundary.py`). Add tests next to `tests/unit/knowledge/kap/test_domain_*.py`.
+
+**An acquisition adapter.** Add the class under `knowledge/acquisition/adapters/`, and give it a kind that the
+registry knows (`acquisition/sources.py`). The adapter must not open a socket: network code lives only in `fetch.py`.
+Remote URLs go through the allow-list. The build constructs only the `GIT_COMMUNITY` adapter (`GIT_KINDS` in
+`cli/kap_release.py`), so a new kind must also be added there before `release build` can use it. Test the adapter offline
+first (see section 12.9 for the pattern used by the git adapter).
 
 ---
 
@@ -978,6 +1336,40 @@ Two related variables are not test switches:
 
 The FRAMEWORK_COMPLETION_REPORT records these results for the default suite on 2026-11-07: 1734 tests OK with 34 opt-in skips, about 42 s. Those figures are taken from the report; this guide did not run the full suite. The same report records live AI provider tests as not run, and the runtime suite (nine tests) as passing once with Docker.
 
+### 9.5 KAP test trees and opt-in variables
+
+The KAP tests are in three places. Their syntax follows the discovery command in section 9.1. These commands were **not executed** in the documentation pass that added this section, because that pass ran no tests.
+
+```bash
+PYTHONPATH=src python3 -m unittest discover -s tests/unit/knowledge/kap -p 'test_*.py' -t .
+PYTHONPATH=src python3 -m unittest discover -s tests/integration/kap -p 'test_*.py' -t .
+PYTHONPATH=src python3 -m unittest tests.integration.kap.test_pipeline_e2e
+```
+
+- The unit tree holds 89 modules, and the integration tree holds 9. The architecture guards are listed in section 12.10.
+  Two of them sit outside the KAP tree: `tests/unit/test_import_graph.py` and
+  `tests/unit/validation/test_no_customer_code_execution.py`.
+- Several integration tests, among them `test_pipeline_e2e.py` and `test_migrate_with_release.py`, replace
+  `socket.socket` and `socket.create_connection` with a function that fails the test, so they cannot reach the network. `test_quickstart.py` runs every `odooflux knowledge` and `migrate` line of
+  `specs/011-knowledge-acquisition-pipeline/quickstart.md` through the real entry point.
+- The synthetic git repository used by the pipeline tests comes from `tests/fixtures/kap/make_synth_repo.py`. It needs
+  the `git` binary, and the tests skip without it.
+
+Opt-in variables. Each name was checked by grep in `tests/`:
+
+| Variable | Value | Enables | Where |
+|---|---|---|---|
+| `ODOOFLUX_KAP_CLONES` | Path to a real Odoo clone. The path is the clone itself, not a parent directory. | `test_live_clone_acquire`. Needs `ODOOFLUX_KAP_CLONE_REV` too. | `tests/integration/kap/test_live_sources.py` |
+| `ODOOFLUX_KAP_CLONE_REV` | A full 40-hex commit that is present in the clone | The pinned revision for the clone test | same |
+| `ODOOFLUX_KAP_LIVE_TESTS` | `1` | `test_live_fetch_checksum`. Also needs the two variables below. | same |
+| `ODOOFLUX_KAP_FETCH_URL` | An allow-listed `https` URL | The live fetch | same |
+| `ODOOFLUX_KAP_FETCH_SHA256` | The expected SHA-256 of the fetched bytes | The live fetch | same |
+| `ODOOFLUX_KAP_DOCKER_TESTS` | `1` | `test_live_docker_skipped_by_default`, which runs `docker version` only and starts no container | same |
+| `ODOOFLUX_KAP_TEST_KEY` | A dummy value for the AI factory test. It is not a live credential. | `tests/unit/knowledge/kap/test_ai_gateway_factory.py` | — |
+
+The live tests have not been run. The offline counterparts (`test_offline_clone_acquire`, `test_offline_fetch_checksum`)
+run by default. The offline fetch test injects its own opener.
+
 ---
 
 ## 10. Error handling and recovery
@@ -1012,6 +1404,9 @@ From `src/odooflux/cli/exit_codes.py` and `cli/migrate.py`:
 | 4 | A BLOCKED module, or an internal tool error |
 
 Precedence is 4, then 3, then 1, then 0. The default `--fail-on critical` fails on an open CRITICAL finding or a `FAILED` module.
+
+The KAP groups (`knowledge release`, `package`, `source`, `extract`, `ledger`, `rule`, `candidates`, `coverage`, `ai`) use
+their own codes, 0 to 5. Section 10.9 gives them. Those codes are not the table above.
 
 ### 10.3 Legacy and v1 mappings (D-10)
 
@@ -1071,6 +1466,31 @@ Rollback collapses repeated writes to one path: the first `sha256_before` is pai
 | Backups are verified before writes | `backup_module` plus `backup_verified` audit entry. |
 | Failed promotion restores what it touched | `promote._restore` (regression finding F-INJ-1 fixed). |
 | Output is not accepted without L1 | `step_runner.py`. |
+
+### 10.9 KAP exit codes
+
+The KAP groups return these codes. The code is the one the module returns, from `cli/kap_common.py` and the group modules.
+
+| Code | Meaning | Typical causes |
+|---|---|---|
+| 0 | Success. A PARTIAL release is success with warnings. | |
+| 1 | Validation or gate failure, or a refused operation | A refused rule or candidate, an unknown id, a ledger with findings, `coverage` FAILED, a kb-home lock held by another process, a stopped build with a non-package code, `release remove` of an ACTIVE release |
+| 2 | Usage error | A missing or invalid flag, an unreadable build plan, `ai propose` without `--ai`, `source fetch` without `--allow-network`, a bad `--sha256` |
+| 3 | Package rejected | Any `P01` to `P11` check, an `--expect-digest` mismatch, an export refused with `EXPORT_REFUSED` |
+| 4 | Source unavailable | A required source failed or is not verified, a pinned revision is missing, a `source fetch` failed |
+| 5 | Release integrity failure | A changed installed release, a manifest or provenance mismatch, a broken audit chain, a blob hash mismatch in `source verify` |
+
+A build reports its stop code in the output. The codes map as follows (`_exit_code` in `cli/kap_release.py`):
+
+| Stop code | Exit |
+|---|---|
+| `SOURCE_REQUIRED_FAILED`, `SOURCE_REQUIRED_NOT_VERIFIED` | 4 |
+| `CHECKSUM_MISMATCH`, `MANIFEST_INCONSISTENT`, `PROVENANCE_INVALID`, `RELEASE_INTEGRITY` | 5 |
+| `P01` to `P11` | 3 |
+| `COMPLETENESS_FAILED`, `DESTRUCTIVE_NEEDS_SUPERSEDE`, `PAIR_SOURCE_NOT_VERIFIED`, `STEP_ERROR`, and any other code | 1 |
+
+Build results are printed with secrets masked. The release commands pass their error text through `redact_text`.
+A `KnowledgeReleaseError` in a release command exits 5, and a `KbLockedError` exits 1.
 
 ---
 
@@ -1158,6 +1578,124 @@ Each provider is a catalog entry with its own type, endpoint, and credential var
 
 Every AI request and response decision is recorded through the run log and audit log (`ai_request` action). Usage and cost are reported through `ai/usage/usage.py` when pricing is configured. The verified-result cache is `ai/caching/cache.py` (`ResultCache`).
 
+### 12.8 KAP trust chain
+
+The chain runs from the source bytes to the importer's refusal of an unverified rule. Each link is checked again by the next.
+
+1. **Source snapshot.** `source acquire` or `source fetch` writes a snapshot manifest (`acquisition/snapshot.py`) with a
+   SHA-256 for each file. The blobs are kept in a content-addressed store and re-hashed by `source verify` and by build step 2.
+   A source's identity is its registry entry. For an official source, the local clone's `origin` remote must also match the
+   declared origin, and the origin must be allow-listed (`acquisition/adapters/git_local.py`).
+2. **Provenance.** `release/provenance.py:write_provenance` copies the snapshot manifests (not the blobs) into the release and
+   writes `provenance/sources.json`, one entry per verified source. Every entry is validated before anything is written.
+3. **Package.** `release.json` binds the same identity (`sources_meta`) and hashes every file. An altered file therefore changes
+   the release digest. `package export` adds `integrity/SHA256SUMS`.
+4. **Importer.** `package import` validates the archive (P01 to P11), recomputes the digest (P06), and then applies gate 1 to
+   each FIX_ENABLED rule (P10).
+5. **Gate 1.** A FIX_ENABLED rule needs a linked evidence record that is official, is not AI-produced, and whose source is bound
+   in the provenance with the same identity. Otherwise the import refuses the rule (`--downgrade-unverified` caps it to
+   DETECT_ONLY instead). At load, a non-built-in FIX_ENABLED rule that fails gates 1 to 5 is capped with `KAP_FIX_CAPPED`.
+
+The chain shows that the bytes and declarations are consistent with each other. It does not show who wrote them. The declared
+identity is not a signature (section 13.8).
+
+**Fail-closed cases.** `tests/integration/kap/test_provenance_e2e.py::test_fail_closed_tamper_cases` runs eight subtests. Each
+one changes a built release, exports it, and asserts that the importer refuses it with P10 and that gate 1 reports a finding:
+
+1. `provenance/sources.json` missing
+2. entry `revision` altered
+3. entry `snapshot_digest` altered
+4. entry `origin_url` missing
+5. entry `origin_url` not on the allow-list
+6. source marked `official=false`
+7. evidence `source_id` not in the provenance
+8. a shipped snapshot file missing
+
+Related tests in the same module cover a snapshot altered after the build
+(`test_snapshot_altered_after_build_fails_release_verification`), a clone whose remote is swapped before acquisition
+(`test_clone_remote_swapped_before_acquisition_builds_no_release`), the downgrade option
+(`test_downgrade_option_caps_refused_rule`), the identity tamper that changes the digest
+(`test_identity_tamper_changes_release_digest`), and determinism across two builds
+(`test_determinism_two_builds_from_same_inputs`).
+
+### 12.9 Git adapter security contract (REQ-SEC-001)
+
+`acquisition/adapters/git_local.py` reads a local clone. The clone is untrusted.
+
+- **Four read-only plumbing subcommands.** `cat-file` (object checks and batch reads), `ls-tree` (listing the pinned tree),
+  `rev-parse --show-toplevel` (the repository root check), and `remote get-url origin` (the identity check). The test
+  `test_only_read_only_plumbing_commands_are_used` enforces this set, and `test_remote_use_is_get_url_only` enforces the
+  `remote` form.
+- **Hardened calls.** Every call passes an argument list with no shell and a 120-second timeout. Its environment is built from
+  scratch and holds only `PATH`. Repository-controlled behaviour is switched off with `-c` options: `core.fsmonitor`,
+  `core.hooksPath`, `protocol.allow=never`, `core.sshCommand`, `core.askPass`, `core.pager`, `core.editor`,
+  `credential.helper`, `gpg.program`, `diff.external`, `uploadpack.packObjectsHook`, `core.alternateRefsCommand` and
+  `core.gitProxy`. The call also adds `--no-optional-locks` and `--no-replace-objects`. The last is load-bearing: a
+  `refs/replace/<commit>` entry in the clone could otherwise substitute another tree for the pinned commit.
+- **No remote access.** Remote URLs are never passed to git. They are checked against the allow-list and refused with
+  `NETWORK_DISABLED`. Network code lives only in `acquisition/fetch.py`.
+- **Pinned revisions only.** The revision must be a full 40-hex commit that is present in the clone (`REVISION_UNAVAILABLE`
+  otherwise). Branches, tags and short SHAs are never resolved, and no other revision is substituted.
+- **Hostile-clone tests** (`tests/unit/knowledge/kap/test_git_local_malicious_repo.py`). The clone's own config, hooks,
+  attributes and executables are attacker-controlled. The tests install a marker-writing script on each known code-execution
+  path and assert that no marker appears during probe and snapshot. A positive control shows that the same hostile setup does
+  fire for ordinary git, so the test cannot pass vacuously. The snapshot content equals the pinned tree even when a replacement
+  ref points elsewhere. `remote get-url` and an `insteadOf` rewrite are printed and never executed.
+
+**What the tests did not cover.** They were run with git 2.43.0 only, on Linux. Other git versions and other platforms have not
+been tested.
+
+**Known gap (not fixed).** `git remote get-url` prints the URL after any `insteadOf` rewrite. A clone whose stored `origin` is an
+`ext::` URL, with an `insteadOf` rule that rewrites it to the official URL, can therefore pass the official identity check. Fixing
+this needs the raw remote URL, which is a `git config` call outside the documented command set. The gap is recorded as
+`@unittest.expectedFailure` in `test_known_gap_insteadof_cannot_forge_official_identity`. Remove the marker when the gap is fixed.
+
+### 12.10 Architecture guards
+
+| Guard | What it enforces |
+|---|---|
+| `tests/unit/test_import_graph.py` (TST-003-001) | Core packages import only the standard library and other core packages. |
+| `tests/unit/validation/test_no_customer_code_execution.py` (TST-008-013) | The package never imports or runs scanned code. No `exec`, `eval`, `compile` or `runpy`. `importlib` only in the one plugin loader. `subprocess` only in the runtime adapter. |
+| `tests/unit/knowledge/kap/test_knowledge_root_guard.py` (TST-011-080) | Only the modules on its reviewed allow-list reference `KNOWLEDGE_ROOT`. The list has 21 entries, each with a reason. An entry whose module no longer references the root fails the test. Do not broaden the list without a reviewed reason. |
+| `tests/unit/knowledge/kap/test_extract_boundary.py` | `knowledge/extract/` (with `domains/`), `knowledge/candidates/` and `cli/kap_*.py` import no adapter package (`parsers`, `rules`, `ai`, `validation.runtime`) and not `builtins`. `ExtractToolkit` lives in `parsers/`. |
+| `tests/unit/knowledge/kap/test_kap_import_graph.py` (TST-084) | No `sqlite3` in the KAP scope. Network modules only in `acquisition/fetch.py`, and `urlopen` only there. Every import is standard library or `odooflux`. No dynamic import (`__import__`, `import_module`). |
+| `tests/unit/knowledge/kap/test_git_local_readonly.py` | The git adapter uses only the four read-only subcommands, and its call shape is fixed (section 12.9). |
+
+The reviewed allow-list of `KNOWLEDGE_ROOT` users covers: `knowledge/loader.py`, `knowledge/release/model.py`,
+`knowledge/release/builtin.py`, `knowledge/view_index.py`, `knowledge/runtime_runs.py`, `knowledge/checks.py`,
+`knowledge/extract/accounting.py`, `knowledge/acquisition/sources.py`, `knowledge/package/validate.py`,
+`knowledge/candidates/evidence_builder.py`, `knowledge/authoring/history.py`, `knowledge/authoring/checks.py`,
+`knowledge/authoring/rule_store.py`, `knowledge/coverage/manifest.py`, `knowledge/ledger/ledger.py`,
+`validation/static/rng.py`, `validation/runtime/docker_env.py`, `validation/dependency/integrity.py`, `cli/knowledge.py`,
+`cli/kap_rule.py` and `cli/support_statement.py`. About half of them load a schema that ships with the package, not data.
+
+### 12.11 Redaction before hashing
+
+- `utils/redaction.py` provides `redact_text(text, secrets)` and `scrub(value, secrets)`.
+- `release/manifest.py:build_manifest(..., secrets=...)` scrubs the metadata (the label, the sources and the rest) before the
+  manifest is hashed. A secret placed in a label therefore never reaches `release.json`. The audit log uses the same mechanism
+  (REQ-KAP-046).
+- `package/builder.py` scans each included entry for registered canaries, credential-shaped strings and absolute paths (P09).
+  `package.json` records the scan status (`PASSED` on the observed release).
+- A source URL that contains credentials is refused with `URL_CREDENTIALS`. It is never normalised.
+- `--ai-secrets-file` is read from a file kept outside the scanned tree. One gap is open: the factory passes `scanned_paths=()`
+  to the credential loader, so a secrets file placed inside the scanned tree is not refused by that guard (INTEGRATION_NOTES item 67).
+
+### 12.12 KAP and AI
+
+Only `knowledge ai propose` uses AI in KAP. `release build` does not (INTEGRATION_NOTES item 72).
+
+- It needs `--ai`, `--ai-consent-send-code`, a provider and a model, and a job token budget (`--ai-budget-job-tokens`). The
+  packaged catalog ships with empty model lists, except for the `fake` provider. A real model needs your own catalog, given with
+  `--ai-catalog`.
+- The grant is per provider and per category. KAP asks for `evidence_excerpt`, for example `--ai-authorize PROVIDER=evidence_excerpt`.
+  `ai/proposer.py` checks the grant before it calls the gateway, so a denied request sends nothing.
+- The kill switch is `--ai-disable-external` or `ODOOFLUX_AI_DISABLE_EXTERNAL=1`. It refuses before anything is sent.
+- Proposals are written to `candidates/ai/` with origin `AI_PROPOSED`. A proposal is not a rule. AI actors cannot confirm a
+  ledger change (`ledger confirm` refuses them).
+- Tests (`tests/unit/knowledge/kap/test_ai_gateway_factory.py`, `test_ai_proposer.py`, and the CLI tests) block sockets and use
+  the fake provider. Only the packaged `fake` provider has been exercised end to end. No external provider has been tested.
+
 ---
 
 ## 13. Known limitations and roadmap
@@ -1242,6 +1780,65 @@ From FRAMEWORK_COMPLETION_REPORT section 3 and the register appendix:
 May be said: the framework runs a migration end to end from an installed wheel; it applies detect-only and evidenced fix rules with a backup, rollback, and resume; it reports unsupported cases explicitly; and it keeps AI off unless authorized.
 
 May not be said: that migrations are accurate; that any path is supported; that behaviour is equivalent after migration; or that the tool is production certified.
+
+### 13.8 KAP limitations and open owner decisions
+
+**Status.** No real Odoo corpus build has been run. Every KAP test uses synthetic fixtures. The live tests (a real clone, a
+network fetch, Docker) have not been run. Only the packaged `fake` AI provider has been exercised. Production certification is
+not granted. The owner decisions below are pending in the review register.
+
+**Owner decisions (OD-K1 to OD-K13).** They are listed as `PENDING (human)` in
+[docs/reviews/FINAL_HUMAN_REVIEW_REGISTER.md](reviews/FINAL_HUMAN_REVIEW_REGISTER.md), lines 729 to 741:
+
+| ID | Decision |
+|---|---|
+| OD-K1 | kb-home location and `ODOOFLUX_KB_HOME` |
+| OD-K2 | Package container: ZIP, deflate or stored |
+| OD-K3 | Unverified FIX_ENABLED on import: refuse or downgrade |
+| OD-K4 | Report schema bump and the built-in release in reports |
+| OD-K5 | Package authenticity: digest pin only |
+| OD-K6 | Enterprise and OCA/OpenUpgrade scope |
+| OD-K7 | Audit log reuse |
+| OD-K8 | Named benchmark sets for recall |
+| OD-K9 | Redaction module |
+| OD-K10 | Activating PARTIAL releases |
+| OD-K11 | Rule history sidecar; opt-in for built-in duplicate checks |
+| OD-K12 | Revisit SQLite and the threshold |
+| OD-K13 | Built-in FIX_ENABLED rules in a built release |
+
+OD-K13 has two parts. Part A is an established invariant: an unverified FIX_ENABLED rule in a non-built-in release is refused on
+import unless downgraded, and it is capped at load. Part B is open product policy. It asks whether carried-forward built-in rows
+should be accepted on import (grandfathered by identity with the shipped row, as they are at load), kept refused, or capped. It
+also asks whether a release built from the built-in parent should import by default without `--downgrade-unverified`.
+Part A is recorded in [planning/kap/INTEGRATION_NOTES.md](planning/kap/INTEGRATION_NOTES.md), where OD-K13 is classified.
+The observed behaviour in the documentation pass matches that classification: the default import refused the ten built-in
+FIX_ENABLED rules with P10, and `--downgrade-unverified` installed the release with them capped to DETECT_ONLY.
+
+**Open items recorded in the integration notes** ([planning/kap/INTEGRATION_NOTES.md](planning/kap/INTEGRATION_NOTES.md)):
+
+- Item 64 (open, technical): `authoring/conflicts.write_conflicts` rewrites `conflicts.json` from the current run only, so resolved
+  conflict history can be lost on a later `generate`.
+- Item 67 (open, small): the AI gateway factory does not pass the candidate tree as a scanned path (section 12.11).
+- Items 69 and 70: a release built by the pipeline and used by `migrate` (variant G). A test now covers it
+  (`test_pipeline_release_usable.py`). The notes still list it as pending, and the documentation pass also ran the flow by hand.
+- Item 72: the pipeline auto-accepts verified PROPOSED candidates without a human review step (section 3.3). Steps 15 and 16 are
+  not run in the build. AI proposal is not wired into the pipeline. Ledger edits outside the pipeline are not detected by resume.
+
+**Other limitations observed or recorded:**
+
+- **Build adapters.** `release build` constructs only the `GIT_COMMUNITY` adapter. Other source kinds fail their source (section 7.14).
+- **Coverage M8.** The version-transition metric is reported and checked, but no gate reads it. Whether an incomplete transition
+  must downgrade a release is an open question in `specs/011-knowledge-acquisition-pipeline/contracts/coverage-and-gates.md`.
+- **Approval.** `rule promote --approval` and the build's `--supersede` are recorded references, not authenticated approvals. Approval
+  identity, authentication and a human approval workflow are deferred (FE-1, [docs/planning/kap/FUTURE_ENHANCEMENTS.md](../docs/planning/kap/FUTURE_ENHANCEMENTS.md)).
+- **Git.** The adapter's tests ran with git 2.43.0 only. The `insteadOf` gap is recorded as an expected failure (section 12.9).
+- **Candidate evidence from a local source** fails the evidence checks, because the source is not allow-listed (section 7.11).
+- **`candidates generate` and local URLs.** A local source needs a `repository` field in its `--source` spec, or an official
+  source with `expected_origin` (section 7.12). Without one, `generate` exits 2.
+
+**Where to read more.** The specification and contracts are in `specs/011-knowledge-acquisition-pipeline/`
+(`contracts/cli-surface.md` is the intended command surface). The KAP review fragment is `docs/reviews/fragments/kap.md`, which is
+being written. The verification record for this section is `docs/reviews/automated/DOC-verification-kap.md`.
 
 ---
 

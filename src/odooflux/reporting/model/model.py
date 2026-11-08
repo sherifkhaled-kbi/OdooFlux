@@ -6,6 +6,7 @@ from odooflux.utils.hashing import finding_id
 from odooflux.core.orchestrator.status import StatusInputs, decide, serialise_layers, skipped
 
 SCHEMA_VERSION = "1.0.0"
+KNOWLEDGE_RELEASE_SCHEMA_VERSION = "1.1.0"  # used only when a knowledge_release object is supplied (OD-K4)
 RUNTIME_NOT_REQUESTED = "runtime_not_requested"
 STATIC_LIMIT = "Static run: L4 install and L5 behavioural tests were not executed, so runtime behaviour is unverified."
 
@@ -161,10 +162,13 @@ def summarise(modules: list) -> dict:
 
 
 def build_report(state: dict, reports: list, *, run_log_path: str = "", evidence_urls: dict = None,
-                 ai_usage: dict = None, provisional: dict = None, warnings: list = None) -> dict:
+                 ai_usage: dict = None, provisional: dict = None, warnings: list = None,
+                 knowledge_release: dict = None) -> dict:
     """*evidence_urls* maps evidence ids to official URLs; *ai_usage* is the AI usage record when the run used AI;
     *provisional* ({"active": True, "labels": [...]}) marks a run that depended on a provisional corpus (ADR-019).
-    All four are optional and additive: omitting them keeps the original model."""
+    *knowledge_release* is a plain mapping {release_id, digest, builtin, completeness, steps_covered} built by the
+    caller from the knowledge handle; supplying it sets schema_version 1.1.0. All are optional and additive: omitting
+    them keeps the original model byte for byte."""
     plan = state["plan"]
     modules = [module_result(m, r, plan["allow_unverified"], evidence_urls)
                for m, r in zip(state["modules"], reports)]
@@ -201,4 +205,7 @@ def build_report(state: dict, reports: list, *, run_log_path: str = "", evidence
     }
     if provisional:
         report["provisional"] = provisional
+    if knowledge_release is not None:
+        report["schema_version"] = KNOWLEDGE_RELEASE_SCHEMA_VERSION
+        report["knowledge_release"] = dict(knowledge_release)
     return report

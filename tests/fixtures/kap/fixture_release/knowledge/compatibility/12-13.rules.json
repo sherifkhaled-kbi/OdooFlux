@@ -1,0 +1,31 @@
+[
+  {
+    "ai_eligible": false,
+    "category": "python_orm",
+    "conflicts_with": [],
+    "depends_on": [],
+    "detector_ref": "odooflux.rules.python.generic:flag_decorator",
+    "evidence": [
+      "EV-101"
+    ],
+    "file_kinds": [
+      "python"
+    ],
+    "fixer_ref": "odooflux.rules.python.generic:remove_decorator",
+    "id": "12-13.python.probe",
+    "legacy_ref": null,
+    "maturity": "DETECT_ONLY",
+    "message": "m",
+    "params": {},
+    "review_required": false,
+    "risk": "LOW",
+    "severity": "CRITICAL",
+    "step": "12-13",
+    "suggestion": "s",
+    "tests": {
+      "idempotence": "T3",
+      "negative": "T2",
+      "positive": "T1"
+    }
+  }
+]

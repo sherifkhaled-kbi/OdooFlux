@@ -1,0 +1,210 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KnowledgeRelease",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "release_id",
+    "label",
+    "format",
+    "parent_release",
+    "framework",
+    "schema_versions",
+    "files",
+    "sources",
+    "steps_covered",
+    "coverage_manifest_digest",
+    "completeness",
+    "build",
+    "release_digest"
+  ],
+  "properties": {
+    "release_id": {
+      "type": "string",
+      "pattern": "^kr-[0-9a-f]{12}$"
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1
+    },
+    "format": {
+      "const": "odooflux.release/1"
+    },
+    "parent_release": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^kr-[0-9a-f]{12}$"
+    },
+    "framework": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "built_with",
+        "min_framework",
+        "max_framework"
+      ],
+      "properties": {
+        "built_with": {
+          "type": "string",
+          "minLength": 1
+        },
+        "min_framework": {
+          "type": "string",
+          "minLength": 1
+        },
+        "max_framework": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "schema_versions": {
+      "type": "object"
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "sha256",
+          "size"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_id",
+          "revision",
+          "snapshot_digest",
+          "official",
+          "status"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "revision": {
+            "type": "string",
+            "minLength": 1
+          },
+          "snapshot_digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "official": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "minLength": 1
+          },
+          "origin_url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^https://[^\\s]+$"
+          },
+          "snapshot_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^ss-[0-9a-f]{12}$"
+          }
+        }
+      }
+    },
+    "steps_covered": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "step",
+          "completeness",
+          "ledger_digest"
+        ],
+        "properties": {
+          "step": {
+            "type": "string",
+            "pattern": "^\\d+-\\d+$"
+          },
+          "completeness": {
+            "enum": [
+              "COMPLETE",
+              "PARTIAL",
+              "FAILED"
+            ]
+          },
+          "ledger_digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "coverage_manifest_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "completeness": {
+      "enum": [
+        "COMPLETE",
+        "PARTIAL",
+        "FAILED"
+      ]
+    },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tool_version",
+        "build_time",
+        "host_free"
+      ],
+      "properties": {
+        "tool_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "build_time": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+        },
+        "host_free": {
+          "const": true
+        }
+      }
+    },
+    "release_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

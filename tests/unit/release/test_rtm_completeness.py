@@ -102,7 +102,12 @@ class RealRtmTests(unittest.TestCase):
         self.assertEqual(result.failures, [], rtm_tools.format_report(result))
 
     def test_repository_rtm_lists_every_requirement(self):
-        self.assertEqual(len(rtm_tools.check_rtm().rows), 92)
+        """92 product requirements (features 001-010) plus the 47 REQ-KAP requirements of feature 011. A change to this
+        count is an explicit decision to add or remove requirements, never a side effect."""
+        rows = rtm_tools.check_rtm().rows
+        kap = [r for r in rows if r.req.startswith("REQ-KAP-")]
+        self.assertEqual(len(kap), 47)
+        self.assertEqual(len(rows) - len(kap), 92)
 
 
 if __name__ == "__main__":

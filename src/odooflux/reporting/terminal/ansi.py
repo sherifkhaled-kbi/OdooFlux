@@ -134,6 +134,10 @@ def render_terminal(report: dict, options: RendererOptions = None, *, is_tty: bo
             emit(*[paint(line, "bold", "yellow") for line in wrap(
                 sanitize_text(label), W, "PROVISIONAL RUN: " if i == 0 else "  ", "  ")])
         emit(*wrap("Results depend on a provisional validation corpus and are not approved migration truth.", W, "  "))
+    if report.get("knowledge_release"):
+        release = report["knowledge_release"]
+        emit(*wrap(f"Knowledge release {sanitize_text(release['release_id'])}  digest "
+                   f"{sanitize_text(release['digest'] or 'unavailable')}", W, "", "  "))
     emit(*wrap(f"Plan  {' -> '.join(sanitize_text(s) for s in run['steps']) or '(none)'}   status: "
                f"{run['plan_status']}" + (f" ({'; '.join(sanitize_text(r) for r in run['plan_reasons'])})"
                                           if run.get("plan_reasons") else ""), W, "", "  "))

@@ -93,6 +93,11 @@ def build_parser() -> argparse.ArgumentParser:
     mig.add_argument("--plugin", action="append", default=[], metavar="MODULE:ATTR")
     mig.add_argument("--enable-rule", action="append", default=[], metavar="RULE_ID",
                      help="opt in to a DETECT_ONLY rule that needs run inputs, e.g. *.manifest.version-prefix")
+    mig.add_argument("--kb-home", default=None, metavar="PATH",
+                     help="knowledge release home (default: $ODOOFLUX_KB_HOME, else the user data directory); "
+                          "resolved once per run; no active release means the built-in knowledge")
+    mig.add_argument("--require-complete-kb", action="store_true",
+                     help="refuse an active knowledge release that is not COMPLETE (exit 4)")
 
     plan = sub.add_parser("plan", help="print the migration plan (writes nothing)")
     _common_sources(plan)
@@ -124,7 +129,7 @@ def run(argv, ctx) -> int:
         return 2  # D-10: before any parsing, so no error text can quote the value
     if argv and argv[0] == "knowledge":
         from odooflux.cli.knowledge import main as knowledge_main
-        return knowledge_main(argv[1:])
+        return knowledge_main(argv[1:], registries=ctx.registries)
     if argv and argv[0] == "support-statement":
         from odooflux.cli.support_statement import main as support_main
         return support_main(argv[1:])
@@ -135,6 +140,13 @@ def run(argv, ctx) -> int:
     if args.command is None:
         parser.print_help()
         return 0
+    if args.command == "migrate":  # one knowledge resolution per run, before plugins extend the registries
+        from odooflux.cli.migrate import resolve_migrate_knowledge
+        handle, problem = resolve_migrate_knowledge(args)
+        if problem:
+            print(problem, file=sys.stderr)
+            return 4
+        ctx = ctx.for_knowledge(handle)
     failures = load_plugins(getattr(args, "plugin", []), ctx.registries)
     if args.command == "migrate" and args.api_key:
         print(DEPRECATED_API_KEY, file=sys.stderr)

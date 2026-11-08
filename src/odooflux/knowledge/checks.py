@@ -4,6 +4,7 @@ import re
 from collections import defaultdict
 
 from odooflux.knowledge import validator
+from odooflux.knowledge.authoring.checks import authoring_findings
 from odooflux.knowledge.loader import KNOWLEDGE_ROOT, Finding, KnowledgeBase
 
 SCHEMA_DIR_NAME = "schemas"
@@ -264,11 +265,14 @@ def check_runtime_runs(kb: KnowledgeBase) -> list:
     return [Finding("E001", runtime_runs.FILE, ptr, msg) for ptr, msg in runtime_runs.file_problems(kb)]
 
 
-def validate_knowledge(kb: KnowledgeBase) -> list:
-    """All findings, sorted by file, pointer and code (deterministic output)."""
+def validate_knowledge(kb: KnowledgeBase, *, strict_builtin: bool = False) -> list:
+    """All findings, sorted by file, pointer and code (deterministic output).
+
+    Authoring checks A001..A006 run for non-built-in trees; the built-in tree only when `strict_builtin` is set."""
     findings = list(kb.load_findings)
     findings += check_evidence(kb) + check_registry(kb) + check_gaps(kb) + check_rules(kb)
     findings += check_runtime_patterns(kb)
     findings += check_compat_data(kb)
     findings += check_runtime_runs(kb)
+    findings += authoring_findings(kb, strict_builtin=strict_builtin)
     return sorted(findings, key=lambda f: (f.file, f.pointer, f.code, f.message))

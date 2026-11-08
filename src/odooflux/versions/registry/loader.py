@@ -23,8 +23,14 @@ def _require(obj: dict, keys, where: str) -> None:
             raise VersionDataError(f"{where}: missing key {key!r}")
 
 
-def load_version_data(path=KNOWLEDGE_FILE):
-    """Return (versions, transitions) where transitions maps (source, target) -> research_status."""
+def load_version_data(path=KNOWLEDGE_FILE, *, knowledge_root=None):
+    """Return (versions, transitions) where transitions maps (source, target) -> research_status.
+
+    `knowledge_root` (a knowledge tree, e.g. an installed release's `knowledge/`) selects
+    `<knowledge_root>/compatibility/versions.json`; without it `path` is used (default: built-in file).
+    """
+    if knowledge_root is not None:
+        path = Path(knowledge_root) / "compatibility" / "versions.json"
     data = json.loads(Path(path).read_text(encoding="utf-8"))
     if data.get("schema") != SCHEMA_ID:
         raise VersionDataError(f"unexpected schema {data.get('schema')!r}")

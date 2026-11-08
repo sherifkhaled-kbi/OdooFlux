@@ -1,0 +1,32 @@
+{
+  "authority": "PROVISIONAL",
+  "loader_counts": {
+    "allow_list": 7,
+    "evidence": 200,
+    "evidence_entries": 200,
+    "gaps": 22,
+    "load_findings": 0,
+    "research": 8,
+    "revisions": 18,
+    "rule_candidates": 43,
+    "rules": 91,
+    "transitions": 7,
+    "versions": 8
+  },
+  "matrix_check": {
+    "rc": 0,
+    "stdout_sha256": "a170e129674f91d7ceb97b192f059f8830c162838b8f30d156bb799c128c3a66"
+  },
+  "note": "Recorded on main before any KAP change (TST-011-001). Built-in behaviour must stay byte-identical (REQ-KAP-005).",
+  "report": {
+    "golden_file_sha256": "9c643c9b3c4fc5acfcc008c183428fd4593aa1a501c50c05520feb861e1a7df2",
+    "model_sha256": "9c643c9b3c4fc5acfcc008c183428fd4593aa1a501c50c05520feb861e1a7df2",
+    "scenario": "mixed"
+  },
+  "schema": 1,
+  "validate": {
+    "rc": 0,
+    "stdout_bytes": 41,
+    "stdout_sha256": "601224c74bc9acab676ec5a0db85e0eb3f23cf5f228f496c335c0c40ca121594"
+  }
+}

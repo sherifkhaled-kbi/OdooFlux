@@ -9,6 +9,7 @@ import sys
 from datetime import date
 from pathlib import Path
 
+from odooflux.cli.kap_common import register_all
 from odooflux.knowledge.checks import validate_knowledge
 from odooflux.knowledge.loader import KNOWLEDGE_ROOT, load_knowledge
 from odooflux.knowledge.matrix import OverclaimError, generate
@@ -43,6 +44,7 @@ def build_parser():
     m.add_argument("--check", action="store_true", help="fail if the committed file differs")
     m.add_argument("--output", default=str(DEFAULT_MATRIX))
     m.add_argument("--path", default=str(KNOWLEDGE_ROOT))
+    register_all(sub)
     return parser
 
 
@@ -88,12 +90,17 @@ def cmd_matrix(args) -> int:
     return 0
 
 
-def main(argv) -> int:
+def main(argv, registries=None) -> int:
+    """`registries` is the composition root's registries (or None). Only the KAP groups read it."""
     try:
         args = build_parser().parse_args(argv)
     except SystemExit as exc:
         return 2 if exc.code else 0
     try:
+        handler = getattr(args, "kap_handler", None)
+        if handler is not None:
+            args.registries = registries
+            return handler(args)
         if args.action == "validate":
             return cmd_validate(args)
         if args.action == "refresh":

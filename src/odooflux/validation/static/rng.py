@@ -24,11 +24,17 @@ RULE_ID = "rng.view_schema"
 _ARCH_MARKER = re.compile(r'name="arch"')
 
 
-def load_rng_map(target_version: str) -> Optional[dict]:
-    """View type -> RNG file name for a version (EV-370), or None when the version has no mapping."""
-    if not RNG_SCHEMAS_FILE.is_file():
+def load_rng_map(target_version: str, *, knowledge_root=None) -> Optional[dict]:
+    """View type -> RNG file name for a version (EV-370), or None when the version has no mapping.
+
+    `knowledge_root` (a knowledge tree, e.g. an installed release's `knowledge/`) selects its
+    `compatibility/rng_schemas.json`; without it the built-in file is used.
+    """
+    path = RNG_SCHEMAS_FILE if knowledge_root is None else (
+        Path(knowledge_root) / "compatibility" / "rng_schemas.json")
+    if not path.is_file():
         return None
-    data = json.loads(RNG_SCHEMAS_FILE.read_text(encoding="utf-8"))
+    data = json.loads(path.read_text(encoding="utf-8"))
     for record in data.get("versions", []):
         if record.get("id") == target_version:
             return dict(record.get("views", {}))

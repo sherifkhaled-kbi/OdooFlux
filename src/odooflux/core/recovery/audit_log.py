@@ -24,7 +24,11 @@ OUTCOMES = ("ok", "failed", "refused")
 ACTIONS = ("config_loaded", "plan_created", "workspace_created", "backup_created", "backup_verified", "file_written",
            "file_promoted", "edit_rejected", "rollback_started", "rollback_completed", "checkpoint_written",
            "ai_request", "runtime_launched", "runtime_teardown", "report_written", "run_finished",
-           "module_blocked")  # module_blocked extends the contract list: a blocked module is a consequential outcome
+           "module_blocked",  # module_blocked extends the contract list: a blocked module is a consequential outcome
+           # Knowledge release lifecycle (feature 011, contracts/release-lifecycle.md "Audit actions"): additive.
+           "source_acquired", "source_failed", "build_started", "build_completed", "release_installed",
+           "release_activated", "release_deactivated", "release_rolled_back", "release_removed", "package_exported",
+           "package_rejected", "ai_proposal")
 
 
 class AuditError(Exception):

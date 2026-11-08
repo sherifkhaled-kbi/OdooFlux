@@ -44,6 +44,7 @@ from odooflux.core.contracts.records import Finding, ValidationResult
 from odooflux.discovery.manifest import MANIFEST_NAMES, read_manifest
 from odooflux.discovery.modules import iter_module_files
 from odooflux.knowledge.loader import KNOWLEDGE_ROOT
+from odooflux.knowledge.release.model import KnowledgeReleaseError
 from odooflux.utils.astnodes import all_nodes, parse as parse_cached
 
 CORE_MODULES_FILE = KNOWLEDGE_ROOT / "compatibility" / "core_modules.json"
@@ -68,22 +69,40 @@ RULES = {
 }
 
 
-def load_core_modules(target_version: str) -> Optional[frozenset]:
-    """Top-level core addon names for a target version, or None when no list is shipped for it."""
-    if not CORE_MODULES_FILE.is_file():
+def _list_path(default: Path, name: str, knowledge_root) -> Path:
+    """The list file: the built-in one, or `<knowledge_root>/compatibility/<name>` for a release (REQ-KAP-036)."""
+    return default if knowledge_root is None else Path(knowledge_root) / "compatibility" / name
+
+
+def load_core_modules(target_version: str, *, knowledge_root=None) -> Optional[frozenset]:
+    """Top-level core addon names for a target version, or None when no list is shipped for it.
+
+    `knowledge_root` selects a release's knowledge tree. A release without `core_modules.json` is an error (L3 stays
+    mandatory); the built-in path never raises here.
+    """
+    path = _list_path(CORE_MODULES_FILE, "core_modules.json", knowledge_root)
+    if knowledge_root is not None and not path.is_file():
+        raise KnowledgeReleaseError(f"release knowledge tree is missing {path}")
+    if not path.is_file():
         return None
-    data = json.loads(CORE_MODULES_FILE.read_text(encoding="utf-8"))
+    data = json.loads(path.read_text(encoding="utf-8"))
     for record in data.get("versions", []):
         if record.get("id") == target_version:
             return frozenset(record.get("modules", []))
     return None
 
 
-def load_enterprise_modules() -> frozenset:
-    """Enterprise-only module names (seed list, D-05). A dependency on one is INFO, not WARNING."""
-    if not ENTERPRISE_MODULES_FILE.is_file():
+def load_enterprise_modules(*, knowledge_root=None) -> frozenset:
+    """Enterprise-only module names (seed list, D-05). A dependency on one is INFO, not WARNING.
+
+    With `knowledge_root`, a release without `enterprise_modules.json` is an error, not an empty list.
+    """
+    path = _list_path(ENTERPRISE_MODULES_FILE, "enterprise_modules.json", knowledge_root)
+    if knowledge_root is not None and not path.is_file():
+        raise KnowledgeReleaseError(f"release knowledge tree is missing {path}")
+    if not path.is_file():
         return frozenset()
-    data = json.loads(ENTERPRISE_MODULES_FILE.read_text(encoding="utf-8"))
+    data = json.loads(path.read_text(encoding="utf-8"))
     return frozenset(m for m in data.get("modules", []) if isinstance(m, str))
 
 
@@ -242,11 +261,11 @@ def _load_module(root: Path):
 
 
 class _Checker:
-    def __init__(self, modules, core):
+    def __init__(self, modules, core, enterprise=None):
         self.modules = modules
         self.scanned = {m.name for m in modules}
         self.core = core
-        self.enterprise = load_enterprise_modules()
+        self.enterprise = load_enterprise_modules() if enterprise is None else enterprise
         self.xids = set()
         self.named = set()
         self.model_xids = {}
@@ -530,8 +549,11 @@ def _outcome(findings, undecided: Counter, target: str) -> ValidationResult:
     return ValidationResult(layer=3, outcome="PASS")
 
 
-def check_integrity(module_paths, *, target_version, core_modules=None):
-    """Return (findings, ValidationResult(layer=3)) for the given module directories."""
+def check_integrity(module_paths, *, target_version, core_modules=None, knowledge_root=None):
+    """Return (findings, ValidationResult(layer=3)) for the given module directories.
+
+    `knowledge_root` (a release's knowledge tree) selects the core and Enterprise lists; without it the built-in lists.
+    """
     notes = []
     modules = []
     for raw in module_paths:
@@ -542,8 +564,9 @@ def check_integrity(module_paths, *, target_version, core_modules=None):
     if not modules:
         return [], ValidationResult(layer=3, outcome="UNAVAILABLE",
                                     reason="no module with a readable manifest in module_paths")
-    core = frozenset(core_modules) if core_modules is not None else load_core_modules(target_version)
-    checker = _Checker(modules, core)
+    core = (frozenset(core_modules) if core_modules is not None
+            else load_core_modules(target_version, knowledge_root=knowledge_root))
+    checker = _Checker(modules, core, enterprise=load_enterprise_modules(knowledge_root=knowledge_root))
     for kind in notes:
         checker.undecide(kind)
     checker.index()

@@ -29,9 +29,13 @@ def _parse(document):
     return None if xdoc.parse_error is not None else xdoc
 
 
-def _setup(target, index):
-    """The index to check against: the given one, else the shipped index for ``target``, else None."""
-    return index if index is not None else load_view_index(target)
+def _setup(target, index, knowledge_root=None):
+    """The index to check against: the given one, else the index of ``target`` in the knowledge tree (the active
+    release's when ``knowledge_root`` is given, else the built-in one), else None. A release never falls back to the
+    built-in index (REQ-KAP-036)."""
+    if index is not None:
+        return index
+    return load_view_index(target, knowledge_root=knowledge_root)
 
 
 def _detail(ctx, text):
@@ -95,9 +99,9 @@ def _skip(ref, scanned):
     return not dot or module in (scanned or ())
 
 
-def flag_inherit_id_missing(document, ctx, *, target, index=None, scanned_modules=None):
+def flag_inherit_id_missing(document, ctx, *, target, index=None, scanned_modules=None, knowledge_root=None):
     """Detect ``inherit_id`` refs to core views that are absent from the target version's index."""
-    index = _setup(target, index)
+    index = _setup(target, index, knowledge_root)
     xdoc = _parse(document)
     if xdoc is None:
         return []
@@ -142,9 +146,9 @@ def _show(names):
     return " or ".join(repr(n) for n in names)
 
 
-def flag_xpath_anchor_missing(document, ctx, *, target, index=None, scanned_modules=None):
+def flag_xpath_anchor_missing(document, ctx, *, target, index=None, scanned_modules=None, knowledge_root=None):
     """Detect xpath/shorthand named anchors (``@name``, ``@id``) that no core view of the parent's tree defines."""
-    index = _setup(target, index)
+    index = _setup(target, index, knowledge_root)
     xdoc = _parse(document)
     if xdoc is None:
         return []

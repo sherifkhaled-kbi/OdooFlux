@@ -145,6 +145,19 @@
           "string",
           "null"
         ]
+      },
+      "origin": {
+        "description": "Optional (feature 011). Absent means BUILTIN.",
+        "enum": [
+          "BUILTIN",
+          "GENERATED",
+          "MANUAL"
+        ]
+      },
+      "rev": {
+        "description": "Optional (feature 011). Revision counter matching the rule history sidecar.",
+        "type": "integer",
+        "minimum": 1
       }
     }
   }

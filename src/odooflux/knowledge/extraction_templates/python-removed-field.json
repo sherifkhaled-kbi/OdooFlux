@@ -1,0 +1,15 @@
+{
+  "template_id": "py-removed-field",
+  "description": "A field removed from an ORM model. Flags the class-body assignment with the generic attribute detector.",
+  "match": {"domain": "python_orm", "class": "REMOVED", "kind": "field"},
+  "rule": {
+    "category": "python_orm",
+    "detector_ref": "odooflux.rules.python.generic:flag_class_attribute",
+    "fixer_ref": null,
+    "params_from": {"attribute": "subject.name"},
+    "risk": "MEDIUM",
+    "review_required": true
+  },
+  "confidence": "MEDIUM",
+  "tests": {"generate_skeleton": true}
+}

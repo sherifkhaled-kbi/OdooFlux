@@ -103,9 +103,14 @@ def step_facts_from(kb, provisional: set) -> dict:
     return out
 
 
-def build_rows(kb=None, index_path: Path = FIXTURE_INDEX) -> tuple:
+def _knowledge(knowledge_root=None):
+    """The knowledge data to compute from: the built-in tree, or a release's `knowledge/` tree (REQ-KAP-036)."""
+    return load_knowledge() if knowledge_root is None else load_knowledge(knowledge_root)
+
+
+def build_rows(kb=None, index_path: Path = FIXTURE_INDEX, *, knowledge_root=None) -> tuple:
     """``(rows, step_facts)``: one row per ordered version pair (source < target) the registry knows."""
-    kb = kb or load_knowledge()
+    kb = kb or _knowledge(knowledge_root)
     facts = step_facts_from(kb, provisional_steps(index_path))
     majors = sorted(_major(v["id"]) for v in kb.versions)
     names = {_major(v["id"]): v["id"] for v in kb.versions}
@@ -169,8 +174,8 @@ def render(rows: list, step_facts: list, pending: tuple = PENDING_BACKLOG) -> st
     return "".join(out)
 
 
-def generate_text(kb=None, index_path: Path = FIXTURE_INDEX) -> str:
-    rows, facts = build_rows(kb, index_path)
+def generate_text(kb=None, index_path: Path = FIXTURE_INDEX, *, knowledge_root=None) -> str:
+    rows, facts = build_rows(kb, index_path, knowledge_root=knowledge_root)
     return render(rows, facts)
 
 

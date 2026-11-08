@@ -104,12 +104,14 @@ class EscalationPass:
     key = "ai-escalation"
     contract_version = CONTRACT_VERSION
 
-    def __init__(self, layer3=None, metadata_source=None, transport_for=None, environ=None, sleep=time.sleep):
+    def __init__(self, layer3=None, metadata_source=None, transport_for=None, environ=None, sleep=time.sleep, *,
+                 knowledge_root=None):
         self.layer3 = layer3
         self.metadata_source = metadata_source
         self.transport_for = transport_for
         self.environ = environ
         self.sleep = sleep
+        self.knowledge_root = knowledge_root  # None: the built-in knowledge tree (REQ-KAP-036)
 
     # -- configuration, checked before discovery ---------------------------------------------------------------
     def check_config(self, config: dict):
@@ -131,7 +133,8 @@ class EscalationPass:
         if self.metadata_source is not None:
             return self.metadata_source()
         from odooflux.knowledge.loader import load_knowledge
-        return rule_metadata_from_knowledge(load_knowledge())
+        kb = load_knowledge() if self.knowledge_root is None else load_knowledge(self.knowledge_root)
+        return rule_metadata_from_knowledge(kb)
 
     # -- the pass ----------------------------------------------------------------------------------------------
     def run(self, *, config, reports, module_paths, run, registries, write_module, validate_text, from_version,

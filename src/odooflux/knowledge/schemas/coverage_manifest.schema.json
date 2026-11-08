@@ -1,0 +1,392 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CoverageManifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "declared_scope",
+    "inventory",
+    "file_accounting_summary",
+    "metrics",
+    "crosschecks",
+    "gates",
+    "limits",
+    "completeness",
+    "tool",
+    "manifest_digest"
+  ],
+  "properties": {
+    "declared_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sources",
+        "modules",
+        "steps",
+        "domains"
+      ],
+      "properties": {
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]{2,63}$"
+          }
+        },
+        "modules": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^\\d{2}-\\d{2}$"
+          }
+        },
+        "domains": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "inventory": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_id",
+          "file_count",
+          "snapshot_digest"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]{2,63}$"
+          },
+          "file_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "snapshot_digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "file_accounting_summary": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "step",
+          "from_snapshot",
+          "to_snapshot",
+          "totals",
+          "independent_count"
+        ],
+        "properties": {
+          "step": {
+            "type": "string",
+            "pattern": "^\\d{2}-\\d{2}$"
+          },
+          "from_snapshot": {
+            "type": "string",
+            "pattern": "^ss-[0-9a-f]{12}$"
+          },
+          "to_snapshot": {
+            "type": "string",
+            "pattern": "^ss-[0-9a-f]{12}$"
+          },
+          "totals": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "PENDING",
+              "ANALYZED",
+              "EXCLUDED",
+              "UNSUPPORTED",
+              "FAILED"
+            ],
+            "properties": {
+              "PENDING": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "ANALYZED": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "EXCLUDED": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "UNSUPPORTED": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "FAILED": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          },
+          "independent_count": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "array",
+      "minItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "numerator",
+          "denominator",
+          "status",
+          "denominator_definition",
+          "per_mille",
+          "breakdown"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^M[1-8]$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "numerator": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "denominator": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "status": {
+            "enum": [
+              "MEASURED",
+              "NOT_APPLICABLE"
+            ]
+          },
+          "denominator_definition": {
+            "type": "string",
+            "minLength": 1
+          },
+          "per_mille": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 1000
+          },
+          "breakdown": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "crosschecks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "status",
+          "benchmark_id",
+          "benchmark_size",
+          "detail"
+        ],
+        "properties": {
+          "id": {
+            "enum": [
+              "XC-UPGRADE",
+              "XC-INDEP",
+              "XC-KB",
+              "XC-REGR",
+              "XC-BENCH"
+            ]
+          },
+          "status": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "NOT_RUN",
+              "NOT_MEASURED"
+            ]
+          },
+          "benchmark_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1
+          },
+          "benchmark_size": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "detail": {
+            "type": "string"
+          },
+          "recall": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "found",
+              "referenced",
+              "benchmark_id",
+              "benchmark_size"
+            ],
+            "properties": {
+              "found": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "referenced": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "benchmark_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9:._/-]*$"
+              },
+              "benchmark_size": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "gates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "gate_id",
+          "name",
+          "blocking",
+          "status",
+          "reason_codes",
+          "offenders",
+          "offenders_total",
+          "checked_at"
+        ],
+        "properties": {
+          "gate_id": {
+            "enum": [
+              "G-SRC",
+              "G-FILES",
+              "G-CLASS",
+              "G-DISP",
+              "G-EVID",
+              "G-MANIFEST",
+              "G-RULES",
+              "G-SAFE",
+              "G-XCHECK",
+              "G-SECRETS"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "blocking": {
+            "type": "boolean"
+          },
+          "status": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "WARN",
+              "NOT_RUN"
+            ]
+          },
+          "reason_codes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Z][A-Z0-9_]*$"
+            }
+          },
+          "offenders": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "offenders_total": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "checked_at": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+          }
+        }
+      }
+    },
+    "limits": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "completeness": {
+      "enum": [
+        "COMPLETE",
+        "PARTIAL",
+        "FAILED"
+      ]
+    },
+    "tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "schema_versions"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_versions": {
+          "type": "object"
+        }
+      }
+    },
+    "manifest_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}
