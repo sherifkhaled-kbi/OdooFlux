@@ -1,0 +1,37 @@
+{
+  "category": "orm",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "The official ORM changelog lists per-release ORM changes from Odoo Online 15.2 to 19.0 (cumulative in the 19.0 docs)",
+  "detection_method": "n/a",
+  "id": "EV-001",
+  "locations": [
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 18,
+      "match": "Odoo Online version 18.4",
+      "path": "content/developer/reference/backend/orm/changelog.rst",
+      "revision": "706918083dbd7dbc8e70c658d3ca63d700f94228"
+    }
+  ],
+  "notes": "Online release normalised to next on-premise major (ADR-007): 18.1 -> 19.0.",
+  "proposed_transformation": "none",
+  "repository": "odoo/documentation",
+  "required_validation": [
+    "documentation"
+  ],
+  "revision": "706918083dbd7dbc8e70c658d3ca63d700f94228",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "15.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "19.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/documentation/blob/706918083dbd7dbc8e70c658d3ca63d700f94228/content/developer/reference/backend/orm/changelog.rst#L18"
+}

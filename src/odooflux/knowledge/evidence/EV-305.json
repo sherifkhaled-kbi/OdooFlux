@@ -1,0 +1,48 @@
+{
+  "category": "tests",
+  "checked_by": "research-006-phase3",
+  "checked_on": "2026-11-07",
+  "description": "17.0 tests/common.py has no SavepointCase class; TransactionCase documents per-test savepoint subtransactions",
+  "detection_method": "grep on pinned source",
+  "id": "EV-305",
+  "locations": [
+    {
+      "branch": "17.0",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "path": "odoo/tests/common.py",
+      "line": 805,
+      "match": "class TransactionCase(BaseCase):",
+      "kind": "present"
+    },
+    {
+      "branch": "17.0",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "path": "odoo/tests/common.py",
+      "line": null,
+      "match": "class SavepointCase",
+      "kind": "absent",
+      "search_scope": "odoo/tests/common.py"
+    }
+  ],
+  "proposed_transformation": "rename-target TransactionCase",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+  "risk": "LOW",
+  "rule_ids": [
+    "16-17.tests.savepointcase-removed"
+  ],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "17.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "17.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9ef8d62331b128bcd288528e4639e0901d85fcc8/odoo/tests/common.py#L805",
+  "notes": "Semantics equivalence from TransactionCase docstring only (lines 806-808); not runtime-verified."
+}

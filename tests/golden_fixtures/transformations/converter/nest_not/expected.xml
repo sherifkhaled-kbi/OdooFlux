@@ -1,0 +1,3 @@
+<odoo>
+  <button name="b" invisible="not (a == 1)"/>
+</odoo>

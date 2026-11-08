@@ -1,0 +1,3 @@
+<odoo>
+  <field name="f" attrs="{'invisible': [('parent_id', '=', parent.id)]}"/>
+</odoo>

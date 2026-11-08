@@ -1,0 +1,22 @@
+{
+ "description": "a line comment marker inside a block comment does not matter",
+ "operations": [
+  "lexer",
+  "validator"
+ ],
+ "syntax": "valid",
+ "tokens": [
+  {
+   "text": "web.inner",
+   "kind": "comment"
+  },
+  {
+   "text": "web.outer",
+   "kind": "string"
+  },
+  {
+   "text": "function () {});",
+   "kind": "code"
+  }
+ ]
+}

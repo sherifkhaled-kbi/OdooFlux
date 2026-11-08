@@ -1,0 +1,14 @@
+{
+  "description": "malformed unparseable",
+  "group": "malformed",
+  "mode": "falsy",
+  "in_list_view": false,
+  "expect": "no-edit",
+  "unconverted": [
+    {
+      "key": "attrs",
+      "reason": "unparseable-attrs"
+    }
+  ],
+  "warnings": []
+}

@@ -1,0 +1,18 @@
+{
+ "description": "odoo.define text inside a single-quoted string",
+ "operations": [
+  "lexer",
+  "validator"
+ ],
+ "syntax": "valid",
+ "tokens": [
+  {
+   "text": "odoo.define(\"web.fake\"",
+   "kind": "string"
+  },
+  {
+   "text": "\nodoo.define(",
+   "kind": "code"
+  }
+ ]
+}

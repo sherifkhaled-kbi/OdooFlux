@@ -1,0 +1,221 @@
+{
+  "category": "tests",
+  "checked_by": "research-008-t004",
+  "checked_on": "2026-11-07",
+  "description": "Test output: ERROR/FAIL lines name Class.method; passing tests log nothing; skips log 'skipped'; module counts via stats logger (16.0-19.0)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-368",
+  "locations": [
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 151,
+      "match": "def addSuccess(self, test):",
+      "path": "odoo/tests/result.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 141,
+      "match": "self.logError(\"FAIL\", test, err)",
+      "path": "odoo/tests/result.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 131,
+      "match": "self.logError(\"ERROR\", test, err)",
+      "path": "odoo/tests/result.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 157,
+      "match": "skipped %s : %s",
+      "path": "odoo/tests/result.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 271,
+      "match": "%s: %d tests %.2fs %d queries",
+      "path": "odoo/tests/result.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 301,
+      "match": "\"%s: %s\\n%s\", flavour",
+      "path": "odoo/tests/result.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 151,
+      "match": "def addSuccess(self, test):",
+      "path": "odoo/tests/result.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 141,
+      "match": "self.logError(\"FAIL\", test, err)",
+      "path": "odoo/tests/result.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 131,
+      "match": "self.logError(\"ERROR\", test, err)",
+      "path": "odoo/tests/result.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 157,
+      "match": "skipped %s : %s",
+      "path": "odoo/tests/result.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 270,
+      "match": "%s: %d tests %.2fs %d queries",
+      "path": "odoo/tests/result.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 300,
+      "match": "\"%s: %s\\n%s\", flavour",
+      "path": "odoo/tests/result.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 151,
+      "match": "def addSuccess(self, test):",
+      "path": "odoo/tests/result.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 141,
+      "match": "self.logError(\"FAIL\", test, err)",
+      "path": "odoo/tests/result.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 131,
+      "match": "self.logError(\"ERROR\", test, err)",
+      "path": "odoo/tests/result.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 157,
+      "match": "skipped %s : %s",
+      "path": "odoo/tests/result.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 270,
+      "match": "%s: %d tests %.2fs %d queries",
+      "path": "odoo/tests/result.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 300,
+      "match": "\"%s: %s\\n%s\", flavour",
+      "path": "odoo/tests/result.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 151,
+      "match": "def addSuccess(self, test):",
+      "path": "odoo/tests/result.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 141,
+      "match": "self.logError(\"FAIL\", test, err)",
+      "path": "odoo/tests/result.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 131,
+      "match": "self.logError(\"ERROR\", test, err)",
+      "path": "odoo/tests/result.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 157,
+      "match": "skipped %s : %s",
+      "path": "odoo/tests/result.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 270,
+      "match": "%s: %d tests %.2fs %d queries",
+      "path": "odoo/tests/result.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 300,
+      "match": "\"%s: %s\\n%s\", flavour",
+      "path": "odoo/tests/result.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "runtime.install",
+    "tests.behaviour"
+  ],
+  "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/58bb9591d4cb08c4d5d4426222c9257f101ad250/odoo/tests/result.py#L151"
+}

@@ -1,0 +1,9 @@
+{
+  "description": "nest depth3 and or not",
+  "group": "nesting",
+  "mode": "falsy",
+  "in_list_view": false,
+  "expect": "edit",
+  "unconverted": [],
+  "warnings": []
+}

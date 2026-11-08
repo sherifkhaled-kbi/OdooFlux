@@ -1,0 +1,18 @@
+{
+ "description": "// and /* inside a double-quoted string are not comments",
+ "operations": [
+  "lexer",
+  "validator"
+ ],
+ "syntax": "valid",
+ "tokens": [
+  {
+   "text": "http://example.com",
+   "kind": "string"
+  },
+  {
+   "text": "\nodoo.define(",
+   "kind": "code"
+  }
+ ]
+}

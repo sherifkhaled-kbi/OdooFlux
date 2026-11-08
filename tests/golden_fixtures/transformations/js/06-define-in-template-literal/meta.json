@@ -1,0 +1,2 @@
+{"description": "odoo.define inside a template literal without substitutions", "operations": ["lexer", "validator"], "syntax": "valid",
+ "tokens": [{"text": "odoo.define('web.tpl'", "kind": "template"}]}

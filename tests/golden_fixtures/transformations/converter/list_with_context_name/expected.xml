@@ -1,0 +1,3 @@
+<odoo>
+  <field name="f" invisible="uid_field in [uid, 1]"/>
+</odoo>

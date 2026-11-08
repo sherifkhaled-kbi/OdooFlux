@@ -1,0 +1,27 @@
+from odoo import models, fields
+
+
+class Sample(models.Model):
+    _name = "kbi.sample"
+    _inherit = ["mail.thread"]
+
+    name = fields.Char()
+    total = fields.Float()
+
+    def f_ok(self):
+        return old_api(self.name)
+
+    def f_syntax(self):
+        return old_api(self.name)
+
+    def f_truncated(self):
+        return old_api(self.name)
+
+    def f_declined(self):
+        return old_api(self.name)
+
+    def f_extra(self):
+        return old_api(self.name)
+
+    def untouched(self):
+        return 1

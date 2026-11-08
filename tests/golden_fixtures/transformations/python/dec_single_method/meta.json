@@ -1,0 +1,19 @@
+{
+  "description": "Whole decorator line removed; indentation of the def unchanged (F-PY-1)",
+  "operations": [
+    {
+      "op": "remove_decorator",
+      "name": "api.multi"
+    }
+  ],
+  "expect": "edit",
+  "reason": "",
+  "spans": [
+    {
+      "locator": "decorator_removal",
+      "decorator": "api.multi",
+      "occurrence": 0,
+      "covers": "    @api.multi\n"
+    }
+  ]
+}

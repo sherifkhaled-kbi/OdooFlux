@@ -1,0 +1,36 @@
+{
+  "category": "javascript",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "`odoo.define(name, deps, factory)` remains the module loader API in 17.0 (positional `deps`)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-122",
+  "locations": [
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 29,
+      "match": "define(name, deps, factory)",
+      "path": "addons/web/static/src/module_loader.js",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "17.0",
+    "to": "17.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "17.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9ef8d62331b128bcd288528e4639e0901d85fcc8/addons/web/static/src/module_loader.js#L29"
+}

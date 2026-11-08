@@ -1,0 +1,22 @@
+{
+  "schema": "odooflux.versions/1",
+  "versions": [
+    {"id": "12.0", "python_min": "3.5", "python_max": null, "online_releases": [], "support_status": "UNSUPPORTED"},
+    {"id": "13.0", "python_min": null, "python_max": null, "online_releases": [], "support_status": "UNSUPPORTED"},
+    {"id": "14.0", "python_min": "3.6", "python_max": null, "online_releases": [], "support_status": "UNSUPPORTED"},
+    {"id": "15.0", "python_min": null, "python_max": null, "online_releases": [], "support_status": "UNSUPPORTED"},
+    {"id": "16.0", "python_min": "3.7", "python_max": null, "online_releases": [], "support_status": "UNSUPPORTED"},
+    {"id": "17.0", "python_min": "3.10", "python_max": null, "online_releases": [], "support_status": "UNSUPPORTED"},
+    {"id": "18.0", "python_min": "3.10", "python_max": null, "online_releases": [], "support_status": "UNSUPPORTED"},
+    {"id": "19.0", "python_min": "3.10", "python_max": null, "online_releases": [], "support_status": "UNSUPPORTED"}
+  ],
+  "transitions": [
+    {"source": "12.0", "target": "13.0", "research_status": "RESEARCH_SEEDED"},
+    {"source": "13.0", "target": "14.0", "research_status": "RESEARCH_SEEDED"},
+    {"source": "14.0", "target": "15.0", "research_status": "RESEARCH_SEEDED"},
+    {"source": "15.0", "target": "16.0", "research_status": "RESEARCH_SEEDED"},
+    {"source": "16.0", "target": "17.0", "research_status": "RESEARCH_SEEDED"},
+    {"source": "17.0", "target": "18.0", "research_status": "RESEARCH_SEEDED"},
+    {"source": "18.0", "target": "19.0", "research_status": "RESEARCH_SEEDED"}
+  ]
+}

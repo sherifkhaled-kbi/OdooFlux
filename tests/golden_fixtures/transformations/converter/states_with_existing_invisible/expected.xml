@@ -1,0 +1,3 @@
+<odoo>
+  <button name="b" invisible="(context.get('x')) or (state not in ['draft'])"/>
+</odoo>

@@ -1,0 +1,30 @@
+{
+  "description": "Nested element with two attributes, self-closing",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "odoo",
+      "span": "<odoo>\n  <record id=\"view_a\" model=\"ir.ui.view\"/>\n</odoo>",
+      "start_tag": "<odoo>",
+      "attrs": []
+    },
+    {
+      "tag": "record",
+      "span": "<record id=\"view_a\" model=\"ir.ui.view\"/>",
+      "start_tag": "<record id=\"view_a\" model=\"ir.ui.view\"/>",
+      "attrs": [
+        {
+          "name": "id",
+          "raw": "view_a",
+          "value": "view_a"
+        },
+        {
+          "name": "model",
+          "raw": "ir.ui.view",
+          "value": "ir.ui.view"
+        }
+      ]
+    }
+  ]
+}

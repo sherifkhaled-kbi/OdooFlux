@@ -1,0 +1,30 @@
+{
+  "description": "Tab-indented attributes, closing bracket on its own line",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "odoo",
+      "span": "<odoo>\n\t<field\n\t\tname=\"a\"\n\t\tstring=\"b\"\n\t/>\n</odoo>",
+      "start_tag": "<odoo>",
+      "attrs": []
+    },
+    {
+      "tag": "field",
+      "span": "<field\n\t\tname=\"a\"\n\t\tstring=\"b\"\n\t/>",
+      "start_tag": "<field\n\t\tname=\"a\"\n\t\tstring=\"b\"\n\t/>",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "a",
+          "value": "a"
+        },
+        {
+          "name": "string",
+          "raw": "b",
+          "value": "b"
+        }
+      ]
+    }
+  ]
+}

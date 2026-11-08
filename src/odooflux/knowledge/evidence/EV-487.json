@@ -1,0 +1,102 @@
+{
+  "category": "views",
+  "checked_by": "research-006-t025-agent",
+  "checked_on": "2026-11-07",
+  "description": "ir.ui.view groups_id (Many2many res.groups via ir_ui_view_group_rel) is defined at 12.0-18.0 and replaced by group_ids (same relation table) at 19.0; no groups_id field assignment remains in 19.0 ir_ui_view.py.",
+  "detection_method": "grep on pinned source",
+  "id": "EV-487",
+  "locations": [
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 219,
+      "match": "groups_id = fields.Many2many('res.groups', 'ir_ui_view_group_rel', 'view_id', 'group_id',",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 239,
+      "match": "groups_id = fields.Many2many('res.groups', 'ir_ui_view_group_rel', 'view_id', 'group_id',",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 240,
+      "match": "groups_id = fields.Many2many('res.groups', 'ir_ui_view_group_rel', 'view_id', 'group_id',",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 271,
+      "match": "groups_id = fields.Many2many('res.groups', 'ir_ui_view_group_rel', 'view_id', 'group_id',",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 265,
+      "match": "groups_id = fields.Many2many('res.groups', 'ir_ui_view_group_rel', 'view_id', 'group_id',",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 190,
+      "match": "groups_id = fields.Many2many('res.groups', 'ir_ui_view_group_rel', 'view_id', 'group_id',",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 179,
+      "match": "groups_id = fields.Many2many('res.groups', 'ir_ui_view_group_rel', 'view_id', 'group_id',",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 175,
+      "match": "group_ids = fields.Many2many('res.groups', 'ir_ui_view_group_rel', 'view_id', 'group_id',",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "absent",
+      "line": null,
+      "match": "^    groups_id = fields",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "search_scope": "ir_ui_view.py"
+    }
+  ],
+  "notes": "Used for legacy XML_RULES#7: groups_id is a model field on ir.ui.view (not a view attribute) with no deprecation located before the 19.0 rename; companion to EV-405 (res.users) and EV-114. Does not evidence that the arch attribute groups= is an equivalent replacement. Scope: the field definition line only; data files setting <field name=\"groups_id\"> are not scanned.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "19.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/odoo/addons/base/models/ir_ui_view.py#L219"
+}

@@ -1,0 +1,36 @@
+{
+  "category": "orm",
+  "checked_by": "fixture",
+  "checked_on": "2026-11-06",
+  "description": "17.0 defines BaseModel.name_get",
+  "detection_method": "grep",
+  "id": "EV-001",
+  "locations": [
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 1694,
+      "match": "def name_get(",
+      "path": "odoo/models.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+  "risk": "HIGH",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "16.0"
+  },
+  "status": "UNVERIFIED",
+  "target_applicability": {
+    "from": "17.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9ef8d62331b128bcd288528e4639e0901d85fcc8/odoo/models.py#L1694"
+}

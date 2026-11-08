@@ -1,0 +1,30 @@
+{
+  "description": "Empty attribute values",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "odoo",
+      "span": "<odoo><field name=\"\" string=\"\"/></odoo>",
+      "start_tag": "<odoo>",
+      "attrs": []
+    },
+    {
+      "tag": "field",
+      "span": "<field name=\"\" string=\"\"/>",
+      "start_tag": "<field name=\"\" string=\"\"/>",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "",
+          "value": ""
+        },
+        {
+          "name": "string",
+          "raw": "",
+          "value": ""
+        }
+      ]
+    }
+  ]
+}

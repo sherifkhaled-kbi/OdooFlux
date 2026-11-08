@@ -1,0 +1,74 @@
+{
+  "category": "orm",
+  "checked_by": "research-006-models",
+  "checked_on": "2026-11-07",
+  "description": "Model stock.production.lot is renamed stock.lot at 16.0 (stock_production_lot.py replaced by stock_lot.py); ACL model external id follows",
+  "detection_method": "raw fetch at pinned revisions; line match",
+  "id": "EV-503",
+  "locations": [
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 24,
+      "match": "_name = 'stock.production.lot'",
+      "path": "addons/stock/models/stock_production_lot.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 23,
+      "match": "_name = 'stock.lot'",
+      "path": "addons/stock/models/stock_lot.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "stock_production_lot.py",
+      "path": "addons/stock/models/stock_production_lot.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 13,
+      "match": "model_stock_production_lot",
+      "path": "addons/stock/security/ir.model.access.csv",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 13,
+      "match": "model_stock_lot",
+      "path": "addons/stock/security/ir.model.access.csv",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    }
+  ],
+  "notes": "Review-only (DETECT_ONLY): each rule cites its own record. Field names, unqualified external ids, tables and ACL row ids that follow the rename have no verified mapping here (see research-notes/models.md).",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "MEDIUM",
+  "rule_ids": [
+    "15-16.csv.model-renamed-stock-lot",
+    "15-16.python.model-renamed-stock-lot",
+    "15-16.xml.model-renamed-stock-lot"
+  ],
+  "source_applicability": {
+    "from": "15.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/addons/stock/models/stock_production_lot.py#L24"
+}

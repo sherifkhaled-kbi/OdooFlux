@@ -1,0 +1,583 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://odooflux.invalid/schemas/report-v1.json",
+  "title": "OdooFlux report model v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run",
+    "modules",
+    "verification_scope",
+    "recovery",
+    "summary",
+    "ai_usage"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "run": {
+      "type": "object",
+      "required": [
+        "run_id",
+        "mode",
+        "status",
+        "source",
+        "target",
+        "steps",
+        "plan_status"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "analyze",
+            "dry_run",
+            "fix"
+          ]
+        },
+        "status": {
+          "enum": [
+            "RUNNING",
+            "INTERRUPTED",
+            "COMPLETED",
+            "ROLLED_BACK"
+          ]
+        },
+        "plan_status": {
+          "enum": [
+            "READY",
+            "BLOCKED"
+          ]
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "modules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "status",
+          "status_reasons",
+          "findings",
+          "edits",
+          "layers"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "VERIFIED_SUCCESS",
+              "INSTALL_VERIFIED",
+              "STATIC_VALIDATED",
+              "NEEDS_REVIEW",
+              "FAILED",
+              "BLOCKED"
+            ]
+          },
+          "status_reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "findings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "rule_id",
+                "path",
+                "line",
+                "severity",
+                "message",
+                "status"
+              ],
+              "properties": {
+                "severity": {
+                  "enum": [
+                    "CRITICAL",
+                    "WARNING",
+                    "INFO"
+                  ]
+                },
+                "status": {
+                  "enum": [
+                    "OPEN",
+                    "FIXED",
+                    "REJECTED",
+                    "NEEDS_REVIEW"
+                  ]
+                },
+                "evidence": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "url"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "url": {
+                            "type": "string",
+                            "pattern": "^https://"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "suggestion": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "edits": {
+            "type": "array"
+          },
+          "layers": {
+            "type": "object",
+            "required": [
+              "L1",
+              "L2",
+              "L3",
+              "L4",
+              "L5"
+            ],
+            "properties": {
+              "L1": {
+                "type": "object",
+                "required": [
+                  "outcome",
+                  "reason"
+                ],
+                "properties": {
+                  "outcome": {
+                    "enum": [
+                      "PASS",
+                      "FAIL",
+                      "UNAVAILABLE",
+                      "SKIPPED"
+                    ]
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "coverage": {
+                    "enum": [
+                      "full",
+                      "partial",
+                      null
+                    ]
+                  }
+                }
+              },
+              "L2": {
+                "type": "object",
+                "required": [
+                  "outcome",
+                  "reason"
+                ],
+                "properties": {
+                  "outcome": {
+                    "enum": [
+                      "PASS",
+                      "FAIL",
+                      "UNAVAILABLE",
+                      "SKIPPED"
+                    ]
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "coverage": {
+                    "enum": [
+                      "full",
+                      "partial",
+                      null
+                    ]
+                  }
+                }
+              },
+              "L3": {
+                "type": "object",
+                "required": [
+                  "outcome",
+                  "reason"
+                ],
+                "properties": {
+                  "outcome": {
+                    "enum": [
+                      "PASS",
+                      "FAIL",
+                      "UNAVAILABLE",
+                      "SKIPPED"
+                    ]
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "coverage": {
+                    "enum": [
+                      "full",
+                      "partial",
+                      null
+                    ]
+                  }
+                }
+              },
+              "L4": {
+                "type": "object",
+                "required": [
+                  "outcome",
+                  "reason"
+                ],
+                "properties": {
+                  "outcome": {
+                    "enum": [
+                      "PASS",
+                      "FAIL",
+                      "UNAVAILABLE",
+                      "SKIPPED"
+                    ]
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "coverage": {
+                    "enum": [
+                      "full",
+                      "partial",
+                      null
+                    ]
+                  }
+                }
+              },
+              "L5": {
+                "type": "object",
+                "required": [
+                  "outcome",
+                  "reason"
+                ],
+                "properties": {
+                  "outcome": {
+                    "enum": [
+                      "PASS",
+                      "FAIL",
+                      "UNAVAILABLE",
+                      "SKIPPED"
+                    ]
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "coverage": {
+                    "enum": [
+                      "full",
+                      "partial",
+                      null
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "rejections": {
+            "type": "array"
+          },
+          "runtime": {
+            "type": "object",
+            "required": [
+              "image",
+              "digest",
+              "logs_path",
+              "errors"
+            ],
+            "properties": {
+              "errors": {
+                "type": "array"
+              }
+            }
+          },
+          "behavior": {
+            "type": "object",
+            "required": [
+              "comparisons",
+              "summary"
+            ],
+            "properties": {
+              "comparisons": {
+                "type": "array"
+              },
+              "summary": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "verification_scope": {
+      "type": "object",
+      "required": [
+        "layers_run",
+        "layers_unavailable"
+      ],
+      "properties": {
+        "layers_run": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "layers_unavailable": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "layers_skipped": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "reasons": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "limits": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "layer_outcomes": {
+          "type": "object"
+        }
+      }
+    },
+    "recovery": {
+      "type": "object",
+      "required": [
+        "run_log",
+        "rollback_cmd",
+        "reversible"
+      ],
+      "properties": {
+        "reversible": {
+          "type": "boolean"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "modules_by_status",
+        "findings",
+        "open_findings",
+        "findings_by_status",
+        "edits",
+        "files_written"
+      ],
+      "properties": {
+        "modules_by_status": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "findings": {
+          "type": "object",
+          "required": [
+            "critical",
+            "warning",
+            "info"
+          ],
+          "properties": {
+            "critical": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "warning": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "info": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "open_findings": {
+          "type": "object",
+          "required": [
+            "critical",
+            "warning",
+            "info"
+          ],
+          "properties": {
+            "critical": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "warning": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "info": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "findings_by_status": {
+          "type": "object",
+          "required": [
+            "open",
+            "fixed",
+            "rejected",
+            "needs_review"
+          ],
+          "properties": {
+            "open": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "fixed": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "rejected": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "needs_review": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "edits": {
+          "type": "object",
+          "required": [
+            "applied",
+            "rejected"
+          ],
+          "properties": {
+            "applied": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "rejected": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "files_written": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "ai_usage": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "providers"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "consent": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "providers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "model",
+              "requests"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "model": {
+                "type": "string"
+              },
+              "requests": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "budget_events": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "totals": {
+          "type": "object"
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "provisional": {
+      "type": "object",
+      "required": [
+        "active",
+        "labels"
+      ],
+      "properties": {
+        "active": {
+          "type": "boolean"
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "severities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

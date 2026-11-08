@@ -1,0 +1,175 @@
+{
+  "ai_usage": {
+    "budget_events": [],
+    "consent": null,
+    "enabled": false,
+    "providers": [],
+    "totals": {}
+  },
+  "modules": [
+    {
+      "behavior": {
+        "comparisons": [
+          {
+            "source": "pass",
+            "target": "pass",
+            "test": "t1"
+          }
+        ],
+        "summary": {
+          "fail_both": 0,
+          "fixed": 0,
+          "pass_both": 1,
+          "regression": 0,
+          "source_only": 0,
+          "target_only": 0
+        }
+      },
+      "block_reason": "",
+      "blocked": false,
+      "edits": [],
+      "findings": [],
+      "fixes_applied": 0,
+      "layers": {
+        "L1": {
+          "coverage": null,
+          "outcome": "PASS",
+          "reason": ""
+        },
+        "L2": {
+          "coverage": null,
+          "outcome": "PASS",
+          "reason": ""
+        },
+        "L3": {
+          "coverage": null,
+          "outcome": "PASS",
+          "reason": ""
+        },
+        "L4": {
+          "coverage": null,
+          "outcome": "PASS",
+          "reason": ""
+        },
+        "L5": {
+          "coverage": "full",
+          "outcome": "PASS",
+          "reason": ""
+        }
+      },
+      "name": "kbi_verified",
+      "path": "/work/kbi_verified",
+      "processing": "DONE",
+      "promoted_files": [],
+      "rejections": [],
+      "reversible": true,
+      "runtime": {
+        "digest": "sha256:cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+        "errors": [],
+        "image": "odoo:18.0",
+        "logs_path": "logs/l4.log"
+      },
+      "status": "VERIFIED_SUCCESS",
+      "status_inputs_digest": "99aef8de2a7ebe90d3acda031e2709805e2a1b3698a2828bb1b86153e68a1059",
+      "status_reasons": [],
+      "status_row": 4
+    }
+  ],
+  "recovery": {
+    "reversible": true,
+    "rollback_cmd": "odooflux rollback run-golden",
+    "run_log": "/state/runs/run-golden/log/run.jsonl"
+  },
+  "run": {
+    "cycles": [],
+    "mode": "dry_run",
+    "plan_reasons": [],
+    "plan_status": "READY",
+    "run_id": "run-golden",
+    "source": "17.0",
+    "status": "COMPLETED",
+    "steps": [
+      "17.0->18.0"
+    ],
+    "target": "18.0",
+    "tool_version": "0.2.0"
+  },
+  "schema_version": "1.0.0",
+  "severities": [
+    "CRITICAL",
+    "WARNING",
+    "INFO"
+  ],
+  "summary": {
+    "edits": {
+      "applied": 0,
+      "rejected": 0
+    },
+    "files_written": 0,
+    "findings": {
+      "critical": 0,
+      "info": 0,
+      "warning": 0
+    },
+    "findings_by_status": {
+      "fixed": 0,
+      "needs_review": 0,
+      "open": 0,
+      "rejected": 0
+    },
+    "modules_by_status": {
+      "VERIFIED_SUCCESS": 1
+    },
+    "open_findings": {
+      "critical": 0,
+      "info": 0,
+      "warning": 0
+    }
+  },
+  "verification_scope": {
+    "layer_outcomes": {
+      "L1": {
+        "FAIL": 0,
+        "PASS": 1,
+        "SKIPPED": 0,
+        "UNAVAILABLE": 0
+      },
+      "L2": {
+        "FAIL": 0,
+        "PASS": 1,
+        "SKIPPED": 0,
+        "UNAVAILABLE": 0
+      },
+      "L3": {
+        "FAIL": 0,
+        "PASS": 1,
+        "SKIPPED": 0,
+        "UNAVAILABLE": 0
+      },
+      "L4": {
+        "FAIL": 0,
+        "PASS": 1,
+        "SKIPPED": 0,
+        "UNAVAILABLE": 0
+      },
+      "L5": {
+        "FAIL": 0,
+        "PASS": 1,
+        "SKIPPED": 0,
+        "UNAVAILABLE": 0
+      }
+    },
+    "layers_run": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "layers_skipped": [],
+    "layers_unavailable": [],
+    "limits": [],
+    "reasons": {}
+  },
+  "warnings": []
+}

@@ -1,0 +1,55 @@
+{
+  "corpus_digest": "1447f498444ba54576fd4cbf6d7c9aa5124ace9cb5e33c2e88f709a33f4fae1d",
+  "corpus_id": "synthetic-seed1-m300x30",
+  "jobs": 12,
+  "machine_profile": {
+    "cores": 12,
+    "cpu": "13th Gen Intel(R) Core(TM) i5-13420H",
+    "memory": "15.2 GiB",
+    "os": "Linux 7.0.0-42-generic",
+    "python": "3.12.3"
+  },
+  "modes": {
+    "incremental": {
+      "files_parsed": 0,
+      "median_wall_s": 2.503,
+      "peak_rss_mib": 433.6,
+      "report_digest": "a82f6d9f7aa5043feb3b8c2d576bcb644a23bbf0b72f0b787a623b4f0818ed8f",
+      "runs": [
+        2.45,
+        2.481,
+        2.504,
+        2.53,
+        2.503
+      ]
+    },
+    "parallel": {
+      "files_parsed": null,
+      "median_wall_s": 3.832,
+      "peak_rss_mib": 399.5,
+      "report_digest": "a82f6d9f7aa5043feb3b8c2d576bcb644a23bbf0b72f0b787a623b4f0818ed8f",
+      "runs": [
+        3.842,
+        3.779,
+        3.832,
+        3.888,
+        3.818
+      ]
+    },
+    "serial": {
+      "files_parsed": null,
+      "median_wall_s": 13.098,
+      "peak_rss_mib": 402.4,
+      "report_digest": "a82f6d9f7aa5043feb3b8c2d576bcb644a23bbf0b72f0b787a623b4f0818ed8f",
+      "runs": [
+        13.013,
+        12.973,
+        13.098,
+        13.311,
+        14.089
+      ]
+    }
+  },
+  "runs_per_mode": 5,
+  "seed": 1
+}

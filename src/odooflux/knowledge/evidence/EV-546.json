@@ -1,0 +1,37 @@
+{
+  "category": "views",
+  "checked_by": "tools/extract_view_index.py",
+  "checked_on": "2026-11-07",
+  "description": "View external ids and named anchors of Odoo 18.0 core modules at 75d6abe5979ac9e8d85d097dad0e7b559ef07326: 5789 views in 451 modules",
+  "detection_method": "tools/extract_view_index.py over addons/*/__manifest__.py data files and odoo/addons/*/__manifest__.py data files at the pinned revision",
+  "id": "EV-546",
+  "locations": [
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": null,
+      "match": "5789 view ids; content_sha256 d91be75265ef942244c5264df244f711d570f842ab1e21a0d547122a0fbe3b76",
+      "path": "addons",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [],
+  "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+  "risk": "LOW",
+  "rule_ids": [
+    "*.xml.inherit-id-missing-in-target",
+    "*.xml.xpath-anchor-missing-in-target"
+  ],
+  "source_applicability": {
+    "from": "18.0",
+    "to": "18.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "18.0",
+    "to": "18.0"
+  },
+  "url": "https://github.com/odoo/odoo/tree/75d6abe5979ac9e8d85d097dad0e7b559ef07326/addons"
+}

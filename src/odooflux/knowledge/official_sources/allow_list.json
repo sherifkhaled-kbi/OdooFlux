@@ -1,0 +1,30 @@
+[
+  {
+    "prefix": "https://github.com/odoo/odoo/",
+    "kind": "source"
+  },
+  {
+    "prefix": "https://github.com/odoo/enterprise/",
+    "kind": "source"
+  },
+  {
+    "prefix": "https://github.com/odoo/owl/",
+    "kind": "framework"
+  },
+  {
+    "prefix": "https://github.com/odoo/documentation/",
+    "kind": "documentation"
+  },
+  {
+    "prefix": "https://www.odoo.com/documentation/",
+    "kind": "documentation"
+  },
+  {
+    "prefix": "https://github.com/odoo/upgrade-util/",
+    "kind": "tooling"
+  },
+  {
+    "prefix": "https://github.com/odoo/docker/",
+    "kind": "runtime_provenance"
+  }
+]

@@ -1,0 +1,129 @@
+{
+  "category": "data_files",
+  "checked_by": "research-006-phase3-t015",
+  "checked_on": "2026-11-07",
+  "description": "import_xml.rng defines <act_window> and <report> elements in 12.0-16.0 but neither in 17.0, 18.0 or 19.0",
+  "detection_method": "grep on pinned source",
+  "id": "EV-323",
+  "locations": [
+    {
+      "branch": "12.0",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "path": "odoo/import_xml.rng",
+      "line": 58,
+      "match": "<rng:define name=\"report\">",
+      "kind": "present"
+    },
+    {
+      "branch": "12.0",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "path": "odoo/import_xml.rng",
+      "line": 277,
+      "match": "<rng:define name=\"act_window\">",
+      "kind": "present"
+    },
+    {
+      "branch": "13.0",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "path": "odoo/import_xml.rng",
+      "line": 68,
+      "match": "<rng:define name=\"report\">",
+      "kind": "present"
+    },
+    {
+      "branch": "13.0",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "path": "odoo/import_xml.rng",
+      "line": 247,
+      "match": "<rng:define name=\"act_window\">",
+      "kind": "present"
+    },
+    {
+      "branch": "14.0",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "path": "odoo/import_xml.rng",
+      "line": 68,
+      "match": "<rng:define name=\"report\">",
+      "kind": "present"
+    },
+    {
+      "branch": "14.0",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "path": "odoo/import_xml.rng",
+      "line": 273,
+      "match": "<rng:define name=\"act_window\">",
+      "kind": "present"
+    },
+    {
+      "branch": "15.0",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "path": "odoo/import_xml.rng",
+      "line": 68,
+      "match": "<rng:define name=\"report\">",
+      "kind": "present"
+    },
+    {
+      "branch": "15.0",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "path": "odoo/import_xml.rng",
+      "line": 273,
+      "match": "<rng:define name=\"act_window\">",
+      "kind": "present"
+    },
+    {
+      "branch": "16.0",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "path": "odoo/import_xml.rng",
+      "line": 68,
+      "match": "<rng:define name=\"report\">",
+      "kind": "present"
+    },
+    {
+      "branch": "16.0",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "path": "odoo/import_xml.rng",
+      "line": 276,
+      "match": "<rng:define name=\"act_window\">",
+      "kind": "present"
+    },
+    {
+      "branch": "17.0",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "path": "odoo/import_xml.rng",
+      "line": null,
+      "match": "<rng:define name=\"act_window\">",
+      "kind": "absent",
+      "search_scope": "odoo/import_xml.rng"
+    },
+    {
+      "branch": "17.0",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "path": "odoo/import_xml.rng",
+      "line": null,
+      "match": "<rng:define name=\"report\">",
+      "kind": "absent",
+      "search_scope": "odoo/import_xml.rng"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+  "risk": "MEDIUM",
+  "rule_ids": [
+    "16-17.xml.act-window-tag",
+    "16-17.xml.report-tag"
+  ],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "17.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "17.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9ef8d62331b128bcd288528e4639e0901d85fcc8/odoo/import_xml.rng"
+}

@@ -1,0 +1,99 @@
+{
+  "category": "orm",
+  "checked_by": "research-006-models",
+  "checked_on": "2026-11-07",
+  "description": "Model mail.channel is renamed discuss.channel at 17.0 (mail/models/mail_channel.py replaced by mail/models/discuss/discuss_channel.py; im_livechat likewise); ACL model external id follows",
+  "detection_method": "raw fetch at pinned revisions; line match",
+  "id": "EV-505",
+  "locations": [
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 16,
+      "match": "_name = 'mail.channel'",
+      "path": "addons/im_livechat/models/mail_channel.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 33,
+      "match": "_name = 'mail.channel'",
+      "path": "addons/mail/models/mail_channel.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 17,
+      "match": "_name = 'discuss.channel'",
+      "path": "addons/im_livechat/models/discuss_channel.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 32,
+      "match": "_name = 'discuss.channel'",
+      "path": "addons/mail/models/discuss/discuss_channel.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "absent",
+      "line": null,
+      "match": "mail_channel.py",
+      "path": "addons/im_livechat/models/mail_channel.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    },
+    {
+      "branch": "17.0",
+      "kind": "absent",
+      "line": null,
+      "match": "mail_channel.py",
+      "path": "addons/mail/models/mail_channel.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 18,
+      "match": "model_mail_channel,",
+      "path": "addons/mail/security/ir.model.access.csv",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 13,
+      "match": "model_discuss_channel,",
+      "path": "addons/mail/security/ir.model.access.csv",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    }
+  ],
+  "notes": "Review-only (DETECT_ONLY): each rule cites its own record. Field names, unqualified external ids, tables and ACL row ids that follow the rename have no verified mapping here (see research-notes/models.md).",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9f40bf622c5531739321e59276c307319198e22b",
+  "risk": "MEDIUM",
+  "rule_ids": [
+    "16-17.csv.model-renamed-discuss-channel",
+    "16-17.python.model-renamed-discuss-channel",
+    "16-17.xml.model-renamed-discuss-channel"
+  ],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "17.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "17.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9f40bf622c5531739321e59276c307319198e22b/addons/im_livechat/models/mail_channel.py#L16"
+}

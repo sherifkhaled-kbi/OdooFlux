@@ -1,0 +1,19 @@
+{
+  "description": "CRLF line endings: removal keeps CRLF and removes the whole line",
+  "operations": [
+    {
+      "op": "remove_decorator",
+      "name": "api.multi"
+    }
+  ],
+  "expect": "edit",
+  "reason": "",
+  "spans": [
+    {
+      "locator": "decorator_removal",
+      "decorator": "api.multi",
+      "occurrence": 0,
+      "covers": "    @api.multi\r\n"
+    }
+  ]
+}

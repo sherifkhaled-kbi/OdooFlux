@@ -1,0 +1,74 @@
+{
+  "category": "orm",
+  "checked_by": "research-006-models",
+  "checked_on": "2026-11-07",
+  "description": "Model mail.shortcode is renamed mail.canned.response at 18.0 (mail_shortcode.py replaced by mail_canned_response.py); ACL model external id follows",
+  "detection_method": "raw fetch at pinned revisions; line match",
+  "id": "EV-508",
+  "locations": [
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 14,
+      "match": "_name = 'mail.shortcode'",
+      "path": "addons/mail/models/mail_shortcode.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 12,
+      "match": "_name = \"mail.canned.response\"",
+      "path": "addons/mail/models/mail_canned_response.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "absent",
+      "line": null,
+      "match": "mail_shortcode.py",
+      "path": "addons/mail/models/mail_shortcode.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 36,
+      "match": "model_mail_shortcode",
+      "path": "addons/mail/security/ir.model.access.csv",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 36,
+      "match": "model_mail_canned_response",
+      "path": "addons/mail/security/ir.model.access.csv",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    }
+  ],
+  "notes": "Review-only (DETECT_ONLY): each rule cites its own record. Field names, unqualified external ids, tables and ACL row ids that follow the rename have no verified mapping here (see research-notes/models.md).",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+  "risk": "MEDIUM",
+  "rule_ids": [
+    "17-18.csv.model-renamed-mail-canned-response",
+    "17-18.python.model-renamed-mail-canned-response",
+    "17-18.xml.model-renamed-mail-canned-response"
+  ],
+  "source_applicability": {
+    "from": "17.0",
+    "to": "18.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "18.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9ef8d62331b128bcd288528e4639e0901d85fcc8/addons/mail/models/mail_shortcode.py#L14"
+}

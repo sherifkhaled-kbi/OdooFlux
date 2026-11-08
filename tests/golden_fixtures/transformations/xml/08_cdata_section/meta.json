@@ -1,0 +1,31 @@
+{
+  "description": "CDATA section containing markup-like text",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "odoo",
+      "span": "<odoo><code><![CDATA[if a < b and c > d: <field name=\"x\"/>]]></code><field name=\"y\"/></odoo>",
+      "start_tag": "<odoo>",
+      "attrs": []
+    },
+    {
+      "tag": "code",
+      "span": "<code><![CDATA[if a < b and c > d: <field name=\"x\"/>]]></code>",
+      "start_tag": "<code>",
+      "attrs": []
+    },
+    {
+      "tag": "field",
+      "span": "<field name=\"y\"/>",
+      "start_tag": "<field name=\"y\"/>",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "y",
+          "value": "y"
+        }
+      ]
+    }
+  ]
+}

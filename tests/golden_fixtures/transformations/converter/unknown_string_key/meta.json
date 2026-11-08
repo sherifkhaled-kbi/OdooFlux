@@ -1,0 +1,14 @@
+{
+  "description": "unknown string key",
+  "group": "unknown_keys",
+  "mode": "falsy",
+  "in_list_view": false,
+  "expect": "no-edit",
+  "unconverted": [
+    {
+      "key": "string",
+      "reason": "unknown-key"
+    }
+  ],
+  "warnings": []
+}

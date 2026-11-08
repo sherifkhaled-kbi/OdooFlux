@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "odooflux"
+version = "0.2.0"
+description = "Analyze and migrate Odoo modules between major versions"
+requires-python = ">=3.10"
+dependencies = []
+
+# Optional extras (D-09). js/xml/rng pinned per D-02 (lazy imports); others empty until the owning phase pins versions; the core never imports them.
+[project.optional-dependencies]
+js = ["tree-sitter>=0.23,<0.27", "tree-sitter-javascript>=0.23,<0.26"]
+xml = ["lxml>=5.0,<7"]
+rng = ["lxml>=5.0,<7"]
+runtime = []
+ai = []
+rich = []
+
+[project.scripts]
+odooflux = "odooflux.builtins:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+# Every runtime asset the loaders read ships in the wheel (FC A-10, ADR-019 OD-5): knowledge/*.json plus
+# compatibility/**, evidence/**, view_index/**, schemas/**, official_sources/**, and the report model schema.
+odooflux = ["knowledge/**/*.json"]
+"odooflux.reporting.model" = ["*.json"]
+"odooflux.ai" = ["catalog/*.json"]

@@ -1,0 +1,72 @@
+{
+  "category": "owl",
+  "checked_by": "research-006-t019-t024",
+  "checked_on": "2026-11-07",
+  "description": "OWL not bundled at 12.0 and 13.0 (addons/web/static/lib/owl/owl.js absent); first bundled at 14.0; core/registry.js with @odoo-module syntax first present at 15.0 (absent at 14.0)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-423",
+  "locations": [
+    {
+      "branch": "12.0",
+      "kind": "absent",
+      "line": null,
+      "match": "owl.js",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    },
+    {
+      "branch": "13.0",
+      "kind": "absent",
+      "line": null,
+      "match": "owl.js",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 5604,
+      "match": "__info__.version = '1.4.11';",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "absent",
+      "line": null,
+      "match": "core/registry.js",
+      "path": "addons/web/static/src/core/registry.js",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 1,
+      "match": "/** @odoo-module **/",
+      "path": "addons/web/static/src/core/registry.js",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    }
+  ],
+  "notes": "Covers javascript_owl for 12-13, 13-14, 14-15: OWL introduced 14.0; ES-module core introduced 15.0. Legacy odoo.define unchanged in this range (EV-342, EV-390). Rule implications are review-only.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "HIGH",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "13.0",
+    "to": "15.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "14.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/addons/web/static/lib/owl/owl.js"
+}

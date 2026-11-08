@@ -1,0 +1,6 @@
+{
+  "description": "Mismatched end tag is a parse error with no elements",
+  "parse_error": true,
+  "encoding": "utf-8",
+  "elements": []
+}

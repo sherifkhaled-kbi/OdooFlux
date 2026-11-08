@@ -1,0 +1,101 @@
+{
+  "category": "security",
+  "checked_by": "research-006-t019-t024",
+  "checked_on": "2026-11-07",
+  "description": "ir.rule domain_force and perm_unlink at 12.0/13.0 (and domain_force at 15.0), ir_model.py perm_unlink at 12.0/13.0, and the base ACL CSV header at 12.0/13.0 match the 14.0 forms in EV-400/401/402 (located items only; 14.0-15.0 field sets not fully compared)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-424",
+  "locations": [
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 23,
+      "match": "domain_force = fields.Text(string='Domain')",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 23,
+      "match": "domain_force = fields.Text(string='Domain')",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 24,
+      "match": "domain_force = fields.Text(string='Domain')",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 27,
+      "match": "perm_unlink = fields.Boolean(string='Apply for Delete', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 27,
+      "match": "perm_unlink = fields.Boolean(string='Apply for Delete', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 1200,
+      "match": "perm_unlink = fields.Boolean(string='Delete Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 1454,
+      "match": "perm_unlink = fields.Boolean(string='Delete Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 1,
+      "match": "\"id\",\"name\",\"model_id:id\",\"group_id:id\",\"perm_read\",\"perm_write\",\"perm_create\",\"perm_unlink\"",
+      "path": "odoo/addons/base/security/ir.model.access.csv",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 1,
+      "match": "\"id\",\"name\",\"model_id:id\",\"group_id:id\",\"perm_read\",\"perm_write\",\"perm_create\",\"perm_unlink\"",
+      "path": "odoo/addons/base/security/ir.model.access.csv",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    }
+  ],
+  "notes": "Downgraded: full field-set equality across 12.0-15.0 is not established by located excerpts.",
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "15.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "13.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/odoo/addons/base/models/ir_rule.py#L23"
+}

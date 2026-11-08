@@ -1,0 +1,26 @@
+{
+  "schema": "odooflux.versions/1",
+  "transitions": [
+    {
+      "research_status": "RESEARCH_SEEDED",
+      "source": "16.0",
+      "target": "17.0"
+    }
+  ],
+  "versions": [
+    {
+      "id": "16.0",
+      "online_releases": [],
+      "python_max": null,
+      "python_min": "3.7",
+      "support_status": "UNSUPPORTED"
+    },
+    {
+      "id": "17.0",
+      "online_releases": [],
+      "python_max": null,
+      "python_min": "3.10",
+      "support_status": "UNSUPPORTED"
+    }
+  ]
+}

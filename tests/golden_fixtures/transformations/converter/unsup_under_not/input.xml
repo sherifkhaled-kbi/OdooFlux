@@ -1,0 +1,3 @@
+<odoo>
+  <field name="f" attrs="{'invisible': ['!', ('a', 'like', 'x')]}"/>
+</odoo>

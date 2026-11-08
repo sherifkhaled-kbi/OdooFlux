@@ -1,0 +1,62 @@
+{
+  "category": "javascript",
+  "checked_by": "research-006-t010",
+  "checked_on": "2026-11-07",
+  "description": "16.0 baseline: attrs-derived modifiers are evaluated as JSON domains with strict fieldValue === value equality",
+  "detection_method": "read pinned file",
+  "id": "EV-385",
+  "locations": [
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 135,
+      "match": "export function evalDomain(modifier, evalContext) {",
+      "path": "addons/web/static/src/views/utils.js",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 137,
+      "match": "modifier = new Domain(modifier).contains(evalContext);",
+      "path": "addons/web/static/src/views/utils.js",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 91,
+      "match": "contains(record) {",
+      "path": "addons/web/static/src/core/domain.js",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 222,
+      "match": "return fieldValue === value;",
+      "path": "addons/web/static/src/core/domain.js",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9f40bf622c5531739321e59276c307319198e22b",
+  "risk": "MEDIUM",
+  "rule_ids": [
+    "16-17.xml.attrs-removed"
+  ],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "17.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9f40bf622c5531739321e59276c307319198e22b/addons/web/static/src/views/utils.js#L135-L139"
+}

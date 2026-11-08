@@ -1,0 +1,434 @@
+[
+  {
+    "id": "17-18.xml.tree-to-list",
+    "step": "17-18",
+    "category": "views",
+    "file_kinds": [
+      "xml",
+      "python"
+    ],
+    "severity": "CRITICAL",
+    "maturity": "FIX_ENABLED",
+    "review_required": false,
+    "ai_eligible": false,
+    "risk": "MEDIUM",
+    "evidence": [
+      "EV-112",
+      "EV-300",
+      "EV-301",
+      "EV-302",
+      "EV-303"
+    ],
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.xml.view_types:flag_view_type",
+    "fixer_ref": "odooflux.rules.xml.view_types:migrate_view_type",
+    "params": {
+      "from_type": "tree",
+      "to_type": "list"
+    },
+    "validation": [
+      "xml-wellformed",
+      "python-syntax"
+    ],
+    "tests": {
+      "positive": "TST-006-007",
+      "negative": "TST-006-007",
+      "idempotence": "TST-006-007"
+    },
+    "message": "The 'tree' view type was removed in 18.0; the view type is 'list'.",
+    "suggestion": "Rename <tree> elements to <list> and replace 'tree' entries of view_mode values with 'list'.",
+    "legacy_ref": null
+  },
+  {
+    "id": "17-18.python.group-operator-renamed",
+    "step": "17-18",
+    "category": "python_orm",
+    "file_kinds": [
+      "python"
+    ],
+    "severity": "WARNING",
+    "maturity": "FIX_ENABLED",
+    "review_required": false,
+    "ai_eligible": false,
+    "risk": "LOW",
+    "evidence": [
+      "EV-010",
+      "EV-118"
+    ],
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.python.generic:keyword_in_call",
+    "fixer_ref": "odooflux.rules.python.generic:rename_keyword",
+    "params": {
+      "callee": "fields.",
+      "keyword": "group_operator",
+      "new_keyword": "aggregator"
+    },
+    "validation": [
+      "python-syntax"
+    ],
+    "tests": {
+      "positive": "TST-006-008",
+      "negative": "TST-006-008",
+      "idempotence": "TST-006-008"
+    },
+    "message": "Field attribute group_operator was renamed aggregator.",
+    "suggestion": "Rename the keyword argument to aggregator.",
+    "legacy_ref": null
+  },
+  {
+    "id": "17-18.python.name-get-removed",
+    "step": "17-18",
+    "category": "python_orm",
+    "file_kinds": [
+      "python"
+    ],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "MEDIUM",
+    "evidence": [
+      "EV-104"
+    ],
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.python.generic:flag_method_override",
+    "fixer_ref": null,
+    "params": {
+      "method": "name_get"
+    },
+    "validation": [],
+    "tests": {
+      "positive": "TST-006-009",
+      "negative": "TST-006-009"
+    },
+    "message": "BaseModel.name_get was removed in 18.0; this override is no longer called.",
+    "suggestion": "Review the override and move the label logic to display_name. Not edited automatically.",
+    "legacy_ref": null
+  },
+  {
+    "id": "17-18.python.name-search-to-search-display-name",
+    "step": "17-18",
+    "category": "python_orm",
+    "file_kinds": [
+      "python"
+    ],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "MEDIUM",
+    "evidence": [
+      "EV-008",
+      "EV-106"
+    ],
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.python.generic:flag_method_override",
+    "fixer_ref": null,
+    "params": {
+      "method": "_name_search"
+    },
+    "validation": [],
+    "tests": {
+      "positive": "TST-006-009",
+      "negative": "TST-006-009"
+    },
+    "message": "Searching by name is implemented as _search_display_name in 18.0; this _name_search override needs review.",
+    "suggestion": "Review the override and port its search logic to _search_display_name. Not edited automatically.",
+    "legacy_ref": null
+  },
+  {
+    "id": "17-18.xml.cron-numbercall-removed",
+    "step": "17-18",
+    "category": "xml_views_data",
+    "file_kinds": [
+      "xml"
+    ],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "MEDIUM",
+    "evidence": [
+      "EV-113"
+    ],
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.xml.generic:flag_attribute_value",
+    "fixer_ref": null,
+    "params": {
+      "attribute": "name",
+      "value": "numbercall",
+      "tag": "field"
+    },
+    "validation": [],
+    "tests": {
+      "positive": "TST-006-009",
+      "negative": "TST-006-009"
+    },
+    "message": "ir.cron.numbercall was removed in 18.0; the cron record sets this field.",
+    "suggestion": "Review the cron record and its repeat semantics (ir.cron has no numbercall in 18.0). Not edited automatically.",
+    "legacy_ref": null
+  },
+  {
+    "id": "17-18.xml.kanban-box-deprecated",
+    "step": "17-18",
+    "category": "xml_views_data",
+    "file_kinds": [
+      "xml"
+    ],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "review_required": false,
+    "ai_eligible": false,
+    "risk": "LOW",
+    "evidence": [
+      "EV-119"
+    ],
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.xml.generic:flag_attribute_value",
+    "fixer_ref": null,
+    "params": {
+      "attribute": "t-name",
+      "value": "kanban-box"
+    },
+    "validation": [],
+    "tests": {
+      "positive": "TST-006-009",
+      "negative": "TST-006-009"
+    },
+    "message": "The kanban t-name 'kanban-box' is deprecated in 18.0 in favour of 'card'.",
+    "suggestion": "Plan the rename to the card template. Not edited automatically.",
+    "legacy_ref": null
+  },
+  {
+    "id": "17-18.python.user-has-groups-removed",
+    "step": "17-18",
+    "category": "security",
+    "file_kinds": [
+      "python"
+    ],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "MEDIUM",
+    "evidence": [
+      "EV-105",
+      "EV-308",
+      "EV-309",
+      "EV-310",
+      "EV-311"
+    ],
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.python.generic:flag_method_call",
+    "fixer_ref": null,
+    "params": {
+      "method": "user_has_groups"
+    },
+    "validation": [],
+    "tests": {
+      "positive": "TST-006-010",
+      "negative": "TST-006-010"
+    },
+    "message": "res.users.user_has_groups was removed in 18.0; use has_groups(group_spec) or has_group(xmlid).",
+    "suggestion": "Review the call. has_groups takes a comma-separated spec with optional '!' negation, so the rewrite is not mechanical. Not edited automatically.",
+    "legacy_ref": null
+  },
+  {
+    "id": "17-18.js.rpc-service-removed",
+    "step": "17-18",
+    "category": "javascript",
+    "file_kinds": [
+      "javascript"
+    ],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "MEDIUM",
+    "evidence": [
+      "EV-120",
+      "EV-394"
+    ],
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.javascript.generic:flag_rpc_service",
+    "fixer_ref": null,
+    "params": {},
+    "validation": [],
+    "tests": {
+      "positive": "TST-006-030",
+      "negative": "TST-006-030"
+    },
+    "message": "The rpc service is not registered in 18.0; rpc is an exported function.",
+    "suggestion": "Import rpc from @web/core/network/rpc and call it directly. Not edited automatically.",
+    "legacy_ref": null
+  },
+  {
+    "id": "17-18.js.legacy-widget-removed",
+    "step": "17-18",
+    "category": "javascript",
+    "file_kinds": [
+      "javascript"
+    ],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "HIGH",
+    "evidence": [
+      "EV-392"
+    ],
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.javascript.generic:flag_legacy_widget_import",
+    "fixer_ref": null,
+    "params": {},
+    "validation": [],
+    "tests": {
+      "positive": "TST-006-031",
+      "negative": "TST-006-031"
+    },
+    "message": "The legacy Widget module (@web/legacy/js/core/widget) does not exist in 18.0.",
+    "suggestion": "Replace Widget subclasses with OWL components. Not edited automatically.",
+    "legacy_ref": null
+  },
+  {
+    "id": "17-18.python.model-renamed-mail-canned-response",
+    "step": "17-18",
+    "category": "model_rename",
+    "file_kinds": ["python"],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "MEDIUM",
+    "evidence": ["EV-508"],
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.models.renamed:flag_python_model",
+    "fixer_ref": null,
+    "params": {"old": "mail.shortcode", "new": "mail.canned.response"},
+    "validation": [],
+    "tests": {"positive": "TST-006-074", "negative": "TST-006-074"},
+    "message": "The model mail.shortcode was renamed mail.canned.response in 18.0.",
+    "suggestion": "Update the reference to mail.canned.response. Detect-only and review required: field names, XML ids and tables that follow the rename are not edited automatically.",
+    "legacy_ref": null
+  },
+  {
+    "id": "17-18.xml.model-renamed-mail-canned-response",
+    "step": "17-18",
+    "category": "model_rename",
+    "file_kinds": ["xml"],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "MEDIUM",
+    "evidence": ["EV-508", "EV-515"],
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.models.renamed:flag_xml_model",
+    "fixer_ref": null,
+    "params": {"old": "mail.shortcode", "new": "mail.canned.response", "xml_ids": {"mail.model_mail_shortcode": "mail.model_mail_canned_response"}},
+    "validation": [],
+    "tests": {"positive": "TST-006-074", "negative": "TST-006-074"},
+    "message": "A reference to the model mail.shortcode (renamed mail.canned.response in 18.0) or to an external id derived from it.",
+    "suggestion": "Update the model name or external id to the mail.canned.response form. Detect-only and review required; only the ids listed in the rule evidence are recognised.",
+    "legacy_ref": null
+  },
+  {
+    "id": "17-18.csv.model-renamed-mail-canned-response",
+    "step": "17-18",
+    "category": "model_rename",
+    "file_kinds": ["csv"],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "MEDIUM",
+    "evidence": ["EV-508", "EV-515"],
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.models.renamed:flag_csv_model",
+    "fixer_ref": null,
+    "params": {"old": "mail.shortcode", "new": "mail.canned.response", "model_ids": {"mail.model_mail_shortcode": "mail.model_mail_canned_response"}},
+    "validation": [],
+    "tests": {"positive": "TST-006-074", "negative": "TST-006-074"},
+    "message": "An ACL row references the model external id mail.model_mail_shortcode (model mail.shortcode renamed mail.canned.response in 18.0).",
+    "suggestion": "Change model_id:id to mail.model_mail_canned_response. Detect-only and review required; unqualified ids and the ACL row id are not covered.",
+    "legacy_ref": null
+  },
+  {
+    "id": "17-18.python.model-renamed-mail-push-device",
+    "step": "17-18",
+    "category": "model_rename",
+    "file_kinds": ["python"],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "MEDIUM",
+    "evidence": ["EV-509"],
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.models.renamed:flag_python_model",
+    "fixer_ref": null,
+    "params": {"old": "mail.partner.device", "new": "mail.push.device"},
+    "validation": [],
+    "tests": {"positive": "TST-006-074", "negative": "TST-006-074"},
+    "message": "The model mail.partner.device was renamed mail.push.device in 18.0.",
+    "suggestion": "Update the reference to mail.push.device. Detect-only and review required: field names, XML ids and tables that follow the rename are not edited automatically.",
+    "legacy_ref": null
+  },
+  {
+    "id": "17-18.xml.model-renamed-mail-push-device",
+    "step": "17-18",
+    "category": "model_rename",
+    "file_kinds": ["xml"],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "MEDIUM",
+    "evidence": ["EV-509", "EV-515"],
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.models.renamed:flag_xml_model",
+    "fixer_ref": null,
+    "params": {"old": "mail.partner.device", "new": "mail.push.device", "xml_ids": {"mail.model_mail_partner_device": "mail.model_mail_push_device"}},
+    "validation": [],
+    "tests": {"positive": "TST-006-074", "negative": "TST-006-074"},
+    "message": "A reference to the model mail.partner.device (renamed mail.push.device in 18.0) or to an external id derived from it.",
+    "suggestion": "Update the model name or external id to the mail.push.device form. Detect-only and review required; only the ids listed in the rule evidence are recognised.",
+    "legacy_ref": null
+  },
+  {
+    "id": "17-18.csv.model-renamed-mail-push-device",
+    "step": "17-18",
+    "category": "model_rename",
+    "file_kinds": ["csv"],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "MEDIUM",
+    "evidence": ["EV-509", "EV-515"],
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.models.renamed:flag_csv_model",
+    "fixer_ref": null,
+    "params": {"old": "mail.partner.device", "new": "mail.push.device", "model_ids": {"mail.model_mail_partner_device": "mail.model_mail_push_device"}},
+    "validation": [],
+    "tests": {"positive": "TST-006-074", "negative": "TST-006-074"},
+    "message": "An ACL row references the model external id mail.model_mail_partner_device (model mail.partner.device renamed mail.push.device in 18.0).",
+    "suggestion": "Change model_id:id to mail.model_mail_push_device. Detect-only and review required; unqualified ids and the ACL row id are not covered.",
+    "legacy_ref": null
+  }
+]

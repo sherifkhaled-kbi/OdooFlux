@@ -1,0 +1,27 @@
+{
+  "corpus_id": "synthetic-seed1-m300x30",
+  "machine_profile": {
+    "cores": 12,
+    "cpu": "13th Gen Intel(R) Core(TM) i5-13420H",
+    "memory": "15.2 GiB",
+    "os": "Linux 7.0.0-42-generic",
+    "python": "3.12.3"
+  },
+  "modes": {
+    "incremental": {
+      "files_parsed": 0,
+      "median_wall_s": 2.463,
+      "peak_rss_mib": 433.7
+    },
+    "parallel": {
+      "files_parsed": null,
+      "median_wall_s": 3.75,
+      "peak_rss_mib": 399.4
+    },
+    "serial": {
+      "files_parsed": null,
+      "median_wall_s": 13.105,
+      "peak_rss_mib": 402.0
+    }
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "category": "controllers",
+  "checked_by": "research-006-t019-t024",
+  "checked_on": "2026-11-07",
+  "description": "15.0 to 16.0 HTTP layer rewrite: JsonRequest class exists at 14.0-15.0; 16.0-19.0 have a Dispatcher class and Request.get_json_data (16.0) and no JsonRequest class",
+  "detection_method": "grep on pinned source",
+  "id": "EV-411",
+  "locations": [
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 565,
+      "match": "class JsonRequest(WebRequest):",
+      "path": "odoo/http.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 567,
+      "match": "class JsonRequest(WebRequest):",
+      "path": "odoo/http.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 626,
+      "match": "self.jsonrequest = json.loads(request)",
+      "path": "odoo/http.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 1889,
+      "match": "class Dispatcher(ABC):",
+      "path": "odoo/http.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 1630,
+      "match": "def get_json_data(self):",
+      "path": "odoo/http.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "^class JsonRequest",
+      "path": "odoo/http.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "odoo/http.py"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 2066,
+      "match": "self.jsonrequest = self.request.get_json_data()",
+      "path": "odoo/http.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "absent",
+      "line": null,
+      "match": "^class JsonRequest",
+      "path": "odoo/http.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "search_scope": "odoo/http.py"
+    },
+    {
+      "branch": "18.0",
+      "kind": "absent",
+      "line": null,
+      "match": "^class JsonRequest",
+      "path": "odoo/http.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "search_scope": "odoo/http.py"
+    },
+    {
+      "branch": "19.0",
+      "kind": "absent",
+      "line": null,
+      "match": "^class JsonRequest",
+      "path": "odoo/http.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "search_scope": "odoo/http.py"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 2389,
+      "match": "class Dispatcher(ABC):",
+      "path": "odoo/http.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 2025,
+      "match": "class Dispatcher(ABC):",
+      "path": "odoo/http.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 2187,
+      "match": "class Dispatcher(ABC):",
+      "path": "odoo/http.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    }
+  ],
+  "notes": "Request handling classes are rewritten at 16.0. request.jsonrequest is still assigned by JsonRPCDispatcher at 16.0 (not removed there); custom WebRequest/JsonRequest subclasses or patches need review. Review-only.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+  "risk": "HIGH",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "15.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/cc0060e889603eb2e47fa44a8a22a70d7d784185/odoo/http.py#L565"
+}

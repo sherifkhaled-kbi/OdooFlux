@@ -1,0 +1,3 @@
+<odoo>
+  <field name="f" attrs="{'invisible': [('company_id', '=', active_id)]}"/>
+</odoo>

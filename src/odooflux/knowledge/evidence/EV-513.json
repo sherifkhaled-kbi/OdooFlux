@@ -1,0 +1,56 @@
+{
+  "category": "views",
+  "checked_by": "research-006-models",
+  "checked_on": "2026-11-07",
+  "description": "View external id payment.payment_acquirer_form is renamed payment.payment_provider_form at 16.0 (defining record moved from payment_acquirer_views.xml to payment_provider_views.xml)",
+  "detection_method": "raw fetch at pinned revisions; line match",
+  "id": "EV-513",
+  "locations": [
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 4,
+      "match": "<record id=\"payment_acquirer_form\" model=\"ir.ui.view\">",
+      "path": "addons/payment/views/payment_acquirer_views.xml",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 4,
+      "match": "<record id=\"payment_provider_form\" model=\"ir.ui.view\">",
+      "path": "addons/payment/views/payment_provider_views.xml",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "payment_acquirer_views.xml",
+      "path": "addons/payment/views/payment_acquirer_views.xml",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    }
+  ],
+  "notes": "Mapping evidenced for this one view id (also the inherit_id ref in EV-450). Other view and menu ids of the payment module were not mapped. Companion of EV-450.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "MEDIUM",
+  "rule_ids": [
+    "15-16.xml.model-renamed-payment-provider"
+  ],
+  "source_applicability": {
+    "from": "15.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/addons/payment/views/payment_acquirer_views.xml#L4"
+}

@@ -1,0 +1,46 @@
+{
+  "category": "javascript",
+  "checked_by": "research-006-t010",
+  "checked_on": "2026-11-07",
+  "description": "17.0 Python-side bool() is false for 0, empty string, empty list/set/object and None; the not operator uses it",
+  "detection_method": "read pinned file",
+  "id": "EV-383",
+  "locations": [
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 33,
+      "match": "bool(value) {",
+      "path": "addons/web/static/src/core/py_js/py_builtin.js",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 45,
+      "match": "return !isTrue(value);",
+      "path": "addons/web/static/src/core/py_js/py_interpreter.js",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    }
+  ],
+  "proposed_transformation": "fix-candidate",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+  "risk": "MEDIUM",
+  "rule_ids": [
+    "16-17.xml.attrs-removed"
+  ],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "17.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "17.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9ef8d62331b128bcd288528e4639e0901d85fcc8/addons/web/static/src/core/py_js/py_builtin.js#L33-L54"
+}

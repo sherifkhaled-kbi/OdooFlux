@@ -1,0 +1,25 @@
+{
+  "category": "security",
+  "checked_by": "research-t020",
+  "checked_on": "2026-11-07",
+  "description": "res.groups 19.0 fields include user_ids, model_access, rule_groups, share, implied_ids (12.0 to 18.0 res_groups.py not fetched)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-347",
+  "locations": [
+    {"branch": "19.0", "kind": "present", "line": 17, "match": "user_ids = fields.Many2many('res.users', 'res_groups_users_rel', 'gid', 'uid', help='Users explicitly in this group')", "path": "odoo/addons/base/models/res_groups.py", "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"},
+    {"branch": "19.0", "kind": "present", "line": 24, "match": "model_access = fields.One2many('ir.model.access', 'group_id', string='Access Controls', copy=True)", "path": "odoo/addons/base/models/res_groups.py", "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"},
+    {"branch": "19.0", "kind": "present", "line": 25, "match": "rule_groups = fields.Many2many('ir.rule', 'rule_group_rel',", "path": "odoo/addons/base/models/res_groups.py", "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"},
+    {"branch": "19.0", "kind": "present", "line": 31, "match": "share = fields.Boolean(string='Share Group', help=\"Group created to set access rights for sharing data with some users.\")", "path": "odoo/addons/base/models/res_groups.py", "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"}
+  ],
+  "notes": "Incomplete: res_groups.py was not fetched for 12.0 to 18.0. Comparison of res.groups fields across versions is not established.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": ["static.rescan"],
+  "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {"from": "18.0", "to": "18.0"},
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {"from": "19.0", "to": null},
+  "url": "https://github.com/odoo/odoo/blob/58bb9591d4cb08c4d5d4426222c9257f101ad250/odoo/addons/base/models/res_groups.py#L17"
+}

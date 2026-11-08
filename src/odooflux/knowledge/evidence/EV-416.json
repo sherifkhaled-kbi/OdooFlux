@@ -1,0 +1,93 @@
+{
+  "category": "assets",
+  "checked_by": "research-006-t019-t024",
+  "checked_on": "2026-11-07",
+  "description": "CSS class .o_list_view appears as a selector in SCSS in every version 14.0-19.0 (scss/list_view.scss 14.0, legacy/scss/list_view.scss 15.0, views/list/list_renderer.scss 16.0-19.0); list_renderer.xml root class is o_list_renderer at 16.0 and 19.0 (17.0, 18.0 not located)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-416",
+  "locations": [
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 1,
+      "match": ".o_list_view {",
+      "path": "addons/web/static/src/scss/list_view.scss",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 1,
+      "match": ".o_list_view {",
+      "path": "addons/web/static/src/legacy/scss/list_view.scss",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 13,
+      "match": ".o_list_view &  {",
+      "path": "addons/web/static/src/views/list/list_renderer.scss",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 27,
+      "match": ".o_list_view & {",
+      "path": "addons/web/static/src/views/list/list_renderer.scss",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 36,
+      "match": ".o_list_view & {",
+      "path": "addons/web/static/src/views/list/list_renderer.scss",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 35,
+      "match": ".o_list_view & {",
+      "path": "addons/web/static/src/views/list/list_renderer.scss",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 6,
+      "match": "class=\"o_list_renderer o_renderer table-responsive\"",
+      "path": "addons/web/static/src/views/list/list_renderer.xml",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 7,
+      "match": "class=\"o_list_renderer o_renderer table-responsive\"",
+      "path": "addons/web/static/src/views/list/list_renderer.xml",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    }
+  ],
+  "notes": "Negative result for legacy row C2: selector not removed 14.0-19.0. Refines EV-353, which only checked the XML template. Located lines are the selector `.o_list_view {` at 14.0-15.0 and the parent-qualified `.o_list_view &` at 16.0-19.0 (present as a selector, not shown to be 'defined' as a standalone rule at 16.0-19.0).",
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "14.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "15.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/cc0060e889603eb2e47fa44a8a22a70d7d784185/addons/web/static/src/scss/list_view.scss#L1"
+}

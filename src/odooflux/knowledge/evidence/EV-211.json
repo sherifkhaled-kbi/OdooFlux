@@ -1,0 +1,76 @@
+{
+  "category": "orm",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "12.0 `odoo/models.py` has no `_columns` model-attribute handling (matches are `_check_removed_columns`, `_create_parent_columns`); `odoo/osv/` still contains `expression.py`, `orm.py`, `osv.py`, `query.py`",
+  "detection_method": "grep on pinned source",
+  "id": "EV-211",
+  "locations": [
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 2340,
+      "match": "def _check_removed_columns(",
+      "path": "odoo/models.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 2473,
+      "match": "def _create_parent_columns(",
+      "path": "odoo/models.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": null,
+      "match": "expression.py",
+      "path": "odoo/osv/expression.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": null,
+      "match": "orm.py",
+      "path": "odoo/osv/orm.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": null,
+      "match": "osv.py",
+      "path": "odoo/osv/osv.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": null,
+      "match": "query.py",
+      "path": "odoo/osv/query.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "12.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "13.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/odoo/models.py#L2340"
+}

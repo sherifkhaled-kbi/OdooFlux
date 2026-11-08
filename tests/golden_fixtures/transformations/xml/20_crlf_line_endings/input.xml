@@ -1,0 +1,4 @@
+<odoo>
+  <field name="a"
+         string="x"/>
+</odoo>

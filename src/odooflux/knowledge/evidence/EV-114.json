@@ -1,0 +1,53 @@
+{
+  "category": "security",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "`res.users.groups_id` (18.0) renamed `group_ids` (19.0)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-114",
+  "locations": [
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 386,
+      "match": "groups_id = fields.Many2many(",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 257,
+      "match": "group_ids = fields.Many2many(",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "absent",
+      "line": null,
+      "match": "groups_id = fields",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "search_scope": "odoo/addons/base/models/res_users.py"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+  "risk": "HIGH",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "18.0",
+    "to": "18.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "19.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/75d6abe5979ac9e8d85d097dad0e7b559ef07326/odoo/addons/base/models/res_users.py#L386"
+}

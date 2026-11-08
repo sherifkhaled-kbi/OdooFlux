@@ -1,0 +1,62 @@
+{
+  "category": "owl",
+  "checked_by": "research-006-t019-t024",
+  "checked_on": "2026-11-07",
+  "description": "OWL 1.x (15.0) Component defines mounted()/willStart() methods and exports hooks/tags; OWL 2.x (16.0) exports onMounted and has no mounted() method",
+  "detection_method": "grep on pinned source",
+  "id": "EV-395",
+  "locations": [
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 4198,
+      "match": "mounted() { }",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 5593,
+      "match": "exports.hooks = hooks;",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 6356,
+      "match": "exports.onMounted = onMounted;",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "^\\s+mounted() {",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "owl.js"
+    }
+  ],
+  "notes": "Review-only: OWL1 to OWL2 component migration is not mechanical.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "HIGH",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "15.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/addons/web/static/lib/owl/owl.js#L4198"
+}

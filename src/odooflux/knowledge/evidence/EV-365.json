@@ -1,0 +1,60 @@
+{
+  "category": "data_files",
+  "checked_by": "research-008-t003",
+  "checked_on": "2026-11-07",
+  "description": "Unresolvable external IDs raise ValueError 'External ID not found in the system' (16.0-19.0)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-365",
+  "locations": [
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 2052,
+      "match": "raise ValueError('External ID not found in the system: %s' % xmlid)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 2214,
+      "match": "raise ValueError('External ID not found in the system: %s' % xmlid)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 2298,
+      "match": "raise ValueError('External ID not found in the system: %s' % xmlid)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 2306,
+      "match": "raise ValueError('External ID not found in the system: %s' % xmlid)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "runtime.install"
+  ],
+  "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/58bb9591d4cb08c4d5d4426222c9257f101ad250/odoo/addons/base/models/ir_model.py#L2052"
+}

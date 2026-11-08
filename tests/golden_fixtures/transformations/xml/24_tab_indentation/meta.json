@@ -1,0 +1,37 @@
+{
+  "description": "Tab indentation and nested fields",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "odoo",
+      "span": "<odoo>\n\t<field name=\"a\">\n\t\t<field name=\"b\"/>\n\t</field>\n</odoo>",
+      "start_tag": "<odoo>",
+      "attrs": []
+    },
+    {
+      "tag": "field",
+      "span": "<field name=\"a\">\n\t\t<field name=\"b\"/>\n\t</field>",
+      "start_tag": "<field name=\"a\">",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "a",
+          "value": "a"
+        }
+      ]
+    },
+    {
+      "tag": "field",
+      "span": "<field name=\"b\"/>",
+      "start_tag": "<field name=\"b\"/>",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "b",
+          "value": "b"
+        }
+      ]
+    }
+  ]
+}

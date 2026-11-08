@@ -1,0 +1,3 @@
+<odoo>
+  <field name="f" attrs="{'domain': [('a', '=', 1)]}"/>
+</odoo>

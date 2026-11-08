@@ -1,0 +1,45 @@
+{
+  "category": "orm",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "15.3 (on-premise: 16.0): `search` argument `args` renamed `domain`; `browse` rejects `str` ids; `fields_get_keys`/`get_xml_id` deprecated; `_mapped_cache` removed; `limit` attribute of One2many/Many2many removed (PR #83687)",
+  "detection_method": "n/a",
+  "id": "EV-013",
+  "locations": [
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 150,
+      "match": "The argument `args` is renamed to `domain`",
+      "path": "content/developer/reference/backend/orm/changelog.rst",
+      "revision": "706918083dbd7dbc8e70c658d3ca63d700f94228"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 155,
+      "match": "_mapped_cache",
+      "path": "content/developer/reference/backend/orm/changelog.rst",
+      "revision": "706918083dbd7dbc8e70c658d3ca63d700f94228"
+    }
+  ],
+  "notes": "Online release normalised to next on-premise major (ADR-007): 15.3 -> 16.0.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/documentation",
+  "required_validation": [
+    "documentation"
+  ],
+  "revision": "706918083dbd7dbc8e70c658d3ca63d700f94228",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "15.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/documentation/blob/706918083dbd7dbc8e70c658d3ca63d700f94228/content/developer/reference/backend/orm/changelog.rst#L150"
+}

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ResearchGap",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "description",
+      "steps",
+      "categories",
+      "blocks_rules",
+      "status",
+      "resolved_by"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^G-R-\\d{2}$"
+      },
+      "description": {
+        "type": "string",
+        "minLength": 1
+      },
+      "steps": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^\\d+-\\d+$"
+        }
+      },
+      "categories": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "blocks_rules": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "status": {
+        "enum": [
+          "OPEN",
+          "RESOLVED"
+        ]
+      },
+      "resolved_by": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^EV-\\d{3}$"
+        }
+      }
+    }
+  }
+}

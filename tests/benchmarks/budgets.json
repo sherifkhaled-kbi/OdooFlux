@@ -1,0 +1,77 @@
+{
+  "budgets": [
+    {
+      "approved_by": "PENDING_HUMAN_REVIEW",
+      "baseline_ref": "tests/benchmarks/baseline.json (P9 measurement, 300 x 30 synthetic corpus seed 1, median of 5, after T014)",
+      "date": "2026-11-07",
+      "headroom_factor": 1.5,
+      "metric": "wall_s",
+      "mode": "serial",
+      "rationale": "baseline median 13.105 x headroom 1.5 = 19.7. Headroom 1.5 covers runner noise on a shared machine while the separate 20 % regression rule against baseline.json catches real slowdowns. P2 baseline tests/benchmarks/BASELINE.md: 1.07 s on the P2 generate_repo corpus (seed 20260106), before knowledge rules were wired; not comparable, different corpus.",
+      "value": 19.7
+    },
+    {
+      "approved_by": "PENDING_HUMAN_REVIEW",
+      "baseline_ref": "tests/benchmarks/baseline.json (P9 measurement, 300 x 30 synthetic corpus seed 1, median of 5, after T014)",
+      "date": "2026-11-07",
+      "headroom_factor": 1.5,
+      "metric": "peak_rss_mib",
+      "mode": "serial",
+      "rationale": "baseline median 402.0 x headroom 1.5 = 603.0. Headroom 1.5 covers runner noise on a shared machine while the separate 20 % regression rule against baseline.json catches real slowdowns. P2 baseline tests/benchmarks/BASELINE.md: 1.07 s on the P2 generate_repo corpus (seed 20260106), before knowledge rules were wired; not comparable, different corpus.",
+      "value": 603.0
+    },
+    {
+      "approved_by": "PENDING_HUMAN_REVIEW",
+      "baseline_ref": "tests/benchmarks/baseline.json (P9 measurement, 300 x 30 synthetic corpus seed 1, median of 5, after T014)",
+      "date": "2026-11-07",
+      "headroom_factor": 1.5,
+      "metric": "wall_s",
+      "mode": "parallel",
+      "rationale": "baseline median 3.75 x headroom 1.5 = 5.6. Headroom 1.5 covers runner noise on a shared machine while the separate 20 % regression rule against baseline.json catches real slowdowns. P2 baseline tests/benchmarks/BASELINE.md: 1.07 s on the P2 generate_repo corpus (seed 20260106), before knowledge rules were wired; not comparable, different corpus.",
+      "value": 5.6
+    },
+    {
+      "approved_by": "PENDING_HUMAN_REVIEW",
+      "baseline_ref": "tests/benchmarks/baseline.json (P9 measurement, 300 x 30 synthetic corpus seed 1, median of 5, after T014)",
+      "date": "2026-11-07",
+      "headroom_factor": 1.5,
+      "metric": "peak_rss_mib",
+      "mode": "parallel",
+      "rationale": "baseline median 399.4 x headroom 1.5 = 599.1. Headroom 1.5 covers runner noise on a shared machine while the separate 20 % regression rule against baseline.json catches real slowdowns. P2 baseline tests/benchmarks/BASELINE.md: 1.07 s on the P2 generate_repo corpus (seed 20260106), before knowledge rules were wired; not comparable, different corpus.",
+      "value": 599.1
+    },
+    {
+      "approved_by": "PENDING_HUMAN_REVIEW",
+      "baseline_ref": "tests/benchmarks/baseline.json (P9 measurement, 300 x 30 synthetic corpus seed 1, median of 5, after T014)",
+      "date": "2026-11-07",
+      "headroom_factor": 1.5,
+      "metric": "wall_s",
+      "mode": "incremental",
+      "rationale": "baseline median 2.463 x headroom 1.5 = 3.7. Headroom 1.5 covers runner noise on a shared machine while the separate 20 % regression rule against baseline.json catches real slowdowns. P2 baseline tests/benchmarks/BASELINE.md: 1.07 s on the P2 generate_repo corpus (seed 20260106), before knowledge rules were wired; not comparable, different corpus.",
+      "value": 3.7
+    },
+    {
+      "approved_by": "PENDING_HUMAN_REVIEW",
+      "baseline_ref": "tests/benchmarks/baseline.json (P9 measurement, 300 x 30 synthetic corpus seed 1, median of 5, after T014)",
+      "date": "2026-11-07",
+      "headroom_factor": 1.5,
+      "metric": "peak_rss_mib",
+      "mode": "incremental",
+      "rationale": "baseline median 433.7 x headroom 1.5 = 650.5. Headroom 1.5 covers runner noise on a shared machine while the separate 20 % regression rule against baseline.json catches real slowdowns. P2 baseline tests/benchmarks/BASELINE.md: 1.07 s on the P2 generate_repo corpus (seed 20260106), before knowledge rules were wired; not comparable, different corpus.",
+      "value": 650.5
+    },
+    {
+      "approved_by": "PENDING_HUMAN_REVIEW",
+      "baseline_ref": "tests/benchmarks/baseline.json (P9 measurement, 300 x 30 synthetic corpus seed 1, median of 5, after T014)",
+      "date": "2026-11-07",
+      "headroom_factor": 1.0,
+      "metric": "files_parsed",
+      "mode": "incremental",
+      "rationale": "baseline is 0 parsed files for an unchanged corpus (FR-004); no headroom is allowed. P2 baseline has no incremental mode.",
+      "value": 0
+    }
+  ],
+  "corpus_id": "synthetic-seed1-m300x30",
+  "note": "Values derive from measured medians, never assumed. approved_by stays PENDING_HUMAN_REVIEW until a maintainer records approval in the review register; no agent approves budgets.",
+  "schema": "odooflux.benchmark-budgets/1"
+}

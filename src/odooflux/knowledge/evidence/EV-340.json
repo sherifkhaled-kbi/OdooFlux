@@ -1,0 +1,23 @@
+{
+  "category": "owl",
+  "checked_by": "research-t019",
+  "checked_on": "2026-11-07",
+  "description": "OWL 1.x bundled at addons/web/static/lib/owl/owl.js (version 1.4.11) for 14.0 and 15.0",
+  "detection_method": "grep on pinned source",
+  "id": "EV-340",
+  "locations": [
+    {"branch": "14.0", "kind": "present", "line": 5604, "match": "__info__.version = '1.4.11';", "path": "addons/web/static/lib/owl/owl.js", "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"},
+    {"branch": "15.0", "kind": "present", "line": 5604, "match": "__info__.version = '1.4.11';", "path": "addons/web/static/lib/owl/owl.js", "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"}
+  ],
+  "notes": "OWL pin is not in revisions.json; this record uses the vendored copy in odoo/odoo (allow-listed source). No OWL framework repo pin exists.",
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": ["static.rescan"],
+  "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {"from": "14.0", "to": "15.0"},
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {"from": "15.0", "to": null},
+  "url": "https://github.com/odoo/odoo/blob/cc0060e889603eb2e47fa44a8a22a70d7d784185/addons/web/static/lib/owl/owl.js#L5604"
+}

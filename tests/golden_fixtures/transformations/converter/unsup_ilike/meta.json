@@ -1,0 +1,14 @@
+{
+  "description": "unsup ilike",
+  "group": "unsupported",
+  "mode": "falsy",
+  "in_list_view": false,
+  "expect": "no-edit",
+  "unconverted": [
+    {
+      "key": "invisible",
+      "reason": "unsupported operator ilike"
+    }
+  ],
+  "warnings": []
+}

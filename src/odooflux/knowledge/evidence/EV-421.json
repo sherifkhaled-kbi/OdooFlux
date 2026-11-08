@@ -1,0 +1,148 @@
+{
+  "category": "orm",
+  "checked_by": "research-006-t019-t024",
+  "checked_on": "2026-11-07",
+  "description": "odoo/models.py public method diff (located items only): 13.0 adds with_user, flush, filtered_domain, action_archive (absent at 12.0); 14.0 adds with_company (absent at 13.0) and no longer has resolve_2many_commands (present at 13.0); compute_concurrency_field present at 14.0 and absent at 15.0",
+  "detection_method": "grep on pinned source",
+  "id": "EV-421",
+  "locations": [
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 5189,
+      "match": "def with_user(self, user):",
+      "path": "odoo/models.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "12.0",
+      "kind": "absent",
+      "line": null,
+      "match": "^    def with_user(",
+      "path": "odoo/models.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "search_scope": "odoo/models.py"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 5512,
+      "match": "def flush(self, fnames=None, records=None):",
+      "path": "odoo/models.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "12.0",
+      "kind": "absent",
+      "line": null,
+      "match": "^    def flush(",
+      "path": "odoo/models.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "search_scope": "odoo/models.py"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 5383,
+      "match": "def filtered_domain(self, domain):",
+      "path": "odoo/models.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "12.0",
+      "kind": "absent",
+      "line": null,
+      "match": "^    def filtered_domain(",
+      "path": "odoo/models.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "search_scope": "odoo/models.py"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 5001,
+      "match": "def action_archive(self):",
+      "path": "odoo/models.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "12.0",
+      "kind": "absent",
+      "line": null,
+      "match": "^    def action_archive(",
+      "path": "odoo/models.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "search_scope": "odoo/models.py"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 5111,
+      "match": "def with_company(self, company):",
+      "path": "odoo/models.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "13.0",
+      "kind": "absent",
+      "line": null,
+      "match": "^    def with_company(",
+      "path": "odoo/models.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "search_scope": "odoo/models.py"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 4902,
+      "match": "def resolve_2many_commands(self, field_name, commands, fields=None):",
+      "path": "odoo/models.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "14.0",
+      "kind": "absent",
+      "line": null,
+      "match": "^    def resolve_2many_commands(",
+      "path": "odoo/models.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "search_scope": "odoo/models.py"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 480,
+      "match": "def compute_concurrency_field(self):",
+      "path": "odoo/models.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "15.0",
+      "kind": "absent",
+      "line": null,
+      "match": "^    def compute_concurrency_field(",
+      "path": "odoo/models.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "search_scope": "odoo/models.py"
+    }
+  ],
+  "notes": "Withdrawn as unlocated: action_unarchive, get_base_url, compute_concurrency_field_with_access. 'dropped' means absent from models.py only.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "15.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "13.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/4cc086d330b73514fbc64a7fcf22d8a7a9f1b691/odoo/models.py#L5189"
+}

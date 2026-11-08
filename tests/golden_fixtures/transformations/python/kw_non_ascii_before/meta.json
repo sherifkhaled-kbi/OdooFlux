@@ -1,0 +1,21 @@
+{
+  "description": "Non-ASCII text earlier on the line: removal is in character positions",
+  "operations": [
+    {
+      "op": "remove_keyword",
+      "call": "fields.Char",
+      "keyword": "size"
+    }
+  ],
+  "expect": "edit",
+  "reason": "",
+  "spans": [
+    {
+      "locator": "keyword_removal",
+      "call": "fields.Char",
+      "keyword": "size",
+      "occurrence": 0,
+      "covers": ", size=64"
+    }
+  ]
+}

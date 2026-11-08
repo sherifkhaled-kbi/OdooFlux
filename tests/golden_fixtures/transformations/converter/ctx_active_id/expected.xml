@@ -1,0 +1,3 @@
+<odoo>
+  <field name="f" invisible="company_id == active_id"/>
+</odoo>

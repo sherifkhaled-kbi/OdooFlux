@@ -1,0 +1,63 @@
+{
+  "category": "views",
+  "checked_by": "research-006-phase3-t018",
+  "checked_on": "2026-11-07",
+  "description": "<chatter/> form tag is first handled by the mail form compiler in 18.0 (selector 'chatter'); no 'chatter' selector in 16.0 or 17.0 form compilers",
+  "detection_method": "grep on pinned source (mail form compilers)",
+  "id": "EV-336",
+  "locations": [
+    {
+      "branch": "18.0",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "path": "addons/mail/static/src/chatter/web/form_compiler.js",
+      "line": 46,
+      "match": "selector: \"chatter\",",
+      "kind": "present"
+    },
+    {
+      "branch": "19.0",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "path": "addons/mail/static/src/chatter/web/form_compiler.js",
+      "line": 47,
+      "match": "selector: \"chatter\",",
+      "kind": "present"
+    },
+    {
+      "branch": "17.0",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "path": "addons/mail/static/src/views/web/form/form_compiler.js",
+      "line": null,
+      "match": "selector: \"chatter\"",
+      "kind": "absent",
+      "search_scope": "addons/mail/static/src/views/web/form/form_compiler.js"
+    },
+    {
+      "branch": "16.0",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "path": "addons/mail/static/src/views/form/form_compiler.js",
+      "line": null,
+      "match": "selector: \"chatter\"",
+      "kind": "absent",
+      "search_scope": "addons/mail/static/src/views/form/form_compiler.js"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "18.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "18.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/75d6abe5979ac9e8d85d097dad0e7b559ef07326/addons/mail/static/src/chatter/web/form_compiler.js#L46",
+  "notes": "Scope: mail JS form compilers and renderers only (no Python-side check of <chatter/> in ir_ui_view or mail models). 18.0 compiler line 46 and 19.0 line 47 both register selector 'chatter'. 17.0 registers its chatter_compiler with selector 'div.oe_chatter' only (fc17 line 74)."
+}

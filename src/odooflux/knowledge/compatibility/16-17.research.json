@@ -1,0 +1,147 @@
+{
+  "categories": {
+    "assets": {
+      "evidence": [
+        "EV-415",
+        "EV-416"
+      ],
+      "gaps": [
+        "G-R-02",
+        "G-R-18"
+      ],
+      "status": "RESEARCH_SEEDED"
+    },
+    "behavioural": {
+      "evidence": [
+        "EV-111"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "NOT_ASSESSED"
+    },
+    "javascript_owl": {
+      "evidence": [
+        "EV-121",
+        "EV-122",
+        "EV-391",
+        "EV-392",
+        "EV-488"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "RESEARCH_SEEDED"
+    },
+    "manifest_dependencies": {
+      "evidence": [
+        "EV-125",
+        "EV-417"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "RESEARCH_SEEDED"
+    },
+    "python_orm": {
+      "evidence": [
+        "EV-001",
+        "EV-010",
+        "EV-011",
+        "EV-012",
+        "EV-013",
+        "EV-014",
+        "EV-102",
+        "EV-108",
+        "EV-110",
+        "EV-207",
+        "EV-412",
+        "EV-483",
+        "EV-484",
+        "EV-486"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "RESEARCH_SEEDED"
+    },
+    "qweb": {
+      "evidence": [
+        "EV-202",
+        "EV-203"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "NOT_ASSESSED"
+    },
+    "rules": {
+      "evidence": [],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "NOT_ASSESSED"
+    },
+    "runtime": {
+      "evidence": [],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "NOT_ASSESSED"
+    },
+    "security": {
+      "evidence": [
+        "EV-400",
+        "EV-401",
+        "EV-402",
+        "EV-480",
+        "EV-481",
+        "EV-482"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "RESEARCH_SEEDED"
+    },
+    "xml_views_data": {
+      "evidence": [
+        "EV-109",
+        "EV-117",
+        "EV-322",
+        "EV-323",
+        "EV-337",
+        "EV-490"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "RESEARCH_SEEDED"
+    }
+  },
+  "notes": "Per-category status copied from VERSION_COMPATIBILITY_MATRIX.md; Research column is the step status.",
+  "open_gaps": [
+    "G-R-08",
+    "G-R-20",
+    "G-R-21",
+    "G-R-22"
+  ],
+  "peer_reviewed": false,
+  "research_status": "RESEARCH_SEEDED",
+  "review_only": "Field `states=` \u2192 view modifiers (manual), `name_get` overrides, `_read_group` callers",
+  "revisions": {
+    "odoo/odoo@16.0": "9f40bf622c5531739321e59276c307319198e22b",
+    "odoo/odoo@17.0": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+  },
+  "seeded_evidence": [
+    "EV-011",
+    "EV-012",
+    "EV-108",
+    "EV-109",
+    "EV-110",
+    "EV-111",
+    "EV-117",
+    "EV-125",
+    "EV-207"
+  ],
+  "step": "16-17"
+}

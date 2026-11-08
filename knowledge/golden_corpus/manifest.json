@@ -1,0 +1,428 @@
+{
+  "schema_version": 1,
+  "purpose": "Golden corpus INPUTS only (source modules). Expected outputs are not generated; they require human review.",
+  "oca": "skipped: no OCA commit SHA resolved",
+  "entries": [
+    {
+      "version": "14.0",
+      "repository": "odoo/odoo",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "addon": "note_pad",
+      "files": [
+        {
+          "path": "addons/note_pad/__init__.py",
+          "sha256": "0422095c50476edda448f611db6225d4c274a2c894899f987f4d59c2d2494781",
+          "size": 121
+        },
+        {
+          "path": "addons/note_pad/__manifest__.py",
+          "sha256": "7ff195f510d2433df1f61537d3125e270d4344206d4ded09de2644e7ae304634",
+          "size": 704
+        },
+        {
+          "path": "addons/note_pad/models/__init__.py",
+          "sha256": "eace7e2aca351ac995bc53274e2e2cc5a7fe17cf6424371f28821f345f0b1687",
+          "size": 119
+        },
+        {
+          "path": "addons/note_pad/models/note.py",
+          "sha256": "6127bae70d588ea6b6a8b9e9646f6a3ab26e5aeb14cb3e6e99b688fad7287c45",
+          "size": 344
+        },
+        {
+          "path": "addons/note_pad/views/note_views.xml",
+          "sha256": "743447657030bc39ddfac04fbd6818858b93e067c477bdfd0830bcbf20400bfe",
+          "size": 460
+        }
+      ]
+    },
+    {
+      "version": "14.0",
+      "repository": "odoo/odoo",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "addon": "social_media",
+      "files": [
+        {
+          "path": "addons/social_media/__init__.py",
+          "sha256": "031e2a2f175bf404e4d39305edc490d01769602a46558172f67e14e333837fda",
+          "size": 46
+        },
+        {
+          "path": "addons/social_media/__manifest__.py",
+          "sha256": "8643da0ba5924c2e0aac87cb370129015fc7543b4a0235cd5daff21f07accdec",
+          "size": 529
+        },
+        {
+          "path": "addons/social_media/demo/res_company_demo.xml",
+          "sha256": "c35136ab2d9c9ed639f7a9de34f2100f8639ffe642dc170ae9fe910005345aed",
+          "size": 602
+        },
+        {
+          "path": "addons/social_media/models/__init__.py",
+          "sha256": "021bcf04a70c0edbf2ea0126f3c72fb1b4ae0ffc26215597a619947e6e0afd9f",
+          "size": 51
+        },
+        {
+          "path": "addons/social_media/models/res_company.py",
+          "sha256": "61497c4da87c792c32a6727bdb8ecc1e046009a618d2f1ca0ac40c2861f44cd5",
+          "size": 516
+        },
+        {
+          "path": "addons/social_media/views/res_company_views.xml",
+          "sha256": "273aa6ad2cbdce14844f6e62d4cac3bad841049b0899097923e1bf8e97740543",
+          "size": 911
+        }
+      ]
+    },
+    {
+      "version": "14.0",
+      "repository": "odoo/odoo",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "addon": "website_payment",
+      "files": [
+        {
+          "path": "addons/website_payment/__init__.py",
+          "sha256": "446a4529d6c9b9553a8abea1b283b9ce75c8b92164d640e9a85b05266b133119",
+          "size": 120
+        },
+        {
+          "path": "addons/website_payment/__manifest__.py",
+          "sha256": "c11fe6132963b84de9f88d6c858c7fb663ea77f39064ad56bd24bdea6412336f",
+          "size": 459
+        },
+        {
+          "path": "addons/website_payment/models/__init__.py",
+          "sha256": "ca3c8cf28ff66dcc4c2936ceb534803d613f2a6db0db19da85be0cf0596d25ae",
+          "size": 30
+        },
+        {
+          "path": "addons/website_payment/models/payment_acquirer.py",
+          "sha256": "43be5300cb814e5284004f8e686de193599a938f80cda7f962dca56f9fb25b53",
+          "size": 296
+        },
+        {
+          "path": "addons/website_payment/views/payment_acquirer.xml",
+          "sha256": "b2d93401251361722254ba5aa5245a1d056710f8a105949191b378ccf556c2b8",
+          "size": 637
+        }
+      ]
+    },
+    {
+      "version": "15.0",
+      "repository": "odoo/odoo",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "addon": "note_pad",
+      "files": [
+        {
+          "path": "addons/note_pad/__init__.py",
+          "sha256": "0422095c50476edda448f611db6225d4c274a2c894899f987f4d59c2d2494781",
+          "size": 121
+        },
+        {
+          "path": "addons/note_pad/__manifest__.py",
+          "sha256": "7ff195f510d2433df1f61537d3125e270d4344206d4ded09de2644e7ae304634",
+          "size": 704
+        },
+        {
+          "path": "addons/note_pad/models/__init__.py",
+          "sha256": "eace7e2aca351ac995bc53274e2e2cc5a7fe17cf6424371f28821f345f0b1687",
+          "size": 119
+        },
+        {
+          "path": "addons/note_pad/models/note.py",
+          "sha256": "6127bae70d588ea6b6a8b9e9646f6a3ab26e5aeb14cb3e6e99b688fad7287c45",
+          "size": 344
+        },
+        {
+          "path": "addons/note_pad/views/note_views.xml",
+          "sha256": "743447657030bc39ddfac04fbd6818858b93e067c477bdfd0830bcbf20400bfe",
+          "size": 460
+        }
+      ]
+    },
+    {
+      "version": "15.0",
+      "repository": "odoo/odoo",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "addon": "social_media",
+      "files": [
+        {
+          "path": "addons/social_media/__init__.py",
+          "sha256": "031e2a2f175bf404e4d39305edc490d01769602a46558172f67e14e333837fda",
+          "size": 46
+        },
+        {
+          "path": "addons/social_media/__manifest__.py",
+          "sha256": "8643da0ba5924c2e0aac87cb370129015fc7543b4a0235cd5daff21f07accdec",
+          "size": 529
+        },
+        {
+          "path": "addons/social_media/demo/res_company_demo.xml",
+          "sha256": "c35136ab2d9c9ed639f7a9de34f2100f8639ffe642dc170ae9fe910005345aed",
+          "size": 602
+        },
+        {
+          "path": "addons/social_media/models/__init__.py",
+          "sha256": "021bcf04a70c0edbf2ea0126f3c72fb1b4ae0ffc26215597a619947e6e0afd9f",
+          "size": 51
+        },
+        {
+          "path": "addons/social_media/models/res_company.py",
+          "sha256": "61497c4da87c792c32a6727bdb8ecc1e046009a618d2f1ca0ac40c2861f44cd5",
+          "size": 516
+        },
+        {
+          "path": "addons/social_media/views/res_company_views.xml",
+          "sha256": "273aa6ad2cbdce14844f6e62d4cac3bad841049b0899097923e1bf8e97740543",
+          "size": 911
+        }
+      ]
+    },
+    {
+      "version": "15.0",
+      "repository": "odoo/odoo",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "addon": "l10n_in_stock",
+      "files": [
+        {
+          "path": "addons/l10n_in_stock/__init__.py",
+          "sha256": "0422095c50476edda448f611db6225d4c274a2c894899f987f4d59c2d2494781",
+          "size": 121
+        },
+        {
+          "path": "addons/l10n_in_stock/__manifest__.py",
+          "sha256": "2d6662a506fefce9d397cdf5c7baf0dd38e2dfc38365eeb239c4c4777ff1536e",
+          "size": 596
+        },
+        {
+          "path": "addons/l10n_in_stock/data/product_demo.xml",
+          "sha256": "e947aa3f2162f668dfc509c91c6b4555bfa7a5948e4814f48ded2a290a24625a",
+          "size": 376
+        },
+        {
+          "path": "addons/l10n_in_stock/models/__init__.py",
+          "sha256": "83ad394189148ebc0abf62602e14d65fcf3af5d080ba06c25568e95d7c8d0d05",
+          "size": 128
+        },
+        {
+          "path": "addons/l10n_in_stock/models/stock_picking.py",
+          "sha256": "4880cadfba985ed7e9ff20d377d0e124f3c3b405c57a4ad6cd49fab35c91a853",
+          "size": 335
+        },
+        {
+          "path": "addons/l10n_in_stock/views/report_stockpicking_operations.xml",
+          "sha256": "ccdce8a813bd2384757521c0db0ea773d121c77ce242360608043448372eb842",
+          "size": 496
+        }
+      ]
+    },
+    {
+      "version": "16.0",
+      "repository": "odoo/odoo",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "addon": "account_add_gln",
+      "files": [
+        {
+          "path": "addons/account_add_gln/__init__.py",
+          "sha256": "5fd10918e1361ad65b4b41bcd8fb525e659267f47c8c4334ae52530e58908e9e",
+          "size": 21
+        },
+        {
+          "path": "addons/account_add_gln/__manifest__.py",
+          "sha256": "aee6350b06fe996153e7954814bb9086b4df1ede788508af48676fec663a8513",
+          "size": 532
+        },
+        {
+          "path": "addons/account_add_gln/models/__init__.py",
+          "sha256": "83e0e9d99c0dea80780aa7507e04489cd4b374c580550835be358bed2f993833",
+          "size": 26
+        },
+        {
+          "path": "addons/account_add_gln/models/res_partner.py",
+          "sha256": "8b6f9e8692d6eaab773115036154bf43d754f5316f2a4ecba09c090e0178abb9",
+          "size": 182
+        },
+        {
+          "path": "addons/account_add_gln/views/res_partner_views.xml",
+          "sha256": "fccdb4dc1dd106819d27b129600f7e09e6d093de38ed62a61056c329076ead34",
+          "size": 941
+        }
+      ]
+    },
+    {
+      "version": "16.0",
+      "repository": "odoo/odoo",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "addon": "social_media",
+      "files": [
+        {
+          "path": "addons/social_media/__init__.py",
+          "sha256": "031e2a2f175bf404e4d39305edc490d01769602a46558172f67e14e333837fda",
+          "size": 46
+        },
+        {
+          "path": "addons/social_media/__manifest__.py",
+          "sha256": "50f3ba252f9126fb26a853b9d7c56a06154cae15448eb5e26b3e81661f724b32",
+          "size": 502
+        },
+        {
+          "path": "addons/social_media/demo/res_company_demo.xml",
+          "sha256": "c35136ab2d9c9ed639f7a9de34f2100f8639ffe642dc170ae9fe910005345aed",
+          "size": 602
+        },
+        {
+          "path": "addons/social_media/models/__init__.py",
+          "sha256": "021bcf04a70c0edbf2ea0126f3c72fb1b4ae0ffc26215597a619947e6e0afd9f",
+          "size": 51
+        },
+        {
+          "path": "addons/social_media/models/res_company.py",
+          "sha256": "61497c4da87c792c32a6727bdb8ecc1e046009a618d2f1ca0ac40c2861f44cd5",
+          "size": 516
+        },
+        {
+          "path": "addons/social_media/views/res_company_views.xml",
+          "sha256": "273aa6ad2cbdce14844f6e62d4cac3bad841049b0899097923e1bf8e97740543",
+          "size": 911
+        }
+      ]
+    },
+    {
+      "version": "16.0",
+      "repository": "odoo/odoo",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "addon": "l10n_lu_peppol_id",
+      "files": [
+        {
+          "path": "addons/l10n_lu_peppol_id/__init__.py",
+          "sha256": "0422095c50476edda448f611db6225d4c274a2c894899f987f4d59c2d2494781",
+          "size": 121
+        },
+        {
+          "path": "addons/l10n_lu_peppol_id/__manifest__.py",
+          "sha256": "37d924f06e33ee4b23f214f58a7e4e4aefd9ef3329cad9ff2ea7ccd729e3175b",
+          "size": 669
+        },
+        {
+          "path": "addons/l10n_lu_peppol_id/models/__init__.py",
+          "sha256": "f1bb052eee4680e63156d46135b898a95b3ad98637a1b3cc0aba936112209d86",
+          "size": 126
+        },
+        {
+          "path": "addons/l10n_lu_peppol_id/models/res_partner.py",
+          "sha256": "02bb5334a746a02563f94fd31a3634c960cc8d7c940e352a1851bffb93e29409",
+          "size": 326
+        },
+        {
+          "path": "addons/l10n_lu_peppol_id/views/partner_view.xml",
+          "sha256": "7090523ab6f4bc2ac159220acbd5fcea2bd94a02d663d3770605679275c13579",
+          "size": 665
+        }
+      ]
+    },
+    {
+      "version": "17.0",
+      "repository": "odoo/odoo",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "addon": "website_event_jitsi",
+      "files": [
+        {
+          "path": "addons/website_event_jitsi/__init__.py",
+          "sha256": "0422095c50476edda448f611db6225d4c274a2c894899f987f4d59c2d2494781",
+          "size": 121
+        },
+        {
+          "path": "addons/website_event_jitsi/__manifest__.py",
+          "sha256": "49cca1bb0a693dcd23563b528d8ccab18a37bd9bd0ebc2cb37c19bd5b2777b64",
+          "size": 488
+        },
+        {
+          "path": "addons/website_event_jitsi/models/__init__.py",
+          "sha256": "9bdee15fb8af31cca7bb547fb318eb869cd47f41353ee15a07e9e321129ce5a0",
+          "size": 134
+        },
+        {
+          "path": "addons/website_event_jitsi/models/res_config_settings.py",
+          "sha256": "1d73897630b0cc10c375469fbe77f0b36f523f1accfd1f80e677a58f6d88801d",
+          "size": 519
+        },
+        {
+          "path": "addons/website_event_jitsi/views/res_config_settings_views.xml",
+          "sha256": "a5b807d70e91cefab99cefd6672705771d8af6e560e12373886e118c58d0cc23",
+          "size": 661
+        }
+      ]
+    },
+    {
+      "version": "17.0",
+      "repository": "odoo/odoo",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "addon": "social_media",
+      "files": [
+        {
+          "path": "addons/social_media/__init__.py",
+          "sha256": "031e2a2f175bf404e4d39305edc490d01769602a46558172f67e14e333837fda",
+          "size": 46
+        },
+        {
+          "path": "addons/social_media/__manifest__.py",
+          "sha256": "50f3ba252f9126fb26a853b9d7c56a06154cae15448eb5e26b3e81661f724b32",
+          "size": 502
+        },
+        {
+          "path": "addons/social_media/demo/res_company_demo.xml",
+          "sha256": "d374e2269ec0c248c5c2d598f5e67b81f704ce0538ccb61f54d8743ecfa84f7b",
+          "size": 675
+        },
+        {
+          "path": "addons/social_media/models/__init__.py",
+          "sha256": "021bcf04a70c0edbf2ea0126f3c72fb1b4ae0ffc26215597a619947e6e0afd9f",
+          "size": 51
+        },
+        {
+          "path": "addons/social_media/models/res_company.py",
+          "sha256": "6ea8c6bc0259214e3c31733b13a53945f0f998b4b565d3d82e8a9e0b5935db6e",
+          "size": 566
+        },
+        {
+          "path": "addons/social_media/views/res_company_views.xml",
+          "sha256": "507a975eda3221e297711d1c82c73aeb028ebe3dc101aa287f888f5ab35aa01a",
+          "size": 961
+        }
+      ]
+    },
+    {
+      "version": "17.0",
+      "repository": "odoo/odoo",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "addon": "l10n_it_edi_ndd_account_dn",
+      "files": [
+        {
+          "path": "addons/l10n_it_edi_ndd_account_dn/__init__.py",
+          "sha256": "5fd10918e1361ad65b4b41bcd8fb525e659267f47c8c4334ae52530e58908e9e",
+          "size": 21
+        },
+        {
+          "path": "addons/l10n_it_edi_ndd_account_dn/__manifest__.py",
+          "sha256": "a7990fe065d52817a73f622bfc90204c787b2aac03a647d1d1f497f972caa3a0",
+          "size": 637
+        },
+        {
+          "path": "addons/l10n_it_edi_ndd_account_dn/data/invoice_it_template.xml",
+          "sha256": "1d07d9e22bceeeb172c5ba10c4ba376f4c5e9537d42aa43393c15dd04dea46c8",
+          "size": 527
+        },
+        {
+          "path": "addons/l10n_it_edi_ndd_account_dn/models/__init__.py",
+          "sha256": "f7cdbd9e741d44db099991037ec1ad09042a3365b426e61aacfa6d60fdb32735",
+          "size": 27
+        },
+        {
+          "path": "addons/l10n_it_edi_ndd_account_dn/models/account_move.py",
+          "sha256": "2d7a4cde6252d3f7f1d74f3c9a6130ca9476b24bc5c2964aeb3a809541b80f01",
+          "size": 723
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "category": "python_runtime",
+  "checked_by": "research-t022",
+  "checked_on": "2026-11-07",
+  "description": "12.0 sudo(user) switches uid with no su flag; 13.0 sudo(flag) toggles superuser and routes non-bool arg to with_user(user)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-349",
+  "locations": [
+    {"branch": "12.0", "kind": "present", "line": 4789, "match": "def sudo(self, user=SUPERUSER_ID):", "path": "odoo/models.py", "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"},
+    {"branch": "12.0", "kind": "present", "line": 851, "match": "def __call__(self, cr=None, user=None, context=None):", "path": "odoo/api.py", "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"},
+    {"branch": "13.0", "kind": "present", "line": 5157, "match": "def sudo(self, flag=True):", "path": "odoo/models.py", "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"},
+    {"branch": "13.0", "kind": "present", "line": 5189, "match": "def with_user(self, user):", "path": "odoo/models.py", "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"},
+    {"branch": "13.0", "kind": "present", "line": 485, "match": "def __call__(self, cr=None, user=None, context=None, su=None):", "path": "odoo/api.py", "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"}
+  ],
+  "notes": "Non-equivalence: 12.0 sudo(user) defaults to SUPERUSER_ID and keeps no su flag; 13.0 sudo(flag=True) is a superuser toggle, and a non-bool argument logs a deprecation warning and calls with_user (models.py:5157 body). Keep 12-13.python.sudo-user-argument review-only (G-R-14 stays open).",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": ["static.rescan"],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "HIGH",
+  "rule_ids": ["12-13.python.sudo-user-argument"],
+  "source_applicability": {"from": "12.0", "to": "13.0"},
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {"from": "13.0", "to": null},
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/odoo/models.py#L4789"
+}

@@ -1,0 +1,25 @@
+{
+  "category": "assets",
+  "checked_by": "research-t023",
+  "checked_on": "2026-11-07",
+  "description": "Legacy backend CSS classes .o_list_view not found in list_renderer.xml at 16.0 to 19.0; form renderer template not located",
+  "detection_method": "grep on pinned source",
+  "id": "EV-353",
+  "locations": [
+    {"branch": "16.0", "kind": "absent", "line": null, "match": "o_list_view", "path": "addons/web/static/src/views/list/list_renderer.xml", "revision": "9f40bf622c5531739321e59276c307319198e22b", "search_scope": "single file"},
+    {"branch": "17.0", "kind": "absent", "line": null, "match": "o_list_view", "path": "addons/web/static/src/views/list/list_renderer.xml", "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8", "search_scope": "single file"},
+    {"branch": "18.0", "kind": "absent", "line": null, "match": "o_list_view", "path": "addons/web/static/src/views/list/list_renderer.xml", "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326", "search_scope": "single file"},
+    {"branch": "19.0", "kind": "absent", "line": null, "match": "o_list_view", "path": "addons/web/static/src/views/list/list_renderer.xml", "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250", "search_scope": "single file"}
+  ],
+  "notes": "UNVERIFIED for the o_form_sheet_bg part: addons/web/static/src/views/form/form_renderer.xml returned 404 at all four branches. CSS stylesheets were not searched, so absence in the template does not prove removal.",
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": ["static.rescan"],
+  "revision": "9f40bf622c5531739321e59276c307319198e22b",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {"from": "16.0", "to": "18.0"},
+  "status": "UNVERIFIED",
+  "target_applicability": {"from": "17.0", "to": null},
+  "url": "https://github.com/odoo/odoo/blob/9f40bf622c5531739321e59276c307319198e22b/addons/web/static/src/views/list/list_renderer.xml"
+}

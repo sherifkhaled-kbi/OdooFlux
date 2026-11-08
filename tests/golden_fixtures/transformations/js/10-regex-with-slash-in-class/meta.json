@@ -1,0 +1,18 @@
+{
+ "description": "a slash inside a character class does not end the regex",
+ "operations": [
+  "lexer",
+  "validator"
+ ],
+ "syntax": "valid",
+ "tokens": [
+  {
+   "text": "[/]x",
+   "kind": "regex"
+  },
+  {
+   "text": "\nodoo.define(",
+   "kind": "code"
+  }
+ ]
+}

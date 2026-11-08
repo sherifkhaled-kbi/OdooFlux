@@ -1,0 +1,18 @@
+{
+ "description": "CRLF line endings: a line comment ends before the carriage return",
+ "operations": [
+  "lexer",
+  "validator"
+ ],
+ "syntax": "valid",
+ "tokens": [
+  {
+   "text": "web.old.crlf",
+   "kind": "comment"
+  },
+  {
+   "text": "\nodoo.define(",
+   "kind": "code"
+  }
+ ]
+}

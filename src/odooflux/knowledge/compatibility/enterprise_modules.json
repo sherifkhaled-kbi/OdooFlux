@@ -1,0 +1,12 @@
+{
+  "status": "UNVERIFIED",
+  "note": "odoo/enterprise source is not accessible (D-05), so Enterprise modules cannot be indexed or runtime-validated. This list is a seed of Enterprise-only module names, not an evidenced catalogue. A module that depends on a name listed here: L4 is SKIPPED with reason enterprise_dependency (no container is started), and L3 reports the dependency as an INFO finding that names the Enterprise dependency. Any other unresolved dependency stays a WARNING.",
+  "modules": [
+    "sale_subscription",
+    "documents",
+    "sign",
+    "web_studio",
+    "account_accountant",
+    "helpdesk"
+  ]
+}

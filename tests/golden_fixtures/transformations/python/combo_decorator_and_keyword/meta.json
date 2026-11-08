@@ -1,0 +1,31 @@
+{
+  "description": "Two operations in one file produce one applied batch",
+  "operations": [
+    {
+      "op": "remove_decorator",
+      "name": "api.multi"
+    },
+    {
+      "op": "remove_keyword",
+      "call": "fields.Char",
+      "keyword": "size"
+    }
+  ],
+  "expect": "edit",
+  "reason": "",
+  "spans": [
+    {
+      "locator": "decorator_removal",
+      "decorator": "api.multi",
+      "occurrence": 0,
+      "covers": "    @api.multi\n"
+    },
+    {
+      "locator": "keyword_removal",
+      "call": "fields.Char",
+      "keyword": "size",
+      "occurrence": 0,
+      "covers": "size=64, "
+    }
+  ]
+}

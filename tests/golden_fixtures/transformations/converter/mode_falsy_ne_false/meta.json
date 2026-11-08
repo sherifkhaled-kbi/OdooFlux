@@ -1,0 +1,9 @@
+{
+  "description": "mode falsy ne false",
+  "group": "modes",
+  "mode": "falsy",
+  "in_list_view": false,
+  "expect": "edit",
+  "unconverted": [],
+  "warnings": []
+}

@@ -1,0 +1,9 @@
+{
+  "description": "merge existing readonly",
+  "group": "merge",
+  "mode": "falsy",
+  "in_list_view": false,
+  "expect": "edit",
+  "unconverted": [],
+  "warnings": []
+}

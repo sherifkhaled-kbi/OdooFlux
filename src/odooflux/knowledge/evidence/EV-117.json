@@ -1,0 +1,53 @@
+{
+  "category": "data_files",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "The `<act_window>` data-file tag is deprecated in 16.0 and both `<act_window>` and `<report>` tag handlers are removed in 17.0",
+  "detection_method": "grep on pinned source",
+  "id": "EV-117",
+  "locations": [
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 342,
+      "match": "The <act_window> tag is deprecated",
+      "path": "odoo/tools/convert.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 278,
+      "match": "def _tag_report(",
+      "path": "odoo/tools/convert.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "absent",
+      "line": null,
+      "match": "def _tag_report(",
+      "path": "odoo/tools/convert.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "search_scope": "odoo/tools/convert.py"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9f40bf622c5531739321e59276c307319198e22b",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "17.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9f40bf622c5531739321e59276c307319198e22b/odoo/tools/convert.py#L342"
+}

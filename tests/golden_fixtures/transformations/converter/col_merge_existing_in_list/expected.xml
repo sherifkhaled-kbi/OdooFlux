@@ -1,0 +1,5 @@
+<odoo>
+  <tree>
+    <field name="f" column_invisible="(0) or (x == 1)"/>
+  </tree>
+</odoo>

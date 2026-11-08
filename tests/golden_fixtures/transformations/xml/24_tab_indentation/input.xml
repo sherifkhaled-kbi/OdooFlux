@@ -1,0 +1,5 @@
+<odoo>
+	<field name="a">
+		<field name="b"/>
+	</field>
+</odoo>

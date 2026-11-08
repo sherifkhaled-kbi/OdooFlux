@@ -1,0 +1,13 @@
+{
+  "description": "Single-quoted XML declaration and a self-closing root",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "odoo",
+      "span": "<odoo/>",
+      "start_tag": "<odoo/>",
+      "attrs": []
+    }
+  ]
+}

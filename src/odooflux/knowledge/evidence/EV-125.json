@@ -1,0 +1,76 @@
+{
+  "category": "dependencies",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "Minimum Python declared by Odoo: 12.0 `>=3.5`, 14.0 `>=3.6`, 16.0 `>=3.7`, 17.0 and 18.0 `>=3.10`; 19.0 `MIN_PY_VERSION = (3, 10)`",
+  "detection_method": "grep on pinned source",
+  "id": "EV-125",
+  "locations": [
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 59,
+      "match": "python_requires='>=3.5'",
+      "path": "setup.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 58,
+      "match": "python_requires='>=3.6'",
+      "path": "setup.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 64,
+      "match": "python_requires='>=3.7'",
+      "path": "setup.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 66,
+      "match": "python_requires='>=3.10'",
+      "path": "setup.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 68,
+      "match": "python_requires='>=3.10'",
+      "path": "setup.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 39,
+      "match": "MIN_PY_VERSION = (3, 10)",
+      "path": "odoo/release.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "syntax.python"
+  ],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "12.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/setup.py#L59"
+}

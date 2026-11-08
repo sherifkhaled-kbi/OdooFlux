@@ -1,0 +1,63 @@
+{
+  "category": "data_files",
+  "checked_by": "research-006-phase3-t015",
+  "checked_on": "2026-11-07",
+  "description": "Negative result: <url> is not a data tag. Only 12.0 import_xml.rng defines it; no url handler in convert.py or RNG for 13.0-19.0 (all 8 checked)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-324",
+  "locations": [
+    {
+      "branch": "12.0",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "path": "odoo/import_xml.rng",
+      "line": 267,
+      "match": "<rng:define name=\"url\">",
+      "kind": "present"
+    },
+    {
+      "branch": "12.0",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "path": "odoo/tools/convert.py",
+      "line": null,
+      "match": "_tag_url",
+      "kind": "absent",
+      "search_scope": "odoo/tools/convert.py"
+    },
+    {
+      "branch": "13.0",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "path": "odoo/import_xml.rng",
+      "line": null,
+      "match": "<rng:define name=\"url\">",
+      "kind": "absent",
+      "search_scope": "odoo/import_xml.rng"
+    },
+    {
+      "branch": "19.0",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "path": "odoo/tools/convert.py",
+      "line": null,
+      "match": "_tag_url",
+      "kind": "absent",
+      "search_scope": "odoo/tools/convert.py"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "13.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "13.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/odoo/import_xml.rng#L267"
+}

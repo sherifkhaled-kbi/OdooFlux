@@ -1,0 +1,53 @@
+{
+  "category": "documentation",
+  "checked_by": "research-008-t002",
+  "checked_on": "2026-11-07",
+  "description": "17.0 image directory is absent at master (removed by 38e5b43b, 2026-09-24); parent d9c2d8d used ubuntu:jammy and a nightly .deb",
+  "detection_method": "read pinned file and commit history",
+  "id": "EV-359",
+  "locations": [
+    {
+      "branch": "17.0",
+      "kind": "absent",
+      "line": null,
+      "match": "17.0/Dockerfile",
+      "path": "17.0/Dockerfile",
+      "revision": "f900094eb7492968332868d686caf22b966592ca",
+      "search_scope": "repository tree at master"
+    },
+    {
+      "branch": "master",
+      "kind": "present",
+      "line": 1,
+      "match": "FROM ubuntu:jammy",
+      "path": "17.0/Dockerfile",
+      "revision": "d9c2d8d50aa8eca1aadc186241bee3eac0e2d79e"
+    },
+    {
+      "branch": "master",
+      "kind": "present",
+      "line": 78,
+      "match": "ODOO_SHA=57a8df50c37363cce2d3f2e626d1b4e67b53fc11",
+      "path": "17.0/Dockerfile",
+      "revision": "d9c2d8d50aa8eca1aadc186241bee3eac0e2d79e"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/docker",
+  "required_validation": [
+    "runtime.image_provenance"
+  ],
+  "revision": "f900094eb7492968332868d686caf22b966592ca",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "17.0",
+    "to": "17.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "17.0",
+    "to": "17.0"
+  },
+  "url": "https://github.com/odoo/docker/blob/d9c2d8d50aa8eca1aadc186241bee3eac0e2d79e/17.0/Dockerfile#LNone"
+}

@@ -1,0 +1,9 @@
+{
+  "description": "col with readonly in list",
+  "group": "column_invisible",
+  "mode": "falsy",
+  "in_list_view": true,
+  "expect": "edit",
+  "unconverted": [],
+  "warnings": []
+}

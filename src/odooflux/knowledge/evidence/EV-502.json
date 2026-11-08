@@ -1,0 +1,74 @@
+{
+  "category": "orm",
+  "checked_by": "research-006-models",
+  "checked_on": "2026-11-07",
+  "description": "Model stock.location.route is renamed stock.route at 16.0 (same file stock_location.py); ACL model external id follows",
+  "detection_method": "raw fetch at pinned revisions; line match",
+  "id": "EV-502",
+  "locations": [
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 421,
+      "match": "_name = 'stock.location.route'",
+      "path": "addons/stock/models/stock_location.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 459,
+      "match": "_name = 'stock.route'",
+      "path": "addons/stock/models/stock_location.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "_name = 'stock.location.route'",
+      "path": "addons/stock/models/stock_location.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "file exists at pinned revision; no _name line equals the old model name"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 40,
+      "match": "model_stock_location_route",
+      "path": "addons/stock/security/ir.model.access.csv",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 41,
+      "match": "model_stock_route",
+      "path": "addons/stock/security/ir.model.access.csv",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    }
+  ],
+  "notes": "Review-only (DETECT_ONLY): each rule cites its own record. Field names, unqualified external ids, tables and ACL row ids that follow the rename have no verified mapping here (see research-notes/models.md).",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "MEDIUM",
+  "rule_ids": [
+    "15-16.csv.model-renamed-stock-route",
+    "15-16.python.model-renamed-stock-route",
+    "15-16.xml.model-renamed-stock-route"
+  ],
+  "source_applicability": {
+    "from": "15.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/addons/stock/models/stock_location.py#L421"
+}

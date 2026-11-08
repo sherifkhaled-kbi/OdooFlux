@@ -1,0 +1,3 @@
+<odoo>
+  <field name="f" attrs="{&quot;invisible&quot;: [(&quot;state&quot;, &quot;=&quot;, &quot;done&quot;)]}"/>
+</odoo>

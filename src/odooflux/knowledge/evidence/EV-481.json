@@ -1,0 +1,669 @@
+{
+  "category": "security",
+  "checked_by": "research-006-t025-agent",
+  "checked_on": "2026-11-07",
+  "description": "ir.rule (class IrRule, ir_rule.py) class body defines exactly 9 fields at every version 12.0-19.0: name, active, model_id, groups, domain_force, perm_read, perm_write, perm_create, perm_unlink; a stored computed Boolean 'global' is attached after the class at all 8 versions.",
+  "detection_method": "grep on pinned source",
+  "id": "EV-481",
+  "locations": [
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 19,
+      "match": "name = fields.Char(index=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 20,
+      "match": "active = fields.Boolean(default=True, help=\"If you uncheck the active field, it will disable the record rule without deleting it (if you delete a native record rule, it may be re-created when you reload the module).\")",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 21,
+      "match": "model_id = fields.Many2one('ir.model', string='Object', index=True, required=True, ondelete=\"cascade\")",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 22,
+      "match": "groups = fields.Many2many('res.groups', 'rule_group_rel', 'rule_group_id', 'group_id')",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 23,
+      "match": "domain_force = fields.Text(string='Domain')",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 24,
+      "match": "perm_read = fields.Boolean(string='Apply for Read', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 25,
+      "match": "perm_write = fields.Boolean(string='Apply for Write', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 26,
+      "match": "perm_create = fields.Boolean(string='Apply for Create', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 27,
+      "match": "perm_unlink = fields.Boolean(string='Apply for Delete', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 19,
+      "match": "name = fields.Char(index=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 20,
+      "match": "active = fields.Boolean(default=True, help=\"If you uncheck the active field, it will disable the record rule without deleting it (if you delete a native record rule, it may be re-created when you reload the module).\")",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 21,
+      "match": "model_id = fields.Many2one('ir.model', string='Object', index=True, required=True, ondelete=\"cascade\")",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 22,
+      "match": "groups = fields.Many2many('res.groups', 'rule_group_rel', 'rule_group_id', 'group_id')",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 23,
+      "match": "domain_force = fields.Text(string='Domain')",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 24,
+      "match": "perm_read = fields.Boolean(string='Apply for Read', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 25,
+      "match": "perm_write = fields.Boolean(string='Apply for Write', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 26,
+      "match": "perm_create = fields.Boolean(string='Apply for Create', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 27,
+      "match": "perm_unlink = fields.Boolean(string='Apply for Delete', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 20,
+      "match": "name = fields.Char(index=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 21,
+      "match": "active = fields.Boolean(default=True, help=\"If you uncheck the active field, it will disable the record rule without deleting it (if you delete a native record rule, it may be re-created when you reload the module).\")",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 22,
+      "match": "model_id = fields.Many2one('ir.model', string='Model', index=True, required=True, ondelete=\"cascade\")",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 23,
+      "match": "groups = fields.Many2many('res.groups', 'rule_group_rel', 'rule_group_id', 'group_id', ondelete='restrict')",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 24,
+      "match": "domain_force = fields.Text(string='Domain')",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 25,
+      "match": "perm_read = fields.Boolean(string='Apply for Read', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 26,
+      "match": "perm_write = fields.Boolean(string='Apply for Write', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 27,
+      "match": "perm_create = fields.Boolean(string='Apply for Create', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 28,
+      "match": "perm_unlink = fields.Boolean(string='Apply for Delete', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 20,
+      "match": "name = fields.Char(index=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 21,
+      "match": "active = fields.Boolean(default=True, help=\"If you uncheck the active field, it will disable the record rule without deleting it (if you delete a native record rule, it may be re-created when you reload the module).\")",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 22,
+      "match": "model_id = fields.Many2one('ir.model', string='Model', index=True, required=True, ondelete=\"cascade\")",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 23,
+      "match": "groups = fields.Many2many('res.groups', 'rule_group_rel', 'rule_group_id', 'group_id', ondelete='restrict')",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 24,
+      "match": "domain_force = fields.Text(string='Domain')",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 25,
+      "match": "perm_read = fields.Boolean(string='Apply for Read', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 26,
+      "match": "perm_write = fields.Boolean(string='Apply for Write', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 27,
+      "match": "perm_create = fields.Boolean(string='Apply for Create', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 28,
+      "match": "perm_unlink = fields.Boolean(string='Apply for Delete', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 20,
+      "match": "name = fields.Char(index=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 21,
+      "match": "active = fields.Boolean(default=True, help=\"If you uncheck the active field, it will disable the record rule without deleting it (if you delete a native record rule, it may be re-created when you reload the module).\")",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 22,
+      "match": "model_id = fields.Many2one('ir.model', string='Model', index=True, required=True, ondelete=\"cascade\")",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 23,
+      "match": "groups = fields.Many2many('res.groups', 'rule_group_rel', 'rule_group_id', 'group_id', ondelete='restrict')",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 24,
+      "match": "domain_force = fields.Text(string='Domain')",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 25,
+      "match": "perm_read = fields.Boolean(string='Apply for Read', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 26,
+      "match": "perm_write = fields.Boolean(string='Apply for Write', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 27,
+      "match": "perm_create = fields.Boolean(string='Apply for Create', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 28,
+      "match": "perm_unlink = fields.Boolean(string='Apply for Delete', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 19,
+      "match": "name = fields.Char(index=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 20,
+      "match": "active = fields.Boolean(default=True, help=\"If you uncheck the active field, it will disable the record rule without deleting it (if you delete a native record rule, it may be re-created when you reload the module).\")",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 21,
+      "match": "model_id = fields.Many2one('ir.model', string='Model', index=True, required=True, ondelete=\"cascade\")",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 22,
+      "match": "groups = fields.Many2many('res.groups', 'rule_group_rel', 'rule_group_id', 'group_id', ondelete='restrict')",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 23,
+      "match": "domain_force = fields.Text(string='Domain')",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 24,
+      "match": "perm_read = fields.Boolean(string='Read', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 25,
+      "match": "perm_write = fields.Boolean(string='Write', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 26,
+      "match": "perm_create = fields.Boolean(string='Create', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 27,
+      "match": "perm_unlink = fields.Boolean(string='Delete', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 19,
+      "match": "name = fields.Char(index=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 20,
+      "match": "active = fields.Boolean(default=True, help=\"If you uncheck the active field, it will disable the record rule without deleting it (if you delete a native record rule, it may be re-created when you reload the module).\")",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 21,
+      "match": "model_id = fields.Many2one('ir.model', string='Model', index=True, required=True, ondelete=\"cascade\")",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 22,
+      "match": "groups = fields.Many2many('res.groups', 'rule_group_rel', 'rule_group_id', 'group_id', ondelete='restrict')",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 23,
+      "match": "domain_force = fields.Text(string='Domain')",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 24,
+      "match": "perm_read = fields.Boolean(string='Read', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 25,
+      "match": "perm_write = fields.Boolean(string='Write', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 26,
+      "match": "perm_create = fields.Boolean(string='Create', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 27,
+      "match": "perm_unlink = fields.Boolean(string='Delete', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 22,
+      "match": "name = fields.Char()",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 23,
+      "match": "active = fields.Boolean(default=True, help=\"If you uncheck the active field, it will disable the record rule without deleting it (if you delete a native record rule, it may be re-created when you reload the module).\")",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 24,
+      "match": "model_id = fields.Many2one('ir.model', string='Model', index=True, required=True, ondelete=\"cascade\")",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 25,
+      "match": "groups = fields.Many2many('res.groups', 'rule_group_rel', 'rule_group_id', 'group_id', ondelete='restrict')",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 26,
+      "match": "domain_force = fields.Text(string='Domain')",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 27,
+      "match": "perm_read = fields.Boolean(string='Read', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 28,
+      "match": "perm_write = fields.Boolean(string='Write', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 29,
+      "match": "perm_create = fields.Boolean(string='Create', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 30,
+      "match": "perm_unlink = fields.Boolean(string='Delete', default=True)",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 156,
+      "match": "fields.Boolean(compute='_compute_global', store=True,",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 257,
+      "match": "fields.Boolean(compute='_compute_global', store=True,",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 286,
+      "match": "fields.Boolean(compute='_compute_global', store=True,",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 296,
+      "match": "fields.Boolean(compute='_compute_global', store=True,",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 261,
+      "match": "fields.Boolean(compute='_compute_global', store=True,",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 263,
+      "match": "fields.Boolean(compute='_compute_global', store=True,",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 273,
+      "match": "fields.Boolean(compute='_compute_global', store=True,",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 276,
+      "match": "fields.Boolean(compute='_compute_global', store=True,",
+      "path": "odoo/addons/base/models/ir_rule.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    }
+  ],
+  "notes": "Class-body field set from a scan for single-line `name = fields.X(` assignments, identical at all 8 versions; the 'global' Boolean (compute='_compute_global', store=True) is defined after the class body (assigned as global_ at 15.0-19.0, inline at 12.0-14.0) and located per version. 'Exactly 9' completeness is the scan result; each located line is re-verifiable. Field labels/defaults not compared (EV-402: perm_unlink label differs 14.0 vs 19.0).",
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "13.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/odoo/addons/base/models/ir_rule.py#L19"
+}

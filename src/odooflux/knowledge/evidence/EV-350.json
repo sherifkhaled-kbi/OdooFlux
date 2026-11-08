@@ -1,0 +1,53 @@
+{
+  "category": "fields",
+  "checked_by": "research-t023",
+  "checked_on": "2026-11-07",
+  "description": "fields.Html sanitize defaults to True at 16.0, 17.0 and 18.0 (legacy claim says 17.0 introduced it)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-350",
+  "locations": [
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 1947,
+      "match": "param bool sanitize: whether value must be sanitized (default: ``True``)",
+      "path": "odoo/fields.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 2010,
+      "match": "param bool sanitize: whether value must be sanitized (default: ``True``)",
+      "path": "odoo/fields.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 2151,
+      "match": "param bool sanitize: whether value must be sanitized (default: ``True``)",
+      "path": "odoo/fields.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    }
+  ],
+  "notes": "Negative for the 'introduced in 17.0' claim: sanitize=True default is already present at 16.0. 19.0 not verified (no fetch of 19.0 Html field definition).",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9f40bf622c5531739321e59276c307319198e22b",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "18.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "17.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9f40bf622c5531739321e59276c307319198e22b/odoo/fields.py#L1947"
+}

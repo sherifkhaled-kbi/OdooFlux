@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odooflux_fixture_form" model="ir.ui.view">
+        <field name="name">odooflux.fixture.form</field>
+        <field name="model">odooflux.fixture</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="name"/>
+            </form>
+        </field>
+    </record>
+</odoo>

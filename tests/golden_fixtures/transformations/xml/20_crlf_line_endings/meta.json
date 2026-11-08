@@ -1,0 +1,30 @@
+{
+  "description": "Document with CRLF line endings inside a multi-line start tag",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "odoo",
+      "span": "<odoo>\r\n  <field name=\"a\"\r\n         string=\"x\"/>\r\n</odoo>",
+      "start_tag": "<odoo>",
+      "attrs": []
+    },
+    {
+      "tag": "field",
+      "span": "<field name=\"a\"\r\n         string=\"x\"/>",
+      "start_tag": "<field name=\"a\"\r\n         string=\"x\"/>",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "a",
+          "value": "a"
+        },
+        {
+          "name": "string",
+          "raw": "x",
+          "value": "x"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "description": "entity quot keys",
+  "group": "entities",
+  "mode": "falsy",
+  "in_list_view": false,
+  "expect": "edit",
+  "unconverted": [],
+  "warnings": []
+}

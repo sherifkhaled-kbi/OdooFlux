@@ -1,0 +1,52 @@
+{
+  "category": "documentation",
+  "checked_by": "research-008-t001",
+  "checked_on": "2026-11-07",
+  "description": "Entrypoint takes the database user and password from environment defaults and passes DB_ARGS to odoo (19.0)",
+  "detection_method": "read pinned file",
+  "id": "EV-358",
+  "locations": [
+    {
+      "branch": "master",
+      "kind": "present",
+      "line": 14,
+      "match": ": ${PASSWORD:=",
+      "path": "19.0/entrypoint.sh",
+      "revision": "f900094eb7492968332868d686caf22b966592ca"
+    },
+    {
+      "branch": "master",
+      "kind": "present",
+      "line": 31,
+      "match": "check_config \"db_user\"",
+      "path": "19.0/entrypoint.sh",
+      "revision": "f900094eb7492968332868d686caf22b966592ca"
+    },
+    {
+      "branch": "master",
+      "kind": "present",
+      "line": 41,
+      "match": "exec odoo \"$@\" \"${DB_ARGS[@]}\"",
+      "path": "19.0/entrypoint.sh",
+      "revision": "f900094eb7492968332868d686caf22b966592ca"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/docker",
+  "required_validation": [
+    "runtime.image_provenance"
+  ],
+  "revision": "f900094eb7492968332868d686caf22b966592ca",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "19.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "19.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/docker/blob/f900094eb7492968332868d686caf22b966592ca/19.0/entrypoint.sh#L14"
+}

@@ -1,0 +1,22 @@
+{
+  "category": "javascript",
+  "checked_by": "research-t019",
+  "checked_on": "2026-11-07",
+  "description": "Legacy odoo.define loader is defined in 14.0 boot.js; 15.0 to 19.0 loader location not located",
+  "detection_method": "grep on pinned source",
+  "id": "EV-342",
+  "locations": [
+    {"branch": "14.0", "kind": "present", "line": 110, "match": "odoo.define = function () {", "path": "addons/web/static/src/js/boot.js", "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"}
+  ],
+  "notes": "Only 14.0 loader line was verified. G-R-08 acceptance of odoo.define in 17.0+ is not established by this record.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": ["static.rescan"],
+  "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {"from": "14.0", "to": "14.0"},
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {"from": "15.0", "to": null},
+  "url": "https://github.com/odoo/odoo/blob/cc0060e889603eb2e47fa44a8a22a70d7d784185/addons/web/static/src/js/boot.js#L110"
+}

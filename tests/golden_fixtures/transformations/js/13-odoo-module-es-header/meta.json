@@ -1,0 +1,2 @@
+{"description": "ES module with the @odoo-module header comment", "operations": ["lexer", "validator"], "syntax": "valid",
+ "tokens": [{"text": "@odoo-module", "kind": "comment"}, {"text": "@odoo/owl", "kind": "string"}, {"text": "export class Counter", "kind": "code"}, {"text": "web.Counter", "kind": "string"}]}

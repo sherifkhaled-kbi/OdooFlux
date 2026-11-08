@@ -1,0 +1,37 @@
+{
+  "category": "orm",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "18.1: constraints and indexes declared as model attributes (PR #175783)",
+  "detection_method": "n/a",
+  "id": "EV-006",
+  "locations": [
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 52,
+      "match": "Declare constraints and indexes as model attributes",
+      "path": "content/developer/reference/backend/orm/changelog.rst",
+      "revision": "706918083dbd7dbc8e70c658d3ca63d700f94228"
+    }
+  ],
+  "notes": "Online release normalised to next on-premise major (ADR-007): 18.1 -> 19.0.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/documentation",
+  "required_validation": [
+    "documentation"
+  ],
+  "revision": "706918083dbd7dbc8e70c658d3ca63d700f94228",
+  "risk": "HIGH",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "18.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "19.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/documentation/blob/706918083dbd7dbc8e70c658d3ca63d700f94228/content/developer/reference/backend/orm/changelog.rst#L52"
+}

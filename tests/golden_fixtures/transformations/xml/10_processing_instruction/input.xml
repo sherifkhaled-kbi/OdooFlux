@@ -1,0 +1,4 @@
+<odoo>
+  <?odoo-marker version="1"?>
+  <field name="a"/>
+</odoo>

@@ -1,0 +1,30 @@
+{
+  "description": "Apostrophe inside double quotes and quoted entities",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "odoo",
+      "span": "<odoo><field name=\"a\" string=\"it's &quot;q&quot;\"/></odoo>",
+      "start_tag": "<odoo>",
+      "attrs": []
+    },
+    {
+      "tag": "field",
+      "span": "<field name=\"a\" string=\"it's &quot;q&quot;\"/>",
+      "start_tag": "<field name=\"a\" string=\"it's &quot;q&quot;\"/>",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "a",
+          "value": "a"
+        },
+        {
+          "name": "string",
+          "raw": "it's &quot;q&quot;",
+          "value": "it's \"q\""
+        }
+      ]
+    }
+  ]
+}

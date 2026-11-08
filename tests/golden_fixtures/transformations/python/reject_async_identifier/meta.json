@@ -1,0 +1,12 @@
+{
+  "description": "Python 2/3.5-3.6 code using async as an identifier: parse error, no edits",
+  "operations": [
+    {
+      "op": "remove_decorator",
+      "name": "api.multi"
+    }
+  ],
+  "expect": "reject",
+  "reason": "SyntaxError on Python 3.10+: async is a keyword",
+  "spans": []
+}

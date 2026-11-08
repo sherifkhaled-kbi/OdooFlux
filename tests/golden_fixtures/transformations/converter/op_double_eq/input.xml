@@ -1,0 +1,3 @@
+<odoo>
+  <button name="b" attrs="{'invisible': [('state', '==', 'done')]}"/>
+</odoo>

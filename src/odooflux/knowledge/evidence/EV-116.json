@@ -1,0 +1,44 @@
+{
+  "category": "orm",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "19.0: `_sql_constraints` is no longer supported (warning only; constraints are not applied); `Constraint` table objects replace it",
+  "detection_method": "grep on pinned source",
+  "id": "EV-116",
+  "locations": [
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 163,
+      "match": "'_sql_constraints' is no longer supported",
+      "path": "odoo/orm/model_classes.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 79,
+      "match": "class Constraint(TableObject)",
+      "path": "odoo/orm/table_objects.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+  "risk": "HIGH",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "18.0",
+    "to": "18.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "19.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/58bb9591d4cb08c4d5d4426222c9257f101ad250/odoo/orm/model_classes.py#L163"
+}

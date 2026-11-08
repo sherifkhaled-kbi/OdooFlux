@@ -1,0 +1,55 @@
+{
+  "category": "views",
+  "checked_by": "research-006-phase3",
+  "checked_on": "2026-11-07",
+  "description": "17.0 act_window VIEW_TYPES includes 'tree'; 18.0 VIEW_TYPES lists 'list' with no 'tree'",
+  "detection_method": "grep on pinned source",
+  "id": "EV-302",
+  "locations": [
+    {
+      "branch": "17.0",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "path": "odoo/addons/base/models/ir_actions.py",
+      "line": 347,
+      "match": "('tree', 'Tree')",
+      "kind": "present"
+    },
+    {
+      "branch": "18.0",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "path": "odoo/addons/base/models/ir_actions.py",
+      "line": 399,
+      "match": "('list', 'List')",
+      "kind": "present"
+    },
+    {
+      "branch": "18.0",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "path": "odoo/addons/base/models/ir_actions.py",
+      "line": null,
+      "match": "('tree', 'Tree')",
+      "kind": "absent",
+      "search_scope": "odoo/addons/base/models/ir_actions.py"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+  "risk": "MEDIUM",
+  "rule_ids": [
+    "17-18.python.action-view-mode-tree"
+  ],
+  "source_applicability": {
+    "from": "17.0",
+    "to": "18.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "18.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/75d6abe5979ac9e8d85d097dad0e7b559ef07326/odoo/addons/base/models/ir_actions.py#L399"
+}

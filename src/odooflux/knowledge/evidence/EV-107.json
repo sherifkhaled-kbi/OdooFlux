@@ -1,0 +1,52 @@
+{
+  "category": "views",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "`fields_view_get` on `BaseModel` through 15.0; 16.0 provides `get_view` and logs that `_fields_view_get` is deprecated",
+  "detection_method": "grep on pinned source",
+  "id": "EV-107",
+  "locations": [
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 1704,
+      "match": "def fields_view_get(",
+      "path": "odoo/models.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 2684,
+      "match": "def get_view(",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 2764,
+      "match": "_fields_view_get",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "python_runtime"
+  ],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "HIGH",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "15.0",
+    "to": "15.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/odoo/models.py#L1704"
+}

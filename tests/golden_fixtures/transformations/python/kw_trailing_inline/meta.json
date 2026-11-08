@@ -1,0 +1,21 @@
+{
+  "description": "Last keyword with trailing comma on one line keeps the trailing comma",
+  "operations": [
+    {
+      "op": "remove_keyword",
+      "call": "fields.Char",
+      "keyword": "size"
+    }
+  ],
+  "expect": "edit",
+  "reason": "",
+  "spans": [
+    {
+      "locator": "keyword_removal",
+      "call": "fields.Char",
+      "keyword": "size",
+      "occurrence": 0,
+      "covers": " size=64,"
+    }
+  ]
+}

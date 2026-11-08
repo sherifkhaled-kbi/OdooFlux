@@ -1,0 +1,30 @@
+{
+  "description": "XML allows whitespace around = and before />",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "odoo",
+      "span": "<odoo><field name = \"a\"   string =  'b' /></odoo>",
+      "start_tag": "<odoo>",
+      "attrs": []
+    },
+    {
+      "tag": "field",
+      "span": "<field name = \"a\"   string =  'b' />",
+      "start_tag": "<field name = \"a\"   string =  'b' />",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "a",
+          "value": "a"
+        },
+        {
+          "name": "string",
+          "raw": "b",
+          "value": "b"
+        }
+      ]
+    }
+  ]
+}

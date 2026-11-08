@@ -1,0 +1,44 @@
+{
+  "category": "qweb",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "The 16.0 QWeb reference docstring marks `t-esc` and `t-raw` \"Deprecated, please use `t-out`\"",
+  "detection_method": "docstring check",
+  "id": "EV-203",
+  "locations": [
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 299,
+      "match": "Deprecated, please use ``t-out``",
+      "path": "odoo/addons/base/models/ir_qweb.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 303,
+      "match": "Deprecated, please use ``t-out``",
+      "path": "odoo/addons/base/models/ir_qweb.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9f40bf622c5531739321e59276c307319198e22b",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "14.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9f40bf622c5531739321e59276c307319198e22b/odoo/addons/base/models/ir_qweb.py#L299"
+}

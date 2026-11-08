@@ -1,0 +1,653 @@
+{
+  "category": "security",
+  "checked_by": "research-006-t025-agent",
+  "checked_on": "2026-11-07",
+  "description": "res.groups (class Groups, res_users.py) field assignments are identical at 12.0-17.0 (11 fields: name, users, model_access, rule_groups, menu_access, view_access, comment, category_id, color, full_name, share); 18.0 adds api_key_duration.",
+  "detection_method": "grep on pinned source",
+  "id": "EV-482",
+  "locations": [
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 93,
+      "match": "name = fields.Char(required=True, translate=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 94,
+      "match": "users = fields.Many2many('res.users', 'res_groups_users_rel', 'gid', 'uid')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 95,
+      "match": "model_access = fields.One2many('ir.model.access', 'group_id', string='Access Controls', copy=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 96,
+      "match": "rule_groups = fields.Many2many('ir.rule', 'rule_group_rel',",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 98,
+      "match": "menu_access = fields.Many2many('ir.ui.menu', 'ir_ui_menu_group_rel', 'gid', 'menu_id', string='Access Menu')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 99,
+      "match": "view_access = fields.Many2many('ir.ui.view', 'ir_ui_view_group_rel', 'group_id', 'view_id', string='Views')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 100,
+      "match": "comment = fields.Text(translate=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 101,
+      "match": "category_id = fields.Many2one('ir.module.category', string='Application', index=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 102,
+      "match": "color = fields.Integer(string='Color Index')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 103,
+      "match": "full_name = fields.Char(compute='_compute_full_name', string='Group Name', search='_search_full_name')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 104,
+      "match": "share = fields.Boolean(string='Share Group', help=\"Group created to set access rights for sharing data with some users.\")",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 93,
+      "match": "name = fields.Char(required=True, translate=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 94,
+      "match": "users = fields.Many2many('res.users', 'res_groups_users_rel', 'gid', 'uid')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 95,
+      "match": "model_access = fields.One2many('ir.model.access', 'group_id', string='Access Controls', copy=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 96,
+      "match": "rule_groups = fields.Many2many('ir.rule', 'rule_group_rel',",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 98,
+      "match": "menu_access = fields.Many2many('ir.ui.menu', 'ir_ui_menu_group_rel', 'gid', 'menu_id', string='Access Menu')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 99,
+      "match": "view_access = fields.Many2many('ir.ui.view', 'ir_ui_view_group_rel', 'group_id', 'view_id', string='Views')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 100,
+      "match": "comment = fields.Text(translate=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 101,
+      "match": "category_id = fields.Many2one('ir.module.category', string='Application', index=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 102,
+      "match": "color = fields.Integer(string='Color Index')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 103,
+      "match": "full_name = fields.Char(compute='_compute_full_name', string='Group Name', search='_search_full_name')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 104,
+      "match": "share = fields.Boolean(string='Share Group', help=\"Group created to set access rights for sharing data with some users.\")",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 147,
+      "match": "name = fields.Char(required=True, translate=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 148,
+      "match": "users = fields.Many2many('res.users', 'res_groups_users_rel', 'gid', 'uid')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 149,
+      "match": "model_access = fields.One2many('ir.model.access', 'group_id', string='Access Controls', copy=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 150,
+      "match": "rule_groups = fields.Many2many('ir.rule', 'rule_group_rel',",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 152,
+      "match": "menu_access = fields.Many2many('ir.ui.menu', 'ir_ui_menu_group_rel', 'gid', 'menu_id', string='Access Menu')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 153,
+      "match": "view_access = fields.Many2many('ir.ui.view', 'ir_ui_view_group_rel', 'group_id', 'view_id', string='Views')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 154,
+      "match": "comment = fields.Text(translate=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 155,
+      "match": "category_id = fields.Many2one('ir.module.category', string='Application', index=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 156,
+      "match": "color = fields.Integer(string='Color Index')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 157,
+      "match": "full_name = fields.Char(compute='_compute_full_name', string='Group Name', search='_search_full_name')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 158,
+      "match": "share = fields.Boolean(string='Share Group', help=\"Group created to set access rights for sharing data with some users.\")",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 200,
+      "match": "name = fields.Char(required=True, translate=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 201,
+      "match": "users = fields.Many2many('res.users', 'res_groups_users_rel', 'gid', 'uid')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 202,
+      "match": "model_access = fields.One2many('ir.model.access', 'group_id', string='Access Controls', copy=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 203,
+      "match": "rule_groups = fields.Many2many('ir.rule', 'rule_group_rel',",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 205,
+      "match": "menu_access = fields.Many2many('ir.ui.menu', 'ir_ui_menu_group_rel', 'gid', 'menu_id', string='Access Menu')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 206,
+      "match": "view_access = fields.Many2many('ir.ui.view', 'ir_ui_view_group_rel', 'group_id', 'view_id', string='Views')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 207,
+      "match": "comment = fields.Text(translate=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 208,
+      "match": "category_id = fields.Many2one('ir.module.category', string='Application', index=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 209,
+      "match": "color = fields.Integer(string='Color Index')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 210,
+      "match": "full_name = fields.Char(compute='_compute_full_name', string='Group Name', search='_search_full_name')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 211,
+      "match": "share = fields.Boolean(string='Share Group', help=\"Group created to set access rights for sharing data with some users.\")",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 188,
+      "match": "name = fields.Char(required=True, translate=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 189,
+      "match": "users = fields.Many2many('res.users', 'res_groups_users_rel', 'gid', 'uid')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 190,
+      "match": "model_access = fields.One2many('ir.model.access', 'group_id', string='Access Controls', copy=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 191,
+      "match": "rule_groups = fields.Many2many('ir.rule', 'rule_group_rel',",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 193,
+      "match": "menu_access = fields.Many2many('ir.ui.menu', 'ir_ui_menu_group_rel', 'gid', 'menu_id', string='Access Menu')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 194,
+      "match": "view_access = fields.Many2many('ir.ui.view', 'ir_ui_view_group_rel', 'group_id', 'view_id', string='Views')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 195,
+      "match": "comment = fields.Text(translate=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 196,
+      "match": "category_id = fields.Many2one('ir.module.category', string='Application', index=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 197,
+      "match": "color = fields.Integer(string='Color Index')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 198,
+      "match": "full_name = fields.Char(compute='_compute_full_name', string='Group Name', search='_search_full_name')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 199,
+      "match": "share = fields.Boolean(string='Share Group', help=\"Group created to set access rights for sharing data with some users.\")",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 189,
+      "match": "name = fields.Char(required=True, translate=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 190,
+      "match": "users = fields.Many2many('res.users', 'res_groups_users_rel', 'gid', 'uid')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 191,
+      "match": "model_access = fields.One2many('ir.model.access', 'group_id', string='Access Controls', copy=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 192,
+      "match": "rule_groups = fields.Many2many('ir.rule', 'rule_group_rel',",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 194,
+      "match": "menu_access = fields.Many2many('ir.ui.menu', 'ir_ui_menu_group_rel', 'gid', 'menu_id', string='Access Menu')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 195,
+      "match": "view_access = fields.Many2many('ir.ui.view', 'ir_ui_view_group_rel', 'group_id', 'view_id', string='Views')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 196,
+      "match": "comment = fields.Text(translate=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 197,
+      "match": "category_id = fields.Many2one('ir.module.category', string='Application', index=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 198,
+      "match": "color = fields.Integer(string='Color Index')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 199,
+      "match": "full_name = fields.Char(compute='_compute_full_name', string='Group Name', search='_search_full_name')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 200,
+      "match": "share = fields.Boolean(string='Share Group', help=\"Group created to set access rights for sharing data with some users.\")",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 183,
+      "match": "name = fields.Char(required=True, translate=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 184,
+      "match": "users = fields.Many2many('res.users', 'res_groups_users_rel', 'gid', 'uid')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 185,
+      "match": "model_access = fields.One2many('ir.model.access', 'group_id', string='Access Controls', copy=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 186,
+      "match": "rule_groups = fields.Many2many('ir.rule', 'rule_group_rel',",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 188,
+      "match": "menu_access = fields.Many2many('ir.ui.menu', 'ir_ui_menu_group_rel', 'gid', 'menu_id', string='Access Menu')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 189,
+      "match": "view_access = fields.Many2many('ir.ui.view', 'ir_ui_view_group_rel', 'group_id', 'view_id', string='Views')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 190,
+      "match": "comment = fields.Text(translate=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 191,
+      "match": "category_id = fields.Many2one('ir.module.category', string='Application', index=True)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 192,
+      "match": "color = fields.Integer(string='Color Index')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 193,
+      "match": "full_name = fields.Char(compute='_compute_full_name', string='Group Name', search='_search_full_name')",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 194,
+      "match": "share = fields.Boolean(string='Share Group', help=\"Group created to set access rights for sharing data with some users.\")",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 195,
+      "match": "api_key_duration = fields.Float(string='API Keys maximum duration days',",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    }
+  ],
+  "notes": "Scan of the class body (class line to next top-level class) at 12.0-18.0 for single-line `name = fields.X(` assignments; each field line is re-verifiable, set completeness is the scan result. 19.0 moves res.groups to res_groups.py with a different field set (EV-403, EV-404, EV-347); not repeated here.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "18.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "13.0",
+    "to": "18.0"
+  },
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/odoo/addons/base/models/res_users.py#L93"
+}

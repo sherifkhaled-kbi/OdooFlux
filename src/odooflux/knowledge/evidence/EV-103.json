@@ -1,0 +1,60 @@
+{
+  "category": "orm",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "`sudo(user)` (12.0) became `sudo(flag=True)` plus `with_user(user)` in 13.0; the flag form persists to 19.0",
+  "detection_method": "grep on pinned source",
+  "id": "EV-103",
+  "locations": [
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 4789,
+      "match": "def sudo(self, user",
+      "path": "odoo/models.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 5157,
+      "match": "def sudo(self, flag",
+      "path": "odoo/models.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 5189,
+      "match": "def with_user(",
+      "path": "odoo/models.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 5973,
+      "match": "def sudo(self, flag",
+      "path": "odoo/orm/models.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "python_runtime"
+  ],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "HIGH",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "12.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "13.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/odoo/models.py#L4789"
+}

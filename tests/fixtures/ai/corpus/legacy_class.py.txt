@@ -1,0 +1,10 @@
+from odoo import models, fields
+from odoo.exceptions import UserError
+
+
+class Legacy(models.Model):
+    _name = "kbi.legacy"
+    _inherit = ["mail.thread"]
+
+    name = fields.Char()
+    legacy_defaults = {"name": "x"}

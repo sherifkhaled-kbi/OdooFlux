@@ -1,0 +1,63 @@
+{
+  "category": "qweb",
+  "checked_by": "research-006-phase3-t017",
+  "checked_on": "2026-11-07",
+  "description": "QWeb t-cache and t-nocache handlers present in 18.0 and removed in 19.0 (no cache/nocache directive in 19.0 ir_qweb.py)",
+  "detection_method": "grep on pinned source; def-name set diff per version",
+  "id": "EV-333",
+  "locations": [
+    {
+      "branch": "18.0",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "path": "odoo/addons/base/models/ir_qweb.py",
+      "line": 2272,
+      "match": "def _compile_directive_cache(self, el, compile_context, level):",
+      "kind": "present"
+    },
+    {
+      "branch": "18.0",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "path": "odoo/addons/base/models/ir_qweb.py",
+      "line": 2341,
+      "match": "def _compile_directive_nocache(self, el, compile_context, level):",
+      "kind": "present"
+    },
+    {
+      "branch": "19.0",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "path": "odoo/addons/base/models/ir_qweb.py",
+      "line": null,
+      "match": "def _compile_directive_cache(",
+      "kind": "absent",
+      "search_scope": "odoo/addons/base/models/ir_qweb.py"
+    },
+    {
+      "branch": "19.0",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "path": "odoo/addons/base/models/ir_qweb.py",
+      "line": null,
+      "match": "t-cache",
+      "kind": "absent",
+      "search_scope": "odoo/addons/base/models/ir_qweb.py"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "18.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "19.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/75d6abe5979ac9e8d85d097dad0e7b559ef07326/odoo/addons/base/models/ir_qweb.py#L2272",
+  "notes": "19.0 def-name set (23): as, att, call, call_assets, consumed_options, debug, elif, else, esc, field, foreach, groups, if, inner_content, lang, options, out, raw, set, tag_close, tag_open, value, valuef. 18.0 set (25) is the same plus cache and nocache. Neither 't-cache' nor 't-nocache' occurs anywhere in 19.0 ir_qweb.py (grep count 0); 18.0 ir_qweb.py mentions them in its docstring (lines 79-80)."
+}

@@ -1,0 +1,9 @@
+{
+  "description": "multiline keeps following attr",
+  "group": "multiline",
+  "mode": "falsy",
+  "in_list_view": false,
+  "expect": "edit",
+  "unconverted": [],
+  "warnings": []
+}

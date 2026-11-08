@@ -1,0 +1,3 @@
+<odoo>
+  <field name="f" required="(1) or (a == 1)" invisible="b == 2"/>
+</odoo>

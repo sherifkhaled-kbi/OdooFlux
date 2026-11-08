@@ -1,0 +1,31 @@
+{
+  "schema": "odooflux.runtime-images/1",
+  "note": "Version to runtime image mapping (REQ-VAL-005, G-R-13, G-R-21). Only the tag is named here. The adapter pins each image by the digest the local daemon reports (RepoDigests) and records that digest in every RuntimeRun. Tags are UNVERIFIED (Docker Hub tag policy is not in allow_list.json). Versions not listed here have no runtime image: their L4/L5 result is UNAVAILABLE with reason image_unavailable (EV-359).",
+  "postgres": {
+    "reference": "postgres:16",
+    "status": "UNVERIFIED",
+    "evidence": [],
+    "note": "Deviation: no research record exists for the PostgreSQL image. It is an official Docker Hub image, used only as the database server for the per-run environment. The tag is UNVERIFIED and the digest is recorded per run."
+  },
+  "images": {
+    "18.0": {
+      "repository": "odoo",
+      "tag": "18.0",
+      "tag_status": "UNVERIFIED",
+      "evidence": ["EV-354", "EV-355", "EV-356"]
+    },
+    "19.0": {
+      "repository": "odoo",
+      "tag": "19.0",
+      "tag_status": "UNVERIFIED",
+      "evidence": ["EV-354", "EV-355", "EV-356", "EV-357", "EV-358"]
+    },
+    "20.0": {
+      "repository": "odoo",
+      "tag": "20.0",
+      "tag_status": "UNVERIFIED",
+      "evidence": ["EV-354", "EV-355", "EV-356", "EV-357"],
+      "note": "The odoo/docker repository has a 20.0 Dockerfile (EV-355, EV-356, EV-357), but no odoo/odoo revision is catalogued for 20.0 (EV-359 note), so the release and the tag are UNVERIFIED. L5 for 20.0 is UNAVAILABLE with reason test_format_unverified (research T004)."
+    }
+  }
+}

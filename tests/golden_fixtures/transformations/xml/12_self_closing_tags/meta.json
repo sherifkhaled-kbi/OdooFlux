@@ -1,0 +1,47 @@
+{
+  "description": "Several self-closing elements with and without attributes",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "odoo",
+      "span": "<odoo><button name=\"a\" type=\"object\" string=\"Go\"/><button name=\"b\"/></odoo>",
+      "start_tag": "<odoo>",
+      "attrs": []
+    },
+    {
+      "tag": "button",
+      "span": "<button name=\"a\" type=\"object\" string=\"Go\"/>",
+      "start_tag": "<button name=\"a\" type=\"object\" string=\"Go\"/>",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "a",
+          "value": "a"
+        },
+        {
+          "name": "type",
+          "raw": "object",
+          "value": "object"
+        },
+        {
+          "name": "string",
+          "raw": "Go",
+          "value": "Go"
+        }
+      ]
+    },
+    {
+      "tag": "button",
+      "span": "<button name=\"b\"/>",
+      "start_tag": "<button name=\"b\"/>",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "b",
+          "value": "b"
+        }
+      ]
+    }
+  ]
+}

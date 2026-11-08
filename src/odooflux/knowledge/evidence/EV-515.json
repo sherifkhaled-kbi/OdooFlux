@@ -1,0 +1,94 @@
+{
+  "category": "orm",
+  "checked_by": "research-006-models",
+  "checked_on": "2026-11-07",
+  "description": "The external id of a model is derived as <module>.model_<_name with dots replaced by underscores> at 15.0 through 19.0 (odoo/addons/base/models/ir_model.py), so a model rename changes <module>.model_<old> to <module>.model_<new>",
+  "detection_method": "raw fetch at pinned revisions; line match",
+  "id": "EV-515",
+  "locations": [
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 50,
+      "match": "return '%s.model_%s' % (module, model_name.replace('.', '_'))",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 52,
+      "match": "return '%s.model_%s' % (module, model_name.replace('.', '_'))",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 53,
+      "match": "return '%s.model_%s' % (module, model_name.replace('.', '_'))",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 65,
+      "match": "return '%s.model_%s' % (module, model_name.replace('.', '_'))",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 65,
+      "match": "return '%s.model_%s' % (module, model_name.replace('.', '_'))",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    }
+  ],
+  "notes": "Basis for mapping the qualified model external ids written in ACL CSV model_id:id and XML ref attributes. Unqualified ids depend on the defining module and are not flagged.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "LOW",
+  "rule_ids": [
+    "15-16.csv.model-renamed-mail-channel-member",
+    "15-16.csv.model-renamed-payment-onboarding-wizard",
+    "15-16.csv.model-renamed-payment-provider",
+    "15-16.csv.model-renamed-sale-payment-onboarding-wizard",
+    "15-16.csv.model-renamed-stock-lot",
+    "15-16.csv.model-renamed-stock-route",
+    "15-16.xml.model-renamed-mail-channel-member",
+    "15-16.xml.model-renamed-payment-onboarding-wizard",
+    "15-16.xml.model-renamed-payment-provider",
+    "15-16.xml.model-renamed-sale-payment-onboarding-wizard",
+    "15-16.xml.model-renamed-stock-lot",
+    "15-16.xml.model-renamed-stock-route",
+    "16-17.csv.model-renamed-discuss-channel",
+    "16-17.csv.model-renamed-discuss-channel-member",
+    "16-17.csv.model-renamed-discuss-channel-rtc-session",
+    "16-17.xml.model-renamed-discuss-channel",
+    "16-17.xml.model-renamed-discuss-channel-member",
+    "16-17.xml.model-renamed-discuss-channel-rtc-session",
+    "17-18.csv.model-renamed-mail-canned-response",
+    "17-18.csv.model-renamed-mail-push-device",
+    "17-18.xml.model-renamed-mail-canned-response",
+    "17-18.xml.model-renamed-mail-push-device",
+    "18-19.csv.model-renamed-stock-package",
+    "18-19.xml.model-renamed-stock-package"
+  ],
+  "source_applicability": {
+    "from": "15.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "19.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/odoo/addons/base/models/ir_model.py#L50"
+}

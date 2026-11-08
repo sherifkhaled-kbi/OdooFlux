@@ -1,0 +1,161 @@
+{
+  "category": "owl",
+  "checked_by": "research-006-t025-agent",
+  "checked_on": "2026-11-07",
+  "description": "OWL useRef: at 14.0-15.0 (OWL 1.x) it is a member of the exported owl.hooks namespace; at 16.0-19.0 (OWL 2.x) it is a top-level export (exports.useRef) at the same lines 6216/6373 in all four versions and exports.hooks is absent.",
+  "detection_method": "grep on pinned source",
+  "id": "EV-488",
+  "locations": [
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 4976,
+      "match": "useRef: useRef,",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 5593,
+      "match": "exports.hooks = hooks;",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 4976,
+      "match": "useRef: useRef,",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 5593,
+      "match": "exports.hooks = hooks;",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 6216,
+      "match": "function useRef(name) {",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 6373,
+      "match": "exports.useRef = useRef;",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "exports\\.hooks = hooks;",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "owl.js"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 6216,
+      "match": "function useRef(name) {",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 6373,
+      "match": "exports.useRef = useRef;",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "absent",
+      "line": null,
+      "match": "exports\\.hooks = hooks;",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "search_scope": "owl.js"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 6216,
+      "match": "function useRef(name) {",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 6373,
+      "match": "exports.useRef = useRef;",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "absent",
+      "line": null,
+      "match": "exports\\.hooks = hooks;",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "search_scope": "owl.js"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 6216,
+      "match": "function useRef(name) {",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 6373,
+      "match": "exports.useRef = useRef;",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "absent",
+      "line": null,
+      "match": "exports\\.hooks = hooks;",
+      "path": "addons/web/static/lib/owl/owl.js",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "search_scope": "owl.js"
+    }
+  ],
+  "notes": "Used for legacy JS_TS_RULES#J6 (useRef INFO): no useRef API change is located between 16.0 and 19.0 (identical function and export lines, OWL 2.8.4 per EV-341); the 15.0 to 16.0 change is the import location (owl.hooks.useRef to owl useRef), part of the OWL1 to OWL2 review (EV-395). Signature/behaviour inside useRef not diffed.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "14.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/cc0060e889603eb2e47fa44a8a22a70d7d784185/addons/web/static/lib/owl/owl.js#L4976"
+}

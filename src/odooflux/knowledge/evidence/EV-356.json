@@ -1,0 +1,52 @@
+{
+  "category": "documentation",
+  "checked_by": "research-008-t001",
+  "checked_on": "2026-11-07",
+  "description": "Official image base is ubuntu:noble for 18.0, 19.0 and 20.0 (master)",
+  "detection_method": "read pinned file",
+  "id": "EV-356",
+  "locations": [
+    {
+      "branch": "master",
+      "kind": "present",
+      "line": 1,
+      "match": "FROM ubuntu:noble",
+      "path": "18.0/Dockerfile",
+      "revision": "f900094eb7492968332868d686caf22b966592ca"
+    },
+    {
+      "branch": "master",
+      "kind": "present",
+      "line": 1,
+      "match": "FROM ubuntu:noble",
+      "path": "19.0/Dockerfile",
+      "revision": "f900094eb7492968332868d686caf22b966592ca"
+    },
+    {
+      "branch": "master",
+      "kind": "present",
+      "line": 1,
+      "match": "FROM ubuntu:noble",
+      "path": "20.0/Dockerfile",
+      "revision": "f900094eb7492968332868d686caf22b966592ca"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/docker",
+  "required_validation": [
+    "runtime.image_provenance"
+  ],
+  "revision": "f900094eb7492968332868d686caf22b966592ca",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "18.0",
+    "to": "20.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "18.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/docker/blob/f900094eb7492968332868d686caf22b966592ca/19.0/Dockerfile#L1"
+}

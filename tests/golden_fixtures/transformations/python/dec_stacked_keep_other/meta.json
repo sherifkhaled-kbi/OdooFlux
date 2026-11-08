@@ -1,0 +1,24 @@
+{
+  "description": "Only the named decorator is removed from a stack",
+  "operations": [
+    {
+      "op": "remove_decorator",
+      "name": "api.multi"
+    }
+  ],
+  "expect": "edit",
+  "reason": "",
+  "spans": [
+    {
+      "locator": "decorator_removal",
+      "decorator": "api.multi",
+      "occurrence": 0,
+      "covers": "    @api.multi\n"
+    },
+    {
+      "locator": "decorator_removal",
+      "decorator": "api.constrains",
+      "matches": 1
+    }
+  ]
+}

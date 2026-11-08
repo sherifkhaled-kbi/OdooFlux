@@ -1,0 +1,37 @@
+{
+  "category": "orm",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "18.2 (on-premise: 19.0): `read_group` deprecated in favour of `_read_group` (backend) and `formatted_read_group` (public) (PR #163300)",
+  "detection_method": "n/a",
+  "id": "EV-004",
+  "locations": [
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 40,
+      "match": "`read_group` has been deprecated",
+      "path": "content/developer/reference/backend/orm/changelog.rst",
+      "revision": "706918083dbd7dbc8e70c658d3ca63d700f94228"
+    }
+  ],
+  "notes": "Online release normalised to next on-premise major (ADR-007): 18.2 -> 19.0.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/documentation",
+  "required_validation": [
+    "documentation"
+  ],
+  "revision": "706918083dbd7dbc8e70c658d3ca63d700f94228",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "17.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "19.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/documentation/blob/706918083dbd7dbc8e70c658d3ca63d700f94228/content/developer/reference/backend/orm/changelog.rst#L40"
+}

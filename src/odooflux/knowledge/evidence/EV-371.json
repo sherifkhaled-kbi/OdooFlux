@@ -1,0 +1,252 @@
+{
+  "category": "tests",
+  "checked_by": "research-008-t001",
+  "checked_on": "2026-11-07",
+  "description": "CLI options used by the runtime adapter (--update, --without-demo, --test-enable, --test-tags, --no-http, --db_host, --stop-after-init) exist at 16.0-19.0",
+  "detection_method": "grep on pinned source",
+  "id": "EV-371",
+  "locations": [
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 113,
+      "match": "--update",
+      "path": "odoo/tools/config.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 115,
+      "match": "--without-demo",
+      "path": "odoo/tools/config.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 175,
+      "match": "--test-enable",
+      "path": "odoo/tools/config.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 178,
+      "match": "--test-tags",
+      "path": "odoo/tools/config.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 147,
+      "match": "--no-http",
+      "path": "odoo/tools/config.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 263,
+      "match": "--db_host",
+      "path": "odoo/tools/config.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 310,
+      "match": "--stop-after-init",
+      "path": "odoo/tools/config.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 113,
+      "match": "--update",
+      "path": "odoo/tools/config.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 115,
+      "match": "--without-demo",
+      "path": "odoo/tools/config.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 176,
+      "match": "--test-enable",
+      "path": "odoo/tools/config.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 179,
+      "match": "--test-tags",
+      "path": "odoo/tools/config.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 148,
+      "match": "--no-http",
+      "path": "odoo/tools/config.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 264,
+      "match": "--db_host",
+      "path": "odoo/tools/config.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 313,
+      "match": "--stop-after-init",
+      "path": "odoo/tools/config.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 112,
+      "match": "--update",
+      "path": "odoo/tools/config.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 114,
+      "match": "--without-demo",
+      "path": "odoo/tools/config.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 173,
+      "match": "--test-enable",
+      "path": "odoo/tools/config.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 176,
+      "match": "--test-tags",
+      "path": "odoo/tools/config.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 145,
+      "match": "--no-http",
+      "path": "odoo/tools/config.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 261,
+      "match": "--db_host",
+      "path": "odoo/tools/config.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 314,
+      "match": "--stop-after-init",
+      "path": "odoo/tools/config.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 234,
+      "match": "--update",
+      "path": "odoo/tools/config.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 240,
+      "match": "--without-demo",
+      "path": "odoo/tools/config.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 290,
+      "match": "--test-enable",
+      "path": "odoo/tools/config.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 292,
+      "match": "--test-tags",
+      "path": "odoo/tools/config.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 268,
+      "match": "--no-http",
+      "path": "odoo/tools/config.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 385,
+      "match": "--db_host",
+      "path": "odoo/tools/config.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 291,
+      "match": "--stop-after-init",
+      "path": "odoo/tools/config.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "runtime.install"
+  ],
+  "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/58bb9591d4cb08c4d5d4426222c9257f101ad250/odoo/tools/config.py#L113"
+}

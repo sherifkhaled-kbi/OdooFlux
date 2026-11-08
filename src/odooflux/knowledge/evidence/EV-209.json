@@ -1,0 +1,44 @@
+{
+  "category": "orm",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "19.0 deprecates `_cr` / `_uid` properties with replacements `self.env.cr` / `self.env.uid`",
+  "detection_method": "grep on pinned source",
+  "id": "EV-209",
+  "locations": [
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 5931,
+      "match": "@api.deprecated(\"Deprecated since 19.0, use self.env.cr directly\")",
+      "path": "odoo/orm/models.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 5936,
+      "match": "use self.env.uid directly",
+      "path": "odoo/orm/models.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "18.0",
+    "to": "18.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "19.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/58bb9591d4cb08c4d5d4426222c9257f101ad250/odoo/orm/models.py#L5931"
+}

@@ -1,0 +1,36 @@
+{
+  "category": "assets",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "The manifest `assets` key is read by `ir.asset` in 15.0",
+  "detection_method": "grep on pinned source",
+  "id": "EV-123",
+  "locations": [
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 216,
+      "match": "manifest.get('assets'",
+      "path": "odoo/addons/base/models/ir_asset.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "14.0",
+    "to": "15.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "15.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/odoo/addons/base/models/ir_asset.py#L216"
+}

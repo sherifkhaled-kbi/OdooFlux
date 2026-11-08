@@ -1,0 +1,77 @@
+{
+  "categories": {
+    "assets": {
+      "evidence": [],
+      "gaps": [],
+      "status": "NOT_ASSESSED"
+    },
+    "behavioural": {
+      "evidence": [
+        "EV-007"
+      ],
+      "gaps": [],
+      "status": "NOT_ASSESSED"
+    },
+    "javascript_owl": {
+      "evidence": [],
+      "gaps": [],
+      "status": "NOT_ASSESSED"
+    },
+    "manifest_dependencies": {
+      "evidence": [
+        "EV-125"
+      ],
+      "gaps": [],
+      "status": "NOT_ASSESSED"
+    },
+    "python_orm": {
+      "evidence": [
+        "EV-001",
+        "EV-002",
+        "EV-003",
+        "EV-004",
+        "EV-005",
+        "EV-006"
+      ],
+      "gaps": [],
+      "status": "NOT_ASSESSED"
+    },
+    "qweb": {
+      "evidence": [],
+      "gaps": [],
+      "status": "NOT_ASSESSED"
+    },
+    "rules": {
+      "evidence": [],
+      "gaps": [],
+      "status": "NOT_ASSESSED"
+    },
+    "runtime": {
+      "evidence": [],
+      "gaps": [],
+      "status": "NOT_ASSESSED"
+    },
+    "security": {
+      "evidence": [],
+      "gaps": [],
+      "status": "NOT_ASSESSED"
+    },
+    "xml_views_data": {
+      "evidence": [],
+      "gaps": [],
+      "status": "NOT_ASSESSED"
+    }
+  },
+  "notes": "Per-category status copied from VERSION_COMPATIBILITY_MATRIX.md; Research column is the step status.",
+  "open_gaps": [
+    "G-R-19"
+  ],
+  "peer_reviewed": false,
+  "research_status": "NOT_ASSESSED",
+  "review_only": "Everything",
+  "revisions": {
+    "odoo/odoo@19.0": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+  },
+  "seeded_evidence": [],
+  "step": "19-20"
+}

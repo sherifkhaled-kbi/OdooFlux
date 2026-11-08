@@ -1,0 +1,237 @@
+{
+  "category": "orm",
+  "checked_by": "research-006-t025-agent",
+  "checked_on": "2026-11-07",
+  "description": "BaseModel defines _inherits at 12.0 and documents it as composition-based inheritance at 13.0-19.0 (models.py; orm/models.py at 19.0); no line in that file combines _inherits with 'deprecat' or 'discourag' at any version 12.0-19.0.",
+  "detection_method": "grep on pinned source",
+  "id": "EV-483",
+  "locations": [
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 242,
+      "match": "_inherits = {}              # inherited models {'parent_model': 'm2o_field'}",
+      "path": "odoo/models.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 317,
+      "match": "implements composition-based inheritance: the new model exposes all",
+      "path": "odoo/models.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 330,
+      "match": "implements composition-based inheritance: the new model exposes all",
+      "path": "odoo/models.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 484,
+      "match": "implements composition-based inheritance: the new model exposes all",
+      "path": "odoo/models.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 489,
+      "match": "implements composition-based inheritance: the new model exposes all",
+      "path": "odoo/models.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 581,
+      "match": "implements composition-based inheritance: the new model exposes all",
+      "path": "odoo/models.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 597,
+      "match": "implements composition-based inheritance: the new model exposes all",
+      "path": "odoo/models.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 416,
+      "match": "implements composition-based inheritance: the new model exposes all",
+      "path": "odoo/orm/models.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "12.0",
+      "kind": "absent",
+      "line": null,
+      "match": "_inherits.*(deprecat|discourag)",
+      "path": "odoo/models.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "search_scope": "models.py"
+    },
+    {
+      "branch": "12.0",
+      "kind": "absent",
+      "line": null,
+      "match": "(deprecat|discourag).*_inherits",
+      "path": "odoo/models.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "search_scope": "models.py"
+    },
+    {
+      "branch": "13.0",
+      "kind": "absent",
+      "line": null,
+      "match": "_inherits.*(deprecat|discourag)",
+      "path": "odoo/models.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "search_scope": "models.py"
+    },
+    {
+      "branch": "13.0",
+      "kind": "absent",
+      "line": null,
+      "match": "(deprecat|discourag).*_inherits",
+      "path": "odoo/models.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "search_scope": "models.py"
+    },
+    {
+      "branch": "14.0",
+      "kind": "absent",
+      "line": null,
+      "match": "_inherits.*(deprecat|discourag)",
+      "path": "odoo/models.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "search_scope": "models.py"
+    },
+    {
+      "branch": "14.0",
+      "kind": "absent",
+      "line": null,
+      "match": "(deprecat|discourag).*_inherits",
+      "path": "odoo/models.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "search_scope": "models.py"
+    },
+    {
+      "branch": "15.0",
+      "kind": "absent",
+      "line": null,
+      "match": "_inherits.*(deprecat|discourag)",
+      "path": "odoo/models.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "search_scope": "models.py"
+    },
+    {
+      "branch": "15.0",
+      "kind": "absent",
+      "line": null,
+      "match": "(deprecat|discourag).*_inherits",
+      "path": "odoo/models.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "search_scope": "models.py"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "_inherits.*(deprecat|discourag)",
+      "path": "odoo/models.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "models.py"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "(deprecat|discourag).*_inherits",
+      "path": "odoo/models.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "models.py"
+    },
+    {
+      "branch": "17.0",
+      "kind": "absent",
+      "line": null,
+      "match": "_inherits.*(deprecat|discourag)",
+      "path": "odoo/models.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "search_scope": "models.py"
+    },
+    {
+      "branch": "17.0",
+      "kind": "absent",
+      "line": null,
+      "match": "(deprecat|discourag).*_inherits",
+      "path": "odoo/models.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "search_scope": "models.py"
+    },
+    {
+      "branch": "18.0",
+      "kind": "absent",
+      "line": null,
+      "match": "_inherits.*(deprecat|discourag)",
+      "path": "odoo/models.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "search_scope": "models.py"
+    },
+    {
+      "branch": "18.0",
+      "kind": "absent",
+      "line": null,
+      "match": "(deprecat|discourag).*_inherits",
+      "path": "odoo/models.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "search_scope": "models.py"
+    },
+    {
+      "branch": "19.0",
+      "kind": "absent",
+      "line": null,
+      "match": "_inherits.*(deprecat|discourag)",
+      "path": "odoo/orm/models.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "search_scope": "models.py"
+    },
+    {
+      "branch": "19.0",
+      "kind": "absent",
+      "line": null,
+      "match": "(deprecat|discourag).*_inherits",
+      "path": "odoo/orm/models.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "search_scope": "models.py"
+    }
+  ],
+  "notes": "Used to retire legacy PYTHON_RULES#7 ('_inherits is discouraged; verify in v16+'). Absence is limited to the one model file and to same-line co-occurrence; other sources (docs, release notes) not searched. Supports: _inherits is a documented, supported mechanism; not a proof that it is never discouraged elsewhere.",
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "13.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/odoo/models.py#L242"
+}

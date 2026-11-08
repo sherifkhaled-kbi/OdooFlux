@@ -1,0 +1,5 @@
+<odoo>
+  <button name="b"
+        attrs="{'readonly': [('a', '=', 1)]}"
+        string="Go"/>
+</odoo>

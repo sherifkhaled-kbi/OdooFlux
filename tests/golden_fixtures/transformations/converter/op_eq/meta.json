@@ -1,0 +1,9 @@
+{
+  "description": "op eq",
+  "group": "operators",
+  "mode": "falsy",
+  "in_list_view": false,
+  "expect": "edit",
+  "unconverted": [],
+  "warnings": []
+}

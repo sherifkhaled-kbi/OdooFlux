@@ -1,0 +1,22 @@
+{
+ "description": "comment openers inside strings do not open comments",
+ "operations": [
+  "lexer",
+  "validator"
+ ],
+ "syntax": "valid",
+ "tokens": [
+  {
+   "text": "/* not a comment",
+   "kind": "string"
+  },
+  {
+   "text": "// nor this",
+   "kind": "string"
+  },
+  {
+   "text": "\nodoo.define(",
+   "kind": "code"
+  }
+ ]
+}

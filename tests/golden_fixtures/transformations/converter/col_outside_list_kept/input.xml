@@ -1,0 +1,3 @@
+<odoo>
+  <field name="f" attrs="{'column_invisible': [('x', '=', 1)]}"/>
+</odoo>

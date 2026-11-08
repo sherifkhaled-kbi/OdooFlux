@@ -1,0 +1,93 @@
+{
+  "category": "fields",
+  "checked_by": "research-006-models",
+  "checked_on": "2026-11-07",
+  "description": "payment.transaction and payment.token field follow-ons at 16.0: many2one acquirer_id becomes provider_id (comodel payment.acquirer to payment.provider), selection provider (related acquirer_id.provider) becomes provider_code (related provider_id.code)",
+  "detection_method": "raw fetch at pinned revisions; line match",
+  "id": "EV-512",
+  "locations": [
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 32,
+      "match": "acquirer_id = fields.Many2one(",
+      "path": "addons/payment/models/payment_transaction.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 33,
+      "match": "comodel_name='payment.acquirer'",
+      "path": "addons/payment/models/payment_transaction.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 32,
+      "match": "provider_id = fields.Many2one(",
+      "path": "addons/payment/models/payment_transaction.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 33,
+      "match": "comodel_name='payment.provider'",
+      "path": "addons/payment/models/payment_transaction.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 34,
+      "match": "provider = fields.Selection(related='acquirer_id.provider')",
+      "path": "addons/payment/models/payment_transaction.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 34,
+      "match": "provider_code = fields.Selection(related='provider_id.code')",
+      "path": "addons/payment/models/payment_transaction.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 15,
+      "match": "acquirer_id = fields.Many2one(",
+      "path": "addons/payment/models/payment_token.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 14,
+      "match": "provider_id = fields.Many2one(",
+      "path": "addons/payment/models/payment_token.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    }
+  ],
+  "notes": "Evidenced only for models payment.transaction and payment.token. A bare field name acquirer_id also exists on custom models, so no rule binds it (needs model context). Companion of EV-450.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "HIGH",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "15.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/addons/payment/models/payment_transaction.py#L32"
+}

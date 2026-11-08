@@ -1,0 +1,70 @@
+{
+  "category": "assets",
+  "checked_by": "research-006-t019-t024",
+  "checked_on": "2026-11-07",
+  "description": "Backend asset bundle is an XML <template id=\"assets_backend\"> in web/views/webclient_templates.xml at 12.0, 13.0 and 14.0; the template is absent at 15.0 (manifest bundle 'web.assets_backend', see EV-328)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-427",
+  "locations": [
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 143,
+      "match": "<template id=\"assets_backend\" name=\"Backend Assets (used in backend interface)\">",
+      "path": "addons/web/views/webclient_templates.xml",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 174,
+      "match": "<template id=\"assets_backend\" name=\"Backend Assets (used in backend interface)\">",
+      "path": "addons/web/views/webclient_templates.xml",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 190,
+      "match": "<template id=\"assets_backend\" name=\"Backend Assets (used in backend interface)\">",
+      "path": "addons/web/views/webclient_templates.xml",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "15.0",
+      "kind": "absent",
+      "line": null,
+      "match": "<template id=\"assets_backend\"",
+      "path": "addons/web/views/webclient_templates.xml",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "search_scope": "addons/web/views/webclient_templates.xml"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 85,
+      "match": "'web.assets_backend': [",
+      "path": "addons/web/__manifest__.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    }
+  ],
+  "notes": "No change in bundle declaration form between 12.0, 13.0 and 14.0 (checked for this bundle only).",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "15.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "15.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/addons/web/views/webclient_templates.xml#L143"
+}

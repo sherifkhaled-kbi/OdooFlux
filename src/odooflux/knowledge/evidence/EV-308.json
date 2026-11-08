@@ -1,0 +1,38 @@
+{
+  "category": "python_runtime",
+  "checked_by": "research-006-phase3",
+  "checked_on": "2026-11-07",
+  "description": "17.0 BaseModel.user_has_groups(groups) exists",
+  "detection_method": "grep on pinned source",
+  "id": "EV-308",
+  "locations": [
+    {
+      "branch": "17.0",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "path": "odoo/models.py",
+      "line": 1559,
+      "match": "def user_has_groups(self, groups):",
+      "kind": "present"
+    }
+  ],
+  "proposed_transformation": "fix-candidate",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+  "risk": "MEDIUM",
+  "rule_ids": [
+    "17-18.python.user-has-groups-removed"
+  ],
+  "source_applicability": {
+    "from": "17.0",
+    "to": "18.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "18.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9ef8d62331b128bcd288528e4639e0901d85fcc8/odoo/models.py#L1559"
+}

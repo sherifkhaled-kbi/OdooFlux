@@ -1,0 +1,72 @@
+{
+  "category": "manifest",
+  "checked_by": "research-006-phase3-t016",
+  "checked_on": "2026-11-07",
+  "description": "web manifest: 14.0 lists XML templates under a 'qweb' key; 15.0 has no 'qweb' key and declares 'assets' bundles (web.assets_qweb holds the XML templates)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-327",
+  "locations": [
+    {
+      "branch": "14.0",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "path": "addons/web/__manifest__.py",
+      "line": 24,
+      "match": "'qweb': [",
+      "kind": "present"
+    },
+    {
+      "branch": "14.0",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "path": "addons/web/__manifest__.py",
+      "line": null,
+      "match": "'assets': {",
+      "kind": "absent",
+      "search_scope": "addons/web/__manifest__.py"
+    },
+    {
+      "branch": "15.0",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "path": "addons/web/__manifest__.py",
+      "line": 25,
+      "match": "'assets': {",
+      "kind": "present"
+    },
+    {
+      "branch": "15.0",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "path": "addons/web/__manifest__.py",
+      "line": 41,
+      "match": "'web.assets_qweb': [",
+      "kind": "present"
+    },
+    {
+      "branch": "15.0",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "path": "addons/web/__manifest__.py",
+      "line": null,
+      "match": "'qweb': [",
+      "kind": "absent",
+      "search_scope": "addons/web/__manifest__.py"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "MEDIUM",
+  "rule_ids": [
+    "14-15.manifest.qweb-key"
+  ],
+  "source_applicability": {
+    "from": "14.0",
+    "to": "15.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "15.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/addons/web/__manifest__.py#L25"
+}

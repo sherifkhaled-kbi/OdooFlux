@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AllowList",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "prefix",
+      "kind"
+    ],
+    "properties": {
+      "prefix": {
+        "type": "string",
+        "pattern": "^https://[^ ]+/$"
+      },
+      "kind": {
+        "enum": [
+          "source",
+          "documentation",
+          "framework",
+          "tooling",
+          "runtime_provenance"
+        ]
+      }
+    }
+  }
+}

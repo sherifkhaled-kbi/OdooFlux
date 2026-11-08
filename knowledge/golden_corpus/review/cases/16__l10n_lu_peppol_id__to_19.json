@@ -1,0 +1,387 @@
+{
+  "schema_version": 1,
+  "case_id": "16__l10n_lu_peppol_id__to_19",
+  "tasks": [
+    "T044"
+  ],
+  "module": "l10n_lu_peppol_id",
+  "source_version": "16.0",
+  "target_version": "19.0",
+  "steps": [
+    "16-17",
+    "17-18",
+    "18-19"
+  ],
+  "source": {
+    "repository": "odoo/odoo",
+    "revision": "9f40bf622c5531739321e59276c307319198e22b",
+    "fetched_to": "/tmp/odooflux-golden-corpus/16.0/l10n_lu_peppol_id",
+    "files": [
+      {
+        "path": "addons/l10n_lu_peppol_id/__init__.py",
+        "sha256": "0422095c50476edda448f611db6225d4c274a2c894899f987f4d59c2d2494781",
+        "size": 121
+      },
+      {
+        "path": "addons/l10n_lu_peppol_id/__manifest__.py",
+        "sha256": "37d924f06e33ee4b23f214f58a7e4e4aefd9ef3329cad9ff2ea7ccd729e3175b",
+        "size": 669
+      },
+      {
+        "path": "addons/l10n_lu_peppol_id/models/__init__.py",
+        "sha256": "f1bb052eee4680e63156d46135b898a95b3ad98637a1b3cc0aba936112209d86",
+        "size": 126
+      },
+      {
+        "path": "addons/l10n_lu_peppol_id/models/res_partner.py",
+        "sha256": "02bb5334a746a02563f94fd31a3634c960cc8d7c940e352a1851bffb93e29409",
+        "size": 326
+      },
+      {
+        "path": "addons/l10n_lu_peppol_id/views/partner_view.xml",
+        "sha256": "7090523ab6f4bc2ac159220acbd5fcea2bd94a02d663d3770605679275c13579",
+        "size": 665
+      }
+    ]
+  },
+  "rules_in_scope": [
+    {
+      "id": "16-17.python.warning-exception",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-110"
+      ]
+    },
+    {
+      "id": "16-17.xml.attrs-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-109",
+        "EV-380",
+        "EV-381",
+        "EV-382",
+        "EV-383",
+        "EV-384",
+        "EV-385"
+      ]
+    },
+    {
+      "id": "16-17.xml.states-attribute-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-109"
+      ]
+    },
+    {
+      "id": "16-17.python.field-states-parameter",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-108"
+      ]
+    },
+    {
+      "id": "16-17.python.name-get-deprecated",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-011"
+      ]
+    },
+    {
+      "id": "16-17.python.read-group-signature",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-012"
+      ]
+    },
+    {
+      "id": "16-17.python.message-post-with-template",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-207"
+      ]
+    },
+    {
+      "id": "16-17.xml.act-window-tag",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-117",
+        "EV-322",
+        "EV-323",
+        "EV-325"
+      ]
+    },
+    {
+      "id": "16-17.xml.report-tag",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-117",
+        "EV-322",
+        "EV-323",
+        "EV-326"
+      ]
+    },
+    {
+      "id": "16-17.tests.savepointcase-removed",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-111",
+        "EV-305",
+        "EV-306",
+        "EV-307"
+      ]
+    },
+    {
+      "id": "16-17.js.odoo-define-legacy-form",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-390",
+        "EV-391"
+      ]
+    },
+    {
+      "id": "17-18.xml.tree-to-list",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-112",
+        "EV-300",
+        "EV-301",
+        "EV-302",
+        "EV-303"
+      ]
+    },
+    {
+      "id": "17-18.python.group-operator-renamed",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-010",
+        "EV-118"
+      ]
+    },
+    {
+      "id": "17-18.python.name-get-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-104"
+      ]
+    },
+    {
+      "id": "17-18.python.name-search-to-search-display-name",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-008",
+        "EV-106"
+      ]
+    },
+    {
+      "id": "17-18.xml.cron-numbercall-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-113"
+      ]
+    },
+    {
+      "id": "17-18.xml.kanban-box-deprecated",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-119"
+      ]
+    },
+    {
+      "id": "17-18.python.user-has-groups-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-105",
+        "EV-308",
+        "EV-309",
+        "EV-310",
+        "EV-311"
+      ]
+    },
+    {
+      "id": "17-18.js.rpc-service-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-120"
+      ]
+    },
+    {
+      "id": "18-19.python.route-type-json",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-007",
+        "EV-115"
+      ]
+    },
+    {
+      "id": "18-19.python.env-shortcuts-deprecated",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-003",
+        "EV-209",
+        "EV-304"
+      ]
+    },
+    {
+      "id": "18-19.python.api-returns-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-102"
+      ]
+    },
+    {
+      "id": "18-19.python.read-group-deprecated",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-004"
+      ]
+    },
+    {
+      "id": "18-19.python.osv-deprecated",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-002"
+      ]
+    },
+    {
+      "id": "18-19.xml.kanban-box-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-119"
+      ]
+    },
+    {
+      "id": "18-19.python.sql-constraints-unsupported",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-006",
+        "EV-116"
+      ]
+    },
+    {
+      "id": "18-19.any.res-users-groups-id",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-114"
+      ]
+    },
+    {
+      "id": "*.manifest.parse-error",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.version-prefix",
+      "maturity": "DRAFT",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.not-installable",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.missing-data-file",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.load-order",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.deps.unknown-dependency",
+      "maturity": "DRAFT",
+      "evidence": [
+        "EV-430",
+        "EV-431",
+        "EV-432",
+        "EV-433",
+        "EV-372",
+        "EV-373",
+        "EV-374",
+        "EV-375"
+      ]
+    },
+    {
+      "id": "*.refs.dangling-reference",
+      "maturity": "DRAFT",
+      "evidence": [
+        "EV-430"
+      ]
+    },
+    {
+      "id": "*.security.acl-csv",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.security.unrestricted-record-rule",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    }
+  ],
+  "applicable_rule_ids": [
+    "16-17.xml.attrs-removed"
+  ],
+  "evidence_ids": [
+    "EV-109",
+    "EV-380",
+    "EV-381",
+    "EV-382",
+    "EV-383",
+    "EV-384",
+    "EV-385"
+  ],
+  "expected_basis": "hand-derived from source reading + rule evidence; NOT produced by OdooFlux",
+  "proposed_expected_transformations": [
+    {
+      "file": "addons/l10n_lu_peppol_id/views/partner_view.xml",
+      "rule_id": "16-17.xml.attrs-removed",
+      "kind": "report_only",
+      "description": "Rule is DETECT_ONLY (converter mode undecided, G-R-20; EV-384 numeric-0 divergence): expected output keeps the file byte-identical and reports 1 CRITICAL finding(s) for the attrs attribute. EVIDENCE: EV-109, EV-380..EV-385.",
+      "informational_manual_fix_not_expected_output": {
+        "occurrences": 1,
+        "before": "<field name=\"l10n_lu_peppol_identifier\" attrs=\"{'invisible': [('country_code', '!=', 'LU')]}\"/>",
+        "after": "<field name=\"l10n_lu_peppol_identifier\" invisible=\"country_code != 'LU'\"/>"
+      }
+    },
+    {
+      "file": "addons/l10n_lu_peppol_id/__init__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/l10n_lu_peppol_id/__manifest__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/l10n_lu_peppol_id/models/__init__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/l10n_lu_peppol_id/models/res_partner.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    }
+  ],
+  "overall_expected": "report_only (no file edits; CRITICAL attrs findings)",
+  "unresolved_ambiguities": [
+    "Whether the future converter mode (G-R-20) will make this FIX_ENABLED; if so expected would become the informational manual fix shown in the transformation, not byte-identical.",
+    "After 16->17 the attrs finding persists unresolved through later steps; reviewer confirm findings are re-reported (not duplicated/suppressed) for target 19.0.",
+    "Inherits account.view_partner_property_form with xpath //group[@name='misc']; existence in later series unverified. The field country_code (related) may collide with a core field in later series; unverified.",
+    "Manifest 'version' has no series prefix ('0.1/1.0' style); *.manifest.version-prefix is DRAFT/review_required and planner-bound. Reviewer must decide whether the expected manifest version is rewritten to target series prefix or untouched. Proposed here: untouched.",
+    "Evidence maturity: all rules in steps 16-17,17-18,18-19 that could apply are DETECT_ONLY/DRAFT unless listed FIX_ENABLED; FIX_ENABLED rules in range fire on no construct of this module."
+  ],
+  "review_status": "PENDING_INDEPENDENT_REVIEW",
+  "reviewer": "",
+  "review_date": "",
+  "reviewer_notes": "",
+  "reviewer_qualification": ""
+}

@@ -1,0 +1,78 @@
+{
+  "category": "views",
+  "checked_by": "research-008-rng",
+  "checked_on": "2026-11-07",
+  "description": "RELAX NG view schemas: tree_view.rng (16.0-17.0), list_view.rng (18.0-19.0); no form_view.rng at 16.0 or 18.0",
+  "detection_method": "GitHub contents API listing at pinned SHA",
+  "id": "EV-370",
+  "locations": [
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": null,
+      "match": "tree_view.rng",
+      "path": "odoo/addons/base/rng/tree_view.rng",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": null,
+      "match": "tree_view.rng",
+      "path": "odoo/addons/base/rng/tree_view.rng",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": null,
+      "match": "list_view.rng",
+      "path": "odoo/addons/base/rng/list_view.rng",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "list_view.rng",
+      "path": "odoo/addons/base/rng/list_view.rng",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "form_view.rng",
+      "path": "odoo/addons/base/rng/form_view.rng",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "odoo/addons/base/rng directory listing"
+    },
+    {
+      "branch": "18.0",
+      "kind": "absent",
+      "line": null,
+      "match": "form_view.rng",
+      "path": "odoo/addons/base/rng/form_view.rng",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "search_scope": "odoo/addons/base/rng directory listing"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rng"
+  ],
+  "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/tree/58bb9591d4cb08c4d5d4426222c9257f101ad250/odoo/addons/base/rng"
+}

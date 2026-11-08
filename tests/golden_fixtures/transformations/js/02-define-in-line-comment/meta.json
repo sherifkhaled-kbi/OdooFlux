@@ -1,0 +1,2 @@
+{"description": "odoo.define inside a line comment", "operations": ["lexer", "validator"], "syntax": "valid",
+ "tokens": [{"text": "odoo.define", "kind": "comment"}, {"text": "answer", "kind": "code"}]}

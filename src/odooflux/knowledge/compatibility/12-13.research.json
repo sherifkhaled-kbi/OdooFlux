@@ -1,0 +1,131 @@
+{
+  "categories": {
+    "assets": {
+      "evidence": [
+        "EV-427"
+      ],
+      "gaps": [
+        "G-R-02",
+        "G-R-18"
+      ],
+      "status": "RESEARCH_SEEDED"
+    },
+    "behavioural": {
+      "evidence": [
+        "EV-015"
+      ],
+      "gaps": [
+        "G-R-02",
+        "G-R-01"
+      ],
+      "status": "NOT_ASSESSED"
+    },
+    "javascript_owl": {
+      "evidence": [
+        "EV-423"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "RESEARCH_SEEDED"
+    },
+    "manifest_dependencies": {
+      "evidence": [
+        "EV-125",
+        "EV-425"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "RESEARCH_SEEDED"
+    },
+    "python_orm": {
+      "evidence": [
+        "EV-101",
+        "EV-102",
+        "EV-103",
+        "EV-110",
+        "EV-205",
+        "EV-206",
+        "EV-211",
+        "EV-421",
+        "EV-483",
+        "EV-484",
+        "EV-485",
+        "EV-486"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "RESEARCH_SEEDED"
+    },
+    "qweb": {
+      "evidence": [
+        "EV-422"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "RESEARCH_SEEDED"
+    },
+    "rules": {
+      "evidence": [],
+      "gaps": [
+        "G-R-02",
+        "G-R-01"
+      ],
+      "status": "NOT_ASSESSED"
+    },
+    "runtime": {
+      "evidence": [
+        "EV-426"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "RESEARCH_SEEDED"
+    },
+    "security": {
+      "evidence": [
+        "EV-424",
+        "EV-480",
+        "EV-481",
+        "EV-482"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "RESEARCH_SEEDED"
+    },
+    "xml_views_data": {
+      "evidence": [
+        "EV-420",
+        "EV-489"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "RESEARCH_SEEDED"
+    }
+  },
+  "notes": "Per-category status copied from VERSION_COMPATIBILITY_MATRIX.md; Research column is the step status. T024 (2026-11-07): source-diff evidence EV-420..EV-427 added per category; behavioural and rules categories remain explicit gaps (G-R-01); python_orm evidence is a models.py method-name diff only.",
+  "open_gaps": [
+    "G-R-01"
+  ],
+  "peer_reviewed": false,
+  "research_status": "RESEARCH_SEEDED",
+  "review_only": "`@api.one` removal (semantics), `sudo(user)` equivalence",
+  "revisions": {
+    "odoo/odoo@12.0": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+    "odoo/odoo@13.0": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+  },
+  "seeded_evidence": [
+    "EV-101",
+    "EV-103",
+    "EV-125",
+    "EV-205",
+    "EV-206",
+    "EV-211"
+  ],
+  "step": "12-13"
+}

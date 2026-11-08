@@ -1,0 +1,5 @@
+{
+  "schema": "odooflux.runtime-runs/1",
+  "note": "Recorded runtime validation runs (008 T029-gen). Empty: no opt-in runtime run (ODOOFLUX_RUNTIME_TESTS=1) has been recorded here, so no step is RUNTIME_VALIDATED. Add a record only for a run that really executed; the matrix generator marks nothing else.",
+  "runs": []
+}

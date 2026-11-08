@@ -1,0 +1,444 @@
+[
+  {
+    "rule_id": "12-13.python.api-multi-removed",
+    "evidence": [
+      "EV-101"
+    ],
+    "proposed_maturity": "FIX_ENABLED",
+    "transformation": "Remove decorator line (indentation-safe)",
+    "risk": "LOW",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "12-13.python.api-one-removed",
+    "evidence": [
+      "EV-101"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None (needs loop or `ensure_one()`)",
+    "risk": "HIGH",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "12-13.python.sudo-user-argument",
+    "evidence": [
+      "EV-103"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None until G-R-14 resolved; never rewrite boolean arguments",
+    "risk": "HIGH",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "14-15.manifest.qweb-key",
+    "evidence": [
+      "EV-123",
+      "EV-124"
+    ],
+    "proposed_maturity": "DETECT_ONLY",
+    "transformation": "Move to `assets` once bundle names are researched (G-R-05)",
+    "risk": "MEDIUM",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "14-15.qweb.t-esc-deprecated",
+    "evidence": [
+      "EV-201",
+      "EV-203"
+    ],
+    "proposed_maturity": "FIX_ENABLED (after P7 check)",
+    "transformation": "`t-esc` \u2192 `t-out`",
+    "risk": "MEDIUM",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "14-15.qweb.t-raw-deprecated",
+    "evidence": [
+      "EV-202"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None (escaping semantics differ)",
+    "risk": "HIGH",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "15-16.python.search-args-keyword",
+    "evidence": [
+      "EV-013"
+    ],
+    "proposed_maturity": "FIX_ENABLED",
+    "transformation": "`args=` \u2192 `domain=` keyword in `search`/`search_count`/`_search` calls",
+    "risk": "LOW",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "15-16.python.browse-str-ids",
+    "evidence": [
+      "EV-013"
+    ],
+    "proposed_maturity": "DETECT_ONLY",
+    "transformation": "None",
+    "risk": "MEDIUM",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "15-16.python.deprecated-model-methods",
+    "evidence": [
+      "EV-013"
+    ],
+    "proposed_maturity": "DETECT_ONLY",
+    "transformation": "`fields_get_keys`, `get_xml_id`, `_mapped_cache` usages",
+    "risk": "MEDIUM",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "15-16.python.x2many-limit-attribute",
+    "evidence": [
+      "EV-013"
+    ],
+    "proposed_maturity": "FIX_ENABLED",
+    "transformation": "Remove `limit=` from One2many/Many2many field declarations",
+    "risk": "LOW",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "15-16.python.removed-field-attributes",
+    "evidence": [
+      "EV-014"
+    ],
+    "proposed_maturity": "FIX_ENABLED",
+    "transformation": "Remove `column_format=`, `deprecated=`; flag `_sequence`",
+    "risk": "LOW",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "15-16.python.fields-view-get",
+    "evidence": [
+      "EV-107"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None (override semantics)",
+    "risk": "HIGH",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "16-17.xml.attrs-removed",
+    "evidence": [
+      "EV-109"
+    ],
+    "proposed_maturity": "FIX_ENABLED",
+    "transformation": "Converter \u2192 `invisible`/`readonly`/`required`/`column_invisible` expressions",
+    "risk": "HIGH",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "16-17.xml.states-attribute-removed",
+    "evidence": [
+      "EV-109"
+    ],
+    "proposed_maturity": "FIX_ENABLED",
+    "transformation": "Converter \u2192 `invisible=\"state not in [...]\"` (warn if no `state` field)",
+    "risk": "MEDIUM",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "16-17.python.field-states-parameter",
+    "evidence": [
+      "EV-108"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None (move logic to views manually)",
+    "risk": "HIGH",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "16-17.python.name-get-deprecated",
+    "evidence": [
+      "EV-011"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None",
+    "risk": "HIGH",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "16-17.python.read-group-signature",
+    "evidence": [
+      "EV-012"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None",
+    "risk": "HIGH",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "16-17.python.warning-exception",
+    "evidence": [
+      "EV-110"
+    ],
+    "proposed_maturity": "FIX_ENABLED",
+    "transformation": "`Warning` \u2192 `UserError` in imports and raises",
+    "risk": "LOW",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "16-17.tests.savepointcase-removed",
+    "evidence": [
+      "EV-111"
+    ],
+    "proposed_maturity": "DETECT_ONLY",
+    "transformation": "Replacement pending G-R-15",
+    "risk": "MEDIUM",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "16-17.xml.act-window-tag",
+    "evidence": [
+      "EV-117"
+    ],
+    "proposed_maturity": "DETECT_ONLY",
+    "transformation": "Expansion to `<record>` designed in P5",
+    "risk": "MEDIUM",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "16-17.xml.report-tag",
+    "evidence": [
+      "EV-117"
+    ],
+    "proposed_maturity": "DETECT_ONLY",
+    "transformation": "Expansion to `<record>` designed in P5",
+    "risk": "MEDIUM",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "16-17.python.message-post-with-template",
+    "evidence": [
+      "EV-207"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None",
+    "risk": "MEDIUM",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "17-18.xml.tree-to-list",
+    "evidence": [
+      "EV-112"
+    ],
+    "proposed_maturity": "FIX_ENABLED",
+    "transformation": "`<tree>`\u2192`<list>` arch root; `tree` in `view_mode` (XML and Python action dicts)",
+    "risk": "MEDIUM",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "17-18.python.name-get-removed",
+    "evidence": [
+      "EV-104"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None",
+    "risk": "HIGH",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "17-18.python.user-has-groups-removed",
+    "evidence": [
+      "EV-105",
+      "EV-210"
+    ],
+    "proposed_maturity": "DETECT_ONLY",
+    "transformation": "Replacement pending G-R-16",
+    "risk": "MEDIUM",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "17-18.python.name-search-to-search-display-name",
+    "evidence": [
+      "EV-008",
+      "EV-106"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None",
+    "risk": "HIGH",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "17-18.python.group-operator-renamed",
+    "evidence": [
+      "EV-010",
+      "EV-118"
+    ],
+    "proposed_maturity": "FIX_ENABLED",
+    "transformation": "`group_operator=` \u2192 `aggregator=`",
+    "risk": "LOW",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "17-18.xml.cron-numbercall-removed",
+    "evidence": [
+      "EV-113"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None",
+    "risk": "MEDIUM",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "17-18.xml.kanban-box-deprecated",
+    "evidence": [
+      "EV-119"
+    ],
+    "proposed_maturity": "DETECT_ONLY",
+    "transformation": "None",
+    "risk": "MEDIUM",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "17-18.js.rpc-service-removed",
+    "evidence": [
+      "EV-120",
+      "EV-394"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None (needs JS adapter)",
+    "risk": "MEDIUM",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "18-19.python.api-returns-removed",
+    "evidence": [
+      "EV-102"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None",
+    "risk": "HIGH",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "18-19.python.sql-constraints-unsupported",
+    "evidence": [
+      "EV-006",
+      "EV-116"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review (CRITICAL)",
+    "transformation": "Conversion to `Constraint` designed in P5 after research",
+    "risk": "HIGH",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "18-19.python.route-type-json",
+    "evidence": [
+      "EV-007",
+      "EV-115"
+    ],
+    "proposed_maturity": "FIX_ENABLED",
+    "transformation": "`type='json'` \u2192 `type='jsonrpc'` in `@route`",
+    "risk": "LOW",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "18-19.python.env-shortcuts-deprecated",
+    "evidence": [
+      "EV-003",
+      "EV-209"
+    ],
+    "proposed_maturity": "FIX_ENABLED",
+    "transformation": "`self._cr`\u2192`self.env.cr`, `self._uid`\u2192`self.env.uid`, `self._context`\u2192`self.env.context`",
+    "risk": "LOW",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "18-19.python.osv-deprecated",
+    "evidence": [
+      "EV-002"
+    ],
+    "proposed_maturity": "DETECT_ONLY",
+    "transformation": "None",
+    "risk": "MEDIUM",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "18-19.python.read-group-deprecated",
+    "evidence": [
+      "EV-004"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None",
+    "risk": "MEDIUM",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "18-19.any.res-users-groups-id",
+    "evidence": [
+      "EV-114"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None (Python, XML, CSV references)",
+    "risk": "HIGH",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "18-19.xml.kanban-box-removed",
+    "evidence": [
+      "EV-119"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review (CRITICAL)",
+    "transformation": "None",
+    "risk": "HIGH",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "15-16.owl.owl1-component-lifecycle",
+    "evidence": [
+      "EV-340",
+      "EV-341",
+      "EV-395"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None (OWL 1 mounted()/willStart() methods and hooks/tags exports need manual OWL 2 migration)",
+    "risk": "HIGH",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "15-16.js.service-registry-on-listener",
+    "evidence": [
+      "EV-393"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None (registry.on('UPDATE', null, cb) becomes addEventListener('UPDATE', cb))",
+    "risk": "LOW",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "16-17.js.odoo-define-two-arg-form",
+    "evidence": [
+      "EV-390",
+      "EV-391"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None (odoo.define(name, function(require){}) needs explicit deps array or @odoo-module conversion)",
+    "risk": "MEDIUM",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "16-17.js.legacy-widget-esm",
+    "evidence": [
+      "EV-392"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None (web.Widget/web.Class/web.mixins become @odoo-module files; require('web.Widget') callers need review)",
+    "risk": "MEDIUM",
+    "status": "CANDIDATE"
+  },
+  {
+    "rule_id": "17-18.js.legacy-widget-removed",
+    "evidence": [
+      "EV-392"
+    ],
+    "proposed_maturity": "DETECT_ONLY, review",
+    "transformation": "None (legacy/js/core/widget.js is absent at 18.0; replace Widget subclasses with OWL components)",
+    "risk": "HIGH",
+    "status": "CANDIDATE"
+  }
+]

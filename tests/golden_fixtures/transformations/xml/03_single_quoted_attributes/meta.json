@@ -1,0 +1,30 @@
+{
+  "description": "Single-quoted attribute values, double quote inside",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "odoo",
+      "span": "<odoo>\n<field name='x' string='It\"s'/>\n</odoo>",
+      "start_tag": "<odoo>",
+      "attrs": []
+    },
+    {
+      "tag": "field",
+      "span": "<field name='x' string='It\"s'/>",
+      "start_tag": "<field name='x' string='It\"s'/>",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "x",
+          "value": "x"
+        },
+        {
+          "name": "string",
+          "raw": "It\"s",
+          "value": "It\"s"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "category": "javascript",
+  "checked_by": "research-006-t010",
+  "checked_on": "2026-11-07",
+  "description": "17.0 Python-JS == uses isEqual: 0 == False is true, '' == False and [] == False are false",
+  "detection_method": "read pinned file",
+  "id": "EV-384",
+  "locations": [
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 109,
+      "match": "function isEqual(left, right) {",
+      "path": "addons/web/static/src/core/py_js/py_interpreter.js",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 112,
+      "match": "return right === (left ? 1 : 0);",
+      "path": "addons/web/static/src/core/py_js/py_interpreter.js",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 117,
+      "match": "return false;",
+      "path": "addons/web/static/src/core/py_js/py_interpreter.js",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 122,
+      "match": "return left === right;",
+      "path": "addons/web/static/src/core/py_js/py_interpreter.js",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    }
+  ],
+  "notes": "Numeric 0 diverges: literal mode (f == False) matches 0 at 17.0, whereas 16.0 strict equality does not. Not executed in a running client.",
+  "proposed_transformation": "fix-candidate",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+  "risk": "MEDIUM",
+  "rule_ids": [
+    "16-17.xml.attrs-removed"
+  ],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "17.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "17.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9ef8d62331b128bcd288528e4639e0901d85fcc8/addons/web/static/src/core/py_js/py_interpreter.js#L109-L122"
+}

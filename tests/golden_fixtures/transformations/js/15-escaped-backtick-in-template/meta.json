@@ -1,0 +1,2 @@
+{"description": "escaped backticks do not end a template literal", "operations": ["lexer", "validator"], "syntax": "valid",
+ "tokens": [{"text": "odoo.define", "kind": "template"}, {"text": "here", "kind": "template"}, {"text": "escaped", "kind": "template"}]}

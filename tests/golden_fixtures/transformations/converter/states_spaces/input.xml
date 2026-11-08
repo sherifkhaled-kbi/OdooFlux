@@ -1,0 +1,3 @@
+<odoo>
+  <button name="b" states="draft, done ,cancel"/>
+</odoo>

@@ -1,0 +1,258 @@
+{
+  "schema_version": 1,
+  "case_id": "16__account_add_gln__to_17",
+  "tasks": [
+    "T044"
+  ],
+  "module": "account_add_gln",
+  "source_version": "16.0",
+  "target_version": "17.0",
+  "steps": [
+    "16-17"
+  ],
+  "source": {
+    "repository": "odoo/odoo",
+    "revision": "9f40bf622c5531739321e59276c307319198e22b",
+    "fetched_to": "/tmp/odooflux-golden-corpus/16.0/account_add_gln",
+    "files": [
+      {
+        "path": "addons/account_add_gln/__init__.py",
+        "sha256": "5fd10918e1361ad65b4b41bcd8fb525e659267f47c8c4334ae52530e58908e9e",
+        "size": 21
+      },
+      {
+        "path": "addons/account_add_gln/__manifest__.py",
+        "sha256": "aee6350b06fe996153e7954814bb9086b4df1ede788508af48676fec663a8513",
+        "size": 532
+      },
+      {
+        "path": "addons/account_add_gln/models/__init__.py",
+        "sha256": "83e0e9d99c0dea80780aa7507e04489cd4b374c580550835be358bed2f993833",
+        "size": 26
+      },
+      {
+        "path": "addons/account_add_gln/models/res_partner.py",
+        "sha256": "8b6f9e8692d6eaab773115036154bf43d754f5316f2a4ecba09c090e0178abb9",
+        "size": 182
+      },
+      {
+        "path": "addons/account_add_gln/views/res_partner_views.xml",
+        "sha256": "fccdb4dc1dd106819d27b129600f7e09e6d093de38ed62a61056c329076ead34",
+        "size": 941
+      }
+    ]
+  },
+  "rules_in_scope": [
+    {
+      "id": "16-17.python.warning-exception",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-110"
+      ]
+    },
+    {
+      "id": "16-17.xml.attrs-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-109",
+        "EV-380",
+        "EV-381",
+        "EV-382",
+        "EV-383",
+        "EV-384",
+        "EV-385"
+      ]
+    },
+    {
+      "id": "16-17.xml.states-attribute-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-109"
+      ]
+    },
+    {
+      "id": "16-17.python.field-states-parameter",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-108"
+      ]
+    },
+    {
+      "id": "16-17.python.name-get-deprecated",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-011"
+      ]
+    },
+    {
+      "id": "16-17.python.read-group-signature",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-012"
+      ]
+    },
+    {
+      "id": "16-17.python.message-post-with-template",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-207"
+      ]
+    },
+    {
+      "id": "16-17.xml.act-window-tag",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-117",
+        "EV-322",
+        "EV-323",
+        "EV-325"
+      ]
+    },
+    {
+      "id": "16-17.xml.report-tag",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-117",
+        "EV-322",
+        "EV-323",
+        "EV-326"
+      ]
+    },
+    {
+      "id": "16-17.tests.savepointcase-removed",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-111",
+        "EV-305",
+        "EV-306",
+        "EV-307"
+      ]
+    },
+    {
+      "id": "16-17.js.odoo-define-legacy-form",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-390",
+        "EV-391"
+      ]
+    },
+    {
+      "id": "*.manifest.parse-error",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.version-prefix",
+      "maturity": "DRAFT",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.not-installable",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.missing-data-file",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.load-order",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.deps.unknown-dependency",
+      "maturity": "DRAFT",
+      "evidence": [
+        "EV-430",
+        "EV-431",
+        "EV-432",
+        "EV-433",
+        "EV-372",
+        "EV-373",
+        "EV-374",
+        "EV-375"
+      ]
+    },
+    {
+      "id": "*.refs.dangling-reference",
+      "maturity": "DRAFT",
+      "evidence": [
+        "EV-430"
+      ]
+    },
+    {
+      "id": "*.security.acl-csv",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.security.unrestricted-record-rule",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    }
+  ],
+  "applicable_rule_ids": [
+    "16-17.xml.attrs-removed"
+  ],
+  "evidence_ids": [
+    "EV-109",
+    "EV-380",
+    "EV-381",
+    "EV-382",
+    "EV-383",
+    "EV-384",
+    "EV-385"
+  ],
+  "expected_basis": "hand-derived from source reading + rule evidence; NOT produced by OdooFlux",
+  "proposed_expected_transformations": [
+    {
+      "file": "addons/account_add_gln/views/res_partner_views.xml",
+      "rule_id": "16-17.xml.attrs-removed",
+      "kind": "report_only",
+      "description": "Rule is DETECT_ONLY (converter mode undecided, G-R-20; EV-384 numeric-0 divergence): expected output keeps the file byte-identical and reports 2 CRITICAL finding(s) for the attrs attribute. EVIDENCE: EV-109, EV-380..EV-385.",
+      "informational_manual_fix_not_expected_output": {
+        "occurrences": 2,
+        "before": "<field name=\"global_location_number\" attrs=\"{'invisible': [('type', '!=', 'delivery')]}\"/>",
+        "after": "<field name=\"global_location_number\" invisible=\"type != 'delivery'\"/>"
+      }
+    },
+    {
+      "file": "addons/account_add_gln/__init__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/account_add_gln/__manifest__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/account_add_gln/models/__init__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/account_add_gln/models/res_partner.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    }
+  ],
+  "overall_expected": "report_only (no file edits; CRITICAL attrs findings)",
+  "unresolved_ambiguities": [
+    "Whether the future converter mode (G-R-20) will make this FIX_ENABLED; if so expected would become the informational manual fix shown in the transformation, not byte-identical.",
+    "Records id is dotted ('account_add_gln.view_partner_form_inherit'); module-prefixed ids are valid but reviewer should confirm no reference rule touches it. xpaths on base.view_partner_form pages (sales_purchases/contact_addresses) are not verified for later series.",
+    "Manifest 'version' has no series prefix ('0.1/1.0' style); *.manifest.version-prefix is DRAFT/review_required and planner-bound. Reviewer must decide whether the expected manifest version is rewritten to target series prefix or untouched. Proposed here: untouched.",
+    "Evidence maturity: all rules in steps 16-17 that could apply are DETECT_ONLY/DRAFT unless listed FIX_ENABLED; FIX_ENABLED rules in range fire on no construct of this module."
+  ],
+  "review_status": "PENDING_INDEPENDENT_REVIEW",
+  "reviewer": "",
+  "review_date": "",
+  "reviewer_notes": "",
+  "reviewer_qualification": ""
+}

@@ -1,0 +1,130 @@
+{
+  "category": "data_files",
+  "checked_by": "research-006-t019-t024",
+  "checked_on": "2026-11-07",
+  "description": "import_xml.rng define diff (located items only): 12.0 defines assert and ir_set, absent at 13.0; 13.0 defines env and views (views absent at 12.0); menuitem_attrs and submenuitem defined at 14.0 (menuitem_attrs absent at 13.0), menuitem_attrs present and assert absent at 15.0",
+  "detection_method": "grep on pinned source",
+  "id": "EV-420",
+  "locations": [
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 238,
+      "match": "<rng:define name=\"assert\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 259,
+      "match": "<rng:define name=\"ir_set\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "13.0",
+      "kind": "absent",
+      "line": null,
+      "match": "<rng:define name=\"assert\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "search_scope": "odoo/import_xml.rng"
+    },
+    {
+      "branch": "13.0",
+      "kind": "absent",
+      "line": null,
+      "match": "<rng:define name=\"ir_set\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "search_scope": "odoo/import_xml.rng"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 4,
+      "match": "<rng:define name=\"env\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 9,
+      "match": "<rng:define name=\"views\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "12.0",
+      "kind": "absent",
+      "line": null,
+      "match": "<rng:define name=\"views\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "search_scope": "odoo/import_xml.rng"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 227,
+      "match": "<rng:define name=\"menuitem_attrs\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 266,
+      "match": "<rng:define name=\"submenuitem\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "13.0",
+      "kind": "absent",
+      "line": null,
+      "match": "<rng:define name=\"menuitem_attrs\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "search_scope": "odoo/import_xml.rng"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 227,
+      "match": "<rng:define name=\"menuitem_attrs\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "absent",
+      "line": null,
+      "match": "<rng:define name=\"assert\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "search_scope": "odoo/import_xml.rng"
+    }
+  ],
+  "notes": "Withdrawn as unlocated: 'url' dropped, submenuitem_contents added, and 14->15 'no define added or removed' (full-set diff not reproducible from locations).",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "15.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "13.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/odoo/import_xml.rng#L238"
+}

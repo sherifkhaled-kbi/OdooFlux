@@ -1,0 +1,18 @@
+{
+  "description": "Commented-out decorator is not code and is not touched",
+  "operations": [
+    {
+      "op": "remove_decorator",
+      "name": "api.multi"
+    }
+  ],
+  "expect": "no-edit",
+  "reason": "comment only",
+  "spans": [
+    {
+      "locator": "decorator_removal",
+      "decorator": "api.multi",
+      "matches": 0
+    }
+  ]
+}

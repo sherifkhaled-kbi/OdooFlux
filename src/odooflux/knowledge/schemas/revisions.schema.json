@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RevisionCatalogue",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "repository",
+      "branch",
+      "revision",
+      "committed",
+      "pinned_on",
+      "tags"
+    ],
+    "properties": {
+      "repository": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+/[a-z0-9._-]+$"
+      },
+      "branch": {
+        "type": "string",
+        "pattern": "^(\\d+\\.0|master)$"
+      },
+      "revision": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{40}$"
+      },
+      "committed": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "pinned_on": {
+        "type": "string",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "tags": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "category": "orm",
+  "checked_by": "research-006-models",
+  "checked_on": "2026-11-07",
+  "description": "Transient model sale.payment.acquirer.onboarding.wizard is renamed sale.payment.provider.onboarding.wizard at 16.0",
+  "detection_method": "raw fetch at pinned revisions; line match",
+  "id": "EV-501",
+  "locations": [
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 11,
+      "match": "_name = 'sale.payment.acquirer.onboarding.wizard'",
+      "path": "addons/sale/wizard/payment_acquirer_onboarding_wizard.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 11,
+      "match": "_name = 'sale.payment.provider.onboarding.wizard'",
+      "path": "addons/sale/wizard/payment_provider_onboarding_wizard.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "payment_acquirer_onboarding_wizard.py",
+      "path": "addons/sale/wizard/payment_acquirer_onboarding_wizard.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 54,
+      "match": "model_sale_payment_acquirer_onboarding_wizard",
+      "path": "addons/sale/security/ir.model.access.csv",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 57,
+      "match": "model_sale_payment_provider_onboarding_wizard",
+      "path": "addons/sale/security/ir.model.access.csv",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    }
+  ],
+  "notes": "Review-only (DETECT_ONLY): companion of EV-450 Field names, unqualified external ids, tables and ACL row ids that follow the rename have no verified mapping here (see research-notes/models.md).",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "MEDIUM",
+  "rule_ids": [
+    "15-16.csv.model-renamed-sale-payment-onboarding-wizard",
+    "15-16.python.model-renamed-sale-payment-onboarding-wizard",
+    "15-16.xml.model-renamed-sale-payment-onboarding-wizard"
+  ],
+  "source_applicability": {
+    "from": "15.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/addons/sale/wizard/payment_acquirer_onboarding_wizard.py#L11"
+}

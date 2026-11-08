@@ -1,0 +1,30 @@
+{
+  "description": "Named and numeric character references in a value",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "odoo",
+      "span": "<odoo><field name=\"a\" help=\"x &amp; y &lt; z &#38; &#x41;\"/></odoo>",
+      "start_tag": "<odoo>",
+      "attrs": []
+    },
+    {
+      "tag": "field",
+      "span": "<field name=\"a\" help=\"x &amp; y &lt; z &#38; &#x41;\"/>",
+      "start_tag": "<field name=\"a\" help=\"x &amp; y &lt; z &#38; &#x41;\"/>",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "a",
+          "value": "a"
+        },
+        {
+          "name": "help",
+          "raw": "x &amp; y &lt; z &#38; &#x41;",
+          "value": "x & y < z & A"
+        }
+      ]
+    }
+  ]
+}

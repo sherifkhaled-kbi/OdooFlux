@@ -1,0 +1,39 @@
+{
+  "category": "tests",
+  "checked_by": "research-006-phase3",
+  "checked_on": "2026-11-07",
+  "description": "18.0 tests/common.py has no SavepointCase class (absent, consistent with 17.0)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-307",
+  "locations": [
+    {
+      "branch": "18.0",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "path": "odoo/tests/common.py",
+      "line": null,
+      "match": "class SavepointCase",
+      "kind": "absent",
+      "search_scope": "odoo/tests/common.py"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+  "risk": "LOW",
+  "rule_ids": [
+    "16-17.tests.savepointcase-removed"
+  ],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "17.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "17.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/75d6abe5979ac9e8d85d097dad0e7b559ef07326/odoo/tests/common.py"
+}

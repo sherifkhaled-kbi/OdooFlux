@@ -1,0 +1,5 @@
+<odoo>
+  <tree>
+    <field name="f" attrs="{'column_invisible': [('x', '=', 1)]}"/>
+  </tree>
+</odoo>

@@ -1,0 +1,9 @@
+{
+  "schema": "odooflux.rng-schemas/1",
+  "versions": [
+    {"id": "16.0", "evidence": ["EV-370"], "views": {"tree": "tree_view.rng"}},
+    {"id": "17.0", "evidence": ["EV-370"], "views": {"tree": "tree_view.rng"}},
+    {"id": "18.0", "evidence": ["EV-370"], "views": {"list": "list_view.rng"}},
+    {"id": "19.0", "evidence": ["EV-370"], "views": {"list": "list_view.rng"}}
+  ]
+}

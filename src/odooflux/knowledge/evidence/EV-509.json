@@ -1,0 +1,74 @@
+{
+  "category": "orm",
+  "checked_by": "research-006-models",
+  "checked_on": "2026-11-07",
+  "description": "Model mail.partner.device is renamed mail.push.device at 18.0 (partner_devices.py replaced by mail_push_device.py); the qualified ACL model external id follows (mail.model_mail_partner_device to mail.model_mail_push_device)",
+  "detection_method": "raw fetch at pinned revisions; line match",
+  "id": "EV-509",
+  "locations": [
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 17,
+      "match": "_name = 'mail.partner.device'",
+      "path": "addons/mail/models/partner_devices.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 14,
+      "match": "_name = 'mail.push.device'",
+      "path": "addons/mail/models/mail_push_device.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "absent",
+      "line": null,
+      "match": "partner_devices.py",
+      "path": "addons/mail/models/partner_devices.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 63,
+      "match": "mail.model_mail_partner_device",
+      "path": "addons/mail/security/ir.model.access.csv",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 62,
+      "match": "mail.model_mail_push_device",
+      "path": "addons/mail/security/ir.model.access.csv",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    }
+  ],
+  "notes": "Review-only (DETECT_ONLY): each rule cites its own record. Field names, unqualified external ids, tables and ACL row ids that follow the rename have no verified mapping here (see research-notes/models.md).",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+  "risk": "MEDIUM",
+  "rule_ids": [
+    "17-18.csv.model-renamed-mail-push-device",
+    "17-18.python.model-renamed-mail-push-device",
+    "17-18.xml.model-renamed-mail-push-device"
+  ],
+  "source_applicability": {
+    "from": "17.0",
+    "to": "18.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "18.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9ef8d62331b128bcd288528e4639e0901d85fcc8/addons/mail/models/partner_devices.py#L17"
+}

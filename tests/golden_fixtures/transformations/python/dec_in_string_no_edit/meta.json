@@ -1,0 +1,18 @@
+{
+  "description": "Decorator text inside string literals is not code and is not touched",
+  "operations": [
+    {
+      "op": "remove_decorator",
+      "name": "api.multi"
+    }
+  ],
+  "expect": "no-edit",
+  "reason": "no decorator node in code",
+  "spans": [
+    {
+      "locator": "decorator_removal",
+      "decorator": "api.multi",
+      "matches": 0
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "description": "list ints",
+  "group": "list_values",
+  "mode": "falsy",
+  "in_list_view": false,
+  "expect": "edit",
+  "unconverted": [],
+  "warnings": []
+}

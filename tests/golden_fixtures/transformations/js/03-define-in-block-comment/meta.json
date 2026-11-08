@@ -1,0 +1,22 @@
+{
+ "description": "odoo.define in a block comment, real call after it",
+ "operations": [
+  "lexer",
+  "validator"
+ ],
+ "syntax": "valid",
+ "tokens": [
+  {
+   "text": "web.old",
+   "kind": "comment"
+  },
+  {
+   "text": "web.new",
+   "kind": "string"
+  },
+  {
+   "text": "\nodoo.define(",
+   "kind": "code"
+  }
+ ]
+}

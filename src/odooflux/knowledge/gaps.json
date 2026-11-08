@@ -1,0 +1,448 @@
+[
+  {
+    "id": "G-R-01",
+    "description": "Source-diff research for steps 12-13, 13-14, 14-15 (no ORM changelog, EV-015). PARTIAL: EV-420..EV-427 cover xml data RNG, models.py method names, QWeb directives, OWL/ESM introduction, security fields, manifest license default, python_requires and asset bundle form per step. Still open: behavioural and rules categories, and non-method ORM semantics (method bodies, fields and decorators not diffed).",
+    "steps": [
+      "12-13",
+      "13-14",
+      "14-15"
+    ],
+    "categories": [
+      "orm",
+      "data_files",
+      "qweb",
+      "owl",
+      "security",
+      "manifest",
+      "python_runtime",
+      "assets"
+    ],
+    "blocks_rules": [],
+    "status": "OPEN",
+    "resolved_by": [
+      "EV-420",
+      "EV-421",
+      "EV-422",
+      "EV-423",
+      "EV-424",
+      "EV-425",
+      "EV-426",
+      "EV-427"
+    ]
+  },
+  {
+    "id": "G-R-02",
+    "description": "Odoo Enterprise source not accessed (no authorised access during planning).",
+    "steps": [
+      "12-13",
+      "13-14",
+      "14-15",
+      "15-16",
+      "16-17",
+      "17-18",
+      "18-19"
+    ],
+    "categories": [],
+    "blocks_rules": [],
+    "status": "OPEN",
+    "resolved_by": []
+  },
+  {
+    "id": "G-R-03",
+    "description": "Resolved: OWL 1.4.11 at 14.0-15.0 (EV-340), 2.8.4 at 16.0-19.0 (EV-341), not bundled at 12.0-13.0 (EV-423); OWL1 to OWL2 lifecycle/hook API change (EV-395); legacy Widget removal 17-18 (EV-392); service registry API changes: listener (EV-393), rpc service removal (EV-394), validation (EV-396). Finer OWL API diffs (individual hooks beyond lifecycle) are not traced and not needed for the candidate rules.",
+    "steps": [
+      "17-18",
+      "18-19"
+    ],
+    "categories": [
+      "owl"
+    ],
+    "blocks_rules": [],
+    "status": "RESOLVED",
+    "resolved_by": [
+      "EV-340",
+      "EV-341",
+      "EV-342",
+      "EV-343",
+      "EV-344",
+      "EV-390",
+      "EV-391",
+      "EV-392",
+      "EV-393",
+      "EV-394",
+      "EV-395",
+      "EV-396",
+      "EV-423"
+    ]
+  },
+  {
+    "id": "G-R-04",
+    "description": "QWeb directive changes (t-esc, t-raw, t-out) not researched beyond presence counts. PARTIAL: t-cache/t-nocache added in 16.0 and removed in 19.0 (EV-332, EV-333); directive def-name set identical 16.0-18.0 (EV-335); t-esc/t-raw/t-out changes not diffed.",
+    "steps": [
+      "14-15",
+      "15-16"
+    ],
+    "categories": [
+      "qweb"
+    ],
+    "blocks_rules": [],
+    "status": "OPEN",
+    "resolved_by": [
+      "EV-331",
+      "EV-332",
+      "EV-333",
+      "EV-334",
+      "EV-335"
+    ]
+  },
+  {
+    "id": "G-R-05",
+    "description": "Asset bundle names and the 15.0 transition from XML asset templates to manifest assets. Resolved: 14.0 XML asset templates map to 15.0 manifest bundle keys, but the transition is not mechanical (EV-330).",
+    "steps": [
+      "14-15"
+    ],
+    "categories": [
+      "assets"
+    ],
+    "blocks_rules": [],
+    "status": "RESOLVED",
+    "resolved_by": [
+      "EV-327",
+      "EV-328",
+      "EV-329",
+      "EV-330"
+    ]
+  },
+  {
+    "id": "G-R-06",
+    "description": "XML view/data RNG schema differences per version (odoo/import_xml.rng, not odoo/addons/base/rng which 404s) not diffed. Scope: element-level checks only (act_window, report, url, root choice in EV-321..324; convert.py handlers EV-320, EV-322, EV-325, EV-326). EV-320, EV-322, EV-325, EV-326 are convert.py records, not RNG records. No full RNG diff.",
+    "steps": [
+      "16-17",
+      "17-18",
+      "18-19"
+    ],
+    "categories": [
+      "views"
+    ],
+    "blocks_rules": [],
+    "status": "RESOLVED",
+    "resolved_by": [
+      "EV-320",
+      "EV-321",
+      "EV-322",
+      "EV-323",
+      "EV-324",
+      "EV-325",
+      "EV-326"
+    ]
+  },
+  {
+    "id": "G-R-07",
+    "description": "Whether 18.0 accepts a tree arch root (backward compatibility). Severity CRITICAL. Resolved: 17.0 has a 'tree' view type (EV-300, EV-302); 18.0 has 'list' and no 'tree' view type, validator or RNG path (EV-301..303). 17-18.xml.tree-to-list must treat a tree root as rejected at 18.0.",
+    "steps": [
+      "17-18"
+    ],
+    "categories": [
+      "views"
+    ],
+    "blocks_rules": [
+      "17-18.xml.tree-to-list"
+    ],
+    "status": "RESOLVED",
+    "resolved_by": [
+      "EV-300",
+      "EV-301",
+      "EV-302",
+      "EV-303"
+    ]
+  },
+  {
+    "id": "G-R-08",
+    "description": "Resolved: odoo.define(name, function(require){}) is parsed at 15.0-16.0 via cjsRequireRegExp (EV-390); at 17.0-19.0 define(name, deps, factory) requires a deps array and throws otherwise (EV-391). Source inference, not run-tested.",
+    "steps": [
+      "16-17",
+      "17-18"
+    ],
+    "categories": [
+      "javascript"
+    ],
+    "blocks_rules": [],
+    "status": "RESOLVED",
+    "resolved_by": [
+      "EV-390",
+      "EV-391"
+    ]
+  },
+  {
+    "id": "G-R-09",
+    "description": "chatter tag introduction version and oe_chatter support window (source counts were ambiguous). Note: message_ids support is unchecked.",
+    "steps": [
+      "15-16",
+      "16-17"
+    ],
+    "categories": [
+      "views"
+    ],
+    "blocks_rules": [],
+    "status": "RESOLVED",
+    "resolved_by": [
+      "EV-336",
+      "EV-337"
+    ]
+  },
+  {
+    "id": "G-R-10",
+    "description": "Resolved at field-name level (T025 follow-up): ir.model.access (EV-480) and ir.rule (EV-481, incl. stored computed 'global') have identical field-name sets at 12.0-19.0; res.groups fields identical 12.0-17.0, api_key_duration added 18.0 (EV-482, EV-406); 19.0 res.groups: user_ids, privilege_id, implied_by_ids, disjoint_ids, res.users.group_ids (EV-347, EV-403..EV-405); ir.ui.view groups_id renamed group_ids at 19.0 (EV-487); ACL CSV header unchanged 12.0-19.0 (EV-345, EV-401, EV-424). Not established: field attributes, labels, defaults and behaviour (e.g. ir.rule perm_unlink label differs 14.0 vs 19.0, EV-402); field sets are class-body scan results (completeness not mechanically re-verifiable).",
+    "steps": [
+      "12-13",
+      "13-14",
+      "14-15",
+      "15-16",
+      "16-17",
+      "17-18",
+      "18-19"
+    ],
+    "categories": [
+      "security"
+    ],
+    "blocks_rules": [],
+    "status": "RESOLVED",
+    "resolved_by": [
+      "EV-345",
+      "EV-346",
+      "EV-347",
+      "EV-400",
+      "EV-401",
+      "EV-402",
+      "EV-403",
+      "EV-404",
+      "EV-405",
+      "EV-406",
+      "EV-424",
+      "EV-480",
+      "EV-481",
+      "EV-482",
+      "EV-487"
+    ]
+  },
+  {
+    "id": "G-R-11",
+    "description": "Resolved: route() params per step: 14-15 route() signature unchanged, documented param list not fully compared (EV-410); 15-16 HTTP layer rewrite (EV-411); handle_params_access_error added 17.0 (EV-412); readonly added 18.0 (EV-413); auth='bearer' added 18.0 (EV-414); type='json' deprecation at 19.0 (EV-348).",
+    "steps": [
+      "14-15",
+      "15-16",
+      "16-17",
+      "17-18",
+      "18-19"
+    ],
+    "categories": [
+      "controllers"
+    ],
+    "blocks_rules": [],
+    "status": "RESOLVED",
+    "resolved_by": [
+      "EV-348",
+      "EV-410",
+      "EV-411",
+      "EV-412",
+      "EV-413",
+      "EV-414"
+    ]
+  },
+  {
+    "id": "G-R-12",
+    "description": "Data-migration requirements between versions; upgrade-util is official but not reviewed.",
+    "steps": [
+      "12-13",
+      "13-14",
+      "14-15",
+      "15-16",
+      "16-17",
+      "17-18",
+      "18-19"
+    ],
+    "categories": [
+      "data_files"
+    ],
+    "blocks_rules": [],
+    "status": "OPEN",
+    "resolved_by": []
+  },
+  {
+    "id": "G-R-13",
+    "description": "Provenance, tags and maintenance of official Odoo container images (github.com/odoo/docker).",
+    "steps": [],
+    "categories": [
+      "tests"
+    ],
+    "blocks_rules": [],
+    "status": "OPEN",
+    "resolved_by": []
+  },
+  {
+    "id": "G-R-14",
+    "description": "Semantic equivalence of 12.0 sudo(user) and 13.0 with_user(user) or with_user(user).sudo(). Resolved as NON-EQUIVALENT (EV-349): 12.0 sudo(user) switches uid with no su flag; 13.0 sudo(flag) routes a non-bool argument to with_user(user). 12-13.python.sudo-user-argument stays review-only.",
+    "steps": [
+      "12-13"
+    ],
+    "categories": [
+      "python_runtime"
+    ],
+    "blocks_rules": [
+      "12-13.python.sudo-user-argument"
+    ],
+    "status": "RESOLVED",
+    "resolved_by": [
+      "EV-349"
+    ]
+  },
+  {
+    "id": "G-R-15",
+    "description": "Replacement for SavepointCase in 17.0 (TransactionCase behaviour). Resolved: SavepointCase absent in 17.0 and 18.0 (EV-305, EV-307), deprecated in 16.0 (EV-306). Rename to TransactionCase allowed. Equivalence of behaviour is taken from the 17.0 TransactionCase docstring only (EV-305); not tested.",
+    "steps": [
+      "16-17"
+    ],
+    "categories": [
+      "tests"
+    ],
+    "blocks_rules": [
+      "16-17.tests.savepointcase-removed"
+    ],
+    "status": "RESOLVED",
+    "resolved_by": [
+      "EV-305",
+      "EV-306",
+      "EV-307"
+    ]
+  },
+  {
+    "id": "G-R-16",
+    "description": "Replacement API for user_has_groups in 18.0 and whether has_group remains. Resolved: user_has_groups removed in 18.0 (EV-309; present in 17.0, EV-308). Replacement is res.users.has_groups(group_spec) and self.env.user.has_group(xmlid) (EV-310, EV-311). Detect-only, not mechanical.",
+    "steps": [
+      "17-18"
+    ],
+    "categories": [
+      "security"
+    ],
+    "blocks_rules": [
+      "17-18.python.user-has-groups-removed"
+    ],
+    "status": "RESOLVED",
+    "resolved_by": [
+      "EV-308",
+      "EV-309",
+      "EV-310",
+      "EV-311"
+    ]
+  },
+  {
+    "id": "G-R-17",
+    "description": "Resolved (all four legacy claims unsupported as stated): Html sanitize default True at 16.0-19.0 (EV-350, EV-419); Binary attachment parameter exists at 16.0-19.0 (EV-351, EV-419); _auto_init exists at 16.0-19.0 (EV-418); phone.validation.mixin is not a model in phone_validation, mail.thread.phone is (EV-352, EV-417). Dispositions in legacy_disposition.json.",
+    "steps": [
+      "16-17",
+      "17-18",
+      "18-19"
+    ],
+    "categories": [
+      "fields"
+    ],
+    "blocks_rules": [],
+    "status": "RESOLVED",
+    "resolved_by": [
+      "EV-350",
+      "EV-351",
+      "EV-352",
+      "EV-353",
+      "EV-417",
+      "EV-418",
+      "EV-419"
+    ]
+  },
+  {
+    "id": "G-R-18",
+    "description": "PARTIAL: only the two legacy classes were researched: .o_form_sheet_bg (EV-415) and .o_list_view (EV-416) selectors persist in SCSS at 14.0-19.0 (EV-353 checked only the XML template). General backend CSS class changes per version are not researched.",
+    "steps": [
+      "12-13",
+      "13-14",
+      "14-15",
+      "15-16",
+      "16-17",
+      "17-18",
+      "18-19"
+    ],
+    "categories": [
+      "assets"
+    ],
+    "blocks_rules": [],
+    "status": "OPEN",
+    "resolved_by": [
+      "EV-415",
+      "EV-416"
+    ]
+  },
+  {
+    "id": "G-R-19",
+    "description": "Odoo 20.0 not inspected (no branch evaluated during planning).",
+    "steps": [
+      "19-20"
+    ],
+    "categories": [
+      "orm"
+    ],
+    "blocks_rules": [],
+    "status": "OPEN",
+    "resolved_by": []
+  },
+  {
+    "id": "G-R-20",
+    "description": "Literal converter-mode decision for attrs-derived view modifiers (16-17.xml.attrs-removed, kept at DETECT_ONLY; rules file not edited here). 17.0 evaluates modifiers as Python expressions with Python bool semantics (EV-380..EV-384); 16.0 baseline evaluates attrs as JSON domains with strict equality (EV-385). Open issue: numeric 0 diverges (0 == False is true at 17.0, strict equality under 16.0).",
+    "steps": [
+      "16-17"
+    ],
+    "categories": [
+      "views",
+      "javascript"
+    ],
+    "blocks_rules": [],
+    "status": "OPEN",
+    "resolved_by": [
+      "EV-380",
+      "EV-381",
+      "EV-382",
+      "EV-383",
+      "EV-384",
+      "EV-385"
+    ]
+  },
+  {
+    "id": "G-R-21",
+    "description": "Whether <field name=\"message_ids\"/>, activity_ids, message_follower_ids and widget=\"mail_thread\" in form view arch remain supported at 16.0-19.0 once <chatter/> exists (18.0). EV-336/EV-337 cover only the <chatter/> compiler selector and the div.oe_chatter handler; field and widget support per version is not checked (legacy XML_RULES#14-#17).",
+    "steps": [
+      "15-16",
+      "16-17",
+      "17-18",
+      "18-19"
+    ],
+    "categories": [
+      "views"
+    ],
+    "blocks_rules": [],
+    "status": "OPEN",
+    "resolved_by": []
+  },
+  {
+    "id": "G-R-22",
+    "description": "View-arch claims with no official evidence yet: <chatter/> placement (legacy XML_RULES#18), <header> placement change at 17.0 (XML_RULES#21), <notebook invisible=> behaviour at 18.0 (VERSION_RULES#V18-4), and the 'web_client_action' type change at 16.0 (XML_RULES#8; the string was not located). No Odoo source diff of form compilers/arch handling for these items was performed.",
+    "steps": [
+      "15-16",
+      "16-17",
+      "17-18"
+    ],
+    "categories": [
+      "views"
+    ],
+    "blocks_rules": [],
+    "status": "OPEN",
+    "resolved_by": []
+  }
+]

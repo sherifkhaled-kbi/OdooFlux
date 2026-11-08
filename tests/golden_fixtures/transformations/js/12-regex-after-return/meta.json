@@ -1,0 +1,2 @@
+{"description": "regex literal after the return keyword", "operations": ["lexer", "validator"], "syntax": "valid",
+ "tokens": [{"text": "odoo\\.define\\(", "kind": "regex"}, {"text": ".test(s)", "kind": "code"}]}

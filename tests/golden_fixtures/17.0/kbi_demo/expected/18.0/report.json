@@ -1,0 +1,566 @@
+{
+  "ai_usage": {
+    "budget_events": [],
+    "consent": null,
+    "enabled": false,
+    "providers": [],
+    "totals": {}
+  },
+  "modules": [
+    {
+      "block_reason": "",
+      "blocked": false,
+      "edits": [
+        {
+          "dest": "<ROOT>/module/kbi_demo/__manifest__.py",
+          "path": "<ROOT>/module/kbi_demo/__manifest__.py",
+          "spans": [
+            {
+              "after": "    'version': '18.0.1.0.0',\n",
+              "before": "    'version': '17.0.1.0.0',\n",
+              "end": 55,
+              "start": 26
+            }
+          ]
+        },
+        {
+          "dest": "<ROOT>/module/kbi_demo/models/demo.py",
+          "path": "<ROOT>/module/kbi_demo/models/demo.py",
+          "spans": [
+            {
+              "after": "    amount = fields.Float(aggregator='avg')\n    total = fields.Float(aggregator=\"sum\")\n",
+              "before": "    amount = fields.Float(group_operator='avg')\n    total = fields.Float(group_operator=\"sum\")\n",
+              "end": 255,
+              "start": 160
+            },
+            {
+              "after": "            'view_mode': 'list,form',\n",
+              "before": "            'view_mode': 'tree,form',\n",
+              "end": 817,
+              "start": 779
+            }
+          ]
+        },
+        {
+          "dest": "<ROOT>/module/kbi_demo/views/demo_views.xml",
+          "path": "<ROOT>/module/kbi_demo/views/demo_views.xml",
+          "spans": [
+            {
+              "after": "            <list string=\"Demo\">\n",
+              "before": "            <tree string=\"Demo\">\n",
+              "end": 268,
+              "start": 235
+            },
+            {
+              "after": "            </list>\n",
+              "before": "            </tree>\n",
+              "end": 376,
+              "start": 356
+            },
+            {
+              "after": "        <field name=\"view_mode\">list,kanban,form</field>\n",
+              "before": "        <field name=\"view_mode\">tree,kanban,form</field>\n",
+              "end": 1132,
+              "start": 1075
+            }
+          ]
+        }
+      ],
+      "findings": [
+        {
+          "auto_fixable": true,
+          "column": 0,
+          "evidence": [],
+          "id": "5547a827c0f81825",
+          "line": 3,
+          "message": "Module version in manifest should be updated to match the target version",
+          "path": "__manifest__.py",
+          "rejection_reason": "",
+          "rule_id": "Manifest Version",
+          "severity": "INFO",
+          "status": "OPEN",
+          "suggestion": "Update 'version' key to the correct target version prefix"
+        },
+        {
+          "auto_fixable": true,
+          "column": 0,
+          "evidence": [],
+          "id": "9b9e0cae2b806d72",
+          "line": 3,
+          "message": "Module version prefix should be '18.0.x.y.z' for Odoo 18",
+          "path": "__manifest__.py",
+          "rejection_reason": "",
+          "rule_id": "Manifest Version (v18)",
+          "severity": "WARNING",
+          "status": "FIXED",
+          "suggestion": "Update 'version' key to '18.0.1.0.0'"
+        },
+        {
+          "auto_fixable": false,
+          "column": 0,
+          "evidence": [
+            "EV-113"
+          ],
+          "id": "88248e807033fcea",
+          "line": 11,
+          "maturity": "DETECT_ONLY",
+          "message": "ir.cron.numbercall was removed in 18.0; the cron record sets this field.",
+          "path": "data/cron.xml",
+          "rejection_reason": "",
+          "review_required": true,
+          "rule_id": "17-18.xml.cron-numbercall-removed",
+          "severity": "WARNING",
+          "status": "NEEDS_REVIEW",
+          "suggestion": "Review the cron record and its repeat semantics (ir.cron has no numbercall in 18.0). Not edited automatically."
+        },
+        {
+          "auto_fixable": true,
+          "column": 0,
+          "evidence": [
+            "EV-010",
+            "EV-118"
+          ],
+          "id": "52d56023eea231a9",
+          "line": 9,
+          "maturity": "FIX_ENABLED",
+          "message": "Field attribute group_operator was renamed aggregator.",
+          "path": "models/demo.py",
+          "rejection_reason": "",
+          "review_required": false,
+          "rule_id": "17-18.python.group-operator-renamed",
+          "severity": "WARNING",
+          "status": "FIXED",
+          "suggestion": "Rename the keyword argument to aggregator."
+        },
+        {
+          "auto_fixable": true,
+          "column": 0,
+          "evidence": [
+            "EV-010",
+            "EV-118"
+          ],
+          "id": "6df967df3baddab0",
+          "line": 10,
+          "maturity": "FIX_ENABLED",
+          "message": "Field attribute group_operator was renamed aggregator.",
+          "path": "models/demo.py",
+          "rejection_reason": "",
+          "review_required": false,
+          "rule_id": "17-18.python.group-operator-renamed",
+          "severity": "WARNING",
+          "status": "FIXED",
+          "suggestion": "Rename the keyword argument to aggregator."
+        },
+        {
+          "auto_fixable": false,
+          "column": 0,
+          "evidence": [
+            "EV-508"
+          ],
+          "id": "f3819f70800120e1",
+          "line": 11,
+          "maturity": "DETECT_ONLY",
+          "message": "The model mail.shortcode was renamed mail.canned.response in 18.0.",
+          "path": "models/demo.py",
+          "rejection_reason": "",
+          "review_required": true,
+          "rule_id": "17-18.python.model-renamed-mail-canned-response",
+          "severity": "WARNING",
+          "status": "NEEDS_REVIEW",
+          "suggestion": "Update the reference to mail.canned.response. Detect-only and review required: field names, XML ids and tables that follow the rename are not edited automatically."
+        },
+        {
+          "auto_fixable": false,
+          "column": 0,
+          "evidence": [
+            "EV-104"
+          ],
+          "id": "825175bd134e5d94",
+          "line": 13,
+          "maturity": "DETECT_ONLY",
+          "message": "BaseModel.name_get was removed in 18.0; this override is no longer called.",
+          "path": "models/demo.py",
+          "rejection_reason": "",
+          "review_required": true,
+          "rule_id": "17-18.python.name-get-removed",
+          "severity": "WARNING",
+          "status": "NEEDS_REVIEW",
+          "suggestion": "Review the override and move the label logic to display_name. Not edited automatically."
+        },
+        {
+          "auto_fixable": false,
+          "column": 0,
+          "evidence": [
+            "EV-008",
+            "EV-106"
+          ],
+          "id": "1f96075a068cd122",
+          "line": 17,
+          "maturity": "DETECT_ONLY",
+          "message": "Searching by name is implemented as _search_display_name in 18.0; this _name_search override needs review.",
+          "path": "models/demo.py",
+          "rejection_reason": "",
+          "review_required": true,
+          "rule_id": "17-18.python.name-search-to-search-display-name",
+          "severity": "WARNING",
+          "status": "NEEDS_REVIEW",
+          "suggestion": "Review the override and port its search logic to _search_display_name. Not edited automatically."
+        },
+        {
+          "auto_fixable": false,
+          "column": 0,
+          "evidence": [
+            "EV-105",
+            "EV-308",
+            "EV-309",
+            "EV-310",
+            "EV-311"
+          ],
+          "id": "468b8ce4139e2079",
+          "line": 21,
+          "maturity": "DETECT_ONLY",
+          "message": "res.users.user_has_groups was removed in 18.0; use has_groups(group_spec) or has_group(xmlid).",
+          "path": "models/demo.py",
+          "rejection_reason": "",
+          "review_required": true,
+          "rule_id": "17-18.python.user-has-groups-removed",
+          "severity": "WARNING",
+          "status": "NEEDS_REVIEW",
+          "suggestion": "Review the call. has_groups takes a comma-separated spec with optional '!' negation, so the rewrite is not mechanical. Not edited automatically."
+        },
+        {
+          "auto_fixable": true,
+          "column": 0,
+          "evidence": [
+            "EV-112",
+            "EV-300",
+            "EV-301",
+            "EV-302",
+            "EV-303"
+          ],
+          "id": "a0224661cb2fcff8",
+          "line": 27,
+          "maturity": "FIX_ENABLED",
+          "message": "The 'tree' view type was removed in 18.0; the view type is 'list'.",
+          "path": "models/demo.py",
+          "rejection_reason": "",
+          "review_required": false,
+          "rule_id": "17-18.xml.tree-to-list",
+          "severity": "CRITICAL",
+          "status": "FIXED",
+          "suggestion": "Rename <tree> elements to <list> and replace 'tree' entries of view_mode values with 'list'."
+        },
+        {
+          "auto_fixable": false,
+          "column": 0,
+          "evidence": [
+            "EV-508",
+            "EV-515"
+          ],
+          "id": "f9ce32eb80374fb9",
+          "line": 3,
+          "maturity": "DETECT_ONLY",
+          "message": "An ACL row references the model external id mail.model_mail_shortcode (model mail.shortcode renamed mail.canned.response in 18.0).",
+          "path": "security/ir.model.access.csv",
+          "rejection_reason": "",
+          "review_required": true,
+          "rule_id": "17-18.csv.model-renamed-mail-canned-response",
+          "severity": "WARNING",
+          "status": "NEEDS_REVIEW",
+          "suggestion": "Change model_id:id to mail.model_mail_canned_response. Detect-only and review required; unqualified ids and the ACL row id are not covered."
+        },
+        {
+          "auto_fixable": false,
+          "column": 0,
+          "evidence": [
+            "EV-120",
+            "EV-394"
+          ],
+          "id": "2aad0955979e38fc",
+          "line": 11,
+          "maturity": "DETECT_ONLY",
+          "message": "The rpc service is not registered in 18.0; rpc is an exported function.",
+          "path": "static/src/js/demo.js",
+          "rejection_reason": "",
+          "review_required": true,
+          "rule_id": "17-18.js.rpc-service-removed",
+          "severity": "WARNING",
+          "status": "NEEDS_REVIEW",
+          "suggestion": "Import rpc from @web/core/network/rpc and call it directly. Not edited automatically."
+        },
+        {
+          "auto_fixable": false,
+          "column": 0,
+          "evidence": [],
+          "id": "fca6e7ecc778cfde",
+          "line": 6,
+          "message": "Ensure view arch is valid for v19 field widgets",
+          "path": "views/demo_views.xml",
+          "rejection_reason": "",
+          "rule_id": "View Arch",
+          "severity": "INFO",
+          "status": "NEEDS_REVIEW",
+          "suggestion": "Review widget= attributes against v19 widget list"
+        },
+        {
+          "auto_fixable": true,
+          "column": 0,
+          "evidence": [],
+          "id": "01982b3f562a712d",
+          "line": 7,
+          "message": "<tree> view tag deprecated in v18 and replaced by <list>",
+          "path": "views/demo_views.xml",
+          "rejection_reason": "",
+          "rule_id": "Tree Tag Renamed",
+          "severity": "CRITICAL",
+          "status": "FIXED",
+          "suggestion": "Replace <tree ...> with <list ...> and </tree> with </list>"
+        },
+        {
+          "auto_fixable": false,
+          "column": 0,
+          "evidence": [],
+          "id": "8206e48147c0619d",
+          "line": 17,
+          "message": "Ensure view arch is valid for v19 field widgets",
+          "path": "views/demo_views.xml",
+          "rejection_reason": "",
+          "rule_id": "View Arch",
+          "severity": "INFO",
+          "status": "NEEDS_REVIEW",
+          "suggestion": "Review widget= attributes against v19 widget list"
+        },
+        {
+          "auto_fixable": false,
+          "column": 0,
+          "evidence": [
+            "EV-119"
+          ],
+          "id": "5224e1798e52b99b",
+          "line": 21,
+          "maturity": "DETECT_ONLY",
+          "message": "The kanban t-name 'kanban-box' is deprecated in 18.0 in favour of 'card'.",
+          "path": "views/demo_views.xml",
+          "rejection_reason": "",
+          "review_required": false,
+          "rule_id": "17-18.xml.kanban-box-deprecated",
+          "severity": "WARNING",
+          "status": "NEEDS_REVIEW",
+          "suggestion": "Plan the rename to the card template. Not edited automatically."
+        },
+        {
+          "auto_fixable": true,
+          "column": 0,
+          "evidence": [
+            "EV-112",
+            "EV-300",
+            "EV-301",
+            "EV-302",
+            "EV-303"
+          ],
+          "id": "a7fe2ec354890ba1",
+          "line": 32,
+          "maturity": "FIX_ENABLED",
+          "message": "The 'tree' view type was removed in 18.0; the view type is 'list'.",
+          "path": "views/demo_views.xml",
+          "rejection_reason": "",
+          "review_required": false,
+          "rule_id": "17-18.xml.tree-to-list",
+          "severity": "CRITICAL",
+          "status": "FIXED",
+          "suggestion": "Rename <tree> elements to <list> and replace 'tree' entries of view_mode values with 'list'."
+        }
+      ],
+      "fixes_applied": 3,
+      "layers": {
+        "L1": {
+          "coverage": null,
+          "outcome": "PASS",
+          "reason": ""
+        },
+        "L2": {
+          "coverage": null,
+          "outcome": "PASS",
+          "reason": ""
+        },
+        "L3": {
+          "coverage": null,
+          "outcome": "PASS",
+          "reason": "no broken reference among decided references; limits: undecided group references into modules not scanned (2); model references outside scanned modules (1); model xids outside scanned modules (1); view fields of models outside scanned modules (2)"
+        },
+        "L4": {
+          "coverage": null,
+          "outcome": "SKIPPED",
+          "reason": "runtime_not_requested"
+        },
+        "L5": {
+          "coverage": null,
+          "outcome": "SKIPPED",
+          "reason": "runtime_not_requested"
+        }
+      },
+      "name": "kbi_demo",
+      "path": "<ROOT>/module/kbi_demo",
+      "processing": "PROMOTED",
+      "promoted_files": [
+        "<ROOT>/module/kbi_demo/__manifest__.py",
+        "<ROOT>/module/kbi_demo/models/demo.py",
+        "<ROOT>/module/kbi_demo/views/demo_views.xml"
+      ],
+      "rejections": [],
+      "reversible": true,
+      "risk_inventory": {
+        "classes": {
+          "computed-field": [],
+          "constraint": [],
+          "controller": [],
+          "cron": [
+            {
+              "detail": "ir.cron record kbi_demo_cron",
+              "line": 4,
+              "path": "data/cron.xml"
+            }
+          ],
+          "integration": [],
+          "multi-company": [],
+          "onchange": [],
+          "orm-override": [
+            {
+              "detail": "override of name_get",
+              "line": 13,
+              "path": "models/demo.py"
+            }
+          ],
+          "security-sensitive": [],
+          "transaction": []
+        },
+        "counts": {
+          "computed-field": 0,
+          "constraint": 0,
+          "controller": 0,
+          "cron": 1,
+          "integration": 0,
+          "multi-company": 0,
+          "onchange": 0,
+          "orm-override": 1,
+          "security-sensitive": 0,
+          "transaction": 0
+        },
+        "total": 2
+      },
+      "status": "NEEDS_REVIEW",
+      "status_inputs_digest": "9eaf5d16e790f833ce792adba4a7c26fa6c22d76ef770f9439d191663deaf7bf",
+      "status_reasons": [
+        "open_review_findings"
+      ],
+      "status_row": 3
+    }
+  ],
+  "provisional": {
+    "active": true,
+    "labels": [
+      "17.0->18.0 rules validated only against the PROVISIONAL corpus; not approved migration truth (PROVISIONAL.md marker found)"
+    ]
+  },
+  "recovery": {
+    "reversible": true
+  },
+  "run": {
+    "cycles": [],
+    "mode": "fix",
+    "plan_reasons": [],
+    "plan_status": "READY",
+    "source": "17.0",
+    "status": "COMPLETED",
+    "steps": [
+      "17.0->18.0"
+    ],
+    "target": "18.0",
+    "tool_version": "0.2.0"
+  },
+  "schema_version": "1.0.0",
+  "severities": [
+    "CRITICAL",
+    "WARNING",
+    "INFO"
+  ],
+  "summary": {
+    "edits": {
+      "applied": 3,
+      "rejected": 0
+    },
+    "files_written": 3,
+    "findings": {
+      "critical": 3,
+      "info": 3,
+      "warning": 11
+    },
+    "findings_by_status": {
+      "fixed": 6,
+      "needs_review": 10,
+      "open": 1,
+      "rejected": 0
+    },
+    "modules_by_status": {
+      "NEEDS_REVIEW": 1
+    },
+    "open_findings": {
+      "critical": 0,
+      "info": 3,
+      "warning": 8
+    }
+  },
+  "verification_scope": {
+    "layer_outcomes": {
+      "L1": {
+        "FAIL": 0,
+        "PASS": 1,
+        "SKIPPED": 0,
+        "UNAVAILABLE": 0
+      },
+      "L2": {
+        "FAIL": 0,
+        "PASS": 1,
+        "SKIPPED": 0,
+        "UNAVAILABLE": 0
+      },
+      "L3": {
+        "FAIL": 0,
+        "PASS": 1,
+        "SKIPPED": 0,
+        "UNAVAILABLE": 0
+      },
+      "L4": {
+        "FAIL": 0,
+        "PASS": 0,
+        "SKIPPED": 1,
+        "UNAVAILABLE": 0
+      },
+      "L5": {
+        "FAIL": 0,
+        "PASS": 0,
+        "SKIPPED": 1,
+        "UNAVAILABLE": 0
+      }
+    },
+    "layers_run": [
+      1,
+      2,
+      3
+    ],
+    "layers_skipped": [],
+    "layers_unavailable": [
+      4,
+      5
+    ],
+    "limits": [
+      "Static run: L4 install and L5 behavioural tests were not executed, so runtime behaviour is unverified.",
+      "L3 (kbi_demo): undecided group references into modules not scanned (2); model references outside scanned modules (1); model xids outside scanned modules (1); view fields of models outside scanned modules (2)"
+    ],
+    "reasons": {
+      "L4": "runtime_not_requested",
+      "L5": "runtime_not_requested"
+    }
+  },
+  "warnings": []
+}

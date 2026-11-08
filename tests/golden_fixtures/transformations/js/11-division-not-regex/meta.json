@@ -1,0 +1,18 @@
+{
+ "description": "slash after an identifier is division, not a regex",
+ "operations": [
+  "lexer",
+  "validator"
+ ],
+ "syntax": "valid",
+ "tokens": [
+  {
+   "text": "/",
+   "kind": "code"
+  },
+  {
+   "text": "\nodoo.define(",
+   "kind": "code"
+  }
+ ]
+}

@@ -1,0 +1,299 @@
+{
+  "schema_version": 1,
+  "case_id": "15__note_pad__to_17",
+  "tasks": [
+    "T044"
+  ],
+  "module": "note_pad",
+  "source_version": "15.0",
+  "target_version": "17.0",
+  "steps": [
+    "15-16",
+    "16-17"
+  ],
+  "source": {
+    "repository": "odoo/odoo",
+    "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+    "fetched_to": "/tmp/odooflux-golden-corpus/15.0/note_pad",
+    "files": [
+      {
+        "path": "addons/note_pad/__init__.py",
+        "sha256": "0422095c50476edda448f611db6225d4c274a2c894899f987f4d59c2d2494781",
+        "size": 121
+      },
+      {
+        "path": "addons/note_pad/__manifest__.py",
+        "sha256": "7ff195f510d2433df1f61537d3125e270d4344206d4ded09de2644e7ae304634",
+        "size": 704
+      },
+      {
+        "path": "addons/note_pad/models/__init__.py",
+        "sha256": "eace7e2aca351ac995bc53274e2e2cc5a7fe17cf6424371f28821f345f0b1687",
+        "size": 119
+      },
+      {
+        "path": "addons/note_pad/models/note.py",
+        "sha256": "6127bae70d588ea6b6a8b9e9646f6a3ab26e5aeb14cb3e6e99b688fad7287c45",
+        "size": 344
+      },
+      {
+        "path": "addons/note_pad/views/note_views.xml",
+        "sha256": "743447657030bc39ddfac04fbd6818858b93e067c477bdfd0830bcbf20400bfe",
+        "size": 460
+      }
+    ]
+  },
+  "rules_in_scope": [
+    {
+      "id": "15-16.python.search-args-keyword",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-013"
+      ]
+    },
+    {
+      "id": "15-16.python.x2many-limit-attribute",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-013"
+      ]
+    },
+    {
+      "id": "15-16.python.removed-field-attributes",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-014"
+      ]
+    },
+    {
+      "id": "15-16.python.browse-str-ids",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-013"
+      ]
+    },
+    {
+      "id": "15-16.python.deprecated-model-methods",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-013"
+      ]
+    },
+    {
+      "id": "15-16.python.fields-view-get",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-107"
+      ]
+    },
+    {
+      "id": "15-16.js.service-registry-on",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-393"
+      ]
+    },
+    {
+      "id": "15-16.owl.mounted-method",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-395"
+      ]
+    },
+    {
+      "id": "16-17.python.warning-exception",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-110"
+      ]
+    },
+    {
+      "id": "16-17.xml.attrs-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-109",
+        "EV-380",
+        "EV-381",
+        "EV-382",
+        "EV-383",
+        "EV-384",
+        "EV-385"
+      ]
+    },
+    {
+      "id": "16-17.xml.states-attribute-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-109"
+      ]
+    },
+    {
+      "id": "16-17.python.field-states-parameter",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-108"
+      ]
+    },
+    {
+      "id": "16-17.python.name-get-deprecated",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-011"
+      ]
+    },
+    {
+      "id": "16-17.python.read-group-signature",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-012"
+      ]
+    },
+    {
+      "id": "16-17.python.message-post-with-template",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-207"
+      ]
+    },
+    {
+      "id": "16-17.xml.act-window-tag",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-117",
+        "EV-322",
+        "EV-323",
+        "EV-325"
+      ]
+    },
+    {
+      "id": "16-17.xml.report-tag",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-117",
+        "EV-322",
+        "EV-323",
+        "EV-326"
+      ]
+    },
+    {
+      "id": "16-17.tests.savepointcase-removed",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-111",
+        "EV-305",
+        "EV-306",
+        "EV-307"
+      ]
+    },
+    {
+      "id": "16-17.js.odoo-define-legacy-form",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-390",
+        "EV-391"
+      ]
+    },
+    {
+      "id": "*.manifest.parse-error",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.version-prefix",
+      "maturity": "DRAFT",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.not-installable",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.missing-data-file",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.load-order",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.deps.unknown-dependency",
+      "maturity": "DRAFT",
+      "evidence": [
+        "EV-430",
+        "EV-431",
+        "EV-432",
+        "EV-433",
+        "EV-372",
+        "EV-373",
+        "EV-374",
+        "EV-375"
+      ]
+    },
+    {
+      "id": "*.refs.dangling-reference",
+      "maturity": "DRAFT",
+      "evidence": [
+        "EV-430"
+      ]
+    },
+    {
+      "id": "*.security.acl-csv",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.security.unrestricted-record-rule",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    }
+  ],
+  "applicable_rule_ids": [],
+  "evidence_ids": [],
+  "expected_basis": "hand-derived from source reading + rule evidence; NOT produced by OdooFlux",
+  "proposed_expected_transformations": [
+    {
+      "file": "addons/note_pad/__init__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/note_pad/__manifest__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/note_pad/models/__init__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/note_pad/models/note.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/note_pad/views/note_views.xml",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    }
+  ],
+  "overall_expected": "no_change (byte-identical; no findings from in-scope rules)",
+  "unresolved_ambiguities": [
+    "Depends on 'pad' and 'note'; availability/shape of these modules in later series is not established by any pinned evidence (*.deps.unknown-dependency is DRAFT). pad_content_field is a custom kwarg of the pad module's field handling; not covered by 15-16.python.removed-field-attributes (scope column_format only). Reviewer to verify.",
+    "Manifest 'version' has no series prefix ('0.1/1.0' style); *.manifest.version-prefix is DRAFT/review_required and planner-bound. Reviewer must decide whether the expected manifest version is rewritten to target series prefix or untouched. Proposed here: untouched.",
+    "Evidence maturity: all rules in steps 15-16,16-17 that could apply are DETECT_ONLY/DRAFT unless listed FIX_ENABLED; FIX_ENABLED rules in range fire on no construct of this module."
+  ],
+  "review_status": "PENDING_INDEPENDENT_REVIEW",
+  "reviewer": "",
+  "review_date": "",
+  "reviewer_notes": "",
+  "reviewer_qualification": ""
+}

@@ -1,0 +1,76 @@
+{
+  "category": "qweb",
+  "checked_by": "research-006-phase3-t017",
+  "checked_on": "2026-11-07",
+  "description": "QWeb t-call-assets directive handler is present in every version 14.0-19.0 (no removal in the range); baseline for directive diffs",
+  "detection_method": "grep on pinned source",
+  "id": "EV-334",
+  "locations": [
+    {
+      "branch": "14.0",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "path": "odoo/addons/base/models/ir_qweb.py",
+      "line": 157,
+      "match": "def _compile_directive_call_assets(self, el, options):",
+      "kind": "present"
+    },
+    {
+      "branch": "15.0",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "path": "odoo/addons/base/models/ir_qweb.py",
+      "line": 213,
+      "match": "def _compile_directive_call_assets(self, el, options, indent):",
+      "kind": "present"
+    },
+    {
+      "branch": "16.0",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "path": "odoo/addons/base/models/ir_qweb.py",
+      "line": 2170,
+      "match": "def _compile_directive_call_assets(self, el, compile_context, level):",
+      "kind": "present"
+    },
+    {
+      "branch": "17.0",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "path": "odoo/addons/base/models/ir_qweb.py",
+      "line": 2212,
+      "match": "def _compile_directive_call_assets(self, el, compile_context, level):",
+      "kind": "present"
+    },
+    {
+      "branch": "18.0",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "path": "odoo/addons/base/models/ir_qweb.py",
+      "line": 2224,
+      "match": "def _compile_directive_call_assets(self, el, compile_context, level):",
+      "kind": "present"
+    },
+    {
+      "branch": "19.0",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "path": "odoo/addons/base/models/ir_qweb.py",
+      "line": 2653,
+      "match": "def _compile_directive_call_assets(self, el, compile_context, level):",
+      "kind": "present"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "14.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "14.0",
+    "to": "19.0"
+  },
+  "url": "https://github.com/odoo/odoo/blob/58bb9591d4cb08c4d5d4426222c9257f101ad250/odoo/addons/base/models/ir_qweb.py#L2653"
+}

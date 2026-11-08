@@ -1,0 +1,87 @@
+{
+  "category": "qweb",
+  "checked_by": "research-006-t019-t024",
+  "checked_on": "2026-11-07",
+  "description": "QWeb directive handlers: _compile_directive_call exists in qweb.py at 12.0 and 13.0; 15.0 adds _compile_directive_out (absent at 14.0) and _compile_directive_groups moves from qweb.py (14.0) to ir_qweb.py (15.0)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-422",
+  "locations": [
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 1400,
+      "match": "def _compile_directive_call(self, el, options):",
+      "path": "odoo/addons/base/models/qweb.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 1391,
+      "match": "def _compile_directive_call(self, el, options):",
+      "path": "odoo/addons/base/models/qweb.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 1121,
+      "match": "def _compile_directive_groups(self, el, options):",
+      "path": "odoo/addons/base/models/qweb.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "absent",
+      "line": null,
+      "match": "def _compile_directive_out(",
+      "path": "odoo/addons/base/models/qweb.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "search_scope": "odoo/addons/base/models/qweb.py"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 1087,
+      "match": "def _compile_directive_out(self, el, options, indent):",
+      "path": "odoo/addons/base/models/qweb.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "absent",
+      "line": null,
+      "match": "def _compile_directive_groups(",
+      "path": "odoo/addons/base/models/qweb.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "search_scope": "odoo/addons/base/models/qweb.py"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 196,
+      "match": "def _compile_directive_groups(self, el, options, indent):",
+      "path": "odoo/addons/base/models/ir_qweb.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    }
+  ],
+  "notes": "Withdrawn as unlocated: 'identical in 12.0, 13.0, 14.0 (no change per step)' - only one handler sampled.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "15.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "15.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/odoo/addons/base/models/qweb.py#L1400"
+}

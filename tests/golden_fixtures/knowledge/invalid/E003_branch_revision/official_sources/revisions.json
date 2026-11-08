@@ -1,0 +1,12 @@
+[
+  {
+    "branch": "17.0",
+    "committed": "2026-11-05",
+    "pinned_on": "2026-11-06",
+    "repository": "odoo/odoo",
+    "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+    "tags": [
+      "v17-release"
+    ]
+  }
+]

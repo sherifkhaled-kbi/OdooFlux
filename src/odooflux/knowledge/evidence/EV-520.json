@@ -1,0 +1,70 @@
+{
+  "category": "dependencies",
+  "checked_by": "research-006-removed-modules",
+  "checked_on": "2026-11-07",
+  "description": "Module payment_transfer (15.0) is removed at 16.0; its provider record payment.payment_acquirer_transfer reappears as payment.payment_provider_transfer defined by module payment_custom (custom_mode wire_transfer)",
+  "detection_method": "raw fetch at pinned revisions; line match",
+  "id": "EV-520",
+  "locations": [
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 4,
+      "match": "<record id=\"payment.payment_acquirer_transfer\" model=\"payment.acquirer\">",
+      "path": "addons/payment_transfer/data/payment_acquirer_data.xml",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "__manifest__.py",
+      "path": "addons/payment_transfer/__manifest__.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 4,
+      "match": "<record id=\"payment.payment_provider_transfer\" model=\"payment.provider\">",
+      "path": "addons/payment_custom/data/payment_provider_data.xml",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 9,
+      "match": "<field name=\"custom_mode\">wire_transfer</field>",
+      "path": "addons/payment_custom/data/payment_provider_data.xml",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 249,
+      "match": "<field name=\"module_id\" ref=\"base.module_payment_custom\"/>",
+      "path": "addons/payment/data/payment_provider_data.xml",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    }
+  ],
+  "notes": "Successor payment_custom is derived from the same XML-id record moving between modules, not from an explicit 'replaced by' statement; review_required.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.dependency"
+  ],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "15.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/addons/payment_transfer/data/payment_acquirer_data.xml#L4"
+}

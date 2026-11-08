@@ -1,0 +1,173 @@
+{
+  "category": "views",
+  "checked_by": "research-006-t025-agent",
+  "checked_on": "2026-11-07",
+  "description": "The list view RNG (tree_view.rng 14.0-17.0, list_view.rng 18.0-19.0) accepts an optional editable attribute with values top and bottom at every version 14.0-19.0; no schema change to editable at 17.0.",
+  "detection_method": "grep on pinned source",
+  "id": "EV-490",
+  "locations": [
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 60,
+      "match": "<rng:attribute name=\"editable\">",
+      "path": "odoo/addons/base/rng/tree_view.rng",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 62,
+      "match": "<rng:value>top</rng:value>",
+      "path": "odoo/addons/base/rng/tree_view.rng",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 63,
+      "match": "<rng:value>bottom</rng:value>",
+      "path": "odoo/addons/base/rng/tree_view.rng",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 60,
+      "match": "<rng:attribute name=\"editable\">",
+      "path": "odoo/addons/base/rng/tree_view.rng",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 62,
+      "match": "<rng:value>top</rng:value>",
+      "path": "odoo/addons/base/rng/tree_view.rng",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 63,
+      "match": "<rng:value>bottom</rng:value>",
+      "path": "odoo/addons/base/rng/tree_view.rng",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 67,
+      "match": "<rng:attribute name=\"editable\">",
+      "path": "odoo/addons/base/rng/tree_view.rng",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 69,
+      "match": "<rng:value>top</rng:value>",
+      "path": "odoo/addons/base/rng/tree_view.rng",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 70,
+      "match": "<rng:value>bottom</rng:value>",
+      "path": "odoo/addons/base/rng/tree_view.rng",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 69,
+      "match": "<rng:attribute name=\"editable\">",
+      "path": "odoo/addons/base/rng/tree_view.rng",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 71,
+      "match": "<rng:value>top</rng:value>",
+      "path": "odoo/addons/base/rng/tree_view.rng",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 72,
+      "match": "<rng:value>bottom</rng:value>",
+      "path": "odoo/addons/base/rng/tree_view.rng",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 68,
+      "match": "<rng:attribute name=\"editable\">",
+      "path": "odoo/addons/base/rng/list_view.rng",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 70,
+      "match": "<rng:value>top</rng:value>",
+      "path": "odoo/addons/base/rng/list_view.rng",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 71,
+      "match": "<rng:value>bottom</rng:value>",
+      "path": "odoo/addons/base/rng/list_view.rng",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 71,
+      "match": "<rng:attribute name=\"editable\">",
+      "path": "odoo/addons/base/rng/list_view.rng",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 73,
+      "match": "<rng:value>top</rng:value>",
+      "path": "odoo/addons/base/rng/list_view.rng",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 74,
+      "match": "<rng:value>bottom</rng:value>",
+      "path": "odoo/addons/base/rng/list_view.rng",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    }
+  ],
+  "notes": "Used for legacy XML_RULES#10 ('editable attribute on list views changed behaviour in v17'): schema-level acceptance is unchanged 14.0-19.0; a client-side behaviour change is neither located nor excluded. The legacy regex (type=form ... editable=) also does not match list views (audit F-VER-3), cited separately as an audit finding, not Odoo evidence.",
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "14.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "15.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/cc0060e889603eb2e47fa44a8a22a70d7d784185/odoo/addons/base/rng/tree_view.rng#L60"
+}

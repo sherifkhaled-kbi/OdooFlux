@@ -1,0 +1,30 @@
+{
+  "description": "Latin-1 document declared in the XML declaration",
+  "parse_error": false,
+  "encoding": "iso8859-1",
+  "elements": [
+    {
+      "tag": "odoo",
+      "span": "<odoo><field name=\"a\" string=\"café\"/></odoo>",
+      "start_tag": "<odoo>",
+      "attrs": []
+    },
+    {
+      "tag": "field",
+      "span": "<field name=\"a\" string=\"café\"/>",
+      "start_tag": "<field name=\"a\" string=\"café\"/>",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "a",
+          "value": "a"
+        },
+        {
+          "name": "string",
+          "raw": "café",
+          "value": "café"
+        }
+      ]
+    }
+  ]
+}

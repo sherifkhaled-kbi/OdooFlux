@@ -1,0 +1,31 @@
+{
+  "description": "Prefixed attribute name with an xmlns declaration",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "odoo",
+      "span": "<odoo xmlns:t=\"http://example.com/t\"><div t:att=\"1\"/></odoo>",
+      "start_tag": "<odoo xmlns:t=\"http://example.com/t\">",
+      "attrs": [
+        {
+          "name": "xmlns:t",
+          "raw": "http://example.com/t",
+          "value": "http://example.com/t"
+        }
+      ]
+    },
+    {
+      "tag": "div",
+      "span": "<div t:att=\"1\"/>",
+      "start_tag": "<div t:att=\"1\"/>",
+      "attrs": [
+        {
+          "name": "t:att",
+          "raw": "1",
+          "value": "1"
+        }
+      ]
+    }
+  ]
+}

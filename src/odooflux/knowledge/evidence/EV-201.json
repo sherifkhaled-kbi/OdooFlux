@@ -1,0 +1,45 @@
+{
+  "category": "qweb",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "QWeb `t-out` directive is compiled from 15.0; no `_compile_directive_out` in 14.0",
+  "detection_method": "grep on pinned source",
+  "id": "EV-201",
+  "locations": [
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 1087,
+      "match": "def _compile_directive_out(",
+      "path": "odoo/addons/base/models/qweb.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "14.0",
+      "kind": "absent",
+      "line": null,
+      "match": "_compile_directive_out",
+      "path": "odoo/addons/base/models/qweb.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "search_scope": "odoo/addons/base/models/qweb.py"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "14.0",
+    "to": "15.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "15.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/odoo/addons/base/models/qweb.py#L1087"
+}

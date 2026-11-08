@@ -1,0 +1,36 @@
+{
+  "category": "manifest",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "The manifest `qweb` key is read by the web client in 14.0",
+  "detection_method": "grep on pinned source",
+  "id": "EV-124",
+  "locations": [
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 589,
+      "match": "manifest_glob('qweb'",
+      "path": "addons/web/controllers/main.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "13.0",
+    "to": "14.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "14.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/cc0060e889603eb2e47fa44a8a22a70d7d784185/addons/web/controllers/main.py#L589"
+}

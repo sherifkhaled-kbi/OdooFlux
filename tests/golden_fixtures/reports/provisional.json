@@ -1,0 +1,181 @@
+{
+  "ai_usage": {
+    "budget_events": [],
+    "consent": null,
+    "enabled": false,
+    "providers": [],
+    "totals": {}
+  },
+  "modules": [
+    {
+      "block_reason": "",
+      "blocked": false,
+      "edits": [],
+      "findings": [
+        {
+          "auto_fixable": true,
+          "column": 0,
+          "evidence": [
+            "EV-110"
+          ],
+          "id": "008175ce2b3a8e85",
+          "line": 1,
+          "message": "fixed",
+          "path": "views/v.xml",
+          "rejection_reason": "",
+          "rule_id": "17-18.xml.x",
+          "severity": "WARNING",
+          "status": "FIXED",
+          "suggestion": "Apply the documented replacement"
+        }
+      ],
+      "fixes_applied": 1,
+      "layers": {
+        "L1": {
+          "coverage": null,
+          "outcome": "PASS",
+          "reason": ""
+        },
+        "L2": {
+          "coverage": null,
+          "outcome": "PASS",
+          "reason": ""
+        },
+        "L3": {
+          "coverage": null,
+          "outcome": "PASS",
+          "reason": ""
+        },
+        "L4": {
+          "coverage": null,
+          "outcome": "SKIPPED",
+          "reason": "runtime_not_requested"
+        },
+        "L5": {
+          "coverage": null,
+          "outcome": "SKIPPED",
+          "reason": "runtime_not_requested"
+        }
+      },
+      "name": "kbi_prov",
+      "path": "/work/kbi_prov",
+      "processing": "DONE",
+      "promoted_files": [],
+      "rejections": [],
+      "reversible": true,
+      "status": "STATIC_VALIDATED",
+      "status_inputs_digest": "b20c6dca701304594ff1e4b00fdbbcc7bc7a96e7024e275aa4ef14991987f91e",
+      "status_reasons": [],
+      "status_row": 6
+    }
+  ],
+  "provisional": {
+    "active": true,
+    "labels": [
+      "17.0->18.0 rules validated only against the PROVISIONAL corpus; not approved migration truth"
+    ]
+  },
+  "recovery": {
+    "reversible": true,
+    "rollback_cmd": "odooflux rollback run-golden",
+    "run_log": "/state/runs/run-golden/log/run.jsonl"
+  },
+  "run": {
+    "cycles": [],
+    "mode": "dry_run",
+    "plan_reasons": [],
+    "plan_status": "READY",
+    "run_id": "run-golden",
+    "source": "17.0",
+    "status": "COMPLETED",
+    "steps": [
+      "17.0->18.0"
+    ],
+    "target": "18.0",
+    "tool_version": "0.2.0"
+  },
+  "schema_version": "1.0.0",
+  "severities": [
+    "CRITICAL",
+    "WARNING",
+    "INFO"
+  ],
+  "summary": {
+    "edits": {
+      "applied": 1,
+      "rejected": 0
+    },
+    "files_written": 0,
+    "findings": {
+      "critical": 0,
+      "info": 0,
+      "warning": 1
+    },
+    "findings_by_status": {
+      "fixed": 1,
+      "needs_review": 0,
+      "open": 0,
+      "rejected": 0
+    },
+    "modules_by_status": {
+      "STATIC_VALIDATED": 1
+    },
+    "open_findings": {
+      "critical": 0,
+      "info": 0,
+      "warning": 0
+    }
+  },
+  "verification_scope": {
+    "layer_outcomes": {
+      "L1": {
+        "FAIL": 0,
+        "PASS": 1,
+        "SKIPPED": 0,
+        "UNAVAILABLE": 0
+      },
+      "L2": {
+        "FAIL": 0,
+        "PASS": 1,
+        "SKIPPED": 0,
+        "UNAVAILABLE": 0
+      },
+      "L3": {
+        "FAIL": 0,
+        "PASS": 1,
+        "SKIPPED": 0,
+        "UNAVAILABLE": 0
+      },
+      "L4": {
+        "FAIL": 0,
+        "PASS": 0,
+        "SKIPPED": 1,
+        "UNAVAILABLE": 0
+      },
+      "L5": {
+        "FAIL": 0,
+        "PASS": 0,
+        "SKIPPED": 1,
+        "UNAVAILABLE": 0
+      }
+    },
+    "layers_run": [
+      1,
+      2,
+      3
+    ],
+    "layers_skipped": [],
+    "layers_unavailable": [
+      4,
+      5
+    ],
+    "limits": [
+      "Static run: L4 install and L5 behavioural tests were not executed, so runtime behaviour is unverified."
+    ],
+    "reasons": {
+      "L4": "runtime_not_requested",
+      "L5": "runtime_not_requested"
+    }
+  },
+  "warnings": []
+}

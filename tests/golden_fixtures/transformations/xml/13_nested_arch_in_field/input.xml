@@ -1,0 +1,11 @@
+<odoo>
+  <record id="view_x" model="ir.ui.view">
+    <field name="arch" type="xml">
+      <form>
+        <header>
+          <button name="act" invisible="1"/>
+        </header>
+      </form>
+    </field>
+  </record>
+</odoo>

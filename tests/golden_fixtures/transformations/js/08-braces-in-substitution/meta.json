@@ -1,0 +1,26 @@
+{
+ "description": "object literal braces inside a substitution do not end it early",
+ "operations": [
+  "lexer",
+  "validator"
+ ],
+ "syntax": "valid",
+ "tokens": [
+  {
+   "text": "start",
+   "kind": "template"
+  },
+  {
+   "text": "finish",
+   "kind": "template"
+  },
+  {
+   "text": "{k: 1}",
+   "kind": "code"
+  },
+  {
+   "text": "odoo.define(",
+   "kind": "code"
+  }
+ ]
+}

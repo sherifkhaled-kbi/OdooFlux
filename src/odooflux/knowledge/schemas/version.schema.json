@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OdooVersion",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "python_min",
+    "python_max",
+    "online_releases",
+    "support_status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^\\d+\\.0$"
+    },
+    "python_min": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^\\d+\\.\\d+$"
+    },
+    "python_max": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^\\d+\\.\\d+$"
+    },
+    "online_releases": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^\\d+\\.\\d+$"
+      }
+    },
+    "support_status": {
+      "enum": [
+        "UNSUPPORTED",
+        "EXPERIMENTAL",
+        "SUPPORTED"
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^EV-\\d{3}$"
+      }
+    }
+  }
+}

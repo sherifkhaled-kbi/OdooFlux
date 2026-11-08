@@ -1,0 +1,88 @@
+OdooFlux  run run-golden  source 17.0 -> target 18.0  mode: fix
+Plan  17.0->18.0   status: READY
+Stages: Discover > Plan > Workspace > Step N/M > Validate L1-L5 > Promote >
+  Report
+
+[1mMODULE RESULTS[0m
+ [33;1mNEEDS_REVIEW[0m  kbi_sale_approval
+   open C/W/I 0/1/1   fixed 1   rejected 0
+   layers: L1 PASS L2 PASS L3 PASS L4 SKIPPED L5 SKIPPED
+ [31;1mFAILED[0m  kbi_hr_extension
+   open C/W/I 0/1/0   fixed 0   rejected 1
+   layers: L1 FAIL L2 PASS L3 PASS L4 SKIPPED L5 SKIPPED
+ [31;1mFAILED[0m  kbi_stock_custom
+   open C/W/I 1/0/0   fixed 0   rejected 0
+   layers: L1 PASS L2 PASS L3 PASS L4 SKIPPED L5 SKIPPED
+ [31;1mBLOCKED[0m  kbi_old_portal
+   open C/W/I 0/0/0   fixed 0   rejected 0
+   layers: L1 PASS L2 PASS L3 UNAVAILABLE L4 SKIPPED L5 SKIPPED
+  Reasons  kbi_sale_approval: open_warning_findings
+  Reasons  kbi_hr_extension: layer_failed:L1
+  Reasons  kbi_stock_custom: open_critical_findings
+  Reasons  kbi_old_portal: workspace failed, tool_state:tool_error,
+           required_layer_unavailable:L3
+
+[1mFINDINGS[0m
+kbi_sale_approval/views/v.xml
+  [34;1mINFO[0m     L3  17-18.xml.note [NEEDS_REVIEW]
+           note
+           Action: Apply the documented replacement
+           Evidence: EV-110
+                    https://github.com/odoo/odoo/blob/17.0/odoo/addons/base/mode
+                    ls/ir_ui_view.py
+  [32;1mFIXED[0m    L9  17-18.xml.tree-to-list
+           t
+  [33;1mWARNING[0m  L11  17-18.xml.tree-to-list [OPEN]
+           t2
+           Action: Apply the documented replacement
+           Evidence: EV-110
+                    https://github.com/odoo/odoo/blob/17.0/odoo/addons/base/mode
+                    ls/ir_ui_view.py
+kbi_hr_extension/views/hr.xml
+  [33;1mWARNING[0m  L42  17-18.xml.attrs-removed [NEEDS_REVIEW]
+           attrs
+           Action: Apply the documented replacement
+           Evidence: EV-110
+                    https://github.com/odoo/odoo/blob/17.0/odoo/addons/base/mode
+                    ls/ir_ui_view.py
+  [31;1mREJECTED[0m L50  17-18.xml.x [REJECTED]
+           bad edit
+           Action: Apply the documented replacement
+           Rejected: validation_failed:L1-xml
+           Evidence: EV-110
+                    https://github.com/odoo/odoo/blob/17.0/odoo/addons/base/mode
+                    ls/ir_ui_view.py
+kbi_stock_custom/models/stock.py
+  [31;1mCRITICAL[0m L118  17-18.py.api [NEEDS_REVIEW]
+           api
+           Action: Apply the documented replacement
+           Evidence: EV-110
+                    https://github.com/odoo/odoo/blob/17.0/odoo/addons/base/mode
+                    ls/ir_ui_view.py
+
+[1mREJECTED EDITS (1)[0m
+  kbi_hr_extension: reason: validation_failed:L1-xml - file left unchanged
+
+[1mVERIFICATION SCOPE[0m
+  Ran: L1 syntax, L2 static re-scan, L3 dependency integrity
+  Not run: L4 runtime install (runtime_not_requested), L5 behaviour
+      (runtime_not_requested)
+  Unavailable: L3 dependency integrity
+    L1: FAIL 1, PASS 3 module(s)
+    L2: PASS 4 module(s)
+    L3: PASS 3, UNAVAILABLE 1 module(s)
+    L4: SKIPPED 4 module(s)
+    L5: SKIPPED 4 module(s)
+  Limit: Static run: L4 install and L5 behavioural tests were not executed, so
+         runtime behaviour is unverified.
+  Why not verified: installation (L4) and behaviour (L5) were not run
+      (runtime_not_requested). Business behaviour is unverified.
+
+[1mAI USAGE  not used in this run[0m
+
+[1mRECOVERY[0m
+  Run log:   /state/runs/run-golden/log/run.jsonl
+  Roll back: odooflux rollback run-golden
+
+TOTALS modules=4 findings=6 open=4 (critical=1 warning=2 info=1) fixed=1
+  rejected=1 needs_review=3

@@ -1,0 +1,46 @@
+{
+  "category": "orm",
+  "checked_by": "research-006-phase3",
+  "checked_on": "2026-11-07",
+  "description": "19.0 deprecates the _context property in favour of self.env.context (@api.deprecated)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-304",
+  "locations": [
+    {
+      "branch": "19.0",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "path": "odoo/orm/models.py",
+      "line": 5941,
+      "match": "@api.deprecated(\"Deprecated since 19.0, use self.env.context directly\")",
+      "kind": "present"
+    },
+    {
+      "branch": "19.0",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "path": "odoo/orm/models.py",
+      "line": 5942,
+      "match": "def _context(self):",
+      "kind": "present"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+  "risk": "LOW",
+  "rule_ids": [
+    "18-19.python.env-shortcuts-deprecated"
+  ],
+  "source_applicability": {
+    "from": "18.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "19.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/58bb9591d4cb08c4d5d4426222c9257f101ad250/odoo/orm/models.py#L5941"
+}

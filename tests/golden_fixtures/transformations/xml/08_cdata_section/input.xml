@@ -1,0 +1,1 @@
+<odoo><code><![CDATA[if a < b and c > d: <field name="x"/>]]></code><field name="y"/></odoo>

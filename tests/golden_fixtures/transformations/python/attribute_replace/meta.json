@@ -1,0 +1,21 @@
+{
+  "description": "Attribute replaced in a base-class expression; the longer chain is only changed at its root",
+  "operations": [
+    {
+      "op": "replace_attribute",
+      "from": "openerp.models",
+      "to": "odoo.models"
+    }
+  ],
+  "expect": "edit",
+  "reason": "",
+  "spans": [
+    {
+      "locator": "node",
+      "kind": "attribute",
+      "name": "openerp.models",
+      "covers": "openerp.models",
+      "occurrence": 0
+    }
+  ]
+}

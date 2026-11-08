@@ -1,0 +1,19 @@
+{
+  "description": "Multi-line decorator call removed in full",
+  "operations": [
+    {
+      "op": "remove_decorator",
+      "name": "api.returns"
+    }
+  ],
+  "expect": "edit",
+  "reason": "",
+  "spans": [
+    {
+      "locator": "decorator_removal",
+      "decorator": "api.returns",
+      "occurrence": 0,
+      "covers": "    @api.returns(\n        'self',\n    )\n"
+    }
+  ]
+}

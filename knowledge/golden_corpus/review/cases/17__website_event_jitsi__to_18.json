@@ -1,0 +1,215 @@
+{
+  "schema_version": 1,
+  "case_id": "17__website_event_jitsi__to_18",
+  "tasks": [
+    "T035"
+  ],
+  "module": "website_event_jitsi",
+  "source_version": "17.0",
+  "target_version": "18.0",
+  "steps": [
+    "17-18"
+  ],
+  "source": {
+    "repository": "odoo/odoo",
+    "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+    "fetched_to": "/tmp/odooflux-golden-corpus/17.0/website_event_jitsi",
+    "files": [
+      {
+        "path": "addons/website_event_jitsi/__init__.py",
+        "sha256": "0422095c50476edda448f611db6225d4c274a2c894899f987f4d59c2d2494781",
+        "size": 121
+      },
+      {
+        "path": "addons/website_event_jitsi/__manifest__.py",
+        "sha256": "49cca1bb0a693dcd23563b528d8ccab18a37bd9bd0ebc2cb37c19bd5b2777b64",
+        "size": 488
+      },
+      {
+        "path": "addons/website_event_jitsi/models/__init__.py",
+        "sha256": "9bdee15fb8af31cca7bb547fb318eb869cd47f41353ee15a07e9e321129ce5a0",
+        "size": 134
+      },
+      {
+        "path": "addons/website_event_jitsi/models/res_config_settings.py",
+        "sha256": "1d73897630b0cc10c375469fbe77f0b36f523f1accfd1f80e677a58f6d88801d",
+        "size": 519
+      },
+      {
+        "path": "addons/website_event_jitsi/views/res_config_settings_views.xml",
+        "sha256": "a5b807d70e91cefab99cefd6672705771d8af6e560e12373886e118c58d0cc23",
+        "size": 661
+      }
+    ]
+  },
+  "rules_in_scope": [
+    {
+      "id": "17-18.xml.tree-to-list",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-112",
+        "EV-300",
+        "EV-301",
+        "EV-302",
+        "EV-303"
+      ]
+    },
+    {
+      "id": "17-18.python.group-operator-renamed",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-010",
+        "EV-118"
+      ]
+    },
+    {
+      "id": "17-18.python.name-get-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-104"
+      ]
+    },
+    {
+      "id": "17-18.python.name-search-to-search-display-name",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-008",
+        "EV-106"
+      ]
+    },
+    {
+      "id": "17-18.xml.cron-numbercall-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-113"
+      ]
+    },
+    {
+      "id": "17-18.xml.kanban-box-deprecated",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-119"
+      ]
+    },
+    {
+      "id": "17-18.python.user-has-groups-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-105",
+        "EV-308",
+        "EV-309",
+        "EV-310",
+        "EV-311"
+      ]
+    },
+    {
+      "id": "17-18.js.rpc-service-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-120"
+      ]
+    },
+    {
+      "id": "*.manifest.parse-error",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.version-prefix",
+      "maturity": "DRAFT",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.not-installable",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.missing-data-file",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.load-order",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.deps.unknown-dependency",
+      "maturity": "DRAFT",
+      "evidence": [
+        "EV-430",
+        "EV-431",
+        "EV-432",
+        "EV-433",
+        "EV-372",
+        "EV-373",
+        "EV-374",
+        "EV-375"
+      ]
+    },
+    {
+      "id": "*.refs.dangling-reference",
+      "maturity": "DRAFT",
+      "evidence": [
+        "EV-430"
+      ]
+    },
+    {
+      "id": "*.security.acl-csv",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.security.unrestricted-record-rule",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    }
+  ],
+  "applicable_rule_ids": [],
+  "evidence_ids": [],
+  "expected_basis": "hand-derived from source reading + rule evidence; NOT produced by OdooFlux",
+  "proposed_expected_transformations": [
+    {
+      "file": "addons/website_event_jitsi/__init__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/website_event_jitsi/__manifest__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/website_event_jitsi/models/__init__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/website_event_jitsi/models/res_config_settings.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/website_event_jitsi/views/res_config_settings_views.xml",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    }
+  ],
+  "overall_expected": "no_change (byte-identical; no findings from in-scope rules)",
+  "unresolved_ambiguities": [
+    "Uses <setting> and <block> (17.0 res.config.settings view constructs) and inherit_id event.res_config_settings_view_form. No pinned evidence on their stability in 18.0/19.0; no rule fires.",
+    "Manifest 'version' has no series prefix ('0.1/1.0' style); *.manifest.version-prefix is DRAFT/review_required and planner-bound. Reviewer must decide whether the expected manifest version is rewritten to target series prefix or untouched. Proposed here: untouched.",
+    "Evidence maturity: all rules in steps 17-18 that could apply are DETECT_ONLY/DRAFT unless listed FIX_ENABLED; FIX_ENABLED rules in range fire on no construct of this module."
+  ],
+  "review_status": "PENDING_INDEPENDENT_REVIEW",
+  "reviewer": "",
+  "review_date": "",
+  "reviewer_notes": "",
+  "reviewer_qualification": ""
+}

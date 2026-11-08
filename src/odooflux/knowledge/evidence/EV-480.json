@@ -1,0 +1,541 @@
+{
+  "category": "security",
+  "checked_by": "research-006-t025-agent",
+  "checked_on": "2026-11-07",
+  "description": "ir.model.access (class IrModelAccess, ir_model.py) defines exactly 8 fields at every version 12.0-19.0: name, active, model_id, group_id, perm_read, perm_write, perm_create, perm_unlink.",
+  "detection_method": "grep on pinned source",
+  "id": "EV-480",
+  "locations": [
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 1193,
+      "match": "name = fields.Char(required=True, index=True)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 1194,
+      "match": "active = fields.Boolean(default=True, help='If you uncheck the active field, it will disable the ACL without deleting it (if you delete a native ACL, it will be re-created when you reload the module).')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 1195,
+      "match": "model_id = fields.Many2one('ir.model', string='Object', required=True, domain=[('transient', '=', False)], index=True, ondelete='cascade')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 1196,
+      "match": "group_id = fields.Many2one('res.groups', string='Group', ondelete='cascade', index=True)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 1197,
+      "match": "perm_read = fields.Boolean(string='Read Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 1198,
+      "match": "perm_write = fields.Boolean(string='Write Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 1199,
+      "match": "perm_create = fields.Boolean(string='Create Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 1200,
+      "match": "perm_unlink = fields.Boolean(string='Delete Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 1447,
+      "match": "name = fields.Char(required=True, index=True)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 1448,
+      "match": "active = fields.Boolean(default=True, help='If you uncheck the active field, it will disable the ACL without deleting it (if you delete a native ACL, it will be re-created when you reload the module).')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 1449,
+      "match": "model_id = fields.Many2one('ir.model', string='Object', required=True, domain=[('transient', '=', False)], index=True, ondelete='cascade')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 1450,
+      "match": "group_id = fields.Many2one('res.groups', string='Group', ondelete='cascade', index=True)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 1451,
+      "match": "perm_read = fields.Boolean(string='Read Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 1452,
+      "match": "perm_write = fields.Boolean(string='Write Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 1453,
+      "match": "perm_create = fields.Boolean(string='Create Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 1454,
+      "match": "perm_unlink = fields.Boolean(string='Delete Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 1698,
+      "match": "name = fields.Char(required=True, index=True)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 1699,
+      "match": "active = fields.Boolean(default=True, help='If you uncheck the active field, it will disable the ACL without deleting it (if you delete a native ACL, it will be re-created when you reload the module).')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 1700,
+      "match": "model_id = fields.Many2one('ir.model', string='Model', required=True, index=True, ondelete='cascade')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 1701,
+      "match": "group_id = fields.Many2one('res.groups', string='Group', ondelete='restrict', index=True)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 1702,
+      "match": "perm_read = fields.Boolean(string='Read Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 1703,
+      "match": "perm_write = fields.Boolean(string='Write Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 1704,
+      "match": "perm_create = fields.Boolean(string='Create Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 1705,
+      "match": "perm_unlink = fields.Boolean(string='Delete Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 1717,
+      "match": "name = fields.Char(required=True, index=True)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 1718,
+      "match": "active = fields.Boolean(default=True, help='If you uncheck the active field, it will disable the ACL without deleting it (if you delete a native ACL, it will be re-created when you reload the module).')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 1719,
+      "match": "model_id = fields.Many2one('ir.model', string='Model', required=True, index=True, ondelete='cascade')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 1720,
+      "match": "group_id = fields.Many2one('res.groups', string='Group', ondelete='restrict', index=True)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 1721,
+      "match": "perm_read = fields.Boolean(string='Read Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 1722,
+      "match": "perm_write = fields.Boolean(string='Write Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 1723,
+      "match": "perm_create = fields.Boolean(string='Create Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 1724,
+      "match": "perm_unlink = fields.Boolean(string='Delete Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 1782,
+      "match": "name = fields.Char(required=True, index=True)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 1783,
+      "match": "active = fields.Boolean(default=True, help='If you uncheck the active field, it will disable the ACL without deleting it (if you delete a native ACL, it will be re-created when you reload the module).')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 1784,
+      "match": "model_id = fields.Many2one('ir.model', string='Model', required=True, index=True, ondelete='cascade')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 1785,
+      "match": "group_id = fields.Many2one('res.groups', string='Group', ondelete='restrict', index=True)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 1786,
+      "match": "perm_read = fields.Boolean(string='Read Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 1787,
+      "match": "perm_write = fields.Boolean(string='Write Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 1788,
+      "match": "perm_create = fields.Boolean(string='Create Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 1789,
+      "match": "perm_unlink = fields.Boolean(string='Delete Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 1987,
+      "match": "name = fields.Char(required=True, index=True)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 1988,
+      "match": "active = fields.Boolean(default=True, help='If you uncheck the active field, it will disable the ACL without deleting it (if you delete a native ACL, it will be re-created when you reload the module).')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 1989,
+      "match": "model_id = fields.Many2one('ir.model', string='Model', required=True, index=True, ondelete='cascade')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 1990,
+      "match": "group_id = fields.Many2one('res.groups', string='Group', ondelete='restrict', index=True)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 1991,
+      "match": "perm_read = fields.Boolean(string='Read Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 1992,
+      "match": "perm_write = fields.Boolean(string='Write Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 1993,
+      "match": "perm_create = fields.Boolean(string='Create Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 1994,
+      "match": "perm_unlink = fields.Boolean(string='Delete Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 2082,
+      "match": "name = fields.Char(required=True, index=True)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 2083,
+      "match": "active = fields.Boolean(default=True, help='If you uncheck the active field, it will disable the ACL without deleting it (if you delete a native ACL, it will be re-created when you reload the module).')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 2084,
+      "match": "model_id = fields.Many2one('ir.model', string='Model', required=True, index=True, ondelete='cascade')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 2085,
+      "match": "group_id = fields.Many2one('res.groups', string='Group', ondelete='restrict', index=True)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 2086,
+      "match": "perm_read = fields.Boolean(string='Read Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 2087,
+      "match": "perm_write = fields.Boolean(string='Write Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 2088,
+      "match": "perm_create = fields.Boolean(string='Create Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 2089,
+      "match": "perm_unlink = fields.Boolean(string='Delete Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 2101,
+      "match": "name = fields.Char(required=True, index=True)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 2102,
+      "match": "active = fields.Boolean(default=True, help='If you uncheck the active field, it will disable the ACL without deleting it (if you delete a native ACL, it will be re-created when you reload the module).')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 2103,
+      "match": "model_id = fields.Many2one('ir.model', string='Model', required=True, index=True, ondelete='cascade')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 2104,
+      "match": "group_id = fields.Many2one('res.groups', string='Group', ondelete='restrict', index=True)",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 2105,
+      "match": "perm_read = fields.Boolean(string='Read Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 2106,
+      "match": "perm_write = fields.Boolean(string='Write Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 2107,
+      "match": "perm_create = fields.Boolean(string='Create Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 2108,
+      "match": "perm_unlink = fields.Boolean(string='Delete Access')",
+      "path": "odoo/addons/base/models/ir_model.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    }
+  ],
+  "notes": "Field set from a scan of the class body (class line to next top-level class) for single-line `name = fields.X(` assignments, identical at all 8 versions; each located field line is mechanically re-verifiable, the 'exactly 8' completeness is the scan result (fields added by other classes via _inherit are out of scope). Complements EV-400/EV-424.",
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "13.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/odoo/addons/base/models/ir_model.py#L1193"
+}

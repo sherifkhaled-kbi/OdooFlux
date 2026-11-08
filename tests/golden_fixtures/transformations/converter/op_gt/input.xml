@@ -1,0 +1,3 @@
+<odoo>
+  <button name="b" attrs="{'invisible': [('qty', '&gt;', 5)]}"/>
+</odoo>

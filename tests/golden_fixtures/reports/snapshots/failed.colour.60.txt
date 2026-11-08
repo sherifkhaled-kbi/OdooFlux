@@ -1,0 +1,57 @@
+OdooFlux  run run-golden  source 17.0 -> target 18.0  mode:
+  dry_run
+Plan  17.0->18.0   status: READY
+Stages: Discover > Plan > Workspace > Step N/M > Validate
+  L1-L5 > Promote > Report
+
+[1mMODULE RESULTS[0m
+ [31;1mFAILED[0m  kbi_stock_custom
+   open C/W/I 1/0/0   fixed 0   rejected 1
+   layers: L1 FAIL L2 PASS L3 PASS L4 SKIPPED L5 SKIPPED
+  Reasons  kbi_stock_custom: layer_failed:L1,
+           open_critical_findings
+
+[1mFINDINGS[0m
+kbi_stock_custom/models/stock.py
+  [31;1mCRITICAL[0m L118  17-18.py.api-removed [NEEDS_REVIEW]
+           removed API used
+           Action: Apply the documented replacement
+           Evidence: EV-110
+  [31;1mREJECTED[0m L203  17-18.py.field [REJECTED]
+           protected identifier
+           Action: Apply the documented replacement
+           Rejected: protected_identifier_changed (field
+                    'qty_done' renamed)
+           Evidence: EV-110
+
+[1mREJECTED EDITS (2)[0m
+  kbi_stock_custom: reason: validation_failed:L1-python
+      (IndentationError line 119) - file left unchanged
+  kbi_stock_custom: reason: protected_identifier_changed
+      (field 'qty_done' renamed) - file left unchanged
+
+[1mVERIFICATION SCOPE[0m
+  Ran: L1 syntax, L2 static re-scan, L3 dependency integrity
+  Not run: L4 runtime install (runtime_not_requested), L5
+      behaviour (runtime_not_requested)
+    L1: FAIL 1 module(s)
+    L2: PASS 1 module(s)
+    L3: PASS 1 module(s)
+    L4: SKIPPED 1 module(s)
+    L5: SKIPPED 1 module(s)
+  Limit: Static run: L4 install and L5 behavioural tests
+         were not executed, so runtime behaviour is
+         unverified.
+  Why not verified: installation (L4) and behaviour (L5)
+      were not run (runtime_not_requested). Business
+      behaviour is unverified.
+
+[1mAI USAGE  not used in this run[0m
+
+[1mRECOVERY[0m
+  Run log:   /state/runs/run-golden/log/run.jsonl
+  Roll back: not needed, nothing was written (analyze or dry
+      run)
+
+TOTALS modules=1 findings=2 open=1 (critical=1 warning=0
+  info=0) fixed=0 rejected=1 needs_review=1

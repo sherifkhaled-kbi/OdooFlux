@@ -1,0 +1,3 @@
+<odoo>
+  <field name="f" attrs="{'invisible': [('qty', 'in', [1, 2])]}"/>
+</odoo>

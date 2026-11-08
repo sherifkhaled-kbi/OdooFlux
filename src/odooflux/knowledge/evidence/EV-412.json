@@ -1,0 +1,54 @@
+{
+  "category": "controllers",
+  "checked_by": "research-006-t019-t024",
+  "checked_on": "2026-11-07",
+  "description": "@route param handle_params_access_error documented at 17.0 and later; absent from 16.0 http.py",
+  "detection_method": "grep on pinned source",
+  "id": "EV-412",
+  "locations": [
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 776,
+      "match": ":param Callable[[Exception], Response] handle_params_access_error:",
+      "path": "odoo/http.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 731,
+      "match": ":param Callable[[Exception], Response] handle_params_access_error:",
+      "path": "odoo/http.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "handle_params_access_error",
+      "path": "odoo/http.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "odoo/http.py"
+    }
+  ],
+  "notes": "Additive option; no migration needed.",
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "17.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "17.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9ef8d62331b128bcd288528e4639e0901d85fcc8/odoo/http.py#L776"
+}

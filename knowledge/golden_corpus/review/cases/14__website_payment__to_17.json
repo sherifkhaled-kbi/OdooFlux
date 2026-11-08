@@ -1,0 +1,336 @@
+{
+  "schema_version": 1,
+  "case_id": "14__website_payment__to_17",
+  "tasks": [
+    "T044"
+  ],
+  "module": "website_payment",
+  "source_version": "14.0",
+  "target_version": "17.0",
+  "steps": [
+    "14-15",
+    "15-16",
+    "16-17"
+  ],
+  "source": {
+    "repository": "odoo/odoo",
+    "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+    "fetched_to": "/tmp/odooflux-golden-corpus/14.0/website_payment",
+    "files": [
+      {
+        "path": "addons/website_payment/__init__.py",
+        "sha256": "446a4529d6c9b9553a8abea1b283b9ce75c8b92164d640e9a85b05266b133119",
+        "size": 120
+      },
+      {
+        "path": "addons/website_payment/__manifest__.py",
+        "sha256": "c11fe6132963b84de9f88d6c858c7fb663ea77f39064ad56bd24bdea6412336f",
+        "size": 459
+      },
+      {
+        "path": "addons/website_payment/models/__init__.py",
+        "sha256": "ca3c8cf28ff66dcc4c2936ceb534803d613f2a6db0db19da85be0cf0596d25ae",
+        "size": 30
+      },
+      {
+        "path": "addons/website_payment/models/payment_acquirer.py",
+        "sha256": "43be5300cb814e5284004f8e686de193599a938f80cda7f962dca56f9fb25b53",
+        "size": 296
+      },
+      {
+        "path": "addons/website_payment/views/payment_acquirer.xml",
+        "sha256": "b2d93401251361722254ba5aa5245a1d056710f8a105949191b378ccf556c2b8",
+        "size": 637
+      }
+    ]
+  },
+  "rules_in_scope": [
+    {
+      "id": "14-15.qweb.t-esc-deprecated",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-201",
+        "EV-203"
+      ]
+    },
+    {
+      "id": "14-15.qweb.t-raw-deprecated",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-202",
+        "EV-203"
+      ]
+    },
+    {
+      "id": "14-15.manifest.qweb-key",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-123",
+        "EV-124",
+        "EV-327",
+        "EV-328"
+      ]
+    },
+    {
+      "id": "14-15.assets.xml-asset-template",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-328",
+        "EV-329",
+        "EV-330"
+      ]
+    },
+    {
+      "id": "15-16.python.search-args-keyword",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-013"
+      ]
+    },
+    {
+      "id": "15-16.python.x2many-limit-attribute",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-013"
+      ]
+    },
+    {
+      "id": "15-16.python.removed-field-attributes",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-014"
+      ]
+    },
+    {
+      "id": "15-16.python.browse-str-ids",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-013"
+      ]
+    },
+    {
+      "id": "15-16.python.deprecated-model-methods",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-013"
+      ]
+    },
+    {
+      "id": "15-16.python.fields-view-get",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-107"
+      ]
+    },
+    {
+      "id": "15-16.js.service-registry-on",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-393"
+      ]
+    },
+    {
+      "id": "15-16.owl.mounted-method",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-395"
+      ]
+    },
+    {
+      "id": "16-17.python.warning-exception",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-110"
+      ]
+    },
+    {
+      "id": "16-17.xml.attrs-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-109",
+        "EV-380",
+        "EV-381",
+        "EV-382",
+        "EV-383",
+        "EV-384",
+        "EV-385"
+      ]
+    },
+    {
+      "id": "16-17.xml.states-attribute-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-109"
+      ]
+    },
+    {
+      "id": "16-17.python.field-states-parameter",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-108"
+      ]
+    },
+    {
+      "id": "16-17.python.name-get-deprecated",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-011"
+      ]
+    },
+    {
+      "id": "16-17.python.read-group-signature",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-012"
+      ]
+    },
+    {
+      "id": "16-17.python.message-post-with-template",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-207"
+      ]
+    },
+    {
+      "id": "16-17.xml.act-window-tag",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-117",
+        "EV-322",
+        "EV-323",
+        "EV-325"
+      ]
+    },
+    {
+      "id": "16-17.xml.report-tag",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-117",
+        "EV-322",
+        "EV-323",
+        "EV-326"
+      ]
+    },
+    {
+      "id": "16-17.tests.savepointcase-removed",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-111",
+        "EV-305",
+        "EV-306",
+        "EV-307"
+      ]
+    },
+    {
+      "id": "16-17.js.odoo-define-legacy-form",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-390",
+        "EV-391"
+      ]
+    },
+    {
+      "id": "*.manifest.parse-error",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.version-prefix",
+      "maturity": "DRAFT",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.not-installable",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.missing-data-file",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.load-order",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.deps.unknown-dependency",
+      "maturity": "DRAFT",
+      "evidence": [
+        "EV-430",
+        "EV-431",
+        "EV-432",
+        "EV-433",
+        "EV-372",
+        "EV-373",
+        "EV-374",
+        "EV-375"
+      ]
+    },
+    {
+      "id": "*.refs.dangling-reference",
+      "maturity": "DRAFT",
+      "evidence": [
+        "EV-430"
+      ]
+    },
+    {
+      "id": "*.security.acl-csv",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.security.unrestricted-record-rule",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    }
+  ],
+  "applicable_rule_ids": [],
+  "evidence_ids": [],
+  "expected_basis": "hand-derived from source reading + rule evidence; NOT produced by OdooFlux",
+  "proposed_expected_transformations": [
+    {
+      "file": "addons/website_payment/__init__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/website_payment/__manifest__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/website_payment/models/__init__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/website_payment/models/payment_acquirer.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/website_payment/views/payment_acquirer.xml",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    }
+  ],
+  "overall_expected": "no_change (byte-identical; no findings from in-scope rules)",
+  "unresolved_ambiguities": [
+    "payment.acquirer -> payment.provider rename (17.0) has no rule/evidence: expected is report-only/unchanged unless reviewer decides otherwise.",
+    "Model payment.acquirer (python _inherit, XML model and inherit_id payment.payment_acquirer_form) is renamed payment.provider at 16.0, not 17.0 (EV-450, raw fetch at the pinned SHAs). No RULE covers this; it is a coverage gap (specs/006-version-compatibility-rules/coverage-gaps.md), not a proposed edit. Reviewer must decide whether expected = report-only/unchanged or a manual rename.",
+    "Manifest 'version' has no series prefix ('0.1/1.0' style); *.manifest.version-prefix is DRAFT/review_required and planner-bound. Reviewer must decide whether the expected manifest version is rewritten to target series prefix or untouched. Proposed here: untouched.",
+    "Evidence maturity: all rules in steps 14-15,15-16,16-17 that could apply are DETECT_ONLY/DRAFT unless listed FIX_ENABLED; FIX_ENABLED rules in range fire on no construct of this module."
+  ],
+  "review_status": "PENDING_INDEPENDENT_REVIEW",
+  "reviewer": "",
+  "review_date": "",
+  "reviewer_notes": "",
+  "reviewer_qualification": ""
+}

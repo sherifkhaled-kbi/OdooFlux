@@ -1,0 +1,3 @@
+<odoo>
+  <button name="b" invisible="qty &gt; 5"/>
+</odoo>

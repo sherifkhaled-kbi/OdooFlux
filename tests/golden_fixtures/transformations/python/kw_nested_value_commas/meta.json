@@ -1,0 +1,21 @@
+{
+  "description": "Commas inside the keyword value do not end the argument",
+  "operations": [
+    {
+      "op": "remove_keyword",
+      "call": "fields.Char",
+      "keyword": "size"
+    }
+  ],
+  "expect": "edit",
+  "reason": "",
+  "spans": [
+    {
+      "locator": "keyword_removal",
+      "call": "fields.Char",
+      "keyword": "size",
+      "occurrence": 0,
+      "covers": "size=min(64, LIMIT), "
+    }
+  ]
+}

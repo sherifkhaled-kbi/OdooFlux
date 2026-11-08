@@ -1,0 +1,237 @@
+{
+  "category": "fields",
+  "checked_by": "research-006-t025-agent",
+  "checked_on": "2026-11-07",
+  "description": "fields.Char size is documented (:param int size) and its slot is commented '(deprecated)' at 12.0-19.0, but is still used: Char column type is built with pg_varchar(self.size) at every version 12.0-19.0 and s[:self.size] truncates values at 18.0-19.0.",
+  "detection_method": "grep on pinned source",
+  "id": "EV-486",
+  "locations": [
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 1496,
+      "match": ":param int size: the maximum size of values stored for that field",
+      "path": "odoo/fields.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 1510,
+      "match": "'size': None,                   # maximum size of values (deprecated)",
+      "path": "odoo/fields.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 1516,
+      "match": "pg_varchar(self.size)",
+      "path": "odoo/fields.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 1535,
+      "match": ":param int size: the maximum size of values stored for that field",
+      "path": "odoo/fields.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 1550,
+      "match": "'size': None,                   # maximum size of values (deprecated)",
+      "path": "odoo/fields.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 1556,
+      "match": "pg_varchar(self.size)",
+      "path": "odoo/fields.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 1608,
+      "match": ":param int size: the maximum size of values stored for that field",
+      "path": "odoo/fields.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 1623,
+      "match": "size = None                         # maximum size of values (deprecated)",
+      "path": "odoo/fields.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 1628,
+      "match": "pg_varchar(self.size)",
+      "path": "odoo/fields.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 1700,
+      "match": ":param int size: the maximum size of values stored for that field",
+      "path": "odoo/fields.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 1715,
+      "match": "size = None                         # maximum size of values (deprecated)",
+      "path": "odoo/fields.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 1725,
+      "match": "pg_varchar(self.size)",
+      "path": "odoo/fields.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 1868,
+      "match": ":param int size: the maximum size of values stored for that field",
+      "path": "odoo/fields.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 1881,
+      "match": "size = None                         # maximum size of values (deprecated)",
+      "path": "odoo/fields.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 1891,
+      "match": "pg_varchar(self.size)",
+      "path": "odoo/fields.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 1931,
+      "match": ":param int size: the maximum size of values stored for that field",
+      "path": "odoo/fields.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 1944,
+      "match": "size = None                         # maximum size of values (deprecated)",
+      "path": "odoo/fields.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 1954,
+      "match": "pg_varchar(self.size)",
+      "path": "odoo/fields.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 2093,
+      "match": ":param int size: the maximum size of values stored for that field",
+      "path": "odoo/fields.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 1806,
+      "match": "size = None                         # maximum size of values (deprecated)",
+      "path": "odoo/fields.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 2115,
+      "match": "pg_varchar(self.size)",
+      "path": "odoo/fields.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 482,
+      "match": ":param int size: the maximum size of values stored for that field",
+      "path": "odoo/orm/fields_textual.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 36,
+      "match": "size = None                         # maximum size of values (deprecated)",
+      "path": "odoo/orm/fields_textual.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 509,
+      "match": "pg_varchar(self.size)",
+      "path": "odoo/orm/fields_textual.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 1868,
+      "match": "value = s[:self.size]",
+      "path": "odoo/fields.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 115,
+      "match": "value = s[:self.size]",
+      "path": "odoo/orm/fields_textual.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    }
+  ],
+  "notes": "Contradicts the legacy claim 'Char size ignored in v13+' (PYTHON_RULES#4): the comment says deprecated, the code honours it. Truncation line at 18.0 is in a String-class method and at 19.0 in fields_textual.py; scope = fields.py / fields_textual.py only. Auto-removal of size= changes column type/truncation.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "13.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/odoo/fields.py#L1496"
+}

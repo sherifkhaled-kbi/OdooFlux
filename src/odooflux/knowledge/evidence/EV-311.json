@@ -1,0 +1,38 @@
+{
+  "category": "python_runtime",
+  "checked_by": "research-006-phase3",
+  "checked_on": "2026-11-07",
+  "description": "18.0 has_group call sites use self.env.user.has_group(xmlid) with fully-qualified ext IDs",
+  "detection_method": "grep on pinned source",
+  "id": "EV-311",
+  "locations": [
+    {
+      "branch": "18.0",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "path": "odoo/models.py",
+      "line": 1273,
+      "match": "self.env.user.has_group('base.group_allow_export')",
+      "kind": "present"
+    }
+  ],
+  "proposed_transformation": "fix-candidate",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+  "risk": "LOW",
+  "rule_ids": [
+    "17-18.python.user-has-groups-removed"
+  ],
+  "source_applicability": {
+    "from": "17.0",
+    "to": "18.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "18.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/75d6abe5979ac9e8d85d097dad0e7b559ef07326/odoo/models.py#L1273"
+}

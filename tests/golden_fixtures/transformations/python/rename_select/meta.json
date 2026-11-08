@@ -1,0 +1,21 @@
+{
+  "description": "Keyword renamed: only the name token changes",
+  "operations": [
+    {
+      "op": "rename_keyword",
+      "call": "fields.Boolean",
+      "keyword": "select",
+      "to": "index"
+    }
+  ],
+  "expect": "edit",
+  "reason": "",
+  "spans": [
+    {
+      "locator": "keyword_rename",
+      "call": "fields.Boolean",
+      "keyword": "select",
+      "covers": "select"
+    }
+  ]
+}

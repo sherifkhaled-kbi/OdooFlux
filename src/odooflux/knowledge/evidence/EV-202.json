@@ -1,0 +1,44 @@
+{
+  "category": "qweb",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "`t-raw` produces a \"Found deprecated directive @t-raw\" warning from 15.0",
+  "detection_method": "grep on pinned source",
+  "id": "EV-202",
+  "locations": [
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 1154,
+      "match": "Found deprecated directive @t-raw",
+      "path": "odoo/addons/base/models/qweb.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 2065,
+      "match": "Found deprecated directive @t-raw",
+      "path": "odoo/addons/base/models/ir_qweb.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "14.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/odoo/addons/base/models/qweb.py#L1154"
+}

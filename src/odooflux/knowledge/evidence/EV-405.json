@@ -1,0 +1,62 @@
+{
+  "category": "security",
+  "checked_by": "research-006-t019-t024",
+  "checked_on": "2026-11-07",
+  "description": "res.users group field: groups_id at 14.0-18.0, group_ids at 19.0 (res.users.groups_id absent in 19.0 res_users.py)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-405",
+  "locations": [
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 304,
+      "match": "groups_id = fields.Many2many('res.groups', 'res_groups_users_rel', 'uid', 'gid', string='Groups', default=_default_groups)",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 386,
+      "match": "groups_id = fields.Many2many('res.groups', 'res_groups_users_rel', 'uid', 'gid', string='Groups', default=lambda s: s._default_groups())",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 257,
+      "match": "group_ids = fields.Many2many('res.groups', 'res_groups_users_rel', 'uid', 'gid', string='Groups', default=lambda s: s._default_groups(), help=\"Groups explicitly assigned to the user\")",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "absent",
+      "line": null,
+      "match": "^\\s+groups_id = fields.",
+      "path": "odoo/addons/base/models/res_users.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "search_scope": "res_users.py"
+    }
+  ],
+  "notes": "Supports candidate 18-19.any.res-users-groups-id.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "18.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "19.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/cc0060e889603eb2e47fa44a8a22a70d7d784185/odoo/addons/base/models/res_users.py#L304"
+}

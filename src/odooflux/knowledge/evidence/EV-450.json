@@ -1,0 +1,136 @@
+{
+  "category": "orm",
+  "checked_by": "research-006-coverage",
+  "checked_on": "2026-11-07",
+  "description": "Model payment.acquirer is renamed payment.provider at 16.0: payment_acquirer.py (15.0) is replaced by payment_provider.py (16.0 onward); website_payment's _inherit, view inherit_id and file names follow",
+  "detection_method": "raw fetch at pinned revisions; line match",
+  "id": "EV-450",
+  "locations": [
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 13,
+      "match": "_name = 'payment.acquirer'",
+      "path": "addons/payment/models/payment_acquirer.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 15,
+      "match": "_name = 'payment.provider'",
+      "path": "addons/payment/models/payment_provider.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 10,
+      "match": "_inherit = \"payment.acquirer\"",
+      "path": "addons/website_payment/models/payment_acquirer.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 10,
+      "match": "_inherit = \"payment.provider\"",
+      "path": "addons/website_payment/models/payment_provider.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 8,
+      "match": "<field name=\"inherit_id\" ref=\"payment.payment_acquirer_form\"/>",
+      "path": "addons/website_payment/views/payment_acquirer.xml",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 8,
+      "match": "<field name=\"inherit_id\" ref=\"payment.payment_provider_form\"/>",
+      "path": "addons/website_payment/views/payment_provider.xml",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 8,
+      "match": "<field name=\"inherit_id\" ref=\"payment.payment_provider_form\"/>",
+      "path": "addons/website_payment/views/payment_provider.xml",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 15,
+      "match": "_name = 'payment.provider'",
+      "path": "addons/payment/models/payment_provider.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 15,
+      "match": "_name = 'payment.provider'",
+      "path": "addons/payment/models/payment_provider.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 22,
+      "match": "_name = 'payment.provider'",
+      "path": "addons/payment/models/payment_provider.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "payment_acquirer.py",
+      "path": "addons/payment/models/payment_acquirer.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "payment_acquirer.xml",
+      "path": "addons/website_payment/views/payment_acquirer.xml",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "payment_acquirer.py",
+      "path": "addons/website_payment/models/payment_acquirer.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    }
+  ],
+  "notes": "Review-only: the rename also affects field names (acquirer_id), XML ids, data records and database tables referenced by custom modules; no rule consumes this record yet (see specs/006-version-compatibility-rules/coverage-gaps.md). Corrects the earlier review-case note that dated the rename to 17.0.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "HIGH",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "15.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/addons/payment/models/payment_acquirer.py#L13"
+}

@@ -1,0 +1,2 @@
+{"description": "regex literal as a function argument", "operations": ["lexer", "validator"], "syntax": "valid",
+ "tokens": [{"text": "odoo\\.define", "kind": "regex"}, {"text": "web.arg", "kind": "string"}]}

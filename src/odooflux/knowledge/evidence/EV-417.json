@@ -1,0 +1,151 @@
+{
+  "category": "dependencies",
+  "checked_by": "research-006-t019-t024",
+  "checked_on": "2026-11-07",
+  "description": "phone.validation.mixin is not a model in addons/phone_validation at 16.0-19.0: the phone mixin is mail.thread.phone, and models/phone_validation.py does not exist (legacy fix path)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-417",
+  "locations": [
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 29,
+      "match": "_name = 'mail.thread.phone'",
+      "path": "addons/phone_validation/models/mail_thread_phone.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 31,
+      "match": "_name = 'mail.thread.phone'",
+      "path": "addons/phone_validation/models/mail_thread_phone.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 31,
+      "match": "_name = 'mail.thread.phone'",
+      "path": "addons/phone_validation/models/mail_thread_phone.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 31,
+      "match": "_name = 'mail.thread.phone'",
+      "path": "addons/phone_validation/models/mail_thread_phone.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "phone.validation.mixin",
+      "path": "addons/phone_validation/models/mail_thread_phone.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "addons/phone_validation/models/*.py (file listing via GitHub contents API at the pinned SHA; mixin name searched in mail_thread_phone.py, phone_blacklist.py, res_partner.py, res_users.py)"
+    },
+    {
+      "branch": "17.0",
+      "kind": "absent",
+      "line": null,
+      "match": "phone.validation.mixin",
+      "path": "addons/phone_validation/models/mail_thread_phone.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "search_scope": "addons/phone_validation/models/*.py (file listing via GitHub contents API at the pinned SHA; mixin name searched in mail_thread_phone.py, phone_blacklist.py, res_partner.py, res_users.py)"
+    },
+    {
+      "branch": "18.0",
+      "kind": "absent",
+      "line": null,
+      "match": "phone.validation.mixin",
+      "path": "addons/phone_validation/models/mail_thread_phone.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "search_scope": "addons/phone_validation/models/*.py (file listing via GitHub contents API at the pinned SHA; mixin name searched in mail_thread_phone.py, phone_blacklist.py, res_partner.py, res_users.py)"
+    },
+    {
+      "branch": "19.0",
+      "kind": "absent",
+      "line": null,
+      "match": "phone.validation.mixin",
+      "path": "addons/phone_validation/models/mail_thread_phone.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "search_scope": "addons/phone_validation/models/*.py (file listing via GitHub contents API at the pinned SHA; mixin name searched in mail_thread_phone.py, phone_blacklist.py, res_partner.py, res_users.py)"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "phone.validation.mixin",
+      "path": "addons/phone_validation/models/phone_blacklist.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "phone_blacklist.py"
+    },
+    {
+      "branch": "19.0",
+      "kind": "absent",
+      "line": null,
+      "match": "phone.validation.mixin",
+      "path": "addons/phone_validation/models/phone_blacklist.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "search_scope": "phone_blacklist.py"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "models/phone_validation.py",
+      "path": "addons/phone_validation/models/phone_validation.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    },
+    {
+      "branch": "17.0",
+      "kind": "absent",
+      "line": null,
+      "match": "models/phone_validation.py",
+      "path": "addons/phone_validation/models/phone_validation.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    },
+    {
+      "branch": "18.0",
+      "kind": "absent",
+      "line": null,
+      "match": "models/phone_validation.py",
+      "path": "addons/phone_validation/models/phone_validation.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    },
+    {
+      "branch": "19.0",
+      "kind": "absent",
+      "line": null,
+      "match": "models/phone_validation.py",
+      "path": "addons/phone_validation/models/phone_validation.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    }
+  ],
+  "notes": "Not exhaustive over all addons; scope is the phone_validation models directory. Legacy claim not supported there.",
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9f40bf622c5531739321e59276c307319198e22b",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9f40bf622c5531739321e59276c307319198e22b/addons/phone_validation/models/mail_thread_phone.py#L29"
+}

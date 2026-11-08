@@ -1,0 +1,40 @@
+{
+  "schema": "odooflux.ai-catalog/1",
+  "_comment": "Provider configuration, not code. Model ids, capabilities and prices are deliberately empty: they are owner/user configuration (merge your own catalog with --ai-catalog). Endpoints and the anthropic_version header are defaults the project owner must verify (docs/reviews/fragments/ws-c-human-review.md).",
+  "providers": {
+    "anthropic": {
+      "type": "external", "adapter": "anthropic",
+      "endpoint": "https://api.anthropic.com/v1/messages",
+      "credential_env": "ANTHROPIC_API_KEY",
+      "options": {"anthropic_version": "2023-06-01"},
+      "models": []
+    },
+    "openai": {
+      "type": "external", "adapter": "openai_compatible",
+      "endpoint": "https://api.openai.com/v1",
+      "credential_env": "OPENAI_API_KEY",
+      "models": []
+    },
+    "deepseek": {
+      "type": "external", "adapter": "openai_compatible",
+      "endpoint": "https://api.deepseek.com",
+      "credential_env": "DEEPSEEK_API_KEY",
+      "models": []
+    },
+    "zai": {
+      "type": "external", "adapter": "openai_compatible",
+      "endpoint": "https://api.z.ai/api/paas/v4",
+      "credential_env": "ZAI_API_KEY",
+      "models": []
+    },
+    "local": {
+      "type": "local", "adapter": "openai_compatible",
+      "endpoint": "",
+      "models": []
+    },
+    "fake": {
+      "type": "fake", "adapter": "fake",
+      "models": [{"id": "fake-model", "context_window": 100000, "max_output": 4096, "structured_output": true}]
+    }
+  }
+}

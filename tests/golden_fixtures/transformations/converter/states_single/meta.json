@@ -1,0 +1,11 @@
+{
+  "description": "states single",
+  "group": "states",
+  "mode": "falsy",
+  "in_list_view": false,
+  "expect": "edit",
+  "unconverted": [],
+  "warnings": [
+    "no-state-field-check"
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "category": "data_files",
+  "checked_by": "research-006-phase3-t015",
+  "checked_on": "2026-11-07",
+  "description": "<act_window> and <report> data tags are dispatched by convert.py in 12.0-16.0 and absent in 17.0 (unknown tags skipped silently by _tag_root)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-322",
+  "locations": [
+    {
+      "branch": "12.0",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "path": "odoo/tools/convert.py",
+      "line": 786,
+      "match": "'report': self._tag_report,",
+      "kind": "present"
+    },
+    {
+      "branch": "12.0",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "path": "odoo/tools/convert.py",
+      "line": 787,
+      "match": "'act_window': self._tag_act_window,",
+      "kind": "present"
+    },
+    {
+      "branch": "13.0",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "path": "odoo/tools/convert.py",
+      "line": 703,
+      "match": "'report': self._tag_report,",
+      "kind": "present"
+    },
+    {
+      "branch": "13.0",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "path": "odoo/tools/convert.py",
+      "line": 704,
+      "match": "'act_window': self._tag_act_window,",
+      "kind": "present"
+    },
+    {
+      "branch": "14.0",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "path": "odoo/tools/convert.py",
+      "line": 711,
+      "match": "'report': self._tag_report,",
+      "kind": "present"
+    },
+    {
+      "branch": "14.0",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "path": "odoo/tools/convert.py",
+      "line": 712,
+      "match": "'act_window': self._tag_act_window,",
+      "kind": "present"
+    },
+    {
+      "branch": "15.0",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "path": "odoo/tools/convert.py",
+      "line": 726,
+      "match": "'report': self._tag_report,",
+      "kind": "present"
+    },
+    {
+      "branch": "15.0",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "path": "odoo/tools/convert.py",
+      "line": 727,
+      "match": "'act_window': self._tag_act_window,",
+      "kind": "present"
+    },
+    {
+      "branch": "16.0",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "path": "odoo/tools/convert.py",
+      "line": 752,
+      "match": "'report': self._tag_report,",
+      "kind": "present"
+    },
+    {
+      "branch": "16.0",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "path": "odoo/tools/convert.py",
+      "line": 753,
+      "match": "'act_window': self._tag_act_window,",
+      "kind": "present"
+    },
+    {
+      "branch": "17.0",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "path": "odoo/tools/convert.py",
+      "line": 606,
+      "match": "if f is None:",
+      "kind": "present"
+    },
+    {
+      "branch": "17.0",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "path": "odoo/tools/convert.py",
+      "line": null,
+      "match": "'act_window': self._tag_act_window",
+      "kind": "absent",
+      "search_scope": "odoo/tools/convert.py"
+    },
+    {
+      "branch": "17.0",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "path": "odoo/tools/convert.py",
+      "line": null,
+      "match": "'report': self._tag_report",
+      "kind": "absent",
+      "search_scope": "odoo/tools/convert.py"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+  "risk": "MEDIUM",
+  "rule_ids": [
+    "16-17.xml.act-window-tag",
+    "16-17.xml.report-tag"
+  ],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "17.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "17.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9ef8d62331b128bcd288528e4639e0901d85fcc8/odoo/tools/convert.py#L606"
+}

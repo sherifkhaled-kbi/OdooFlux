@@ -1,0 +1,2 @@
+{"description": "syntactically broken file (missing expression); lexer still tokenises it", "operations": ["lexer", "validator"], "syntax": "broken",
+ "tokens": [{"text": "odoo.define", "kind": "code"}, {"text": "web.broken", "kind": "string"}]}

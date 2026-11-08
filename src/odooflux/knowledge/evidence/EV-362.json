@@ -1,0 +1,93 @@
+{
+  "category": "views",
+  "checked_by": "research-008-t003",
+  "checked_on": "2026-11-07",
+  "description": "View validation messages: 'Error while validating view' and 'Invalid view ... definition in ...' (16.0-19.0)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-362",
+  "locations": [
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 472,
+      "match": "Error while validating view near",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 462,
+      "match": "Invalid view %(name)s definition in %(file)s",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 418,
+      "match": "Error while validating view near",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 410,
+      "match": "Invalid view %(name)s definition in %(file)s",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 411,
+      "match": "Error while validating view near",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 403,
+      "match": "Invalid view %(name)s definition in %(file)s",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 521,
+      "match": "Error while validating view near",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 513,
+      "match": "Invalid view %(name)s definition in %(file)s",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "runtime.install",
+    "static.rescan"
+  ],
+  "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/58bb9591d4cb08c4d5d4426222c9257f101ad250/odoo/addons/base/models/ir_ui_view.py#L472"
+}

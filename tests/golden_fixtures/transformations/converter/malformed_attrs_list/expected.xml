@@ -1,0 +1,3 @@
+<odoo>
+  <field name="f" attrs="[('state', '=', 'done')]"/>
+</odoo>

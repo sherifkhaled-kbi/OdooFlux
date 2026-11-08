@@ -1,0 +1,14 @@
+{
+  "description": "unsup mixed keys",
+  "group": "unsupported",
+  "mode": "falsy",
+  "in_list_view": false,
+  "expect": "edit",
+  "unconverted": [
+    {
+      "key": "readonly",
+      "reason": "unsupported operator like"
+    }
+  ],
+  "warnings": []
+}

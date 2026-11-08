@@ -1,0 +1,172 @@
+{
+  "category": "data_files",
+  "checked_by": "research-006-t025-agent",
+  "checked_on": "2026-11-07",
+  "description": "<url> data element: import_xml.rng defines it only at 12.0 (absent 13.0-19.0); convert.py has no _tag_url handler at any version 12.0-19.0 (tag handlers there are _tag_<name> methods).",
+  "detection_method": "grep on pinned source",
+  "id": "EV-489",
+  "locations": [
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 267,
+      "match": "<rng:define name=\"url\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "13.0",
+      "kind": "absent",
+      "line": null,
+      "match": "<rng:define name=\"url\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "search_scope": "import_xml.rng"
+    },
+    {
+      "branch": "14.0",
+      "kind": "absent",
+      "line": null,
+      "match": "<rng:define name=\"url\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "search_scope": "import_xml.rng"
+    },
+    {
+      "branch": "15.0",
+      "kind": "absent",
+      "line": null,
+      "match": "<rng:define name=\"url\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "search_scope": "import_xml.rng"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "<rng:define name=\"url\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "import_xml.rng"
+    },
+    {
+      "branch": "17.0",
+      "kind": "absent",
+      "line": null,
+      "match": "<rng:define name=\"url\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "search_scope": "import_xml.rng"
+    },
+    {
+      "branch": "18.0",
+      "kind": "absent",
+      "line": null,
+      "match": "<rng:define name=\"url\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "search_scope": "import_xml.rng"
+    },
+    {
+      "branch": "19.0",
+      "kind": "absent",
+      "line": null,
+      "match": "<rng:define name=\"url\">",
+      "path": "odoo/import_xml.rng",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "search_scope": "import_xml.rng"
+    },
+    {
+      "branch": "12.0",
+      "kind": "absent",
+      "line": null,
+      "match": "def _tag_url\\b",
+      "path": "odoo/tools/convert.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "search_scope": "convert.py"
+    },
+    {
+      "branch": "13.0",
+      "kind": "absent",
+      "line": null,
+      "match": "def _tag_url\\b",
+      "path": "odoo/tools/convert.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "search_scope": "convert.py"
+    },
+    {
+      "branch": "14.0",
+      "kind": "absent",
+      "line": null,
+      "match": "def _tag_url\\b",
+      "path": "odoo/tools/convert.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "search_scope": "convert.py"
+    },
+    {
+      "branch": "15.0",
+      "kind": "absent",
+      "line": null,
+      "match": "def _tag_url\\b",
+      "path": "odoo/tools/convert.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "search_scope": "convert.py"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "def _tag_url\\b",
+      "path": "odoo/tools/convert.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "convert.py"
+    },
+    {
+      "branch": "17.0",
+      "kind": "absent",
+      "line": null,
+      "match": "def _tag_url\\b",
+      "path": "odoo/tools/convert.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "search_scope": "convert.py"
+    },
+    {
+      "branch": "18.0",
+      "kind": "absent",
+      "line": null,
+      "match": "def _tag_url\\b",
+      "path": "odoo/tools/convert.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "search_scope": "convert.py"
+    },
+    {
+      "branch": "19.0",
+      "kind": "absent",
+      "line": null,
+      "match": "def _tag_url\\b",
+      "path": "odoo/tools/convert.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "search_scope": "convert.py"
+    }
+  ],
+  "notes": "Completes EV-324 (whose locations cover only 12.0/13.0/19.0 although its description says all 8 versions checked). Used for legacy XML_RULES#6: <url> was never converted by convert.py, only schema-accepted at 12.0. How 12.0 treats an unhandled <url> element at load time is not established here. Replacement act_url claim not evidenced.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "13.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "13.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/odoo/import_xml.rng#L267"
+}

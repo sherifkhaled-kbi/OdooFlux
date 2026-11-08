@@ -1,0 +1,69 @@
+{
+  "retrieved": "2026-11-07",
+  "note": "Vendored unmodified as test data. Downloaded over HTTPS by the agent on the retrieval date; not hand-edited.",
+  "files": [
+    {
+      "path": "sarif-schema-2.1.0.json",
+      "source_url": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/schemas/sarif-schema-2.1.0.json",
+      "description": "SARIF 2.1.0 JSON schema (OASIS errata01; byte-identical to oasis-tcs/sarif-spec main sarif-2.1/schema at retrieval)",
+      "sha256": "c3b4bb2d6093897483348925aaa73af03b3e3f4bd4ca38cef26dcb4212a2682e",
+      "bytes": 112768
+    },
+    {
+      "path": "json-schema-2020-12/schema.json",
+      "source_url": "https://json-schema.org/draft/2020-12/schema",
+      "description": "JSON Schema draft 2020-12 meta-schema",
+      "sha256": "41da76f5afb7ce062d248f762463a92f7ca47e4e0f905b224ba6afeef91ded0f",
+      "bytes": 2452
+    },
+    {
+      "path": "json-schema-2020-12/meta/core.json",
+      "source_url": "https://json-schema.org/draft/2020-12/meta/core",
+      "description": "JSON Schema 2020-12 vocabulary meta-schema",
+      "sha256": "21f79d143fab1f180245c331e5657057045b36794d41fe151e6e4fed65035299",
+      "bytes": 1471
+    },
+    {
+      "path": "json-schema-2020-12/meta/applicator.json",
+      "source_url": "https://json-schema.org/draft/2020-12/meta/applicator",
+      "description": "JSON Schema 2020-12 vocabulary meta-schema",
+      "sha256": "bf273b26f9f735b93ece78f2b61b36676e1d122ce78ab37ad5a2e45dfa1ca2b1",
+      "bytes": 1560
+    },
+    {
+      "path": "json-schema-2020-12/meta/unevaluated.json",
+      "source_url": "https://json-schema.org/draft/2020-12/meta/unevaluated",
+      "description": "JSON Schema 2020-12 vocabulary meta-schema",
+      "sha256": "fc99f32188da41689a9382af174dd42e8b255e4374965c157b8286556b4ab2bc",
+      "bytes": 406
+    },
+    {
+      "path": "json-schema-2020-12/meta/validation.json",
+      "source_url": "https://json-schema.org/draft/2020-12/meta/validation",
+      "description": "JSON Schema 2020-12 vocabulary meta-schema",
+      "sha256": "e921c5b79264d3689af01c1af1ffdf692e09f1c45df90a0f08eb7288c9acdeab",
+      "bytes": 2735
+    },
+    {
+      "path": "json-schema-2020-12/meta/meta-data.json",
+      "source_url": "https://json-schema.org/draft/2020-12/meta/meta-data",
+      "description": "JSON Schema 2020-12 vocabulary meta-schema",
+      "sha256": "c664d438a84d58889c8edecd248ce2f945a4bc0e3b087323b11303dc136abfbe",
+      "bytes": 794
+    },
+    {
+      "path": "json-schema-2020-12/meta/format-annotation.json",
+      "source_url": "https://json-schema.org/draft/2020-12/meta/format-annotation",
+      "description": "JSON Schema 2020-12 vocabulary meta-schema",
+      "sha256": "5c79404f831dd905c0f40fefac7c6f3e51bf3729b4a876a5c2020178d97f3bcc",
+      "bytes": 342
+    },
+    {
+      "path": "json-schema-2020-12/meta/content.json",
+      "source_url": "https://json-schema.org/draft/2020-12/meta/content",
+      "description": "JSON Schema 2020-12 vocabulary meta-schema",
+      "sha256": "a10456605b2b5bb12a1b4dcfc0300f02f54d3e8bb3646bed7724583866627682",
+      "bytes": 423
+    }
+  ]
+}

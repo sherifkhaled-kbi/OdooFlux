@@ -1,0 +1,19 @@
+{
+  "description": "Comment between decorator and def survives removal (F-PY-1 regression)",
+  "operations": [
+    {
+      "op": "remove_decorator",
+      "name": "api.multi"
+    }
+  ],
+  "expect": "edit",
+  "reason": "",
+  "spans": [
+    {
+      "locator": "decorator_removal",
+      "decorator": "api.multi",
+      "occurrence": 0,
+      "covers": "    @api.multi\n"
+    }
+  ]
+}

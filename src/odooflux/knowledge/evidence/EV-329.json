@@ -1,0 +1,140 @@
+{
+  "category": "assets",
+  "checked_by": "research-006-phase3-t016",
+  "checked_on": "2026-11-07",
+  "description": "14.0 web XML asset templates map name-for-name to 15.0 manifest bundle keys (web.<id>); lazy variants keep their 'web.' target keys",
+  "detection_method": "grep on pinned source",
+  "id": "EV-329",
+  "locations": [
+    {
+      "branch": "14.0",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "path": "addons/web/views/webclient_templates.xml",
+      "line": 56,
+      "match": "<template id=\"assets_common\"",
+      "kind": "present"
+    },
+    {
+      "branch": "15.0",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "path": "addons/web/__manifest__.py",
+      "line": 66,
+      "match": "'web.assets_common': [",
+      "kind": "present"
+    },
+    {
+      "branch": "14.0",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "path": "addons/web/views/webclient_templates.xml",
+      "line": 186,
+      "match": "<template id=\"assets_common_lazy\" inherit_id=\"web.assets_common\"",
+      "kind": "present"
+    },
+    {
+      "branch": "15.0",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "path": "addons/web/__manifest__.py",
+      "line": 75,
+      "match": "'web.assets_common_lazy': [",
+      "kind": "present"
+    },
+    {
+      "branch": "14.0",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "path": "addons/web/views/webclient_templates.xml",
+      "line": 190,
+      "match": "<template id=\"assets_backend\"",
+      "kind": "present"
+    },
+    {
+      "branch": "15.0",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "path": "addons/web/__manifest__.py",
+      "line": 85,
+      "match": "'web.assets_backend': [",
+      "kind": "present"
+    },
+    {
+      "branch": "14.0",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "path": "addons/web/views/webclient_templates.xml",
+      "line": 408,
+      "match": "<template id=\"assets_frontend\"",
+      "kind": "present"
+    },
+    {
+      "branch": "15.0",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "path": "addons/web/__manifest__.py",
+      "line": 208,
+      "match": "'web.assets_frontend': [",
+      "kind": "present"
+    },
+    {
+      "branch": "14.0",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "path": "addons/web/views/webclient_templates.xml",
+      "line": 430,
+      "match": "<template id=\"assets_frontend_lazy\" inherit_id=\"web.assets_frontend\"",
+      "kind": "present"
+    },
+    {
+      "branch": "15.0",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "path": "addons/web/__manifest__.py",
+      "line": 242,
+      "match": "'web.assets_frontend_lazy': [",
+      "kind": "present"
+    },
+    {
+      "branch": "14.0",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "path": "addons/web/views/webclient_templates.xml",
+      "line": 435,
+      "match": "<template id=\"assets_tests\"",
+      "kind": "present"
+    },
+    {
+      "branch": "15.0",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "path": "addons/web/__manifest__.py",
+      "line": 448,
+      "match": "'web.assets_tests': [",
+      "kind": "present"
+    },
+    {
+      "branch": "14.0",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "path": "addons/web/views/webclient_templates.xml",
+      "line": 20,
+      "match": "<template id=\"_assets_helpers\">",
+      "kind": "present"
+    },
+    {
+      "branch": "15.0",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "path": "addons/web/__manifest__.py",
+      "line": 307,
+      "match": "'web._assets_helpers': [",
+      "kind": "present"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "14.0",
+    "to": "15.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "15.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/addons/web/__manifest__.py#L66"
+}

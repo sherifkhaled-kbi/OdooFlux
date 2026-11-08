@@ -1,0 +1,18 @@
+{
+ "description": "regex literal with escaped slashes that look like a line comment",
+ "operations": [
+  "lexer",
+  "validator"
+ ],
+ "syntax": "valid",
+ "tokens": [
+  {
+   "text": "https?:\\/\\/example",
+   "kind": "regex"
+  },
+  {
+   "text": "\nodoo.define(",
+   "kind": "code"
+  }
+ ]
+}

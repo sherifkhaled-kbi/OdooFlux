@@ -1,0 +1,55 @@
+{
+  "category": "qweb",
+  "checked_by": "research-006-phase3-t017",
+  "checked_on": "2026-11-07",
+  "description": "QWeb directive handler _compile_directive_options is added in 15.0; absent in 14.0 (qweb.py and ir_qweb.py)",
+  "detection_method": "grep on pinned source; def-name set diff per version",
+  "id": "EV-331",
+  "locations": [
+    {
+      "branch": "15.0",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "path": "odoo/addons/base/models/qweb.py",
+      "line": 847,
+      "match": "def _compile_directive_options(self, el, options, indent):",
+      "kind": "present"
+    },
+    {
+      "branch": "14.0",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "path": "odoo/addons/base/models/qweb.py",
+      "line": null,
+      "match": "def _compile_directive_options(",
+      "kind": "absent",
+      "search_scope": "odoo/addons/base/models/qweb.py"
+    },
+    {
+      "branch": "14.0",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "path": "odoo/addons/base/models/ir_qweb.py",
+      "line": null,
+      "match": "def _compile_directive_options(",
+      "kind": "absent",
+      "search_scope": "odoo/addons/base/models/ir_qweb.py"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "14.0",
+    "to": "15.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "15.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/odoo/addons/base/models/qweb.py#L847",
+  "notes": "Directive def sets (names after _compile_directive_). 14.0: call, content, debug, elif, else, esc, field, foreach, groups, if, raw, set, tag (qweb.py) + call_assets, lang (ir_qweb.py). 15.0: call, content, debug, elif, else, esc, field, foreach, if, options, out, raw, set, tag (qweb.py) + call_assets, groups, lang (ir_qweb.py). t-out is covered by EV-201. Def-name sets only; directive-to-attribute mapping not re-verified."
+}

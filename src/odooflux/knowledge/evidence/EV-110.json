@@ -1,0 +1,61 @@
+{
+  "category": "python_runtime",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "`odoo.exceptions.Warning` is an alias (`Warning = UserError`) in 12.0/13.0, a subclass of `UserError` in 14.0\u201316.0, and no longer defined as a class in 17.0",
+  "detection_method": "grep on pinned source",
+  "id": "EV-110",
+  "locations": [
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 37,
+      "match": "Warning = UserError",
+      "path": "odoo/exceptions.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 132,
+      "match": "class Warning(UserError)",
+      "path": "odoo/exceptions.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 129,
+      "match": "class Warning(UserError)",
+      "path": "odoo/exceptions.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "absent",
+      "line": null,
+      "match": "class Warning(",
+      "path": "odoo/exceptions.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "search_scope": "odoo/exceptions.py"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "syntax.python"
+  ],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "17.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/odoo/exceptions.py#L37"
+}

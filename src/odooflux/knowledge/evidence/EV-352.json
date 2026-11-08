@@ -1,0 +1,22 @@
+{
+  "category": "dependencies",
+  "checked_by": "research-t023",
+  "checked_on": "2026-11-07",
+  "description": "phone.validation.mixin not located in addons/phone_validation at 16.0 (tools/phone_validation.py has no mixin definition)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-352",
+  "locations": [
+    {"branch": "16.0", "kind": "absent", "line": null, "match": "phone.validation.mixin", "path": "addons/phone_validation/tools/phone_validation.py", "revision": "9f40bf622c5531739321e59276c307319198e22b", "search_scope": "single file fetched; full addon and 17.0 to 19.0 not searched"}
+  ],
+  "notes": "UNVERIFIED: the mixin path could not be established; the claim is not confirmed or refuted. Corresponds to V18-3 in MIGRATION_RULE_ENGINE.md.",
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": ["static.rescan"],
+  "revision": "9f40bf622c5531739321e59276c307319198e22b",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {"from": "16.0", "to": "18.0"},
+  "status": "UNVERIFIED",
+  "target_applicability": {"from": "18.0", "to": null},
+  "url": "https://github.com/odoo/odoo/blob/9f40bf622c5531739321e59276c307319198e22b/addons/phone_validation/tools/phone_validation.py"
+}

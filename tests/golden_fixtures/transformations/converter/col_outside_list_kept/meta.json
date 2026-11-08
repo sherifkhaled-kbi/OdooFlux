@@ -1,0 +1,14 @@
+{
+  "description": "col outside list kept",
+  "group": "column_invisible",
+  "mode": "falsy",
+  "in_list_view": false,
+  "expect": "no-edit",
+  "unconverted": [
+    {
+      "key": "column_invisible",
+      "reason": "column-invisible-outside-list"
+    }
+  ],
+  "warnings": []
+}

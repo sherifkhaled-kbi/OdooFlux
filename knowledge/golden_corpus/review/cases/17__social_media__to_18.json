@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "case_id": "17__social_media__to_18",
+  "tasks": [
+    "T035"
+  ],
+  "module": "social_media",
+  "source_version": "17.0",
+  "target_version": "18.0",
+  "steps": [
+    "17-18"
+  ],
+  "source": {
+    "repository": "odoo/odoo",
+    "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+    "fetched_to": "/tmp/odooflux-golden-corpus/17.0/social_media",
+    "files": [
+      {
+        "path": "addons/social_media/__init__.py",
+        "sha256": "031e2a2f175bf404e4d39305edc490d01769602a46558172f67e14e333837fda",
+        "size": 46
+      },
+      {
+        "path": "addons/social_media/__manifest__.py",
+        "sha256": "50f3ba252f9126fb26a853b9d7c56a06154cae15448eb5e26b3e81661f724b32",
+        "size": 502
+      },
+      {
+        "path": "addons/social_media/demo/res_company_demo.xml",
+        "sha256": "d374e2269ec0c248c5c2d598f5e67b81f704ce0538ccb61f54d8743ecfa84f7b",
+        "size": 675
+      },
+      {
+        "path": "addons/social_media/models/__init__.py",
+        "sha256": "021bcf04a70c0edbf2ea0126f3c72fb1b4ae0ffc26215597a619947e6e0afd9f",
+        "size": 51
+      },
+      {
+        "path": "addons/social_media/models/res_company.py",
+        "sha256": "6ea8c6bc0259214e3c31733b13a53945f0f998b4b565d3d82e8a9e0b5935db6e",
+        "size": 566
+      },
+      {
+        "path": "addons/social_media/views/res_company_views.xml",
+        "sha256": "507a975eda3221e297711d1c82c73aeb028ebe3dc101aa287f888f5ab35aa01a",
+        "size": 961
+      }
+    ]
+  },
+  "rules_in_scope": [
+    {
+      "id": "17-18.xml.tree-to-list",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-112",
+        "EV-300",
+        "EV-301",
+        "EV-302",
+        "EV-303"
+      ]
+    },
+    {
+      "id": "17-18.python.group-operator-renamed",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-010",
+        "EV-118"
+      ]
+    },
+    {
+      "id": "17-18.python.name-get-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-104"
+      ]
+    },
+    {
+      "id": "17-18.python.name-search-to-search-display-name",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-008",
+        "EV-106"
+      ]
+    },
+    {
+      "id": "17-18.xml.cron-numbercall-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-113"
+      ]
+    },
+    {
+      "id": "17-18.xml.kanban-box-deprecated",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-119"
+      ]
+    },
+    {
+      "id": "17-18.python.user-has-groups-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-105",
+        "EV-308",
+        "EV-309",
+        "EV-310",
+        "EV-311"
+      ]
+    },
+    {
+      "id": "17-18.js.rpc-service-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-120"
+      ]
+    },
+    {
+      "id": "*.manifest.parse-error",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.version-prefix",
+      "maturity": "DRAFT",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.not-installable",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.missing-data-file",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.load-order",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.deps.unknown-dependency",
+      "maturity": "DRAFT",
+      "evidence": [
+        "EV-430",
+        "EV-431",
+        "EV-432",
+        "EV-433",
+        "EV-372",
+        "EV-373",
+        "EV-374",
+        "EV-375"
+      ]
+    },
+    {
+      "id": "*.refs.dangling-reference",
+      "maturity": "DRAFT",
+      "evidence": [
+        "EV-430"
+      ]
+    },
+    {
+      "id": "*.security.acl-csv",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.security.unrestricted-record-rule",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    }
+  ],
+  "applicable_rule_ids": [],
+  "evidence_ids": [],
+  "expected_basis": "hand-derived from source reading + rule evidence; NOT produced by OdooFlux",
+  "proposed_expected_transformations": [
+    {
+      "file": "addons/social_media/__init__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/social_media/__manifest__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/social_media/demo/res_company_demo.xml",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "Demo data record on base.main_company setting social_* fields; pinned at the registry SHA (raw fetch, sha256 verified). No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/social_media/models/__init__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/social_media/models/res_company.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/social_media/views/res_company_views.xml",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    }
+  ],
+  "overall_expected": "no_change (byte-identical; no findings from in-scope rules)",
+  "unresolved_ambiguities": [
+    "views/, models/ and demo/res_company_demo.xml are pinned. Inherits base.view_company_form xpath //group[@name='social_media']; target-series stability is unverified.",
+    "Manifest 'version' has no series prefix ('0.1/1.0' style); *.manifest.version-prefix is DRAFT/review_required and planner-bound. Reviewer must decide whether the expected manifest version is rewritten to target series prefix or untouched. Proposed here: untouched.",
+    "Evidence maturity: all rules in steps 17-18 that could apply are DETECT_ONLY/DRAFT unless listed FIX_ENABLED; FIX_ENABLED rules in range fire on no construct of this module."
+  ],
+  "review_status": "PENDING_INDEPENDENT_REVIEW",
+  "reviewer": "",
+  "review_date": "",
+  "reviewer_notes": "",
+  "reviewer_qualification": ""
+}

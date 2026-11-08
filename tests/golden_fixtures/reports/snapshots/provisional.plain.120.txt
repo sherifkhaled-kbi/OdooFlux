@@ -1,0 +1,36 @@
+OdooFlux  run run-golden  source 17.0 -> target 18.0  mode: dry_run
+PROVISIONAL RUN: 17.0->18.0 rules validated only against the PROVISIONAL corpus; not approved migration truth
+  Results depend on a provisional validation corpus and are not approved migration truth.
+Plan  17.0->18.0   status: READY
+Stages: Discover > Plan > Workspace > Step N/M > Validate L1-L5 > Promote > Report
+
+MODULE RESULTS
+ Status           Module   Open C/W/I Fixed Rejected Layers
+ STATIC_VALIDATED kbi_prov 0/0/0      1     0        L1 PASS L2 PASS L3 PASS L4 SKIPPED L5 SKIPPED
+
+FINDINGS
+kbi_prov/views/v.xml
+  FIXED    L1  17-18.xml.x
+           fixed
+
+REJECTED EDITS: none
+
+VERIFICATION SCOPE
+  Ran: L1 syntax, L2 static re-scan, L3 dependency integrity
+  Not run: L4 runtime install (runtime_not_requested), L5 behaviour (runtime_not_requested)
+    L1: PASS 1 module(s)
+    L2: PASS 1 module(s)
+    L3: PASS 1 module(s)
+    L4: SKIPPED 1 module(s)
+    L5: SKIPPED 1 module(s)
+  Limit: Static run: L4 install and L5 behavioural tests were not executed, so runtime behaviour is unverified.
+  Why not verified: installation (L4) and behaviour (L5) were not run (runtime_not_requested). Business behaviour is
+      unverified.
+
+AI USAGE  not used in this run
+
+RECOVERY
+  Run log:   /state/runs/run-golden/log/run.jsonl
+  Roll back: not needed, nothing was written (analyze or dry run)
+
+TOTALS modules=1 findings=1 open=0 (critical=0 warning=0 info=0) fixed=1 rejected=0 needs_review=0

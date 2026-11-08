@@ -1,0 +1,66 @@
+{
+ "schema": "odooflux.ai-catalog/1",
+ "providers": {
+  "alpha": {
+   "type": "external",
+   "adapter": "openai_compatible",
+   "endpoint": "https://alpha.invalid/v1",
+   "credential_env": "ALPHA_KEY",
+   "models": [
+    {
+     "id": "m-one",
+     "context_window": 8000,
+     "max_output": 1000,
+     "structured_output": true,
+     "tool_calling": false,
+     "pricing": {
+      "input_per_mtok": 1.0,
+      "output_per_mtok": 2.0
+     }
+    },
+    {
+     "id": "m-nopricing",
+     "context_window": 8000,
+     "max_output": 1000
+    }
+   ]
+  },
+  "beta": {
+   "type": "external",
+   "adapter": "anthropic",
+   "endpoint": "https://beta.invalid/v1/messages",
+   "credential_env": "BETA_KEY",
+   "models": [
+    {
+     "id": "b-one",
+     "context_window": 8000,
+     "max_output": 1000
+    }
+   ]
+  },
+  "loc": {
+   "type": "local",
+   "adapter": "openai_compatible",
+   "endpoint": "http://127.0.0.1:1/v1",
+   "models": [
+    {
+     "id": "l-one",
+     "context_window": 4000,
+     "max_output": 500
+    }
+   ]
+  },
+  "fake": {
+   "type": "fake",
+   "adapter": "fake",
+   "models": [
+    {
+     "id": "fake-model",
+     "context_window": 100000,
+     "max_output": 4000,
+     "structured_output": true
+    }
+   ]
+  }
+ }
+}

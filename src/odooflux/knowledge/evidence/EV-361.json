@@ -1,0 +1,60 @@
+{
+  "category": "python_runtime",
+  "checked_by": "research-008-t003",
+  "checked_on": "2026-11-07",
+  "description": "Modules whose Python package cannot be imported are logged as 'Couldn't load module' (16.0-19.0)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-361",
+  "locations": [
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 481,
+      "match": "Couldn't load module",
+      "path": "odoo/modules/module.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 434,
+      "match": "Couldn't load module",
+      "path": "odoo/modules/module.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 394,
+      "match": "Couldn't load module",
+      "path": "odoo/modules/module.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 516,
+      "match": "Couldn't load module",
+      "path": "odoo/modules/module.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "runtime.install"
+  ],
+  "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/58bb9591d4cb08c4d5d4426222c9257f101ad250/odoo/modules/module.py#L481"
+}

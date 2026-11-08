@@ -1,0 +1,92 @@
+{
+  "category": "data_files",
+  "checked_by": "research-006-phase3-t015",
+  "checked_on": "2026-11-07",
+  "description": "convert.py accepts <openerp> as a data root alongside <odoo>/<data> in every version 12.0-19.0 (re-verified; 12.0 uses a local roots list)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-320",
+  "locations": [
+    {
+      "branch": "12.0",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "path": "odoo/tools/convert.py",
+      "line": 750,
+      "match": "roots = ['openerp','data','odoo']",
+      "kind": "present"
+    },
+    {
+      "branch": "13.0",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "path": "odoo/tools/convert.py",
+      "line": 723,
+      "match": "DATA_ROOTS = ['odoo', 'data', 'openerp']",
+      "kind": "present"
+    },
+    {
+      "branch": "14.0",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "path": "odoo/tools/convert.py",
+      "line": 720,
+      "match": "DATA_ROOTS = ['odoo', 'data', 'openerp']",
+      "kind": "present"
+    },
+    {
+      "branch": "15.0",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "path": "odoo/tools/convert.py",
+      "line": 735,
+      "match": "DATA_ROOTS = ['odoo', 'data', 'openerp']",
+      "kind": "present"
+    },
+    {
+      "branch": "16.0",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "path": "odoo/tools/convert.py",
+      "line": 761,
+      "match": "DATA_ROOTS = ['odoo', 'data', 'openerp']",
+      "kind": "present"
+    },
+    {
+      "branch": "17.0",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "path": "odoo/tools/convert.py",
+      "line": 672,
+      "match": "DATA_ROOTS = ['odoo', 'data', 'openerp']",
+      "kind": "present"
+    },
+    {
+      "branch": "18.0",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "path": "odoo/tools/convert.py",
+      "line": 652,
+      "match": "DATA_ROOTS = ['odoo', 'data', 'openerp']",
+      "kind": "present"
+    },
+    {
+      "branch": "19.0",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "path": "odoo/tools/convert.py",
+      "line": 667,
+      "match": "DATA_ROOTS = ['odoo', 'data', 'openerp']",
+      "kind": "present"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "12.0",
+    "to": "19.0"
+  },
+  "url": "https://github.com/odoo/odoo/blob/58bb9591d4cb08c4d5d4426222c9257f101ad250/odoo/tools/convert.py#L667"
+}

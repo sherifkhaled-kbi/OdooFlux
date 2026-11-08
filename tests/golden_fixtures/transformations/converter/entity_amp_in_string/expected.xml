@@ -1,0 +1,3 @@
+<odoo>
+  <field name="f" invisible="title == 'A &amp; B'"/>
+</odoo>

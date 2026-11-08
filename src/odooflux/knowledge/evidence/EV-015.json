@@ -1,0 +1,64 @@
+{
+  "category": "documentation",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "No ORM changelog page exists in the 12.0\u201315.0 documentation branches",
+  "detection_method": "n/a",
+  "id": "EV-015",
+  "locations": [
+    {
+      "branch": "12.0",
+      "kind": "absent",
+      "line": null,
+      "match": "changelog",
+      "path": "content/developer/reference/backend/orm/changelog.rst",
+      "revision": "c6556f144db6e3b9a94ddf1e6f586e0ab4f38a40",
+      "search_scope": "content/developer/reference/backend/orm/changelog.rst"
+    },
+    {
+      "branch": "13.0",
+      "kind": "absent",
+      "line": null,
+      "match": "changelog",
+      "path": "content/developer/reference/backend/orm/changelog.rst",
+      "revision": "f7407ebae9886f5662a55fb14753a0db00187a63",
+      "search_scope": "content/developer/reference/backend/orm/changelog.rst"
+    },
+    {
+      "branch": "14.0",
+      "kind": "absent",
+      "line": null,
+      "match": "changelog",
+      "path": "content/developer/reference/backend/orm/changelog.rst",
+      "revision": "cbf8a7bf815b51ae6277f83999c3267fff4cd67f",
+      "search_scope": "content/developer/reference/backend/orm/changelog.rst"
+    },
+    {
+      "branch": "15.0",
+      "kind": "absent",
+      "line": null,
+      "match": "changelog",
+      "path": "content/developer/reference/backend/orm/changelog.rst",
+      "revision": "f6b84ed59624ba8f0db2b1d0f7097e435550bb7e",
+      "search_scope": "content/developer/reference/backend/orm/changelog.rst"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/documentation",
+  "required_validation": [
+    "documentation"
+  ],
+  "revision": "c6556f144db6e3b9a94ddf1e6f586e0ab4f38a40",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "15.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "13.0",
+    "to": "15.0"
+  },
+  "url": "https://github.com/odoo/documentation/blob/c6556f144db6e3b9a94ddf1e6f586e0ab4f38a40/content/developer/reference/backend/orm/changelog.rst"
+}

@@ -1,0 +1,37 @@
+{
+  "description": "Same tag name at two depths, including an empty element",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "group",
+      "span": "<group><group><field name=\"a\"/></group><group/></group>",
+      "start_tag": "<group>",
+      "attrs": []
+    },
+    {
+      "tag": "group",
+      "span": "<group><field name=\"a\"/></group>",
+      "start_tag": "<group>",
+      "attrs": []
+    },
+    {
+      "tag": "field",
+      "span": "<field name=\"a\"/>",
+      "start_tag": "<field name=\"a\"/>",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "a",
+          "value": "a"
+        }
+      ]
+    },
+    {
+      "tag": "group",
+      "span": "<group/>",
+      "start_tag": "<group/>",
+      "attrs": []
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+ "schema": "odooflux.ai-fake-script/1",
+ "entries": [
+  {
+   "match": {
+    "contains": "def f_truncated"
+   },
+   "response": {
+    "replacement": "    def f_truncated(self):\n        return new_",
+    "notes": "",
+    "cannot_fix": false,
+    "usage": {
+     "input": 120,
+     "output": 30
+    },
+    "stop_reason": "max_tokens"
+   }
+  }
+ ]
+}

@@ -1,0 +1,26 @@
+{
+ "description": "template literal nested inside a substitution",
+ "operations": [
+  "lexer",
+  "validator"
+ ],
+ "syntax": "valid",
+ "tokens": [
+  {
+   "text": "outer",
+   "kind": "template"
+  },
+  {
+   "text": "inner",
+   "kind": "template"
+  },
+  {
+   "text": "end",
+   "kind": "template"
+  },
+  {
+   "text": "odoo.define(",
+   "kind": "code"
+  }
+ ]
+}

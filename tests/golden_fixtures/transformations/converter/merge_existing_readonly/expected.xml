@@ -1,0 +1,3 @@
+<odoo>
+  <field name="f" readonly="(True) or (x == 1)"/>
+</odoo>

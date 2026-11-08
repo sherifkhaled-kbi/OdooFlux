@@ -1,0 +1,50 @@
+OdooFlux  run run-golden  source 17.0 -> target 18.0  mode: dry_run
+Plan  17.0->18.0   status: READY
+Stages: Discover > Plan > Workspace > Step N/M > Validate L1-L5 > Promote >
+  Report
+
+MODULE RESULTS
+ STATIC_VALIDATED  kbi_sale_approval
+   open C/W/I 0/0/1   fixed 3   rejected 0
+   layers: L1 PASS L2 PASS L3 PASS L4 SKIPPED L5 SKIPPED
+
+FINDINGS
+kbi_sale_approval/models/a.py
+  FIXED    L5  17-18.py.attrs
+           attr changed
+  FIXED    L7  17-18.py.attrs
+           attr changed
+kbi_sale_approval/views/v.xml
+  INFO     L3  17-18.xml.note [NEEDS_REVIEW]
+           informational note
+           Action: Apply the documented replacement
+           Evidence: EV-110
+                    https://github.com/odoo/odoo/blob/17.0/odoo/addons/base/mode
+                    ls/ir_ui_view.py
+  FIXED    L9  17-18.xml.tree-to-list
+           tree renamed
+
+REJECTED EDITS: none
+
+VERIFICATION SCOPE
+  Ran: L1 syntax, L2 static re-scan, L3 dependency integrity
+  Not run: L4 runtime install (runtime_not_requested), L5 behaviour
+      (runtime_not_requested)
+    L1: PASS 1 module(s)
+    L2: PASS 1 module(s)
+    L3: PASS 1 module(s)
+    L4: SKIPPED 1 module(s)
+    L5: SKIPPED 1 module(s)
+  Limit: Static run: L4 install and L5 behavioural tests were not executed, so
+         runtime behaviour is unverified.
+  Why not verified: installation (L4) and behaviour (L5) were not run
+      (runtime_not_requested). Business behaviour is unverified.
+
+AI USAGE  not used in this run
+
+RECOVERY
+  Run log:   /state/runs/run-golden/log/run.jsonl
+  Roll back: not needed, nothing was written (analyze or dry run)
+
+TOTALS modules=1 findings=4 open=1 (critical=0 warning=0 info=1) fixed=3
+  rejected=0 needs_review=1

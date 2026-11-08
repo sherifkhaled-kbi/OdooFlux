@@ -1,0 +1,22 @@
+{
+ "description": "code inside a template substitution is code",
+ "operations": [
+  "lexer",
+  "validator"
+ ],
+ "syntax": "valid",
+ "tokens": [
+  {
+   "text": "odoo.define(",
+   "kind": "code"
+  },
+  {
+   "text": "prefix",
+   "kind": "template"
+  },
+  {
+   "text": "suffix",
+   "kind": "template"
+  }
+ ]
+}

@@ -1,0 +1,138 @@
+{
+  "schema": "odooflux.runtime-log-patterns/1",
+  "patterns": [
+    {
+      "id": "registry.modules-not-loaded",
+      "class": "registry",
+      "pattern": "Some modules are not loaded",
+      "version_range": {
+        "from": "16.0",
+        "to": "19.0"
+      },
+      "evidence": [
+        "EV-360"
+      ]
+    },
+    {
+      "id": "import_error.couldnt-load-module",
+      "class": "import_error",
+      "pattern": "Couldn't load module",
+      "version_range": {
+        "from": "16.0",
+        "to": "19.0"
+      },
+      "evidence": [
+        "EV-361"
+      ]
+    },
+    {
+      "id": "view_validation.error-near",
+      "class": "view_validation",
+      "pattern": "Error while validating view",
+      "version_range": {
+        "from": "16.0",
+        "to": "19.0"
+      },
+      "evidence": [
+        "EV-362"
+      ]
+    },
+    {
+      "id": "view_validation.invalid-definition",
+      "class": "view_validation",
+      "pattern": "Invalid view .* definition in",
+      "version_range": {
+        "from": "16.0",
+        "to": "19.0"
+      },
+      "evidence": [
+        "EV-362"
+      ]
+    },
+    {
+      "id": "access_rights.acl-unknown-external-id",
+      "class": "access_rights",
+      "pattern": "External ID not found in the system",
+      "context": "ir\\.model\\.access",
+      "version_range": {
+        "from": "16.0",
+        "to": "19.0"
+      },
+      "evidence": [
+        "EV-365"
+      ]
+    },
+    {
+      "id": "access_rights.missing-model",
+      "class": "access_rights",
+      "pattern": "Missing model ",
+      "version_range": {
+        "from": "16.0",
+        "to": "19.0"
+      },
+      "evidence": [
+        "EV-364"
+      ]
+    },
+    {
+      "id": "access_rights.null-model-id",
+      "class": "access_rights",
+      "pattern": "null value in column .model_id. of relation .ir_model_access.",
+      "version_range": {
+        "from": "19.0",
+        "to": "19.0"
+      },
+      "evidence": [
+        "EV-376"
+      ]
+    },
+    {
+      "id": "data_load.rng-schema",
+      "class": "data_load",
+      "pattern": "does not fit the required schema",
+      "version_range": {
+        "from": "16.0",
+        "to": "19.0"
+      },
+      "evidence": [
+        "EV-363"
+      ]
+    },
+    {
+      "id": "data_load.external-id-not-found",
+      "class": "data_load",
+      "pattern": "External ID not found in the system",
+      "version_range": {
+        "from": "16.0",
+        "to": "19.0"
+      },
+      "evidence": [
+        "EV-365"
+      ]
+    },
+    {
+      "id": "asset_compile.parse-file",
+      "class": "asset_compile",
+      "pattern": "Could not parse file",
+      "version_range": {
+        "from": "16.0",
+        "to": "19.0"
+      },
+      "evidence": [
+        "EV-366"
+      ]
+    },
+    {
+      "id": "missing_python_dependency.not-installed",
+      "class": "missing_python_dependency",
+      "pattern": "Python library not installed|External dependency .+ not installed",
+      "version_range": {
+        "from": "16.0",
+        "to": "19.0"
+      },
+      "evidence": [
+        "EV-367"
+      ]
+    }
+  ]
+}

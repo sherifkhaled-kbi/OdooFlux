@@ -1,0 +1,54 @@
+{
+  "category": "controllers",
+  "checked_by": "research-006-t019-t024",
+  "checked_on": "2026-11-07",
+  "description": "@route param readonly documented at 18.0; absent from 17.0 http.py",
+  "detection_method": "grep on pinned source",
+  "id": "EV-413",
+  "locations": [
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 728,
+      "match": ":param Union[bool, Callable[[registry, request], bool]] readonly:",
+      "path": "odoo/http.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 795,
+      "match": ":param Union[bool, Callable[[registry, request], bool]] readonly:",
+      "path": "odoo/http.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "17.0",
+      "kind": "absent",
+      "line": null,
+      "match": ":param .* readonly:",
+      "path": "odoo/http.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "search_scope": "odoo/http.py"
+    }
+  ],
+  "notes": "Additive option; no migration needed.",
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "17.0",
+    "to": "18.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "18.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/75d6abe5979ac9e8d85d097dad0e7b559ef07326/odoo/http.py#L728"
+}

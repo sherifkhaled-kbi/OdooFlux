@@ -1,0 +1,44 @@
+{
+  "category": "orm",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "`website.published.mixin` is still defined in 17.0 and 18.0",
+  "detection_method": "grep on pinned source",
+  "id": "EV-208",
+  "locations": [
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 183,
+      "match": "_name = \"website.published.mixin\"",
+      "path": "addons/website/models/mixins.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 180,
+      "match": "_name = \"website.published.mixin\"",
+      "path": "addons/website/models/mixins.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "17.0",
+    "to": "18.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "18.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9ef8d62331b128bcd288528e4639e0901d85fcc8/addons/website/models/mixins.py#L183"
+}

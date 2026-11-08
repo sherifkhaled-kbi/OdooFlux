@@ -1,0 +1,158 @@
+{
+  "category": "fields",
+  "checked_by": "research-006-t025-agent",
+  "checked_on": "2026-11-07",
+  "description": "Field docs at 12.0-19.0 state default may be a function taking a recordset; core addon lunch defines fields.Selection(_tz_get, ..., default=lambda self: ...) in lunch_alert.py at every version 13.0-19.0 (lunch_alert.py absent at 12.0).",
+  "detection_method": "grep on pinned source",
+  "id": "EV-484",
+  "locations": [
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 122,
+      "match": ":param default: the default value for the field; this is either a static",
+      "path": "odoo/fields.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 121,
+      "match": ":param default: the default value for the field; this is either a static",
+      "path": "odoo/fields.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 138,
+      "match": ":param default: the default value for the field; this is either a static",
+      "path": "odoo/fields.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 143,
+      "match": ":param default: the default value for the field; this is either a static",
+      "path": "odoo/fields.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 160,
+      "match": ":param default: the default value for the field; this is either a static",
+      "path": "odoo/fields.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 162,
+      "match": ":param default: the default value for the field; this is either a static",
+      "path": "odoo/fields.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 170,
+      "match": ":param default: the default value for the field; this is either a static",
+      "path": "odoo/fields.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 119,
+      "match": ":param default: the default value for the field; this is either a static",
+      "path": "odoo/orm/fields.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": 37,
+      "match": "fields.Selection(_tz_get, string='Timezone', required=True, default=lambda self: self.env.user.tz or 'UTC')",
+      "path": "addons/lunch/models/lunch_alert.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 37,
+      "match": "fields.Selection(_tz_get, string='Timezone', required=True, default=lambda self: self.env.user.tz or 'UTC')",
+      "path": "addons/lunch/models/lunch_alert.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 41,
+      "match": "fields.Selection(_tz_get, string='Timezone', required=True, default=lambda self: self.env.user.tz or 'UTC')",
+      "path": "addons/lunch/models/lunch_alert.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 41,
+      "match": "fields.Selection(_tz_get, string='Timezone', required=True, default=lambda self: self.env.user.tz or 'UTC')",
+      "path": "addons/lunch/models/lunch_alert.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 41,
+      "match": "fields.Selection(_tz_get, string='Timezone', required=True, default=lambda self: self.env.user.tz or 'UTC')",
+      "path": "addons/lunch/models/lunch_alert.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 41,
+      "match": "fields.Selection(_tz_get, string='Timezone', required=True, default=lambda self: self.env.user.tz or 'UTC')",
+      "path": "addons/lunch/models/lunch_alert.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 41,
+      "match": "fields.Selection(_tz_get, string='Timezone', required=True, default=lambda self: self.env.user.tz or 'UTC')",
+      "path": "addons/lunch/models/lunch_alert.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "12.0",
+      "kind": "absent",
+      "line": null,
+      "match": "lunch_alert.py",
+      "path": "addons/lunch/models/lunch_alert.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    }
+  ],
+  "notes": "Used for legacy PYTHON_RULES#22 ('Selection lambda default' must be replaced): a Selection field with a lambda default exists in core at 13.0-19.0 and the Field docstring allows callables, so no removal of lambda defaults is evidenced. Single core example; not an exhaustive census.",
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "13.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/odoo/fields.py#L122"
+}

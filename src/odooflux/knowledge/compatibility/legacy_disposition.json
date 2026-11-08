@@ -1,0 +1,882 @@
+[
+  {
+    "legacy_ref": "PYTHON_RULES#1",
+    "legacy_rule": "openerp namespace",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-205"
+    ],
+    "gap": null,
+    "reason": "No openerp package in 12.0, the lowest supported source"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#2",
+    "legacy_rule": "@api.one/multi/returns",
+    "disposition": "correct",
+    "new_rule_ids": [
+      "12-13.python.api-multi-removed",
+      "12-13.python.api-one-removed",
+      "18-19.python.api-returns-removed"
+    ],
+    "evidence": [
+      "EV-101",
+      "EV-102"
+    ],
+    "gap": null,
+    "reason": "Split: 12-13.python.api-multi-removed, 12-13.python.api-one-removed (review), 18-19.python.api-returns-removed (review). Legacy said \"v14+\" and removed @api.returns for all targets",
+    "audit_refs": [
+      "F-PY-1/3/4"
+    ]
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#3",
+    "legacy_rule": "Old API cr, uid signature",
+    "disposition": "correct",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-485"
+    ],
+    "gap": null,
+    "reason": "Not a pre-12 construct: 12.0 api.py guess() is applied by the model metaclass to methods with cr/uid parameters and logs 'Deprecated method', so old-API signatures are accepted at 12.0; guess and cr_uid_* decorators are absent from 13.0 api.py (EV-485). Source-level only; runtime rejection at 13.0 not shown. No rule exists yet (12-13 step); a review-only 12-13 rule can be built from EV-485.",
+    "researched_by": "T025-audit"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#4",
+    "legacy_rule": "fields.Char(size=…)",
+    "disposition": "correct",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-486"
+    ],
+    "gap": null,
+    "reason": "Claim 'ignored in v13+' is NOT supported: Char size is commented '(deprecated)' at 12.0-19.0 but still builds the column type (pg_varchar(self.size), 12.0-19.0) and truncates values (18.0-19.0) (EV-486). At most a review-only deprecation note; the auto-removal fixer is unsafe (F-PY-2) and changes column type.",
+    "audit_refs": [
+      "F-PY-2"
+    ],
+    "researched_by": "T025-audit"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#5",
+    "legacy_rule": "execute_kw INFO",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [],
+    "gap": null,
+    "reason": "Noise; not a compatibility claim",
+    "audit_refs": [
+      "F-VER-4"
+    ]
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#6",
+    "legacy_rule": ".sudo(user)",
+    "disposition": "correct",
+    "new_rule_ids": [
+      "12-13.python.sudo-user-argument"
+    ],
+    "evidence": [
+      "EV-103"
+    ],
+    "gap": "G-R-14",
+    "reason": "12-13.python.sudo-user-argument, detect-only; never rewrite boolean flags; semantics unresolved",
+    "audit_refs": [
+      "F-PY-5"
+    ]
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#7",
+    "legacy_rule": "_inherits warning",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-483"
+    ],
+    "gap": null,
+    "reason": "_inherits is a documented mechanism ('composition-based inheritance') at 13.0-19.0 and defined at 12.0; no 'deprecat'/'discourag' text on the same line as _inherits in the model file at 12.0-19.0 (EV-483; limited to that file). Legacy warning is misleading (audit F-VER-3).",
+    "audit_refs": [
+      "F-VER-3"
+    ],
+    "researched_by": "T025-audit"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#8",
+    "legacy_rule": "osv import",
+    "disposition": "correct",
+    "new_rule_ids": [
+      "18-19.python.osv-deprecated"
+    ],
+    "evidence": [
+      "EV-002",
+      "EV-211"
+    ],
+    "gap": null,
+    "reason": "12.0 still ships odoo/osv (EV-211 notes orm.py/osv.py present); fold into 18-19.python.osv-deprecated"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#9",
+    "legacy_rule": "_columns dict",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-211"
+    ],
+    "gap": null,
+    "reason": "Pre-12 API; 12.0 has no _columns attribute handling"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#10",
+    "legacy_rule": "_defaults dict",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-211"
+    ],
+    "gap": null,
+    "reason": "Pre-12 API, same as #9"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#11",
+    "legacy_rule": "openerp.tools html_sanitize import",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-205"
+    ],
+    "gap": null,
+    "reason": "Same as #1"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#12",
+    "legacy_rule": "Python 2 print",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-125"
+    ],
+    "gap": null,
+    "reason": "Supported sources are Python 3 (≥3.5)"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#13",
+    "legacy_rule": "fields.Html sanitize (17) INFO",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-350",
+      "EV-419"
+    ],
+    "gap": "G-R-17",
+    "reason": "sanitize defaults to True at 16.0, 17.0, 18.0 and 19.0; no change at 17.0 supports the claim",
+    "researched_by": "T023"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#14",
+    "legacy_rule": "qweb. / t-widget (15)",
+    "disposition": "needs-research",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-331",
+      "EV-332",
+      "EV-333",
+      "EV-335"
+    ],
+    "gap": "G-R-04",
+    "reason": "Regex 'qweb.|t-widget=' is too broad (audit F-VER-3). Server-side QWeb directive def-name sets at 14.0-19.0 (EV-331..333, EV-335 notes) contain no widget directive; client-side/OWL template directives and 'qweb.' usages are not researched. G-R-03 (OWL/JS) does not cover this row; still open under G-R-04.",
+    "status": "PENDING",
+    "audit_refs": [
+      "F-VER-3"
+    ]
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#15",
+    "legacy_rule": "attachment=False (18)",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-351",
+      "EV-419"
+    ],
+    "gap": "G-R-17",
+    "reason": "Binary attachment parameter exists at 16.0-19.0 (default True); no deprecation found at 18.0",
+    "researched_by": "T023"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#16",
+    "legacy_rule": "werkzeug.contrib",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [],
+    "gap": null,
+    "reason": "Not an Odoo claim (third-party library); may return as a generic dependency check"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#17",
+    "legacy_rule": "ir.values",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-206"
+    ],
+    "gap": null,
+    "reason": "Model absent in 12.0"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#18",
+    "legacy_rule": "message_post_with_template",
+    "disposition": "correct",
+    "new_rule_ids": [
+      "16-17.python.message-post-with-template"
+    ],
+    "evidence": [
+      "EV-207"
+    ],
+    "gap": null,
+    "reason": "16-17.python.message-post-with-template; removed in 17.0, not \"signature changed in v16\""
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#19",
+    "legacy_rule": "_auto_init (19) INFO",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-418"
+    ],
+    "gap": "G-R-17",
+    "reason": "_auto_init is defined at 16.0-18.0 (odoo/models.py) and 19.0 (odoo/orm/models.py); no removal or new requirement evidenced",
+    "researched_by": "T023"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#20",
+    "legacy_rule": "TransientModel INFO",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [],
+    "gap": null,
+    "reason": "Noise",
+    "audit_refs": [
+      "F-VER-4"
+    ]
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#21",
+    "legacy_rule": "AbstractModel INFO",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [],
+    "gap": null,
+    "reason": "Noise",
+    "audit_refs": [
+      "F-VER-4"
+    ]
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#22",
+    "legacy_rule": "Selection lambda default",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-484"
+    ],
+    "gap": null,
+    "reason": "Selection fields with a lambda default exist in core at 13.0-19.0 (lunch_alert.py) and the Field docs allow a function default at 12.0-19.0 (EV-484); no removal evidenced. Single core example, not a census.",
+    "audit_refs": [
+      "F-VER-3"
+    ],
+    "researched_by": "T025-audit"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#23",
+    "legacy_rule": "_cr.execute with % formatting",
+    "disposition": "correct",
+    "new_rule_ids": [
+      "18-19.python.env-shortcuts-deprecated"
+    ],
+    "evidence": [
+      "EV-209"
+    ],
+    "gap": null,
+    "reason": "Shared security hygiene rule (*.python.sql-string-formatting), not a migration claim; combine with 18-19.python.env-shortcuts-deprecated",
+    "planned_rule_ids": [
+      "*.python.sql-string-formatting"
+    ]
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#24",
+    "legacy_rule": "openerp.http import",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-205"
+    ],
+    "gap": null,
+    "reason": "Same as #1"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#25",
+    "legacy_rule": "from openerp.",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-205"
+    ],
+    "gap": null,
+    "reason": "Same as #1"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#26",
+    "legacy_rule": "import openerp",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-205"
+    ],
+    "gap": null,
+    "reason": "Same as #1"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#27",
+    "legacy_rule": "Warning import (odoo)",
+    "disposition": "correct",
+    "new_rule_ids": [
+      "16-17.python.warning-exception"
+    ],
+    "evidence": [
+      "EV-110"
+    ],
+    "gap": null,
+    "reason": "16-17.python.warning-exception; removal is in 17.0, not 14"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#28",
+    "legacy_rule": "Warning import (openerp)",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-205"
+    ],
+    "gap": null,
+    "reason": "Same as #1"
+  },
+  {
+    "legacy_ref": "PYTHON_RULES#29",
+    "legacy_rule": "raise Warning(",
+    "disposition": "correct",
+    "new_rule_ids": [
+      "16-17.python.warning-exception"
+    ],
+    "evidence": [
+      "EV-110"
+    ],
+    "gap": null,
+    "reason": "Part of 16-17.python.warning-exception"
+  },
+  {
+    "legacy_ref": "XML_RULES#1",
+    "legacy_rule": "<openerp> root",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-320",
+      "EV-321"
+    ],
+    "gap": null,
+    "reason": "Claim '<openerp> root tag removed' is contradicted: convert.py accepts <openerp> (EV-320) and import_xml.rng root choice includes openerp (EV-321) at every version 12.0-19.0.",
+    "researched_by": "T025-audit"
+  },
+  {
+    "legacy_ref": "XML_RULES#2",
+    "legacy_rule": "attrs=",
+    "disposition": "correct",
+    "new_rule_ids": [
+      "16-17.xml.attrs-removed"
+    ],
+    "evidence": [
+      "EV-109"
+    ],
+    "gap": null,
+    "reason": "16-17.xml.attrs-removed; converter must emit Python expressions",
+    "audit_refs": [
+      "F-XML-2/3"
+    ]
+  },
+  {
+    "legacy_ref": "XML_RULES#3",
+    "legacy_rule": "states=",
+    "disposition": "correct",
+    "new_rule_ids": [
+      "16-17.xml.states-attribute-removed"
+    ],
+    "evidence": [
+      "EV-109"
+    ],
+    "gap": null,
+    "reason": "16-17.xml.states-attribute-removed; no in-tag comments",
+    "audit_refs": [
+      "F-XML-1/4"
+    ]
+  },
+  {
+    "legacy_ref": "XML_RULES#4",
+    "legacy_rule": "<act_window>",
+    "disposition": "correct",
+    "new_rule_ids": [
+      "16-17.xml.act-window-tag"
+    ],
+    "evidence": [
+      "EV-117"
+    ],
+    "gap": null,
+    "reason": "16-17.xml.act-window-tag (deprecated 16.0, removed 17.0)"
+  },
+  {
+    "legacy_ref": "XML_RULES#5",
+    "legacy_rule": "<menuitem> INFO",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [],
+    "gap": null,
+    "reason": "Noise",
+    "audit_refs": [
+      "F-VER-4"
+    ]
+  },
+  {
+    "legacy_ref": "XML_RULES#6",
+    "legacy_rule": "<url> tag",
+    "disposition": "correct",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-324",
+      "EV-489"
+    ],
+    "gap": null,
+    "reason": "<url> is not a data tag handled by convert.py at any version 12.0-19.0 (no _tag_url, EV-489); import_xml.rng defines it only at 12.0 (EV-324, EV-489). So it is not a 'removed shorthand'; at most an RNG-schema difference 12.0 vs 13.0+. The act_url replacement is not evidenced; no rule created. Note: EV-324 locations cover only 12.0/13.0/19.0 (EV-489 completes 8 versions).",
+    "researched_by": "T025-audit"
+  },
+  {
+    "legacy_ref": "XML_RULES#7",
+    "legacy_rule": "groups_id= attribute",
+    "disposition": "correct",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-114",
+      "EV-405",
+      "EV-487"
+    ],
+    "gap": "G-R-10",
+    "reason": "groups_id is a model field (ir.ui.view groups_id at 12.0-18.0, renamed group_ids at 19.0, EV-487; res.users likewise, EV-405/EV-114), not a deprecated view attribute before 19.0; groups= as an equivalent replacement is not evidenced. Rule 18-19.any.res-users-groups-id covers res.users only (view/data scope not confirmed).",
+    "researched_by": "T025-audit"
+  },
+  {
+    "legacy_ref": "XML_RULES#8",
+    "legacy_rule": "web_client_action (16)",
+    "disposition": "needs-research",
+    "new_rule_ids": [],
+    "evidence": [],
+    "gap": "G-R-22",
+    "reason": "Claim 'web_client_action type changed in v16' unverified: the identifier was not located (lead only, not evidence: GitHub code search found no occurrence on the default branch). G-R-03 does not cover it; open under G-R-22.",
+    "status": "PENDING"
+  },
+  {
+    "legacy_ref": "XML_RULES#9",
+    "legacy_rule": "arch type=\"xml\" INFO",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [],
+    "gap": null,
+    "reason": "Noise",
+    "audit_refs": [
+      "F-VER-4"
+    ]
+  },
+  {
+    "legacy_ref": "XML_RULES#10",
+    "legacy_rule": "\"Editable Form\" (17)",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-490"
+    ],
+    "gap": null,
+    "reason": "Legacy regex (type=\"form\" ... editable=) does not match its stated claim about list views (audit finding F-VER-3, odooflux.py line 255; audit finding, not Odoo evidence). Separately the list-view RNG accepts editable top|bottom unchanged at 14.0-19.0 (EV-490); client behaviour change at 17.0 neither located nor excluded.",
+    "audit_refs": [
+      "F-VER-3"
+    ],
+    "researched_by": "T025-audit"
+  },
+  {
+    "legacy_ref": "XML_RULES#11",
+    "legacy_rule": "monetary widget INFO",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [],
+    "gap": null,
+    "reason": "Noise",
+    "audit_refs": [
+      "F-VER-4"
+    ]
+  },
+  {
+    "legacy_ref": "XML_RULES#12",
+    "legacy_rule": "<tree> (18)",
+    "disposition": "correct",
+    "new_rule_ids": [
+      "17-18.xml.tree-to-list"
+    ],
+    "evidence": [
+      "EV-112"
+    ],
+    "gap": null,
+    "reason": "17-18.xml.tree-to-list, gated for all sources below 18.0 including 18→19 leftovers",
+    "audit_refs": [
+      "F-VER-1"
+    ]
+  },
+  {
+    "legacy_ref": "XML_RULES#13",
+    "legacy_rule": "oe_chatter div",
+    "disposition": "correct",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-336",
+      "EV-337"
+    ],
+    "gap": "G-R-09",
+    "reason": "Legacy window 'v16+' is wrong: div.oe_chatter is handled at 14.0-17.0 and absent from the 18.0 chatter form compiler/arch parser; <chatter/> is first handled at 18.0 (EV-336, EV-337; mail JS only). Rule not created here (rules files not owned by this task); a review-only 17-18 rule is supported.",
+    "audit_refs": [
+      "F-XML-5/6"
+    ],
+    "researched_by": "T025-audit",
+    "planned_rule_ids": [
+      "17-18.xml.oe-chatter-div"
+    ]
+  },
+  {
+    "legacy_ref": "XML_RULES#14",
+    "legacy_rule": "message_ids field",
+    "disposition": "needs-research",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-336",
+      "EV-337"
+    ],
+    "gap": "G-R-21",
+    "reason": "Support/obsolescence of message_ids in form arch at 16.0-19.0 not checked: EV-336/EV-337 cover only the <chatter/> compiler selector and the div.oe_chatter handler. G-R-09 resolved neither; open under G-R-21.",
+    "status": "PENDING"
+  },
+  {
+    "legacy_ref": "XML_RULES#15",
+    "legacy_rule": "activity_ids field",
+    "disposition": "needs-research",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-336",
+      "EV-337"
+    ],
+    "gap": "G-R-21",
+    "reason": "Support/obsolescence of activity_ids in form arch at 16.0-19.0 not checked: EV-336/EV-337 cover only the <chatter/> compiler selector and the div.oe_chatter handler. G-R-09 resolved neither; open under G-R-21.",
+    "status": "PENDING"
+  },
+  {
+    "legacy_ref": "XML_RULES#16",
+    "legacy_rule": "message_follower_ids field",
+    "disposition": "needs-research",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-336",
+      "EV-337"
+    ],
+    "gap": "G-R-21",
+    "reason": "Support/obsolescence of message_follower_ids in form arch at 16.0-19.0 not checked: EV-336/EV-337 cover only the <chatter/> compiler selector and the div.oe_chatter handler. G-R-09 resolved neither; open under G-R-21.",
+    "status": "PENDING"
+  },
+  {
+    "legacy_ref": "XML_RULES#17",
+    "legacy_rule": "mail_thread widget",
+    "disposition": "needs-research",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-336",
+      "EV-337"
+    ],
+    "gap": "G-R-21",
+    "reason": "Support/obsolescence of widget mail_thread in form arch at 16.0-19.0 not checked: EV-336/EV-337 cover only the <chatter/> compiler selector and the div.oe_chatter handler. G-R-09 resolved neither; open under G-R-21.",
+    "status": "PENDING"
+  },
+  {
+    "legacy_ref": "XML_RULES#18",
+    "legacy_rule": "<chatter> placement INFO",
+    "disposition": "needs-research",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-336"
+    ],
+    "gap": "G-R-22",
+    "reason": "<chatter/> exists from 18.0 (EV-336) but placement requirements (after </sheet>) are not evidenced; open under G-R-22.",
+    "status": "PENDING"
+  },
+  {
+    "legacy_ref": "XML_RULES#19",
+    "legacy_rule": "<page attrs=> (17)",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-109"
+    ],
+    "gap": null,
+    "reason": "Duplicate of #2"
+  },
+  {
+    "legacy_ref": "XML_RULES#20",
+    "legacy_rule": "noupdate=\"0\" INFO",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [],
+    "gap": null,
+    "reason": "Noise",
+    "audit_refs": [
+      "F-VER-4"
+    ]
+  },
+  {
+    "legacy_ref": "XML_RULES#21",
+    "legacy_rule": "<header> placement (17) INFO",
+    "disposition": "needs-research",
+    "new_rule_ids": [],
+    "evidence": [],
+    "gap": "G-R-22",
+    "reason": "Claim '<header> placement rules changed in v17' has no official evidence (previously retired as unverified noise); no 16.0 vs 17.0 form compiler/RNG comparison done. Open under G-R-22.",
+    "audit_refs": [
+      "F-VER-4"
+    ],
+    "status": "PENDING"
+  },
+  {
+    "legacy_ref": "MANIFEST_RULES#M1",
+    "legacy_rule": "version key INFO",
+    "disposition": "correct",
+    "new_rule_ids": [
+      "*.manifest.version-prefix"
+    ],
+    "evidence": [],
+    "gap": null,
+    "reason": "Shared rule *.manifest.version-prefix; preserve the module suffix (REQ-MAN-002)",
+    "audit_refs": [
+      "F-MAN-1"
+    ]
+  },
+  {
+    "legacy_ref": "MANIFEST_RULES#M2",
+    "legacy_rule": "installable: False",
+    "disposition": "keep",
+    "new_rule_ids": [
+      "*.manifest.not-installable"
+    ],
+    "evidence": [],
+    "gap": null,
+    "reason": "Shared hygiene rule (not an Odoo version claim)"
+  },
+  {
+    "legacy_ref": "MANIFEST_RULES#M3",
+    "legacy_rule": "auto_install: True INFO",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [],
+    "gap": null,
+    "reason": "Noise; replaced by depends checks (REQ-DEP-001)"
+  },
+  {
+    "legacy_ref": "MANIFEST_RULES#M4",
+    "legacy_rule": "application: True INFO",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [],
+    "gap": null,
+    "reason": "Noise"
+  },
+  {
+    "legacy_ref": "JS_TS_RULES#J1",
+    "legacy_rule": "odoo.define(",
+    "disposition": "correct",
+    "new_rule_ids": [
+      "16-17.js.odoo-define-legacy-form"
+    ],
+    "evidence": [
+      "EV-122",
+      "EV-390",
+      "EV-391"
+    ],
+    "gap": "G-R-08",
+    "reason": "odoo.define(name, function(require){}) is accepted at 15.0-16.0 (EV-390) and rejected at 17.0-19.0 by the module loader, which needs a deps array (EV-391, source inference, not run-tested); covered by 16-17.js.odoo-define-legacy-form. Detect-only."
+  },
+  {
+    "legacy_ref": "JS_TS_RULES#J2",
+    "legacy_rule": "require('web.",
+    "disposition": "correct",
+    "new_rule_ids": [
+      "16-17.js.odoo-define-legacy-form"
+    ],
+    "evidence": [
+      "EV-390",
+      "EV-391"
+    ],
+    "gap": "G-R-08",
+    "reason": "require('web.*') inside the 2-arg odoo.define(function(require){}) form is covered by 16-17.js.odoo-define-legacy-form (form rejected at 17.0+, EV-391). Only that form is evidenced; require('web.*') with an explicit deps array and the availability of legacy web.* module names at 17.0+ are not evidenced.",
+    "researched_by": "T025-audit"
+  },
+  {
+    "legacy_ref": "JS_TS_RULES#J3",
+    "legacy_rule": "Widget.extend(",
+    "disposition": "correct",
+    "new_rule_ids": [
+      "17-18.js.legacy-widget-removed"
+    ],
+    "evidence": [
+      "EV-343",
+      "EV-392"
+    ],
+    "gap": "G-R-03",
+    "reason": "Legacy Widget: web.Widget odoo.define at 15.0/16.0, ES module at 17.0, widget.js path absent at 18.0 and 19.0 (EV-392, EV-343) -> window 17-18, covered by 17-18.js.legacy-widget-removed. Absence is path-level; a relocated Widget is not excluded (EV-343 note). Detect-only.",
+    "researched_by": "T025-audit"
+  },
+  {
+    "legacy_ref": "JS_TS_RULES#J4",
+    "legacy_rule": "ajax.jsonRpc( (16)",
+    "disposition": "correct",
+    "new_rule_ids": [
+      "17-18.js.rpc-service-removed"
+    ],
+    "evidence": [
+      "EV-120"
+    ],
+    "gap": null,
+    "reason": "Fold into 17-18.js.rpc-service-removed research; legacy suggestion (env.services.rpc) is wrong for 18.0+",
+    "audit_refs": [
+      "F-VER-6"
+    ]
+  },
+  {
+    "legacy_ref": "JS_TS_RULES#J5",
+    "legacy_rule": "jQuery .on('click' INFO",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [],
+    "gap": null,
+    "reason": "Noise",
+    "audit_refs": [
+      "F-VER-4"
+    ]
+  },
+  {
+    "legacy_ref": "JS_TS_RULES#J6",
+    "legacy_rule": "useRef( INFO",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-488",
+      "EV-341"
+    ],
+    "gap": "G-R-03",
+    "reason": "No useRef change located 16.0-19.0 (identical OWL 2.8.4 function/export lines, EV-488, EV-341). 15.0 to 16.0 only moves useRef from owl.hooks to a top-level export, part of the OWL1 to OWL2 review (EV-395, 15-16.owl.mounted-method scope). Signature/behaviour not diffed.",
+    "researched_by": "T025-audit"
+  },
+  {
+    "legacy_ref": "CSS_RULES#C1",
+    "legacy_rule": ".o_form_sheet_bg",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-415"
+    ],
+    "gap": "G-R-18",
+    "reason": "Selector defined in SCSS at every version 14.0-19.0; no rename or removal",
+    "researched_by": "T023"
+  },
+  {
+    "legacy_ref": "CSS_RULES#C2",
+    "legacy_rule": ".o_list_view",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-353",
+      "EV-416"
+    ],
+    "gap": "G-R-18",
+    "reason": "Selector present in SCSS at every version 14.0-19.0 (as .o_list_view at 14.0-15.0, as .o_list_view & at 16.0-19.0; EV-416); no rename or removal",
+    "researched_by": "T023"
+  },
+  {
+    "legacy_ref": "VERSION_RULES#V18-1",
+    "legacy_rule": "spreadsheet_dashboard reorganised",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-212"
+    ],
+    "gap": null,
+    "reason": "Module present in 17.0 and 18.0"
+  },
+  {
+    "legacy_ref": "VERSION_RULES#V18-2",
+    "legacy_rule": "website.published.mixin removed in 18",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-208"
+    ],
+    "gap": null,
+    "reason": "Contradicted: the model is still defined in 18.0"
+  },
+  {
+    "legacy_ref": "VERSION_RULES#V18-3",
+    "legacy_rule": "phone.validation.mixin path changed",
+    "disposition": "retire",
+    "new_rule_ids": [],
+    "evidence": [
+      "EV-352",
+      "EV-417"
+    ],
+    "gap": "G-R-17",
+    "reason": "No phone.validation.mixin model or models/phone_validation.py exists at 16.0-19.0; the phone mixin is mail.thread.phone",
+    "researched_by": "T023"
+  },
+  {
+    "legacy_ref": "VERSION_RULES#V18-4",
+    "legacy_rule": "<notebook invisible=> (18)",
+    "disposition": "needs-research",
+    "new_rule_ids": [],
+    "evidence": [],
+    "gap": "G-R-22",
+    "reason": "Claim '<notebook invisible=> behaves differently in v18' has no official evidence (previously retired as unverified/vague); no 17.0 vs 18.0 comparison done. Open under G-R-22.",
+    "status": "PENDING"
+  },
+  {
+    "legacy_ref": "VERSION_RULES#V18-5",
+    "legacy_rule": "manifest version must be 18.0",
+    "disposition": "correct",
+    "new_rule_ids": [
+      "*.manifest.version-prefix"
+    ],
+    "evidence": [],
+    "gap": null,
+    "reason": "Merged into *.manifest.version-prefix (target-aware)",
+    "audit_refs": [
+      "F-MAN-1"
+    ]
+  },
+  {
+    "legacy_ref": "VERSION_RULES#V19-1",
+    "legacy_rule": "manifest version must be 19.0",
+    "disposition": "correct",
+    "new_rule_ids": [
+      "*.manifest.version-prefix"
+    ],
+    "evidence": [],
+    "gap": null,
+    "reason": "Same as V18-5",
+    "audit_refs": [
+      "F-MAN-1"
+    ]
+  }
+]

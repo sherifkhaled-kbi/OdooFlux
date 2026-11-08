@@ -1,0 +1,15 @@
+[
+  {
+    "category": "python",
+    "detector_ref": null,
+    "evidence": [
+      "EV-001"
+    ],
+    "fixer_ref": null,
+    "id": "16-17.python.name-get-deprecated",
+    "maturity": "FIX_ENABLED",
+    "risk": "LOW",
+    "step": "16-17",
+    "tests": []
+  }
+]

@@ -1,0 +1,61 @@
+{
+  "category": "fields",
+  "checked_by": "research-006-t019-t024",
+  "checked_on": "2026-11-07",
+  "description": "19.0 fields: Binary.attachment defaults to True (odoo/orm/fields_binary.py) and Html sanitize is documented with default True (odoo/orm/fields_textual.py); Binary.attachment = True also at 18.0 (16.0, 17.0 and Html sanitize at 16.0-18.0 not located)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-419",
+  "locations": [
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 39,
+      "match": "attachment = True                   # whether value is stored in attachment",
+      "path": "odoo/orm/fields_binary.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 32,
+      "match": ":param bool attachment: whether the field should be stored as `ir_attachment`",
+      "path": "odoo/orm/fields_binary.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 561,
+      "match": ":param bool sanitize: whether value must be sanitized (default: ``True``)",
+      "path": "odoo/orm/fields_textual.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 2534,
+      "match": "attachment = True                   # whether value is stored in attachment",
+      "path": "odoo/fields.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    }
+  ],
+  "notes": "The 'same as 16.0-17.0' and 'neither legacy claim supported at 16.0-19.0' statements are not established by located excerpts; only 18.0-19.0 attachment and 19.0 sanitize are (downgraded by independent verification).",
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "18.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "19.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/58bb9591d4cb08c4d5d4426222c9257f101ad250/odoo/orm/fields_binary.py#L39"
+}

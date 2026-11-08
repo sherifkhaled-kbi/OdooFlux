@@ -1,0 +1,37 @@
+{
+  "category": "views",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "Odoo's own view-arch RELAX NG validation uses `lxml.etree.RelaxNG`",
+  "detection_method": "grep on pinned source",
+  "id": "EV-204",
+  "locations": [
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 13,
+      "match": "from lxml import etree",
+      "path": "odoo/addons/base/models/ir_ui_view.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    }
+  ],
+  "notes": "NOT CONFIRMED: the RelaxNG usage was not found at the pinned SHA; register lines 9 and 301-302 are wrong. Only the lxml import is confirmed (line 13). Re-research before any rule depends on it (G-R-06).",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "18.0",
+    "to": "18.0"
+  },
+  "status": "UNVERIFIED",
+  "target_applicability": {
+    "from": "19.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/75d6abe5979ac9e8d85d097dad0e7b559ef07326/odoo/addons/base/models/ir_ui_view.py#L13"
+}

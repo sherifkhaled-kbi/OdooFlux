@@ -1,0 +1,2 @@
+{"description": "unterminated string ends at the line break; the next line is code again", "operations": ["lexer", "validator"], "syntax": "broken",
+ "tokens": [{"text": "abc", "kind": "string"}, {"text": "odoo.define", "kind": "code"}, {"text": "web.after", "kind": "string"}]}

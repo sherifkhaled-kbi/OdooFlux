@@ -1,0 +1,3 @@
+<odoo>
+  <field name="f" attrs="{'readonly': [('b', 'like', 'x')]}" invisible="a == 1"/>
+</odoo>

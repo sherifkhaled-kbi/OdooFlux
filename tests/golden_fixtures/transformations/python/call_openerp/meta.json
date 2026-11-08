@@ -1,0 +1,26 @@
+{
+  "description": "Dotted call name replaced; the same text inside a string is untouched",
+  "operations": [
+    {
+      "op": "replace_call_name",
+      "from": "openerp.fields.Char",
+      "to": "odoo.fields.Char"
+    }
+  ],
+  "expect": "edit",
+  "reason": "",
+  "spans": [
+    {
+      "locator": "node",
+      "kind": "callee",
+      "name": "openerp.fields.Char",
+      "covers": "openerp.fields.Char"
+    },
+    {
+      "locator": "node",
+      "kind": "call",
+      "name": "openerp.fields.Char",
+      "covers": "openerp.fields.Char(size=64)"
+    }
+  ]
+}

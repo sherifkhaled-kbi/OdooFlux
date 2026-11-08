@@ -1,0 +1,74 @@
+{
+  "category": "orm",
+  "checked_by": "research-006-models",
+  "checked_on": "2026-11-07",
+  "description": "Model stock.quant.package is renamed stock.package at 19.0 (declared in stock_quant.py at 18.0, in stock_package.py at 19.0); ACL model external id follows",
+  "detection_method": "raw fetch at pinned revisions; line match",
+  "id": "EV-510",
+  "locations": [
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 1584,
+      "match": "_name = \"stock.quant.package\"",
+      "path": "addons/stock/models/stock_quant.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 18,
+      "match": "_name = 'stock.package'",
+      "path": "addons/stock/models/stock_package.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "absent",
+      "line": null,
+      "match": "_name = \"stock.quant.package\"",
+      "path": "addons/stock/models/stock_quant.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "search_scope": "file exists at pinned revision; no _name line equals the old model name"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 34,
+      "match": "model_stock_quant_package",
+      "path": "addons/stock/security/ir.model.access.csv",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 23,
+      "match": "model_stock_package",
+      "path": "addons/stock/security/ir.model.access.csv",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    }
+  ],
+  "notes": "Review-only (DETECT_ONLY): each rule cites its own record. Field names, unqualified external ids, tables and ACL row ids that follow the rename have no verified mapping here (see research-notes/models.md).",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+  "risk": "MEDIUM",
+  "rule_ids": [
+    "18-19.csv.model-renamed-stock-package",
+    "18-19.python.model-renamed-stock-package",
+    "18-19.xml.model-renamed-stock-package"
+  ],
+  "source_applicability": {
+    "from": "18.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "19.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/75d6abe5979ac9e8d85d097dad0e7b559ef07326/addons/stock/models/stock_quant.py#L1584"
+}

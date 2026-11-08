@@ -1,0 +1,61 @@
+{
+ "schema": "odooflux.ai-fake-script/1",
+ "entries": [
+  {
+   "match": {
+    "contains": "def f_ok"
+   },
+   "response": {
+    "replacement": "    def f_ok(self):\n        return new_api(self.name)\n",
+    "notes": "",
+    "cannot_fix": false,
+    "usage": {
+     "input": 120,
+     "output": 30
+    }
+   }
+  },
+  {
+   "match": {
+    "contains": "def f_declined"
+   },
+   "response": {
+    "replacement": "",
+    "notes": "",
+    "cannot_fix": true,
+    "usage": {
+     "input": 120,
+     "output": 30
+    }
+   }
+  },
+  {
+   "match": {
+    "contains": "def f_extra"
+   },
+   "response": {
+    "replacement": "    def f_extra(self):\n        return new_api(self.name)\n\n    def sneaky(self):\n        return 2\n",
+    "notes": "",
+    "cannot_fix": false,
+    "usage": {
+     "input": 120,
+     "output": 30
+    }
+   }
+  },
+  {
+   "match": {
+    "contains": "legacy_defaults"
+   },
+   "response": {
+    "replacement": "class Legacy(models.Model):\n    _name = \"kbi.legacy\"\n    _inherit = [\"mail.thread\"]\n\n    name = fields.Char()\n    legacy_defaults = {\"name\": \"y\"}\n",
+    "notes": "",
+    "cannot_fix": false,
+    "usage": {
+     "input": 120,
+     "output": 30
+    }
+   }
+  }
+ ]
+}

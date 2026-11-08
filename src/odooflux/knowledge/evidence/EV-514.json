@@ -1,0 +1,45 @@
+{
+  "category": "orm",
+  "checked_by": "research-006-models",
+  "checked_on": "2026-11-07",
+  "description": "The ORM derives a model's table name from _name (cls._table = cls._name.replace('.', '_')) at 15.0 and 16.0, so a renamed model uses a different table (payment_acquirer to payment_provider); no source file maps data between tables, so raw-SQL references are unmapped",
+  "detection_method": "raw fetch at pinned revisions; line match",
+  "id": "EV-514",
+  "locations": [
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 706,
+      "match": "cls._table = cls._name.replace('.', '_')",
+      "path": "odoo/models.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 702,
+      "match": "cls._table = cls._name.replace('.', '_')",
+      "path": "odoo/models.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    }
+  ],
+  "notes": "Derivation only. This does not prove that no migration copies data; it shows static source cannot rewrite SQL strings safely. Companion of EV-450.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "HIGH",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "15.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/odoo/models.py#L706"
+}

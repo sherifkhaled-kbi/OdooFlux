@@ -1,0 +1,146 @@
+[
+  {
+    "repository": "odoo/odoo",
+    "branch": "12.0",
+    "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+    "committed": "2024-01-29",
+    "pinned_on": "2026-11-06",
+    "tags": []
+  },
+  {
+    "repository": "odoo/odoo",
+    "branch": "13.0",
+    "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+    "committed": "2024-01-31",
+    "pinned_on": "2026-11-06",
+    "tags": []
+  },
+  {
+    "repository": "odoo/odoo",
+    "branch": "14.0",
+    "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+    "committed": "2024-10-22",
+    "pinned_on": "2026-11-06",
+    "tags": []
+  },
+  {
+    "repository": "odoo/odoo",
+    "branch": "15.0",
+    "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+    "committed": "2024-11-01",
+    "pinned_on": "2026-11-06",
+    "tags": []
+  },
+  {
+    "repository": "odoo/odoo",
+    "branch": "16.0",
+    "revision": "9f40bf622c5531739321e59276c307319198e22b",
+    "committed": "2026-11-06",
+    "pinned_on": "2026-11-06",
+    "tags": []
+  },
+  {
+    "repository": "odoo/odoo",
+    "branch": "17.0",
+    "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+    "committed": "2026-11-05",
+    "pinned_on": "2026-11-06",
+    "tags": []
+  },
+  {
+    "repository": "odoo/odoo",
+    "branch": "18.0",
+    "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+    "committed": "2026-11-06",
+    "pinned_on": "2026-11-06",
+    "tags": []
+  },
+  {
+    "repository": "odoo/odoo",
+    "branch": "19.0",
+    "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+    "committed": "2026-11-06",
+    "pinned_on": "2026-11-06",
+    "tags": []
+  },
+  {
+    "repository": "odoo/documentation",
+    "branch": "12.0",
+    "revision": "c6556f144db6e3b9a94ddf1e6f586e0ab4f38a40",
+    "committed": null,
+    "pinned_on": "2026-11-06",
+    "tags": []
+  },
+  {
+    "repository": "odoo/documentation",
+    "branch": "13.0",
+    "revision": "f7407ebae9886f5662a55fb14753a0db00187a63",
+    "committed": null,
+    "pinned_on": "2026-11-06",
+    "tags": []
+  },
+  {
+    "repository": "odoo/documentation",
+    "branch": "14.0",
+    "revision": "cbf8a7bf815b51ae6277f83999c3267fff4cd67f",
+    "committed": null,
+    "pinned_on": "2026-11-06",
+    "tags": []
+  },
+  {
+    "repository": "odoo/documentation",
+    "branch": "15.0",
+    "revision": "f6b84ed59624ba8f0db2b1d0f7097e435550bb7e",
+    "committed": null,
+    "pinned_on": "2026-11-06",
+    "tags": []
+  },
+  {
+    "repository": "odoo/documentation",
+    "branch": "16.0",
+    "revision": "f61c6f0d8df0a849b3e15cb24eaf9c10c52332d7",
+    "committed": null,
+    "pinned_on": "2026-11-06",
+    "tags": []
+  },
+  {
+    "repository": "odoo/documentation",
+    "branch": "17.0",
+    "revision": "fbf3e3a6ef0bda7c30b28f213848deca17c2a872",
+    "committed": null,
+    "pinned_on": "2026-11-06",
+    "tags": []
+  },
+  {
+    "repository": "odoo/documentation",
+    "branch": "18.0",
+    "revision": "cc3890dc84189dfa58680242d7e96c816f2dec27",
+    "committed": null,
+    "pinned_on": "2026-11-06",
+    "tags": []
+  },
+  {
+    "repository": "odoo/documentation",
+    "branch": "19.0",
+    "revision": "706918083dbd7dbc8e70c658d3ca63d700f94228",
+    "committed": null,
+    "pinned_on": "2026-11-06",
+    "tags": []
+  },
+  {
+    "repository": "odoo/docker",
+    "branch": "master",
+    "revision": "f900094eb7492968332868d686caf22b966592ca",
+    "committed": "2026-11-02",
+    "pinned_on": "2026-11-07",
+    "tags": []
+  },
+  {
+    "repository": "odoo/docker",
+    "branch": "master",
+    "revision": "d9c2d8d50aa8eca1aadc186241bee3eac0e2d79e",
+    "committed": "2026-09-08",
+    "pinned_on": "2026-11-07",
+    "tags": []
+  }
+]

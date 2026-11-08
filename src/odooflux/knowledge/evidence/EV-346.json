@@ -1,0 +1,25 @@
+{
+  "category": "security",
+  "checked_by": "research-t020",
+  "checked_on": "2026-11-07",
+  "description": "ir.rule core fields name, active, model_id, groups, domain_force, perm_read..perm_unlink present at 12.0 and 19.0 (18.0 field list matches by grep)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-346",
+  "locations": [
+    {"branch": "12.0", "kind": "present", "line": 19, "match": "name = fields.Char(index=True)", "path": "odoo/addons/base/models/ir_rule.py", "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"},
+    {"branch": "12.0", "kind": "present", "line": 24, "match": "perm_read = fields.Boolean(string='Apply for Read', default=True)", "path": "odoo/addons/base/models/ir_rule.py", "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"},
+    {"branch": "19.0", "kind": "present", "line": 22, "match": "name = fields.Char()", "path": "odoo/addons/base/models/ir_rule.py", "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"},
+    {"branch": "19.0", "kind": "present", "line": 25, "match": "groups = fields.Many2many('res.groups', 'rule_group_rel', 'rule_group_id', 'group_id', ondelete='restrict')", "path": "odoo/addons/base/models/ir_rule.py", "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"}
+  ],
+  "notes": "Field names match between 12.0 and 19.0. 18.0 field names matched in a grep but its line numbers were not recorded. Negative result: no ir.rule field rename found.",
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": ["static.rescan"],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {"from": "12.0", "to": "18.0"},
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {"from": "19.0", "to": null},
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/odoo/addons/base/models/ir_rule.py#L19"
+}

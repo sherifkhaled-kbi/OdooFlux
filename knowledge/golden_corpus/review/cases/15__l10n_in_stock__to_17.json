@@ -1,0 +1,310 @@
+{
+  "schema_version": 1,
+  "case_id": "15__l10n_in_stock__to_17",
+  "tasks": [
+    "T044"
+  ],
+  "module": "l10n_in_stock",
+  "source_version": "15.0",
+  "target_version": "17.0",
+  "steps": [
+    "15-16",
+    "16-17"
+  ],
+  "source": {
+    "repository": "odoo/odoo",
+    "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+    "fetched_to": "/tmp/odooflux-golden-corpus/15.0/l10n_in_stock",
+    "files": [
+      {
+        "path": "addons/l10n_in_stock/__init__.py",
+        "sha256": "0422095c50476edda448f611db6225d4c274a2c894899f987f4d59c2d2494781",
+        "size": 121
+      },
+      {
+        "path": "addons/l10n_in_stock/__manifest__.py",
+        "sha256": "2d6662a506fefce9d397cdf5c7baf0dd38e2dfc38365eeb239c4c4777ff1536e",
+        "size": 596
+      },
+      {
+        "path": "addons/l10n_in_stock/data/product_demo.xml",
+        "sha256": "e947aa3f2162f668dfc509c91c6b4555bfa7a5948e4814f48ded2a290a24625a",
+        "size": 376
+      },
+      {
+        "path": "addons/l10n_in_stock/models/__init__.py",
+        "sha256": "83ad394189148ebc0abf62602e14d65fcf3af5d080ba06c25568e95d7c8d0d05",
+        "size": 128
+      },
+      {
+        "path": "addons/l10n_in_stock/models/stock_picking.py",
+        "sha256": "4880cadfba985ed7e9ff20d377d0e124f3c3b405c57a4ad6cd49fab35c91a853",
+        "size": 335
+      },
+      {
+        "path": "addons/l10n_in_stock/views/report_stockpicking_operations.xml",
+        "sha256": "ccdce8a813bd2384757521c0db0ea773d121c77ce242360608043448372eb842",
+        "size": 496
+      }
+    ]
+  },
+  "rules_in_scope": [
+    {
+      "id": "15-16.python.search-args-keyword",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-013"
+      ]
+    },
+    {
+      "id": "15-16.python.x2many-limit-attribute",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-013"
+      ]
+    },
+    {
+      "id": "15-16.python.removed-field-attributes",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-014"
+      ]
+    },
+    {
+      "id": "15-16.python.browse-str-ids",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-013"
+      ]
+    },
+    {
+      "id": "15-16.python.deprecated-model-methods",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-013"
+      ]
+    },
+    {
+      "id": "15-16.python.fields-view-get",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-107"
+      ]
+    },
+    {
+      "id": "15-16.js.service-registry-on",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-393"
+      ]
+    },
+    {
+      "id": "15-16.owl.mounted-method",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-395"
+      ]
+    },
+    {
+      "id": "16-17.python.warning-exception",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-110"
+      ]
+    },
+    {
+      "id": "16-17.xml.attrs-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-109",
+        "EV-380",
+        "EV-381",
+        "EV-382",
+        "EV-383",
+        "EV-384",
+        "EV-385"
+      ]
+    },
+    {
+      "id": "16-17.xml.states-attribute-removed",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-109"
+      ]
+    },
+    {
+      "id": "16-17.python.field-states-parameter",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-108"
+      ]
+    },
+    {
+      "id": "16-17.python.name-get-deprecated",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-011"
+      ]
+    },
+    {
+      "id": "16-17.python.read-group-signature",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-012"
+      ]
+    },
+    {
+      "id": "16-17.python.message-post-with-template",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-207"
+      ]
+    },
+    {
+      "id": "16-17.xml.act-window-tag",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-117",
+        "EV-322",
+        "EV-323",
+        "EV-325"
+      ]
+    },
+    {
+      "id": "16-17.xml.report-tag",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-117",
+        "EV-322",
+        "EV-323",
+        "EV-326"
+      ]
+    },
+    {
+      "id": "16-17.tests.savepointcase-removed",
+      "maturity": "FIX_ENABLED",
+      "evidence": [
+        "EV-111",
+        "EV-305",
+        "EV-306",
+        "EV-307"
+      ]
+    },
+    {
+      "id": "16-17.js.odoo-define-legacy-form",
+      "maturity": "DETECT_ONLY",
+      "evidence": [
+        "EV-390",
+        "EV-391"
+      ]
+    },
+    {
+      "id": "*.manifest.parse-error",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.version-prefix",
+      "maturity": "DRAFT",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.not-installable",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.missing-data-file",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.manifest.load-order",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.deps.unknown-dependency",
+      "maturity": "DRAFT",
+      "evidence": [
+        "EV-430",
+        "EV-431",
+        "EV-432",
+        "EV-433",
+        "EV-372",
+        "EV-373",
+        "EV-374",
+        "EV-375"
+      ]
+    },
+    {
+      "id": "*.refs.dangling-reference",
+      "maturity": "DRAFT",
+      "evidence": [
+        "EV-430"
+      ]
+    },
+    {
+      "id": "*.security.acl-csv",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    },
+    {
+      "id": "*.security.unrestricted-record-rule",
+      "maturity": "DETECT_ONLY",
+      "evidence": []
+    }
+  ],
+  "applicable_rule_ids": [],
+  "evidence_ids": [],
+  "expected_basis": "hand-derived from source reading + rule evidence; NOT produced by OdooFlux",
+  "proposed_expected_transformations": [
+    {
+      "file": "addons/l10n_in_stock/__init__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/l10n_in_stock/__manifest__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/l10n_in_stock/data/product_demo.xml",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/l10n_in_stock/models/__init__.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/l10n_in_stock/models/stock_picking.py",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    },
+    {
+      "file": "addons/l10n_in_stock/views/report_stockpicking_operations.xml",
+      "rule_id": null,
+      "kind": "no_change",
+      "description": "No applicable rule construct found by reading this file; expected byte-identical, no findings."
+    }
+  ],
+  "overall_expected": "no_change (byte-identical; no findings from in-scope rules)",
+  "unresolved_ambiguities": [
+    "Template xpath targets stock.report_picking internals (span[@t-field='ml.product_id.description_picking']); whether this anchor survives in later series is not verifiable from evidence. super(StockPicking, self) style is valid; no rule rewrites it.",
+    "Manifest 'version' has no series prefix ('0.1/1.0' style); *.manifest.version-prefix is DRAFT/review_required and planner-bound. Reviewer must decide whether the expected manifest version is rewritten to target series prefix or untouched. Proposed here: untouched.",
+    "Evidence maturity: all rules in steps 15-16,16-17 that could apply are DETECT_ONLY/DRAFT unless listed FIX_ENABLED; FIX_ENABLED rules in range fire on no construct of this module."
+  ],
+  "review_status": "PENDING_INDEPENDENT_REVIEW",
+  "reviewer": "",
+  "review_date": "",
+  "reviewer_notes": "",
+  "reviewer_qualification": ""
+}

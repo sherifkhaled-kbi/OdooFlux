@@ -1,0 +1,1 @@
+<odoo><field name="a" attrs="{'invisible': [('x', '&gt;', 3)]}"/><field name="b" help="a > b"/></odoo>

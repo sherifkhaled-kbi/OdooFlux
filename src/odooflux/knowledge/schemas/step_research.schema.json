@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StepResearchRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "step",
+    "research_status",
+    "revisions",
+    "categories",
+    "peer_reviewed",
+    "notes",
+    "review_only",
+    "seeded_evidence",
+    "open_gaps"
+  ],
+  "properties": {
+    "step": {
+      "type": "string",
+      "pattern": "^\\d+-\\d+$"
+    },
+    "research_status": {
+      "enum": [
+        "NOT_ASSESSED",
+        "RESEARCH_SEEDED",
+        "RESEARCHED",
+        "RULES_DRAFTED",
+        "RULES_TESTED",
+        "RUNTIME_VALIDATED"
+      ]
+    },
+    "revisions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "categories": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status",
+          "evidence",
+          "gaps"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "NOT_ASSESSED",
+              "RESEARCH_SEEDED",
+              "RESEARCHED",
+              "RULES_DRAFTED",
+              "RULES_TESTED",
+              "RUNTIME_VALIDATED"
+            ]
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^EV-\\d{3}$"
+            }
+          },
+          "gaps": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^G-R-\\d{2}$"
+            }
+          }
+        }
+      }
+    },
+    "peer_reviewed": {
+      "type": "boolean"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "review_only": {
+      "type": "string",
+      "minLength": 1
+    },
+    "seeded_evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^EV-\\\\d{3}$"
+      }
+    },
+    "open_gaps": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^G-R-\\\\d{2}$"
+      }
+    }
+  }
+}

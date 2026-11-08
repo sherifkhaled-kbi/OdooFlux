@@ -1,0 +1,26 @@
+{
+  "category": "javascript",
+  "checked_by": "research-t019",
+  "checked_on": "2026-11-07",
+  "description": "Web client registry export moves within core/registry.js from 15.0 to 19.0; service registry API not traced",
+  "detection_method": "grep on pinned source",
+  "id": "EV-344",
+  "locations": [
+    {"branch": "15.0", "kind": "present", "line": 144, "match": "export const registry = new Registry();", "path": "addons/web/static/src/core/registry.js", "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"},
+    {"branch": "16.0", "kind": "present", "line": 143, "match": "export const registry = new Registry();", "path": "addons/web/static/src/core/registry.js", "revision": "9f40bf622c5531739321e59276c307319198e22b"},
+    {"branch": "17.0", "kind": "present", "line": 143, "match": "export const registry = new Registry();", "path": "addons/web/static/src/core/registry.js", "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"},
+    {"branch": "18.0", "kind": "present", "line": 205, "match": "export const registry = new Registry();", "path": "addons/web/static/src/core/registry.js", "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"},
+    {"branch": "19.0", "kind": "present", "line": 209, "match": "export const registry = new Registry();", "path": "addons/web/static/src/core/registry.js", "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"}
+  ],
+  "notes": "Only the registry export line was checked. The services API change 15.0 to 19.0 (G-R-08) remains open.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": ["static.rescan"],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {"from": "15.0", "to": "19.0"},
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {"from": "19.0", "to": null},
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/addons/web/static/src/core/registry.js#L144"
+}

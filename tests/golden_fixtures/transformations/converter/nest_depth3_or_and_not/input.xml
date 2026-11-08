@@ -1,0 +1,3 @@
+<odoo>
+  <button name="b" attrs="{'invisible': ['|', '&amp;', ('a', '=', 1), ('b', '=', 2), '!', ('c', '=', 3)]}"/>
+</odoo>

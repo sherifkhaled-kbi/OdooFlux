@@ -1,0 +1,70 @@
+{
+  "category": "data_files",
+  "checked_by": "research-006-phase3-t015",
+  "checked_on": "2026-11-07",
+  "description": "<report> expansion: XML name maps to report_name, string maps to name, file maps to report_file; same mapping in 12.0-16.0",
+  "detection_method": "grep on pinned source",
+  "id": "EV-326",
+  "locations": [
+    {
+      "branch": "12.0",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "path": "odoo/tools/convert.py",
+      "line": 286,
+      "match": "('report_name','name')",
+      "kind": "present"
+    },
+    {
+      "branch": "12.0",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "path": "odoo/tools/convert.py",
+      "line": 292,
+      "match": "('file', 'report_file')",
+      "kind": "present"
+    },
+    {
+      "branch": "13.0",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "path": "odoo/tools/convert.py",
+      "line": 277,
+      "match": "('report_name','name')",
+      "kind": "present"
+    },
+    {
+      "branch": "16.0",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "path": "odoo/tools/convert.py",
+      "line": 280,
+      "match": "('report_name','name')",
+      "kind": "present"
+    },
+    {
+      "branch": "16.0",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "path": "odoo/tools/convert.py",
+      "line": 286,
+      "match": "('file', 'report_file')",
+      "kind": "present"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9f40bf622c5531739321e59276c307319198e22b",
+  "risk": "MEDIUM",
+  "rule_ids": [
+    "16-17.xml.report-tag"
+  ],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "17.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9f40bf622c5531739321e59276c307319198e22b/odoo/tools/convert.py#L280"
+}

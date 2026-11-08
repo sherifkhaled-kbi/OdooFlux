@@ -1,0 +1,94 @@
+{
+  "category": "controllers",
+  "checked_by": "research-006-t019-t024",
+  "checked_on": "2026-11-07",
+  "description": "@route signature: 14.0 and 15.0 define route(route=None, **kw) and document csrf; 16.0-18.0 define route(route=None, **routing) (only the signature and csrf docstring lines are located; a full parameter-list comparison is not established)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-410",
+  "locations": [
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 444,
+      "match": "def route(route=None, **kw):",
+      "path": "odoo/http.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 468,
+      "match": ":param bool csrf: Whether CSRF protection should be enabled for the route.",
+      "path": "odoo/http.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 442,
+      "match": "def route(route=None, **kw):",
+      "path": "odoo/http.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 466,
+      "match": ":param bool csrf: Whether CSRF protection should be enabled for the route.",
+      "path": "odoo/http.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 708,
+      "match": "def route(route=None, **routing):",
+      "path": "odoo/http.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 741,
+      "match": "def route(route=None, **routing):",
+      "path": "odoo/http.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 687,
+      "match": "def route(route=None, **routing):",
+      "path": "odoo/http.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "^def route(route=None, **kw):",
+      "path": "odoo/http.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "odoo/http.py"
+    }
+  ],
+  "notes": "Withdrawn: claim of identical documented params type/auth/methods/cors across 14->15 (not located).",
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "14.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/cc0060e889603eb2e47fa44a8a22a70d7d784185/odoo/http.py#L444"
+}

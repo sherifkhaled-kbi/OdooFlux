@@ -1,0 +1,25 @@
+{
+  "description": "Two decorators with the same name are both removed",
+  "operations": [
+    {
+      "op": "remove_decorator",
+      "name": "api.one"
+    }
+  ],
+  "expect": "edit",
+  "reason": "",
+  "spans": [
+    {
+      "locator": "decorator_removal",
+      "decorator": "api.one",
+      "occurrence": 0,
+      "covers": "    @api.one\n"
+    },
+    {
+      "locator": "decorator_removal",
+      "decorator": "api.one",
+      "occurrence": 1,
+      "covers": "    @api.one\n"
+    }
+  ]
+}

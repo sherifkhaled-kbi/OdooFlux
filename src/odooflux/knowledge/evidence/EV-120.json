@@ -1,0 +1,53 @@
+{
+  "category": "javascript",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "The `rpc` service is registered in 17.0; 18.0 exports an `rpc` function and no longer registers the service",
+  "detection_method": "grep on pinned source",
+  "id": "EV-120",
+  "locations": [
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 140,
+      "match": "registry.category(\"services\").add(\"rpc\"",
+      "path": "addons/web/static/src/core/network/rpc_service.js",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 65,
+      "match": "export function rpc(",
+      "path": "addons/web/static/src/core/network/rpc.js",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "18.0",
+      "kind": "absent",
+      "line": null,
+      "match": "rpc_service",
+      "path": "addons/web/static/src/core/network/rpc_service.js",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326",
+      "search_scope": "addons/web/static/src/core/network/rpc_service.js"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "17.0",
+    "to": "17.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "18.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9ef8d62331b128bcd288528e4639e0901d85fcc8/addons/web/static/src/core/network/rpc_service.js#L140"
+}

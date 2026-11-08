@@ -1,0 +1,25 @@
+{
+  "category": "owl",
+  "checked_by": "research-t019",
+  "checked_on": "2026-11-07",
+  "description": "OWL 2.x bundled at addons/web/static/lib/owl/owl.js (version 2.8.4) for 16.0 through 19.0",
+  "detection_method": "grep on pinned source",
+  "id": "EV-341",
+  "locations": [
+    {"branch": "16.0", "kind": "present", "line": 5869, "match": "const version = \"2.8.4\";", "path": "addons/web/static/lib/owl/owl.js", "revision": "9f40bf622c5531739321e59276c307319198e22b"},
+    {"branch": "17.0", "kind": "present", "line": 5869, "match": "const version = \"2.8.4\";", "path": "addons/web/static/lib/owl/owl.js", "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"},
+    {"branch": "18.0", "kind": "present", "line": 5869, "match": "const version = \"2.8.4\";", "path": "addons/web/static/lib/owl/owl.js", "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"},
+    {"branch": "19.0", "kind": "present", "line": 5869, "match": "const version = \"2.8.4\";", "path": "addons/web/static/lib/owl/owl.js", "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"}
+  ],
+  "notes": "Same vendored file, same version string on all four pinned branches. OWL pin is not in revisions.json.",
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": ["static.rescan"],
+  "revision": "9f40bf622c5531739321e59276c307319198e22b",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {"from": "16.0", "to": "19.0"},
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {"from": "19.0", "to": null},
+  "url": "https://github.com/odoo/odoo/blob/9f40bf622c5531739321e59276c307319198e22b/addons/web/static/lib/owl/owl.js#L5869"
+}

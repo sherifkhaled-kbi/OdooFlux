@@ -1,0 +1,19 @@
+{
+ "schema": "odooflux.ai-fake-script/1",
+ "entries": [
+  {
+   "match": {
+    "contains": "def f_syntax"
+   },
+   "response": {
+    "replacement": "    def f_syntax(self):\n        return new_api(self.name\n",
+    "notes": "",
+    "cannot_fix": false,
+    "usage": {
+     "input": 120,
+     "output": 30
+    }
+   }
+  }
+ ]
+}

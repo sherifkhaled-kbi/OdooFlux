@@ -1,0 +1,74 @@
+{
+  "category": "orm",
+  "checked_by": "research-006-models",
+  "checked_on": "2026-11-07",
+  "description": "Model mail.channel.partner is renamed mail.channel.member at 16.0 (mail_channel_partner.py replaced by mail_channel_member.py); ACL model external id follows",
+  "detection_method": "raw fetch at pinned revisions; line match",
+  "id": "EV-504",
+  "locations": [
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 12,
+      "match": "_name = 'mail.channel.partner'",
+      "path": "addons/mail/models/mail_channel_partner.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 11,
+      "match": "_name = 'mail.channel.member'",
+      "path": "addons/mail/models/mail_channel_member.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "16.0",
+      "kind": "absent",
+      "line": null,
+      "match": "mail_channel_partner.py",
+      "path": "addons/mail/models/mail_channel_partner.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    },
+    {
+      "branch": "15.0",
+      "kind": "present",
+      "line": 18,
+      "match": "model_mail_channel_partner",
+      "path": "addons/mail/security/ir.model.access.csv",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187"
+    },
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 21,
+      "match": "model_mail_channel_member",
+      "path": "addons/mail/security/ir.model.access.csv",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    }
+  ],
+  "notes": "Review-only (DETECT_ONLY): each rule cites its own record. Field names, unqualified external ids, tables and ACL row ids that follow the rename have no verified mapping here (see research-notes/models.md).",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "MEDIUM",
+  "rule_ids": [
+    "15-16.csv.model-renamed-mail-channel-member",
+    "15-16.python.model-renamed-mail-channel-member",
+    "15-16.xml.model-renamed-mail-channel-member"
+  ],
+  "source_applicability": {
+    "from": "15.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "16.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/addons/mail/models/mail_channel_partner.py#L12"
+}

@@ -1,0 +1,46 @@
+{
+  "category": "dependencies",
+  "checked_by": "research-006-removed-modules",
+  "checked_on": "2026-11-07",
+  "description": "Module l10n_be_invoice_bba is an empty module merged into l10n_be (manifest comment at 14.0); it is removed at 15.0",
+  "detection_method": "raw fetch at pinned revisions; line match",
+  "id": "EV-521",
+  "locations": [
+    {
+      "branch": "14.0",
+      "kind": "present",
+      "line": 7,
+      "match": "# This module is empty. It is merged whith l10n_be version 14.1.",
+      "path": "addons/l10n_be_invoice_bba/__manifest__.py",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+    },
+    {
+      "branch": "15.0",
+      "kind": "absent",
+      "line": null,
+      "match": "__manifest__.py",
+      "path": "addons/l10n_be_invoice_bba/__manifest__.py",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    }
+  ],
+  "notes": "The comment states the merge target l10n_be explicitly.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.dependency"
+  ],
+  "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "14.0",
+    "to": "15.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "15.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/cc0060e889603eb2e47fa44a8a22a70d7d784185/addons/l10n_be_invoice_bba/__manifest__.py#L7"
+}

@@ -1,0 +1,5356 @@
+{
+  "category": "dependencies",
+  "checked_by": "research-008-us4",
+  "checked_on": "2026-11-07",
+  "description": "Core addon directory names at 19.0 (addons/ and odoo/addons/) used as the core module set for L3 dependency checks",
+  "detection_method": "GitHub contents API directory listing at pinned SHA",
+  "id": "EV-375",
+  "locations": [
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "account",
+      "path": "addons/account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "account_add_gln",
+      "path": "addons/account_add_gln",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "account_check_printing",
+      "path": "addons/account_check_printing",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "account_debit_note",
+      "path": "addons/account_debit_note",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "account_edi",
+      "path": "addons/account_edi",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "account_edi_proxy_client",
+      "path": "addons/account_edi_proxy_client",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "account_edi_ubl_cii",
+      "path": "addons/account_edi_ubl_cii",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "account_fleet",
+      "path": "addons/account_fleet",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "account_payment",
+      "path": "addons/account_payment",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "account_payment_interco",
+      "path": "addons/account_payment_interco",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "account_peppol",
+      "path": "addons/account_peppol",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "account_peppol_advanced_fields",
+      "path": "addons/account_peppol_advanced_fields",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "account_peppol_response",
+      "path": "addons/account_peppol_response",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "account_qr_code_emv",
+      "path": "addons/account_qr_code_emv",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "account_qr_code_sepa",
+      "path": "addons/account_qr_code_sepa",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "account_tax_python",
+      "path": "addons/account_tax_python",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "account_test",
+      "path": "addons/account_test",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "account_update_tax_tags",
+      "path": "addons/account_update_tax_tags",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "analytic",
+      "path": "addons/analytic",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "api_doc",
+      "path": "addons/api_doc",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "attachment_indexation",
+      "path": "addons/attachment_indexation",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "auth_ldap",
+      "path": "addons/auth_ldap",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "auth_oauth",
+      "path": "addons/auth_oauth",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "auth_passkey",
+      "path": "addons/auth_passkey",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "auth_passkey_portal",
+      "path": "addons/auth_passkey_portal",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "auth_password_policy",
+      "path": "addons/auth_password_policy",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "auth_password_policy_portal",
+      "path": "addons/auth_password_policy_portal",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "auth_password_policy_signup",
+      "path": "addons/auth_password_policy_signup",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "auth_signup",
+      "path": "addons/auth_signup",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "auth_timeout",
+      "path": "addons/auth_timeout",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "auth_totp",
+      "path": "addons/auth_totp",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "auth_totp_mail",
+      "path": "addons/auth_totp_mail",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "auth_totp_portal",
+      "path": "addons/auth_totp_portal",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "barcodes",
+      "path": "addons/barcodes",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "barcodes_gs1_nomenclature",
+      "path": "addons/barcodes_gs1_nomenclature",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "base_address_extended",
+      "path": "addons/base_address_extended",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "base_automation",
+      "path": "addons/base_automation",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "base_geolocalize",
+      "path": "addons/base_geolocalize",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "base_iban",
+      "path": "addons/base_iban",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "base_import",
+      "path": "addons/base_import",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "base_import_module",
+      "path": "addons/base_import_module",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "base_install_request",
+      "path": "addons/base_install_request",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "base_setup",
+      "path": "addons/base_setup",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "base_sparse_field",
+      "path": "addons/base_sparse_field",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "base_vat",
+      "path": "addons/base_vat",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "board",
+      "path": "addons/board",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "bus",
+      "path": "addons/bus",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "calendar",
+      "path": "addons/calendar",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "calendar_sms",
+      "path": "addons/calendar_sms",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "certificate",
+      "path": "addons/certificate",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "cloud_storage",
+      "path": "addons/cloud_storage",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "cloud_storage_azure",
+      "path": "addons/cloud_storage_azure",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "cloud_storage_google",
+      "path": "addons/cloud_storage_google",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "cloud_storage_migration",
+      "path": "addons/cloud_storage_migration",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "contacts",
+      "path": "addons/contacts",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "crm",
+      "path": "addons/crm",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "crm_iap_enrich",
+      "path": "addons/crm_iap_enrich",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "crm_iap_mine",
+      "path": "addons/crm_iap_mine",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "crm_livechat",
+      "path": "addons/crm_livechat",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "crm_mail_plugin",
+      "path": "addons/crm_mail_plugin",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "crm_sms",
+      "path": "addons/crm_sms",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "data_recycle",
+      "path": "addons/data_recycle",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "delivery",
+      "path": "addons/delivery",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "delivery_mondialrelay",
+      "path": "addons/delivery_mondialrelay",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "delivery_stock_picking_batch",
+      "path": "addons/delivery_stock_picking_batch",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "digest",
+      "path": "addons/digest",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "event",
+      "path": "addons/event",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "event_booth",
+      "path": "addons/event_booth",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "event_booth_sale",
+      "path": "addons/event_booth_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "event_crm",
+      "path": "addons/event_crm",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "event_crm_sale",
+      "path": "addons/event_crm_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "event_product",
+      "path": "addons/event_product",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "event_sale",
+      "path": "addons/event_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "event_sms",
+      "path": "addons/event_sms",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "fleet",
+      "path": "addons/fleet",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "gamification",
+      "path": "addons/gamification",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "gamification_sale_crm",
+      "path": "addons/gamification_sale_crm",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "google_account",
+      "path": "addons/google_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "google_address_autocomplete",
+      "path": "addons/google_address_autocomplete",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "google_calendar",
+      "path": "addons/google_calendar",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "google_gmail",
+      "path": "addons/google_gmail",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "google_recaptcha",
+      "path": "addons/google_recaptcha",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr",
+      "path": "addons/hr",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_attendance",
+      "path": "addons/hr_attendance",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_calendar",
+      "path": "addons/hr_calendar",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_expense",
+      "path": "addons/hr_expense",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_fleet",
+      "path": "addons/hr_fleet",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_gamification",
+      "path": "addons/hr_gamification",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_holidays",
+      "path": "addons/hr_holidays",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_holidays_attendance",
+      "path": "addons/hr_holidays_attendance",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_holidays_homeworking",
+      "path": "addons/hr_holidays_homeworking",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_homeworking",
+      "path": "addons/hr_homeworking",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_homeworking_calendar",
+      "path": "addons/hr_homeworking_calendar",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_hourly_cost",
+      "path": "addons/hr_hourly_cost",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_livechat",
+      "path": "addons/hr_livechat",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_maintenance",
+      "path": "addons/hr_maintenance",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_org_chart",
+      "path": "addons/hr_org_chart",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_presence",
+      "path": "addons/hr_presence",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_recruitment",
+      "path": "addons/hr_recruitment",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_recruitment_skills",
+      "path": "addons/hr_recruitment_skills",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_recruitment_sms",
+      "path": "addons/hr_recruitment_sms",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_recruitment_survey",
+      "path": "addons/hr_recruitment_survey",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_skills",
+      "path": "addons/hr_skills",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_skills_event",
+      "path": "addons/hr_skills_event",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_skills_slides",
+      "path": "addons/hr_skills_slides",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_skills_survey",
+      "path": "addons/hr_skills_survey",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_timesheet",
+      "path": "addons/hr_timesheet",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_timesheet_attendance",
+      "path": "addons/hr_timesheet_attendance",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_work_entry",
+      "path": "addons/hr_work_entry",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "hr_work_entry_holidays",
+      "path": "addons/hr_work_entry_holidays",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "html_builder",
+      "path": "addons/html_builder",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "html_editor",
+      "path": "addons/html_editor",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "http_routing",
+      "path": "addons/http_routing",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "iap",
+      "path": "addons/iap",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "iap_crm",
+      "path": "addons/iap_crm",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "iap_mail",
+      "path": "addons/iap_mail",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "im_livechat",
+      "path": "addons/im_livechat",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "iot_base",
+      "path": "addons/iot_base",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "iot_box_image",
+      "path": "addons/iot_box_image",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "iot_drivers",
+      "path": "addons/iot_drivers",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_account_edi_ubl_cii_tests",
+      "path": "addons/l10n_account_edi_ubl_cii_tests",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_account_withholding_tax",
+      "path": "addons/l10n_account_withholding_tax",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_account_withholding_tax_pos",
+      "path": "addons/l10n_account_withholding_tax_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ae",
+      "path": "addons/l10n_ae",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ae_pos",
+      "path": "addons/l10n_ae_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_anz_ubl_pint",
+      "path": "addons/l10n_anz_ubl_pint",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ar",
+      "path": "addons/l10n_ar",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ar_pos",
+      "path": "addons/l10n_ar_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ar_stock",
+      "path": "addons/l10n_ar_stock",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ar_website_sale",
+      "path": "addons/l10n_ar_website_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ar_withholding",
+      "path": "addons/l10n_ar_withholding",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_at",
+      "path": "addons/l10n_at",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_au",
+      "path": "addons/l10n_au",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_bd",
+      "path": "addons/l10n_bd",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_be",
+      "path": "addons/l10n_be",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_be_pos_restaurant",
+      "path": "addons/l10n_be_pos_restaurant",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_be_pos_sale",
+      "path": "addons/l10n_be_pos_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_bf",
+      "path": "addons/l10n_bf",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_bg",
+      "path": "addons/l10n_bg",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_bg_ledger",
+      "path": "addons/l10n_bg_ledger",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_bh",
+      "path": "addons/l10n_bh",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_bh_pos",
+      "path": "addons/l10n_bh_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_bj",
+      "path": "addons/l10n_bj",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_bo",
+      "path": "addons/l10n_bo",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_br",
+      "path": "addons/l10n_br",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_br_sales",
+      "path": "addons/l10n_br_sales",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_br_website_sale",
+      "path": "addons/l10n_br_website_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ca",
+      "path": "addons/l10n_ca",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_cd",
+      "path": "addons/l10n_cd",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_cf",
+      "path": "addons/l10n_cf",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_cg",
+      "path": "addons/l10n_cg",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ch",
+      "path": "addons/l10n_ch",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ch_pos",
+      "path": "addons/l10n_ch_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ci",
+      "path": "addons/l10n_ci",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_cl",
+      "path": "addons/l10n_cl",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_cm",
+      "path": "addons/l10n_cm",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_cn",
+      "path": "addons/l10n_cn",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_cn_city",
+      "path": "addons/l10n_cn_city",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_co",
+      "path": "addons/l10n_co",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_co_pos",
+      "path": "addons/l10n_co_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_cr",
+      "path": "addons/l10n_cr",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_cy",
+      "path": "addons/l10n_cy",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_cz",
+      "path": "addons/l10n_cz",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_de",
+      "path": "addons/l10n_de",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_din5008",
+      "path": "addons/l10n_din5008",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_din5008_expense",
+      "path": "addons/l10n_din5008_expense",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_din5008_purchase",
+      "path": "addons/l10n_din5008_purchase",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_din5008_repair",
+      "path": "addons/l10n_din5008_repair",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_din5008_sale",
+      "path": "addons/l10n_din5008_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_din5008_stock",
+      "path": "addons/l10n_din5008_stock",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_dk",
+      "path": "addons/l10n_dk",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_dk_fik",
+      "path": "addons/l10n_dk_fik",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_dk_nemhandel",
+      "path": "addons/l10n_dk_nemhandel",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_dk_nemhandel_response",
+      "path": "addons/l10n_dk_nemhandel_response",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_dk_oioubl",
+      "path": "addons/l10n_dk_oioubl",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_do",
+      "path": "addons/l10n_do",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_dz",
+      "path": "addons/l10n_dz",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ec",
+      "path": "addons/l10n_ec",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ec_sale",
+      "path": "addons/l10n_ec_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ec_stock",
+      "path": "addons/l10n_ec_stock",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ee",
+      "path": "addons/l10n_ee",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_eg",
+      "path": "addons/l10n_eg",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_eg_edi_eta",
+      "path": "addons/l10n_eg_edi_eta",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_es",
+      "path": "addons/l10n_es",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_es_edi_facturae",
+      "path": "addons/l10n_es_edi_facturae",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_es_edi_sii",
+      "path": "addons/l10n_es_edi_sii",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_es_edi_tbai",
+      "path": "addons/l10n_es_edi_tbai",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_es_edi_tbai_pos",
+      "path": "addons/l10n_es_edi_tbai_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_es_edi_verifactu",
+      "path": "addons/l10n_es_edi_verifactu",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_es_edi_verifactu_pos",
+      "path": "addons/l10n_es_edi_verifactu_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_es_pos",
+      "path": "addons/l10n_es_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_et",
+      "path": "addons/l10n_et",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_eu_oss",
+      "path": "addons/l10n_eu_oss",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_fi",
+      "path": "addons/l10n_fi",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_fi_sale",
+      "path": "addons/l10n_fi_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_fr",
+      "path": "addons/l10n_fr",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_fr_account",
+      "path": "addons/l10n_fr_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_fr_facturx_chorus_pro",
+      "path": "addons/l10n_fr_facturx_chorus_pro",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_fr_hr_holidays",
+      "path": "addons/l10n_fr_hr_holidays",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_fr_hr_work_entry_holidays",
+      "path": "addons/l10n_fr_hr_work_entry_holidays",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_fr_pdp",
+      "path": "addons/l10n_fr_pdp",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_fr_pdp_penalty_rate",
+      "path": "addons/l10n_fr_pdp_penalty_rate",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_fr_pdp_pos",
+      "path": "addons/l10n_fr_pdp_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_fr_pos_cert",
+      "path": "addons/l10n_fr_pos_cert",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ga",
+      "path": "addons/l10n_ga",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_gcc_invoice",
+      "path": "addons/l10n_gcc_invoice",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_gcc_invoice_stock_account",
+      "path": "addons/l10n_gcc_invoice_stock_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_gcc_pos",
+      "path": "addons/l10n_gcc_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ge",
+      "path": "addons/l10n_ge",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_gf",
+      "path": "addons/l10n_gf",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_gn",
+      "path": "addons/l10n_gn",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_gp",
+      "path": "addons/l10n_gp",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_gq",
+      "path": "addons/l10n_gq",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_gr",
+      "path": "addons/l10n_gr",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_gr_edi",
+      "path": "addons/l10n_gr_edi",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_gr_edi_e_invoo",
+      "path": "addons/l10n_gr_edi_e_invoo",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_gr_edi_e_invoo_bridge",
+      "path": "addons/l10n_gr_edi_e_invoo_bridge",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_gt",
+      "path": "addons/l10n_gt",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_gw",
+      "path": "addons/l10n_gw",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_hk",
+      "path": "addons/l10n_hk",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_hn",
+      "path": "addons/l10n_hn",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_hr",
+      "path": "addons/l10n_hr",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_hr_edi",
+      "path": "addons/l10n_hr_edi",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_hr_kuna",
+      "path": "addons/l10n_hr_kuna",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_hu",
+      "path": "addons/l10n_hu",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_hu_edi",
+      "path": "addons/l10n_hu_edi",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_hu_edi_receive",
+      "path": "addons/l10n_hu_edi_receive",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_id",
+      "path": "addons/l10n_id",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_id_efaktur_coretax",
+      "path": "addons/l10n_id_efaktur_coretax",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_id_pos",
+      "path": "addons/l10n_id_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ie",
+      "path": "addons/l10n_ie",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_il",
+      "path": "addons/l10n_il",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_in",
+      "path": "addons/l10n_in",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_in_edi",
+      "path": "addons/l10n_in_edi",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_in_ewaybill",
+      "path": "addons/l10n_in_ewaybill",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_in_ewaybill_irn",
+      "path": "addons/l10n_in_ewaybill_irn",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_in_ewaybill_stock",
+      "path": "addons/l10n_in_ewaybill_stock",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_in_hr_holidays",
+      "path": "addons/l10n_in_hr_holidays",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_in_pos",
+      "path": "addons/l10n_in_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_in_purchase_stock",
+      "path": "addons/l10n_in_purchase_stock",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_in_sale",
+      "path": "addons/l10n_in_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_in_sale_stock",
+      "path": "addons/l10n_in_sale_stock",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_in_stock",
+      "path": "addons/l10n_in_stock",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_iq",
+      "path": "addons/l10n_iq",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_it",
+      "path": "addons/l10n_it",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_it_edi",
+      "path": "addons/l10n_it_edi",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_it_edi_doi",
+      "path": "addons/l10n_it_edi_doi",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_it_edi_sale",
+      "path": "addons/l10n_it_edi_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_it_stock_ddt",
+      "path": "addons/l10n_it_stock_ddt",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_jo",
+      "path": "addons/l10n_jo",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_jo_edi",
+      "path": "addons/l10n_jo_edi",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_jo_edi_pos",
+      "path": "addons/l10n_jo_edi_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_jp",
+      "path": "addons/l10n_jp",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_jp_ubl_pint",
+      "path": "addons/l10n_jp_ubl_pint",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ke",
+      "path": "addons/l10n_ke",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ke_edi_tremol",
+      "path": "addons/l10n_ke_edi_tremol",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_kh",
+      "path": "addons/l10n_kh",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_km",
+      "path": "addons/l10n_km",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_kr",
+      "path": "addons/l10n_kr",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_kw",
+      "path": "addons/l10n_kw",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_kz",
+      "path": "addons/l10n_kz",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_latam_base",
+      "path": "addons/l10n_latam_base",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_latam_check",
+      "path": "addons/l10n_latam_check",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_latam_invoice_document",
+      "path": "addons/l10n_latam_invoice_document",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_lb_account",
+      "path": "addons/l10n_lb_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_lk",
+      "path": "addons/l10n_lk",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_lk_invoice",
+      "path": "addons/l10n_lk_invoice",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_lt",
+      "path": "addons/l10n_lt",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_lu",
+      "path": "addons/l10n_lu",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_lv",
+      "path": "addons/l10n_lv",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ma",
+      "path": "addons/l10n_ma",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_mc",
+      "path": "addons/l10n_mc",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ml",
+      "path": "addons/l10n_ml",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_mn",
+      "path": "addons/l10n_mn",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_mq",
+      "path": "addons/l10n_mq",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_mr",
+      "path": "addons/l10n_mr",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_mt",
+      "path": "addons/l10n_mt",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_mt_pos",
+      "path": "addons/l10n_mt_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_mu_account",
+      "path": "addons/l10n_mu_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_mx",
+      "path": "addons/l10n_mx",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_my",
+      "path": "addons/l10n_my",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_my_edi",
+      "path": "addons/l10n_my_edi",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_my_edi_pos",
+      "path": "addons/l10n_my_edi_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_my_ubl_pint",
+      "path": "addons/l10n_my_ubl_pint",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_mz",
+      "path": "addons/l10n_mz",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ne",
+      "path": "addons/l10n_ne",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ng",
+      "path": "addons/l10n_ng",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_nl",
+      "path": "addons/l10n_nl",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_no",
+      "path": "addons/l10n_no",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_nz",
+      "path": "addons/l10n_nz",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_om",
+      "path": "addons/l10n_om",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_pa",
+      "path": "addons/l10n_pa",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_pe",
+      "path": "addons/l10n_pe",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_pe_pos",
+      "path": "addons/l10n_pe_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ph",
+      "path": "addons/l10n_ph",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_pk",
+      "path": "addons/l10n_pk",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_pl",
+      "path": "addons/l10n_pl",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_pl_bank_verification",
+      "path": "addons/l10n_pl_bank_verification",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_pl_edi",
+      "path": "addons/l10n_pl_edi",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_pl_edi_jst",
+      "path": "addons/l10n_pl_edi_jst",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_pt",
+      "path": "addons/l10n_pt",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_qa",
+      "path": "addons/l10n_qa",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_re",
+      "path": "addons/l10n_re",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ro",
+      "path": "addons/l10n_ro",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ro_cpv_code",
+      "path": "addons/l10n_ro_cpv_code",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ro_edi",
+      "path": "addons/l10n_ro_edi",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ro_edi_stock",
+      "path": "addons/l10n_ro_edi_stock",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ro_edi_stock_batch",
+      "path": "addons/l10n_ro_edi_stock_batch",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_rs",
+      "path": "addons/l10n_rs",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_rs_edi",
+      "path": "addons/l10n_rs_edi",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_rw",
+      "path": "addons/l10n_rw",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_sa",
+      "path": "addons/l10n_sa",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_sa_edi",
+      "path": "addons/l10n_sa_edi",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_sa_edi_pos",
+      "path": "addons/l10n_sa_edi_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_sa_pos",
+      "path": "addons/l10n_sa_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_sa_withholding_tax",
+      "path": "addons/l10n_sa_withholding_tax",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_se",
+      "path": "addons/l10n_se",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_sg",
+      "path": "addons/l10n_sg",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_sg_ubl_pint",
+      "path": "addons/l10n_sg_ubl_pint",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_si",
+      "path": "addons/l10n_si",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_sk",
+      "path": "addons/l10n_sk",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_sn",
+      "path": "addons/l10n_sn",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_syscohada",
+      "path": "addons/l10n_syscohada",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_td",
+      "path": "addons/l10n_td",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_test_pos_qr_payment",
+      "path": "addons/l10n_test_pos_qr_payment",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_tg",
+      "path": "addons/l10n_tg",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_th",
+      "path": "addons/l10n_th",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_tn",
+      "path": "addons/l10n_tn",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_tr",
+      "path": "addons/l10n_tr",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_tr_gib_invoice_scenarios",
+      "path": "addons/l10n_tr_gib_invoice_scenarios",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_tr_nilvera",
+      "path": "addons/l10n_tr_nilvera",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_tr_nilvera_base_vat",
+      "path": "addons/l10n_tr_nilvera_base_vat",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_tr_nilvera_edispatch",
+      "path": "addons/l10n_tr_nilvera_edispatch",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_tr_nilvera_einvoice",
+      "path": "addons/l10n_tr_nilvera_einvoice",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_tr_nilvera_einvoice_extended",
+      "path": "addons/l10n_tr_nilvera_einvoice_extended",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_tw",
+      "path": "addons/l10n_tw",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_tw_edi_ecpay",
+      "path": "addons/l10n_tw_edi_ecpay",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_tw_edi_ecpay_pos",
+      "path": "addons/l10n_tw_edi_ecpay_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_tw_edi_ecpay_website_sale",
+      "path": "addons/l10n_tw_edi_ecpay_website_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_tz_account",
+      "path": "addons/l10n_tz_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ua",
+      "path": "addons/l10n_ua",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ug",
+      "path": "addons/l10n_ug",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_uk",
+      "path": "addons/l10n_uk",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_us",
+      "path": "addons/l10n_us",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_us_account",
+      "path": "addons/l10n_us_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_uy",
+      "path": "addons/l10n_uy",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_uy_pos",
+      "path": "addons/l10n_uy_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_uz",
+      "path": "addons/l10n_uz",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_ve",
+      "path": "addons/l10n_ve",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_vn",
+      "path": "addons/l10n_vn",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_vn_edi_viettel",
+      "path": "addons/l10n_vn_edi_viettel",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_vn_edi_viettel_pos",
+      "path": "addons/l10n_vn_edi_viettel_pos",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_yt",
+      "path": "addons/l10n_yt",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_za",
+      "path": "addons/l10n_za",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "l10n_zm_account",
+      "path": "addons/l10n_zm_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "link_tracker",
+      "path": "addons/link_tracker",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "loyalty",
+      "path": "addons/loyalty",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "lunch",
+      "path": "addons/lunch",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mail",
+      "path": "addons/mail",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mail_bot",
+      "path": "addons/mail_bot",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mail_bot_hr",
+      "path": "addons/mail_bot_hr",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mail_group",
+      "path": "addons/mail_group",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mail_plugin",
+      "path": "addons/mail_plugin",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "maintenance",
+      "path": "addons/maintenance",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "marketing_card",
+      "path": "addons/marketing_card",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mass_mailing",
+      "path": "addons/mass_mailing",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mass_mailing_crm",
+      "path": "addons/mass_mailing_crm",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mass_mailing_crm_sms",
+      "path": "addons/mass_mailing_crm_sms",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mass_mailing_event",
+      "path": "addons/mass_mailing_event",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mass_mailing_event_sms",
+      "path": "addons/mass_mailing_event_sms",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mass_mailing_event_track",
+      "path": "addons/mass_mailing_event_track",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mass_mailing_event_track_sms",
+      "path": "addons/mass_mailing_event_track_sms",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mass_mailing_sale",
+      "path": "addons/mass_mailing_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mass_mailing_sale_sms",
+      "path": "addons/mass_mailing_sale_sms",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mass_mailing_slides",
+      "path": "addons/mass_mailing_slides",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mass_mailing_sms",
+      "path": "addons/mass_mailing_sms",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mass_mailing_themes",
+      "path": "addons/mass_mailing_themes",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "microsoft_account",
+      "path": "addons/microsoft_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "microsoft_calendar",
+      "path": "addons/microsoft_calendar",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "microsoft_outlook",
+      "path": "addons/microsoft_outlook",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mrp",
+      "path": "addons/mrp",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mrp_account",
+      "path": "addons/mrp_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mrp_landed_costs",
+      "path": "addons/mrp_landed_costs",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mrp_product_expiry",
+      "path": "addons/mrp_product_expiry",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mrp_repair",
+      "path": "addons/mrp_repair",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mrp_subcontracting",
+      "path": "addons/mrp_subcontracting",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mrp_subcontracting_account",
+      "path": "addons/mrp_subcontracting_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mrp_subcontracting_dropshipping",
+      "path": "addons/mrp_subcontracting_dropshipping",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mrp_subcontracting_landed_costs",
+      "path": "addons/mrp_subcontracting_landed_costs",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mrp_subcontracting_purchase",
+      "path": "addons/mrp_subcontracting_purchase",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "mrp_subcontracting_repair",
+      "path": "addons/mrp_subcontracting_repair",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "onboarding",
+      "path": "addons/onboarding",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "partner_autocomplete",
+      "path": "addons/partner_autocomplete",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "partnership",
+      "path": "addons/partnership",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment",
+      "path": "addons/payment",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_adyen",
+      "path": "addons/payment_adyen",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_aps",
+      "path": "addons/payment_aps",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_asiapay",
+      "path": "addons/payment_asiapay",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_authorize",
+      "path": "addons/payment_authorize",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_buckaroo",
+      "path": "addons/payment_buckaroo",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_custom",
+      "path": "addons/payment_custom",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_demo",
+      "path": "addons/payment_demo",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_dpo",
+      "path": "addons/payment_dpo",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_ecpay",
+      "path": "addons/payment_ecpay",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_flutterwave",
+      "path": "addons/payment_flutterwave",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_iyzico",
+      "path": "addons/payment_iyzico",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_mercado_pago",
+      "path": "addons/payment_mercado_pago",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_mollie",
+      "path": "addons/payment_mollie",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_nuvei",
+      "path": "addons/payment_nuvei",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_paymob",
+      "path": "addons/payment_paymob",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_paypal",
+      "path": "addons/payment_paypal",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_payu",
+      "path": "addons/payment_payu",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_razorpay",
+      "path": "addons/payment_razorpay",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_redsys",
+      "path": "addons/payment_redsys",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_stripe",
+      "path": "addons/payment_stripe",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_toss_payments",
+      "path": "addons/payment_toss_payments",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_worldline",
+      "path": "addons/payment_worldline",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "payment_xendit",
+      "path": "addons/payment_xendit",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "phone_validation",
+      "path": "addons/phone_validation",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "point_of_sale",
+      "path": "addons/point_of_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "portal",
+      "path": "addons/portal",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "portal_rating",
+      "path": "addons/portal_rating",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_account_tax_python",
+      "path": "addons/pos_account_tax_python",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_adyen",
+      "path": "addons/pos_adyen",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_cashdro",
+      "path": "addons/pos_cashdro",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_cashmatic",
+      "path": "addons/pos_cashmatic",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_discount",
+      "path": "addons/pos_discount",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_dpopay",
+      "path": "addons/pos_dpopay",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_edi_ubl",
+      "path": "addons/pos_edi_ubl",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_event",
+      "path": "addons/pos_event",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_event_sale",
+      "path": "addons/pos_event_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_glory_cash",
+      "path": "addons/pos_glory_cash",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_hr",
+      "path": "addons/pos_hr",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_hr_restaurant",
+      "path": "addons/pos_hr_restaurant",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_imin",
+      "path": "addons/pos_imin",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_loyalty",
+      "path": "addons/pos_loyalty",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_mercado_pago",
+      "path": "addons/pos_mercado_pago",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_mollie",
+      "path": "addons/pos_mollie",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_mrp",
+      "path": "addons/pos_mrp",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_online_payment",
+      "path": "addons/pos_online_payment",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_online_payment_self_order",
+      "path": "addons/pos_online_payment_self_order",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_pine_labs",
+      "path": "addons/pos_pine_labs",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_qfpay",
+      "path": "addons/pos_qfpay",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_razorpay",
+      "path": "addons/pos_razorpay",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_repair",
+      "path": "addons/pos_repair",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_restaurant",
+      "path": "addons/pos_restaurant",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_restaurant_adyen",
+      "path": "addons/pos_restaurant_adyen",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_restaurant_loyalty",
+      "path": "addons/pos_restaurant_loyalty",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_restaurant_stripe",
+      "path": "addons/pos_restaurant_stripe",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_safaricom",
+      "path": "addons/pos_safaricom",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_sale",
+      "path": "addons/pos_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_sale_loyalty",
+      "path": "addons/pos_sale_loyalty",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_sale_margin",
+      "path": "addons/pos_sale_margin",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_self_order",
+      "path": "addons/pos_self_order",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_self_order_adyen",
+      "path": "addons/pos_self_order_adyen",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_self_order_pine_labs",
+      "path": "addons/pos_self_order_pine_labs",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_self_order_qfpay",
+      "path": "addons/pos_self_order_qfpay",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_self_order_razorpay",
+      "path": "addons/pos_self_order_razorpay",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_self_order_sale",
+      "path": "addons/pos_self_order_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_self_order_stripe",
+      "path": "addons/pos_self_order_stripe",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_self_order_viva_com",
+      "path": "addons/pos_self_order_viva_com",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_sms",
+      "path": "addons/pos_sms",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_stripe",
+      "path": "addons/pos_stripe",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "pos_viva_com",
+      "path": "addons/pos_viva_com",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "privacy_lookup",
+      "path": "addons/privacy_lookup",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "product",
+      "path": "addons/product",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "product_email_template",
+      "path": "addons/product_email_template",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "product_expiry",
+      "path": "addons/product_expiry",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "product_margin",
+      "path": "addons/product_margin",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "product_matrix",
+      "path": "addons/product_matrix",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "project",
+      "path": "addons/project",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "project_account",
+      "path": "addons/project_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "project_hr_expense",
+      "path": "addons/project_hr_expense",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "project_hr_skills",
+      "path": "addons/project_hr_skills",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "project_mail_plugin",
+      "path": "addons/project_mail_plugin",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "project_mrp",
+      "path": "addons/project_mrp",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "project_mrp_account",
+      "path": "addons/project_mrp_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "project_mrp_sale",
+      "path": "addons/project_mrp_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "project_mrp_stock_landed_costs",
+      "path": "addons/project_mrp_stock_landed_costs",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "project_purchase",
+      "path": "addons/project_purchase",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "project_purchase_stock",
+      "path": "addons/project_purchase_stock",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "project_sale_expense",
+      "path": "addons/project_sale_expense",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "project_sms",
+      "path": "addons/project_sms",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "project_stock",
+      "path": "addons/project_stock",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "project_stock_account",
+      "path": "addons/project_stock_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "project_stock_landed_costs",
+      "path": "addons/project_stock_landed_costs",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "project_timesheet_holidays",
+      "path": "addons/project_timesheet_holidays",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "project_todo",
+      "path": "addons/project_todo",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "purchase",
+      "path": "addons/purchase",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "purchase_edi_ubl_bis3",
+      "path": "addons/purchase_edi_ubl_bis3",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "purchase_mrp",
+      "path": "addons/purchase_mrp",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "purchase_product_matrix",
+      "path": "addons/purchase_product_matrix",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "purchase_repair",
+      "path": "addons/purchase_repair",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "purchase_requisition",
+      "path": "addons/purchase_requisition",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "purchase_requisition_sale",
+      "path": "addons/purchase_requisition_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "purchase_requisition_stock",
+      "path": "addons/purchase_requisition_stock",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "purchase_stock",
+      "path": "addons/purchase_stock",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "rating",
+      "path": "addons/rating",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "repair",
+      "path": "addons/repair",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "resource",
+      "path": "addons/resource",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "resource_mail",
+      "path": "addons/resource_mail",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "rpc",
+      "path": "addons/rpc",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale",
+      "path": "addons/sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_crm",
+      "path": "addons/sale_crm",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_edi_ubl",
+      "path": "addons/sale_edi_ubl",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_expense",
+      "path": "addons/sale_expense",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_expense_margin",
+      "path": "addons/sale_expense_margin",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_gelato",
+      "path": "addons/sale_gelato",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_gelato_stock",
+      "path": "addons/sale_gelato_stock",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_loyalty",
+      "path": "addons/sale_loyalty",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_loyalty_delivery",
+      "path": "addons/sale_loyalty_delivery",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_management",
+      "path": "addons/sale_management",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_margin",
+      "path": "addons/sale_margin",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_mrp",
+      "path": "addons/sale_mrp",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_mrp_margin",
+      "path": "addons/sale_mrp_margin",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_pdf_quote_builder",
+      "path": "addons/sale_pdf_quote_builder",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_product_matrix",
+      "path": "addons/sale_product_matrix",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_project",
+      "path": "addons/sale_project",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_project_stock",
+      "path": "addons/sale_project_stock",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_project_stock_account",
+      "path": "addons/sale_project_stock_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_purchase",
+      "path": "addons/sale_purchase",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_purchase_project",
+      "path": "addons/sale_purchase_project",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_purchase_stock",
+      "path": "addons/sale_purchase_stock",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_service",
+      "path": "addons/sale_service",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_sms",
+      "path": "addons/sale_sms",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_stock",
+      "path": "addons/sale_stock",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_stock_margin",
+      "path": "addons/sale_stock_margin",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_stock_product_expiry",
+      "path": "addons/sale_stock_product_expiry",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_timesheet",
+      "path": "addons/sale_timesheet",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sale_timesheet_margin",
+      "path": "addons/sale_timesheet_margin",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sales_team",
+      "path": "addons/sales_team",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sms",
+      "path": "addons/sms",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "sms_twilio",
+      "path": "addons/sms_twilio",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "snailmail",
+      "path": "addons/snailmail",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "snailmail_account",
+      "path": "addons/snailmail_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "social_media",
+      "path": "addons/social_media",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "spreadsheet",
+      "path": "addons/spreadsheet",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "spreadsheet_account",
+      "path": "addons/spreadsheet_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "spreadsheet_dashboard",
+      "path": "addons/spreadsheet_dashboard",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "spreadsheet_dashboard_account",
+      "path": "addons/spreadsheet_dashboard_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "spreadsheet_dashboard_event_sale",
+      "path": "addons/spreadsheet_dashboard_event_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "spreadsheet_dashboard_hr_expense",
+      "path": "addons/spreadsheet_dashboard_hr_expense",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "spreadsheet_dashboard_hr_timesheet",
+      "path": "addons/spreadsheet_dashboard_hr_timesheet",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "spreadsheet_dashboard_im_livechat",
+      "path": "addons/spreadsheet_dashboard_im_livechat",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "spreadsheet_dashboard_pos_hr",
+      "path": "addons/spreadsheet_dashboard_pos_hr",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "spreadsheet_dashboard_pos_restaurant",
+      "path": "addons/spreadsheet_dashboard_pos_restaurant",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "spreadsheet_dashboard_sale",
+      "path": "addons/spreadsheet_dashboard_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "spreadsheet_dashboard_sale_timesheet",
+      "path": "addons/spreadsheet_dashboard_sale_timesheet",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "spreadsheet_dashboard_stock_account",
+      "path": "addons/spreadsheet_dashboard_stock_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "spreadsheet_dashboard_website_sale",
+      "path": "addons/spreadsheet_dashboard_website_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "spreadsheet_dashboard_website_sale_slides",
+      "path": "addons/spreadsheet_dashboard_website_sale_slides",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "stock",
+      "path": "addons/stock",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "stock_account",
+      "path": "addons/stock_account",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "stock_delivery",
+      "path": "addons/stock_delivery",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "stock_dropshipping",
+      "path": "addons/stock_dropshipping",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "stock_fleet",
+      "path": "addons/stock_fleet",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "stock_landed_costs",
+      "path": "addons/stock_landed_costs",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "stock_maintenance",
+      "path": "addons/stock_maintenance",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "stock_picking_batch",
+      "path": "addons/stock_picking_batch",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "stock_sms",
+      "path": "addons/stock_sms",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "survey",
+      "path": "addons/survey",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "survey_crm",
+      "path": "addons/survey_crm",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_base_automation",
+      "path": "addons/test_base_automation",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_crm_full",
+      "path": "addons/test_crm_full",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_discuss_full",
+      "path": "addons/test_discuss_full",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_event_full",
+      "path": "addons/test_event_full",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_html_field_history",
+      "path": "addons/test_html_field_history",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_import_export",
+      "path": "addons/test_import_export",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_mail",
+      "path": "addons/test_mail",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_mail_full",
+      "path": "addons/test_mail_full",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_mail_sms",
+      "path": "addons/test_mail_sms",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_mass_mailing",
+      "path": "addons/test_mass_mailing",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_resource",
+      "path": "addons/test_resource",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_sale_product_configurators",
+      "path": "addons/test_sale_product_configurators",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_sale_purchase_edi_ubl",
+      "path": "addons/test_sale_purchase_edi_ubl",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_spreadsheet",
+      "path": "addons/test_spreadsheet",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_website",
+      "path": "addons/test_website",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_website_modules",
+      "path": "addons/test_website_modules",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_website_slides_full",
+      "path": "addons/test_website_slides_full",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "theme_default",
+      "path": "addons/theme_default",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "transifex",
+      "path": "addons/transifex",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "uom",
+      "path": "addons/uom",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "utm",
+      "path": "addons/utm",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "web",
+      "path": "addons/web",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "web_hierarchy",
+      "path": "addons/web_hierarchy",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "web_tour",
+      "path": "addons/web_tour",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "web_unsplash",
+      "path": "addons/web_unsplash",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website",
+      "path": "addons/website",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_blog",
+      "path": "addons/website_blog",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_cf_turnstile",
+      "path": "addons/website_cf_turnstile",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_crm",
+      "path": "addons/website_crm",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_crm_iap_reveal",
+      "path": "addons/website_crm_iap_reveal",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_crm_livechat",
+      "path": "addons/website_crm_livechat",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_crm_partner_assign",
+      "path": "addons/website_crm_partner_assign",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_crm_sms",
+      "path": "addons/website_crm_sms",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_customer",
+      "path": "addons/website_customer",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_event",
+      "path": "addons/website_event",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_event_booth",
+      "path": "addons/website_event_booth",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_event_booth_exhibitor",
+      "path": "addons/website_event_booth_exhibitor",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_event_booth_sale",
+      "path": "addons/website_event_booth_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_event_booth_sale_exhibitor",
+      "path": "addons/website_event_booth_sale_exhibitor",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_event_crm",
+      "path": "addons/website_event_crm",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_event_exhibitor",
+      "path": "addons/website_event_exhibitor",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_event_sale",
+      "path": "addons/website_event_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_event_track",
+      "path": "addons/website_event_track",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_event_track_live",
+      "path": "addons/website_event_track_live",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_event_track_live_quiz",
+      "path": "addons/website_event_track_live_quiz",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_event_track_quiz",
+      "path": "addons/website_event_track_quiz",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_forum",
+      "path": "addons/website_forum",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_google_map",
+      "path": "addons/website_google_map",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_hr_recruitment",
+      "path": "addons/website_hr_recruitment",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_hr_recruitment_livechat",
+      "path": "addons/website_hr_recruitment_livechat",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_links",
+      "path": "addons/website_links",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_livechat",
+      "path": "addons/website_livechat",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_mail",
+      "path": "addons/website_mail",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_mail_group",
+      "path": "addons/website_mail_group",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_mass_mailing",
+      "path": "addons/website_mass_mailing",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_mass_mailing_sms",
+      "path": "addons/website_mass_mailing_sms",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_partner",
+      "path": "addons/website_partner",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_payment",
+      "path": "addons/website_payment",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_profile",
+      "path": "addons/website_profile",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_project",
+      "path": "addons/website_project",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_sale",
+      "path": "addons/website_sale",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_sale_autocomplete",
+      "path": "addons/website_sale_autocomplete",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_sale_collect",
+      "path": "addons/website_sale_collect",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_sale_collect_wishlist",
+      "path": "addons/website_sale_collect_wishlist",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_sale_comparison",
+      "path": "addons/website_sale_comparison",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_sale_comparison_wishlist",
+      "path": "addons/website_sale_comparison_wishlist",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_sale_gelato",
+      "path": "addons/website_sale_gelato",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_sale_loyalty",
+      "path": "addons/website_sale_loyalty",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_sale_mass_mailing",
+      "path": "addons/website_sale_mass_mailing",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_sale_mondialrelay",
+      "path": "addons/website_sale_mondialrelay",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_sale_mrp",
+      "path": "addons/website_sale_mrp",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_sale_slides",
+      "path": "addons/website_sale_slides",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_sale_stock",
+      "path": "addons/website_sale_stock",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_sale_stock_wishlist",
+      "path": "addons/website_sale_stock_wishlist",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_sale_wishlist",
+      "path": "addons/website_sale_wishlist",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_slides",
+      "path": "addons/website_slides",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_slides_forum",
+      "path": "addons/website_slides_forum",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_slides_survey",
+      "path": "addons/website_slides_survey",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_sms",
+      "path": "addons/website_sms",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "website_timesheet",
+      "path": "addons/website_timesheet",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "base",
+      "path": "odoo/addons/base",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_access_rights",
+      "path": "odoo/addons/test_access_rights",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_action_bindings",
+      "path": "odoo/addons/test_action_bindings",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_assetsbundle",
+      "path": "odoo/addons/test_assetsbundle",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_auth_custom",
+      "path": "odoo/addons/test_auth_custom",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_convert",
+      "path": "odoo/addons/test_convert",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_converter",
+      "path": "odoo/addons/test_converter",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_data_module",
+      "path": "odoo/addons/test_data_module",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_data_module_install",
+      "path": "odoo/addons/test_data_module_install",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_http",
+      "path": "odoo/addons/test_http",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_inherit",
+      "path": "odoo/addons/test_inherit",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_inherit_depends",
+      "path": "odoo/addons/test_inherit_depends",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_inherits",
+      "path": "odoo/addons/test_inherits",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_inherits_depends",
+      "path": "odoo/addons/test_inherits_depends",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_lint",
+      "path": "odoo/addons/test_lint",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_main_flows",
+      "path": "odoo/addons/test_main_flows",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_mimetypes",
+      "path": "odoo/addons/test_mimetypes",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_orm",
+      "path": "odoo/addons/test_orm",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_read_group",
+      "path": "odoo/addons/test_read_group",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_rpc",
+      "path": "odoo/addons/test_rpc",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_search_panel",
+      "path": "odoo/addons/test_search_panel",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_testing_utilities",
+      "path": "odoo/addons/test_testing_utilities",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_translation_import",
+      "path": "odoo/addons/test_translation_import",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": null,
+      "match": "test_uninstall",
+      "path": "odoo/addons/test_uninstall",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.dependency"
+  ],
+  "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "19.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "19.0",
+    "to": "19.0"
+  },
+  "url": "https://github.com/odoo/odoo/tree/58bb9591d4cb08c4d5d4426222c9257f101ad250/addons"
+}

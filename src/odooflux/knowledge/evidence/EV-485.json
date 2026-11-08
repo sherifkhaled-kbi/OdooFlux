@@ -1,0 +1,113 @@
+{
+  "category": "python_runtime",
+  "checked_by": "research-006-t025-agent",
+  "checked_on": "2026-11-07",
+  "description": "12.0 api.py still supports old-API (cr, uid, ids, context) methods: Meta applies guess() by parameter names and logs 'Deprecated method'; guess, cr_uid_ids_context are defined (12.0) and absent from 13.0 api.py, models.py has no api.guess at 13.0.",
+  "detection_method": "grep on pinned source",
+  "id": "EV-485",
+  "locations": [
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 671,
+      "match": "def guess(method):",
+      "path": "odoo/api.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 673,
+      "match": "This decorator is applied automatically by the model's",
+      "path": "odoo/api.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 555,
+      "match": "def cr_uid_ids_context(method):",
+      "path": "odoo/api.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 113,
+      "match": "value = guess(value)",
+      "path": "odoo/api.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 118,
+      "match": "_logger.warning(\"Deprecated method %s.%s in module %s\", name, key, attrs.get('__module__'))",
+      "path": "odoo/api.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "12.0",
+      "kind": "present",
+      "line": 4687,
+      "match": "wrapped = api.guess(api.propagate(origin, method))",
+      "path": "odoo/models.py",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771"
+    },
+    {
+      "branch": "13.0",
+      "kind": "absent",
+      "line": null,
+      "match": "def guess\\(",
+      "path": "odoo/api.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "search_scope": "api.py"
+    },
+    {
+      "branch": "13.0",
+      "kind": "absent",
+      "line": null,
+      "match": "def cr_uid_ids_context\\(",
+      "path": "odoo/api.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "search_scope": "api.py"
+    },
+    {
+      "branch": "13.0",
+      "kind": "absent",
+      "line": null,
+      "match": "def cr_uid\\(",
+      "path": "odoo/api.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "search_scope": "api.py"
+    },
+    {
+      "branch": "13.0",
+      "kind": "absent",
+      "line": null,
+      "match": "api\\.guess",
+      "path": "odoo/models.py",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "search_scope": "models.py"
+    }
+  ],
+  "notes": "Legacy PYTHON_RULES#3 called this a pre-12 construct: 12.0 source shows it is still accepted (with a deprecation warning) and that the support code is absent at 13.0. Source-level evidence only: runtime rejection of such signatures at 13.0 is not demonstrated here. 12.0 api.py 'noguess' etc. not listed.",
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+  "risk": "HIGH",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "13.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "13.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/ba1ba88874e2ae9716e59ec199eb739d58c3f771/odoo/api.py#L671"
+}

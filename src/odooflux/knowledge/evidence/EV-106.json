@@ -1,0 +1,44 @@
+{
+  "category": "orm",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "`_name_search` (17.0) replaced by `_search_display_name` (18.0)",
+  "detection_method": "grep on pinned source",
+  "id": "EV-106",
+  "locations": [
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 1773,
+      "match": "def _name_search(",
+      "path": "odoo/models.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 1823,
+      "match": "def _search_display_name(",
+      "path": "odoo/models.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "python_runtime"
+  ],
+  "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "17.0",
+    "to": "17.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "18.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9ef8d62331b128bcd288528e4639e0901d85fcc8/odoo/models.py#L1773"
+}

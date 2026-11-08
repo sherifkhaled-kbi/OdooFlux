@@ -1,0 +1,381 @@
+[
+  {
+    "id": "*.manifest.parse-error",
+    "step": "*",
+    "category": "manifest",
+    "file_kinds": [
+      "manifest"
+    ],
+    "severity": "CRITICAL",
+    "maturity": "DETECT_ONLY",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "LOW",
+    "evidence": [],
+    "not_applicable_reason": "Shared hygiene rule on the manifest format; no Odoo-series change to evidence (REQ-MAN-002, REQ-MAN-003).",
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.manifest.hygiene:flag_parse_error",
+    "fixer_ref": null,
+    "params": {},
+    "validation": [
+      "python-syntax"
+    ],
+    "tests": {
+      "positive": "TST-006-025",
+      "negative": "TST-006-025"
+    },
+    "message": "The manifest is not a literal Python dict and cannot be read without executing it.",
+    "suggestion": "Rewrite the manifest as a single dict literal.",
+    "legacy_ref": null
+  },
+  {
+    "id": "*.manifest.version-prefix",
+    "step": "*",
+    "category": "manifest",
+    "file_kinds": [
+      "manifest"
+    ],
+    "severity": "INFO",
+    "maturity": "DETECT_ONLY",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "LOW",
+    "evidence": [],
+    "not_applicable_reason": "Shared hygiene rule on the manifest format; no Odoo-series change to evidence (REQ-MAN-002, REQ-MAN-003).",
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.manifest.hygiene:flag_version_prefix",
+    "fixer_ref": null,
+    "params": {},
+    "validation": [
+      "python-syntax"
+    ],
+    "tests": {
+      "positive": "TST-006-025",
+      "negative": "TST-006-025"
+    },
+    "message": "The manifest version prefix differs from the target series.",
+    "suggestion": "Set the version prefix to the target series and keep the suffix. Detect-only: bound per run with the planned step's target version (run param, ADR-018 D-A1); no fixer is bound.",
+    "legacy_ref": null
+  },
+  {
+    "id": "*.manifest.not-installable",
+    "step": "*",
+    "category": "manifest",
+    "file_kinds": [
+      "manifest"
+    ],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "LOW",
+    "evidence": [],
+    "not_applicable_reason": "Shared hygiene rule on the manifest format; no Odoo-series change to evidence (REQ-MAN-002, REQ-MAN-003).",
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.manifest.hygiene:flag_not_installable",
+    "fixer_ref": null,
+    "params": {},
+    "validation": [
+      "python-syntax"
+    ],
+    "tests": {
+      "positive": "TST-006-025",
+      "negative": "TST-006-025"
+    },
+    "message": "The module is marked installable: False.",
+    "suggestion": "Confirm the module is meant to stay uninstallable before migrating it.",
+    "legacy_ref": null
+  },
+  {
+    "id": "*.manifest.missing-data-file",
+    "step": "*",
+    "category": "manifest",
+    "file_kinds": [
+      "manifest"
+    ],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "LOW",
+    "evidence": [],
+    "not_applicable_reason": "Shared hygiene rule on the manifest format; no Odoo-series change to evidence (REQ-MAN-002, REQ-MAN-003).",
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.manifest.files:flag_missing_data_files",
+    "fixer_ref": null,
+    "params": {},
+    "validation": [
+      "python-syntax"
+    ],
+    "tests": {
+      "positive": "TST-006-025",
+      "negative": "TST-006-025"
+    },
+    "message": "The manifest lists a data, demo or asset file that does not exist.",
+    "suggestion": "Create the file or remove the entry.",
+    "legacy_ref": null
+  },
+  {
+    "id": "*.manifest.load-order",
+    "step": "*",
+    "category": "manifest",
+    "file_kinds": [
+      "manifest"
+    ],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "LOW",
+    "evidence": [],
+    "not_applicable_reason": "Shared hygiene rule on the manifest format; no Odoo-series change to evidence (REQ-MAN-002, REQ-MAN-003).",
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.manifest.files:flag_load_order",
+    "fixer_ref": null,
+    "params": {},
+    "validation": [
+      "python-syntax"
+    ],
+    "tests": {
+      "positive": "TST-006-025",
+      "negative": "TST-006-025"
+    },
+    "message": "A security file is listed after a views file.",
+    "suggestion": "List security files before views in 'data'.",
+    "legacy_ref": null
+  },
+  {
+    "id": "*.deps.unknown-dependency",
+    "step": "*",
+    "category": "dependencies",
+    "file_kinds": [
+      "manifest",
+      "python",
+      "xml",
+      "csv"
+    ],
+    "severity": "WARNING",
+    "maturity": "DRAFT",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "LOW",
+    "evidence": [
+      "EV-430",
+      "EV-431",
+      "EV-432",
+      "EV-433",
+      "EV-372",
+      "EV-373",
+      "EV-374",
+      "EV-375"
+    ],
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": null,
+    "fixer_ref": null,
+    "params": {},
+    "validation": [],
+    "tests": {
+      "positive": "TST-006-026",
+      "negative": "TST-006-026"
+    },
+    "message": "A dependency is neither a scanned module nor a core module of the target version.",
+    "suggestion": "Module-level scanner (odooflux.dependencies.core_modules.check_unknown_dependencies); it needs every scanned manifest, so it is not bound as a single-document rule.",
+    "legacy_ref": null
+  },
+  {
+    "id": "*.deps.removed-with-successor",
+    "step": "*",
+    "category": "dependencies",
+    "file_kinds": [
+      "manifest"
+    ],
+    "severity": "CRITICAL",
+    "maturity": "DRAFT",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "MEDIUM",
+    "evidence": [
+      "EV-520",
+      "EV-521"
+    ],
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": null,
+    "fixer_ref": null,
+    "params": {},
+    "validation": [],
+    "tests": {
+      "positive": "TST-006-063",
+      "negative": "TST-006-063"
+    },
+    "message": "A dependency was removed from the target core and official evidence names a successor module (DETECT_ONLY).",
+    "suggestion": "Module-level scanner (odooflux.dependencies.core_modules.check_unknown_dependencies with replaced_by); a suggestion only, depends is never edited.",
+    "legacy_ref": null
+  },
+  {
+    "id": "*.refs.dangling-reference",
+    "step": "*",
+    "category": "references",
+    "file_kinds": [
+      "manifest",
+      "python",
+      "xml",
+      "csv"
+    ],
+    "severity": "CRITICAL",
+    "maturity": "DRAFT",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "LOW",
+    "evidence": [
+      "EV-430"
+    ],
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": null,
+    "fixer_ref": null,
+    "params": {},
+    "validation": [],
+    "tests": {
+      "positive": "TST-006-027",
+      "negative": "TST-006-027"
+    },
+    "message": "An XML ID, model or field reference has no definition among the scanned modules.",
+    "suggestion": "Module-level scanner (odooflux.dependencies.references.scan_references); references into core modules are reported unverified.",
+    "legacy_ref": null
+  },
+  {
+    "id": "*.security.acl-csv",
+    "step": "*",
+    "category": "security",
+    "file_kinds": [
+      "csv"
+    ],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "LOW",
+    "evidence": [],
+    "not_applicable_reason": "Shared structural check on security data; no Odoo-series change to evidence (REQ-ACL-001).",
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.security.acl_csv:flag_acl_issues",
+    "fixer_ref": null,
+    "params": {},
+    "validation": [],
+    "tests": {
+      "positive": "TST-006-028",
+      "negative": "TST-006-028"
+    },
+    "message": "The ACL CSV has a missing column, a short row, a non 0/1 permission, a duplicate id or a model_id that is not a model_* XML ID.",
+    "suggestion": "Correct the row.",
+    "legacy_ref": null
+  },
+  {
+    "id": "*.security.unrestricted-record-rule",
+    "step": "*",
+    "category": "security",
+    "file_kinds": [
+      "xml"
+    ],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "review_required": true,
+    "ai_eligible": false,
+    "risk": "LOW",
+    "evidence": [],
+    "not_applicable_reason": "Shared structural check on security data; no Odoo-series change to evidence (REQ-ACL-001).",
+    "depends_on": [],
+    "conflicts_with": [],
+    "detector_ref": "odooflux.rules.security.record_rules:flag_unrestricted_global_rules",
+    "fixer_ref": null,
+    "params": {},
+    "validation": [],
+    "tests": {
+      "positive": "TST-006-028",
+      "negative": "TST-006-028"
+    },
+    "message": "A global record rule has an empty or always-true domain, so it restricts nothing.",
+    "suggestion": "Remove the rule or give it a domain or groups.",
+    "legacy_ref": null
+  },
+  {
+    "id": "*.xml.inherit-id-missing-in-target",
+    "review_required": false,
+    "step": "*",
+    "category": "xml_views_data",
+    "file_kinds": [
+      "xml"
+    ],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "ai_eligible": false,
+    "risk": "MEDIUM",
+    "evidence": [
+      "EV-540",
+      "EV-541",
+      "EV-542",
+      "EV-543",
+      "EV-544",
+      "EV-545",
+      "EV-546",
+      "EV-547"
+    ],
+    "depends_on": [],
+    "conflicts_with": [],
+    "fixer_ref": null,
+    "params": {},
+    "validation": [],
+    "tests": {
+      "positive": "TST-006-064",
+      "negative": "TST-006-064"
+    },
+    "legacy_ref": null,
+    "detector_ref": "odooflux.rules.xml.view_refs:flag_inherit_id_missing",
+    "message": "The inherited view is not defined by the target version's core modules.",
+    "suggestion": "Find the replacement view for the target version and update inherit_id. Detect-only: the finding is INFO 'unverifiable' for non-core modules and when no view index exists for the target; neither is proof of compatibility. Bound per run with the planned target version (run param)."
+  },
+  {
+    "id": "*.xml.xpath-anchor-missing-in-target",
+    "review_required": true,
+    "step": "*",
+    "category": "xml_views_data",
+    "file_kinds": [
+      "xml"
+    ],
+    "severity": "WARNING",
+    "maturity": "DETECT_ONLY",
+    "ai_eligible": false,
+    "risk": "MEDIUM",
+    "evidence": [
+      "EV-540",
+      "EV-541",
+      "EV-542",
+      "EV-543",
+      "EV-544",
+      "EV-545",
+      "EV-546",
+      "EV-547"
+    ],
+    "depends_on": [],
+    "conflicts_with": [],
+    "fixer_ref": null,
+    "params": {},
+    "validation": [],
+    "tests": {
+      "positive": "TST-006-064",
+      "negative": "TST-006-064"
+    },
+    "legacy_ref": null,
+    "detector_ref": "odooflux.rules.xml.view_refs:flag_xpath_anchor_missing",
+    "message": "The xpath or shorthand anchor (name or id) is not defined by any core view in the parent view's inheritance tree for the target version.",
+    "suggestion": "Review the parent view in the target version and adjust the anchor. The anchor may be added by a module outside core, so this needs review. INFO 'unverifiable' means the parent is non-core or no view index exists for the target; neither is proof of compatibility. No fix."
+  }
+]

@@ -1,0 +1,2 @@
+{"description": "odoo.define call in code with a string argument", "operations": ["lexer", "validator"], "syntax": "valid",
+ "tokens": [{"text": "odoo.define", "kind": "code"}, {"text": "'use strict'", "kind": "string"}]}

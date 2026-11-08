@@ -1,0 +1,121 @@
+{
+  "categories": {
+    "assets": {
+      "evidence": [
+        "EV-427"
+      ],
+      "gaps": [
+        "G-R-02",
+        "G-R-18"
+      ],
+      "status": "RESEARCH_SEEDED"
+    },
+    "behavioural": {
+      "evidence": [
+        "EV-015"
+      ],
+      "gaps": [
+        "G-R-02",
+        "G-R-01"
+      ],
+      "status": "NOT_ASSESSED"
+    },
+    "javascript_owl": {
+      "evidence": [
+        "EV-423"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "RESEARCH_SEEDED"
+    },
+    "manifest_dependencies": {
+      "evidence": [
+        "EV-124",
+        "EV-125",
+        "EV-425"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "RESEARCH_SEEDED"
+    },
+    "python_orm": {
+      "evidence": [
+        "EV-102",
+        "EV-110",
+        "EV-421",
+        "EV-483",
+        "EV-484",
+        "EV-486"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "RESEARCH_SEEDED"
+    },
+    "qweb": {
+      "evidence": [
+        "EV-422"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "RESEARCH_SEEDED"
+    },
+    "rules": {
+      "evidence": [],
+      "gaps": [
+        "G-R-02",
+        "G-R-01"
+      ],
+      "status": "NOT_ASSESSED"
+    },
+    "runtime": {
+      "evidence": [
+        "EV-426"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "RESEARCH_SEEDED"
+    },
+    "security": {
+      "evidence": [
+        "EV-424",
+        "EV-480",
+        "EV-481",
+        "EV-482"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "RESEARCH_SEEDED"
+    },
+    "xml_views_data": {
+      "evidence": [
+        "EV-420"
+      ],
+      "gaps": [
+        "G-R-02"
+      ],
+      "status": "RESEARCH_SEEDED"
+    }
+  },
+  "notes": "Per-category status copied from VERSION_COMPATIBILITY_MATRIX.md; Research column is the step status. T024 (2026-11-07): source-diff evidence EV-420..EV-427 added per category; behavioural and rules categories remain explicit gaps (G-R-01); python_orm evidence is a models.py method-name diff only.",
+  "open_gaps": [
+    "G-R-01"
+  ],
+  "peer_reviewed": false,
+  "research_status": "RESEARCH_SEEDED",
+  "review_only": "\u2014",
+  "revisions": {
+    "odoo/odoo@13.0": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+    "odoo/odoo@14.0": "cc0060e889603eb2e47fa44a8a22a70d7d784185"
+  },
+  "seeded_evidence": [
+    "EV-110",
+    "EV-125"
+  ],
+  "step": "13-14"
+}

@@ -1,0 +1,25 @@
+{
+  "description": "Processing instruction inside an element",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "odoo",
+      "span": "<odoo>\n  <?odoo-marker version=\"1\"?>\n  <field name=\"a\"/>\n</odoo>",
+      "start_tag": "<odoo>",
+      "attrs": []
+    },
+    {
+      "tag": "field",
+      "span": "<field name=\"a\"/>",
+      "start_tag": "<field name=\"a\"/>",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "a",
+          "value": "a"
+        }
+      ]
+    }
+  ]
+}

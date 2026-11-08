@@ -1,0 +1,12 @@
+{
+  "description": "Missing colon: parse error, no edits",
+  "operations": [
+    {
+      "op": "remove_decorator",
+      "name": "api.multi"
+    }
+  ],
+  "expect": "reject",
+  "reason": "SyntaxError",
+  "spans": []
+}

@@ -1,0 +1,30 @@
+{
+  "description": "Newline written as a character reference inside a value",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "odoo",
+      "span": "<odoo><field name=\"a\" help=\"line1&#10;line2\"/></odoo>",
+      "start_tag": "<odoo>",
+      "attrs": []
+    },
+    {
+      "tag": "field",
+      "span": "<field name=\"a\" help=\"line1&#10;line2\"/>",
+      "start_tag": "<field name=\"a\" help=\"line1&#10;line2\"/>",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "a",
+          "value": "a"
+        },
+        {
+          "name": "help",
+          "raw": "line1&#10;line2",
+          "value": "line1\nline2"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+<odoo>
+  <button name="b"
+        string="Go" readonly="a == 1"/>
+</odoo>

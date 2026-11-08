@@ -1,0 +1,48 @@
+{
+  "description": "Five levels of nesting",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "a",
+      "span": "<a><b><c><d><e name=\"deep\" string=\"s\"/></d></c></b></a>",
+      "start_tag": "<a>",
+      "attrs": []
+    },
+    {
+      "tag": "b",
+      "span": "<b><c><d><e name=\"deep\" string=\"s\"/></d></c></b>",
+      "start_tag": "<b>",
+      "attrs": []
+    },
+    {
+      "tag": "c",
+      "span": "<c><d><e name=\"deep\" string=\"s\"/></d></c>",
+      "start_tag": "<c>",
+      "attrs": []
+    },
+    {
+      "tag": "d",
+      "span": "<d><e name=\"deep\" string=\"s\"/></d>",
+      "start_tag": "<d>",
+      "attrs": []
+    },
+    {
+      "tag": "e",
+      "span": "<e name=\"deep\" string=\"s\"/>",
+      "start_tag": "<e name=\"deep\" string=\"s\"/>",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "deep",
+          "value": "deep"
+        },
+        {
+          "name": "string",
+          "raw": "s",
+          "value": "s"
+        }
+      ]
+    }
+  ]
+}

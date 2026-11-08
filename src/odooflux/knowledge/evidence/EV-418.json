@@ -1,0 +1,70 @@
+{
+  "category": "orm",
+  "checked_by": "research-006-t019-t024",
+  "checked_on": "2026-11-07",
+  "description": "BaseModel._auto_init is defined at 16.0, 17.0, 18.0 (odoo/models.py) and 19.0 (odoo/orm/models.py, now annotated '-> None'); not removed in 19.0",
+  "detection_method": "grep on pinned source",
+  "id": "EV-418",
+  "locations": [
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 2589,
+      "match": "def _auto_init(self):",
+      "path": "odoo/models.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "present",
+      "line": 3141,
+      "match": "def _auto_init(self):",
+      "path": "odoo/models.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8"
+    },
+    {
+      "branch": "18.0",
+      "kind": "present",
+      "line": 3429,
+      "match": "def _auto_init(self):",
+      "path": "odoo/models.py",
+      "revision": "75d6abe5979ac9e8d85d097dad0e7b559ef07326"
+    },
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 3176,
+      "match": "def _auto_init(self) -> None:",
+      "path": "odoo/orm/models.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250"
+    },
+    {
+      "branch": "19.0",
+      "kind": "absent",
+      "line": null,
+      "match": "odoo/models.py",
+      "path": "odoo/models.py",
+      "revision": "58bb9591d4cb08c4d5d4426222c9257f101ad250",
+      "search_scope": "path returns HTTP 404 at pinned revision"
+    }
+  ],
+  "notes": "Supports retiring legacy row 19 as a version claim: method persists. Behaviour inside not diffed. Location moved to odoo/orm/models.py in 19.0.",
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9f40bf622c5531739321e59276c307319198e22b",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "18.0",
+    "to": "19.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "19.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9f40bf622c5531739321e59276c307319198e22b/odoo/models.py#L2589"
+}

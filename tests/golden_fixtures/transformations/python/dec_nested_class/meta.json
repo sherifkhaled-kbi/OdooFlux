@@ -1,0 +1,19 @@
+{
+  "description": "Decorator inside a nested class at depth 2",
+  "operations": [
+    {
+      "op": "remove_decorator",
+      "name": "api.model"
+    }
+  ],
+  "expect": "edit",
+  "reason": "",
+  "spans": [
+    {
+      "locator": "decorator_removal",
+      "decorator": "api.model",
+      "occurrence": 0,
+      "covers": "        @api.model\n"
+    }
+  ]
+}

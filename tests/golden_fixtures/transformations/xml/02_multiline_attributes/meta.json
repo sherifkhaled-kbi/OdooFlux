@@ -1,0 +1,47 @@
+{
+  "description": "Attribute values spanning several lines",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "odoo",
+      "span": "<odoo>\n  <field name=\"arch\" type=\"xml\">\n    <form string=\"Orders\"\n          class=\"o_form\n                 o_bright\">\n    </form>\n  </field>\n</odoo>",
+      "start_tag": "<odoo>",
+      "attrs": []
+    },
+    {
+      "tag": "field",
+      "span": "<field name=\"arch\" type=\"xml\">\n    <form string=\"Orders\"\n          class=\"o_form\n                 o_bright\">\n    </form>\n  </field>",
+      "start_tag": "<field name=\"arch\" type=\"xml\">",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "arch",
+          "value": "arch"
+        },
+        {
+          "name": "type",
+          "raw": "xml",
+          "value": "xml"
+        }
+      ]
+    },
+    {
+      "tag": "form",
+      "span": "<form string=\"Orders\"\n          class=\"o_form\n                 o_bright\">\n    </form>",
+      "start_tag": "<form string=\"Orders\"\n          class=\"o_form\n                 o_bright\">",
+      "attrs": [
+        {
+          "name": "string",
+          "raw": "Orders",
+          "value": "Orders"
+        },
+        {
+          "name": "class",
+          "raw": "o_form\n                 o_bright",
+          "value": "o_form                  o_bright"
+        }
+      ]
+    }
+  ]
+}

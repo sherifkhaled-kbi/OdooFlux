@@ -1,0 +1,9 @@
+{
+  "description": "merge required and new invisible",
+  "group": "merge",
+  "mode": "falsy",
+  "in_list_view": false,
+  "expect": "edit",
+  "unconverted": [],
+  "warnings": []
+}

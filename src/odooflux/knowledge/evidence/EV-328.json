@@ -1,0 +1,53 @@
+{
+  "category": "assets",
+  "checked_by": "research-006-phase3-t016",
+  "checked_on": "2026-11-07",
+  "description": "ir.asset model (bundle resolution from manifest 'assets') is introduced in 15.0; 14.0 has no odoo/addons/base/models/ir_asset.py",
+  "detection_method": "grep on pinned source",
+  "id": "EV-328",
+  "locations": [
+    {
+      "branch": "15.0",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "path": "odoo/addons/base/models/ir_asset.py",
+      "line": 52,
+      "match": "class IrAsset(models.Model):",
+      "kind": "present"
+    },
+    {
+      "branch": "15.0",
+      "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+      "path": "odoo/addons/base/models/ir_asset.py",
+      "line": 61,
+      "match": "_name = 'ir.asset'",
+      "kind": "present"
+    },
+    {
+      "branch": "14.0",
+      "revision": "cc0060e889603eb2e47fa44a8a22a70d7d784185",
+      "path": "odoo/addons/base/models/ir_asset.py",
+      "line": null,
+      "match": "class IrAsset(models.Model):",
+      "kind": "absent",
+      "search_scope": "odoo/addons/base/models/ir_asset.py"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "14.0",
+    "to": "15.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "15.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/3a28e5b0adbb36bdb1155a6854cdfbe4e7f9b187/odoo/addons/base/models/ir_asset.py#L52"
+}

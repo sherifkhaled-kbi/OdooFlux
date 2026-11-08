@@ -1,0 +1,25 @@
+{
+  "description": "Comment between child elements",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "group",
+      "span": "<group>\n  <!-- note -->\n  <field name=\"a\"/>\n</group>",
+      "start_tag": "<group>",
+      "attrs": []
+    },
+    {
+      "tag": "field",
+      "span": "<field name=\"a\"/>",
+      "start_tag": "<field name=\"a\"/>",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "a",
+          "value": "a"
+        }
+      ]
+    }
+  ]
+}

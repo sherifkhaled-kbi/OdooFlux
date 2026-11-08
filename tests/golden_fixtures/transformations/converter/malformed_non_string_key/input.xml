@@ -1,0 +1,3 @@
+<odoo>
+  <field name="f" attrs="{1: [('a', '=', 1)]}"/>
+</odoo>

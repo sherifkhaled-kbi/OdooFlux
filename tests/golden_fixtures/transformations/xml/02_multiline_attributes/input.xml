@@ -1,0 +1,8 @@
+<odoo>
+  <field name="arch" type="xml">
+    <form string="Orders"
+          class="o_form
+                 o_bright">
+    </form>
+  </field>
+</odoo>

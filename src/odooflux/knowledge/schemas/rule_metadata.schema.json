@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RuleMetadata",
+  "description": "One entry of compatibility/<step>.rules.json (data-model.md RuleMetadata, feature 006). Feature 004 defined the core fields; feature 006 adds severity, file_kinds, review_required, params, validation, message, suggestion, depends_on, conflicts_with, ai_eligible, legacy_ref and retired_reason, and accepts the object form of tests.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "step",
+      "category",
+      "maturity",
+      "risk",
+      "evidence",
+      "detector_ref",
+      "fixer_ref",
+      "tests"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^(\\d+-\\d+|\\*)\\.[a-z_]+\\.[a-z0-9-]+$"
+      },
+      "step": {
+        "type": "string",
+        "pattern": "^(\\d+-\\d+|\\*)$"
+      },
+      "category": {
+        "type": "string"
+      },
+      "file_kinds": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "severity": {
+        "enum": [
+          "CRITICAL",
+          "WARNING",
+          "INFO"
+        ]
+      },
+      "maturity": {
+        "enum": [
+          "DRAFT",
+          "DETECT_ONLY",
+          "FIX_ENABLED",
+          "RETIRED"
+        ]
+      },
+      "review_required": {
+        "type": "boolean"
+      },
+      "ai_eligible": {
+        "type": "boolean"
+      },
+      "risk": {
+        "enum": [
+          "LOW",
+          "MEDIUM",
+          "HIGH"
+        ]
+      },
+      "evidence": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^EV-\\d{3}$"
+        }
+      },
+      "not_applicable_reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "retired_reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "depends_on": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "conflicts_with": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "detector_ref": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "fixer_ref": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "params": {
+        "type": "object"
+      },
+      "validation": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "tests": {
+        "description": "Either the legacy list of test IDs or the object form used by feature 006 (positive, negative, idempotence).",
+        "type": [
+          "array",
+          "object"
+        ],
+        "items": {
+          "type": "string"
+        },
+        "additionalProperties": false,
+        "properties": {
+          "positive": {
+            "type": "string"
+          },
+          "negative": {
+            "type": "string"
+          },
+          "idempotence": {
+            "type": "string"
+          }
+        }
+      },
+      "message": {
+        "type": "string"
+      },
+      "suggestion": {
+        "type": "string"
+      },
+      "legacy_ref": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    }
+  }
+}

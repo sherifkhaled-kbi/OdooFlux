@@ -1,0 +1,76 @@
+{
+  "description": "View architecture embedded as text-type field inside a record",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "odoo",
+      "span": "<odoo>\n  <record id=\"view_x\" model=\"ir.ui.view\">\n    <field name=\"arch\" type=\"xml\">\n      <form>\n        <header>\n          <button name=\"act\" invisible=\"1\"/>\n        </header>\n      </form>\n    </field>\n  </record>\n</odoo>",
+      "start_tag": "<odoo>",
+      "attrs": []
+    },
+    {
+      "tag": "record",
+      "span": "<record id=\"view_x\" model=\"ir.ui.view\">\n    <field name=\"arch\" type=\"xml\">\n      <form>\n        <header>\n          <button name=\"act\" invisible=\"1\"/>\n        </header>\n      </form>\n    </field>\n  </record>",
+      "start_tag": "<record id=\"view_x\" model=\"ir.ui.view\">",
+      "attrs": [
+        {
+          "name": "id",
+          "raw": "view_x",
+          "value": "view_x"
+        },
+        {
+          "name": "model",
+          "raw": "ir.ui.view",
+          "value": "ir.ui.view"
+        }
+      ]
+    },
+    {
+      "tag": "field",
+      "span": "<field name=\"arch\" type=\"xml\">\n      <form>\n        <header>\n          <button name=\"act\" invisible=\"1\"/>\n        </header>\n      </form>\n    </field>",
+      "start_tag": "<field name=\"arch\" type=\"xml\">",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "arch",
+          "value": "arch"
+        },
+        {
+          "name": "type",
+          "raw": "xml",
+          "value": "xml"
+        }
+      ]
+    },
+    {
+      "tag": "form",
+      "span": "<form>\n        <header>\n          <button name=\"act\" invisible=\"1\"/>\n        </header>\n      </form>",
+      "start_tag": "<form>",
+      "attrs": []
+    },
+    {
+      "tag": "header",
+      "span": "<header>\n          <button name=\"act\" invisible=\"1\"/>\n        </header>",
+      "start_tag": "<header>",
+      "attrs": []
+    },
+    {
+      "tag": "button",
+      "span": "<button name=\"act\" invisible=\"1\"/>",
+      "start_tag": "<button name=\"act\" invisible=\"1\"/>",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "act",
+          "value": "act"
+        },
+        {
+          "name": "invisible",
+          "raw": "1",
+          "value": "1"
+        }
+      ]
+    }
+  ]
+}

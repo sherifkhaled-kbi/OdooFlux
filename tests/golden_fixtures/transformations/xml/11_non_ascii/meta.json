@@ -1,0 +1,30 @@
+{
+  "description": "Non-ASCII characters in attribute values and text",
+  "parse_error": false,
+  "encoding": "utf-8",
+  "elements": [
+    {
+      "tag": "odoo",
+      "span": "<odoo>\n  <field name=\"label\" string=\"Société – 中文\">café</field>\n</odoo>",
+      "start_tag": "<odoo>",
+      "attrs": []
+    },
+    {
+      "tag": "field",
+      "span": "<field name=\"label\" string=\"Société – 中文\">café</field>",
+      "start_tag": "<field name=\"label\" string=\"Société – 中文\">",
+      "attrs": [
+        {
+          "name": "name",
+          "raw": "label",
+          "value": "label"
+        },
+        {
+          "name": "string",
+          "raw": "Société – 中文",
+          "value": "Société – 中文"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+ "schema": "odooflux.ai-benchmark-corpus/1",
+ "note": "PROVISIONAL (ADR-019 item 4): synthetic regions and scripted fake-provider answers that exercise framework mechanics. They are not Odoo migration truth and say nothing about any real model.",
+ "scenarios": [
+  {
+   "id": "accepted",
+   "file": "sample_models.py.txt",
+   "script": "mixed.json",
+   "focus": "def f_ok",
+   "expected": {
+    "def f_ok": "    def f_ok(self):\n        return new_api(self.name)\n"
+   }
+  },
+  {
+   "id": "model-declined",
+   "file": "sample_models.py.txt",
+   "script": "mixed.json",
+   "focus": "def f_declined",
+   "expected": {}
+  },
+  {
+   "id": "out-of-region",
+   "file": "sample_models.py.txt",
+   "script": "mixed.json",
+   "focus": "def f_extra",
+   "expected": {}
+  },
+  {
+   "id": "syntax-error",
+   "file": "sample_models.py.txt",
+   "script": "syntax.json",
+   "focus": "def f_syntax",
+   "expected": {}
+  },
+  {
+   "id": "truncated",
+   "file": "sample_models.py.txt",
+   "script": "truncated.json",
+   "focus": "def f_truncated",
+   "expected": {}
+  },
+  {
+   "id": "protected-rename",
+   "file": "legacy_class.py.txt",
+   "script": "protected.json",
+   "focus": "legacy_defaults",
+   "expected": {}
+  },
+  {
+   "id": "class-unresolved",
+   "file": "legacy_class.py.txt",
+   "script": "mixed.json",
+   "focus": "legacy_defaults",
+   "expected": {}
+  }
+ ]
+}

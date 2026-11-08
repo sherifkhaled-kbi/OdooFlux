@@ -1,0 +1,19 @@
+{
+ "schema": "odooflux.ai-fake-script/1",
+ "entries": [
+  {
+   "match": {
+    "contains": "legacy_defaults"
+   },
+   "response": {
+    "replacement": "class Legacy(models.Model):\n    _name = \"kbi.renamed\"\n    _inherit = [\"mail.thread\"]\n\n    name = fields.Char()\n",
+    "notes": "",
+    "cannot_fix": false,
+    "usage": {
+     "input": 120,
+     "output": 30
+    }
+   }
+  }
+ ]
+}

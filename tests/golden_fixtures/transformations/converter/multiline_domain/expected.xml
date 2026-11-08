@@ -1,0 +1,3 @@
+<odoo>
+  <field name="f" invisible="state == 'done' and qty &gt; 0"/>
+</odoo>

@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "authority": "PROVISIONAL",
+  "note": "Fixtures and expected outputs are provisional validation material (ADR-019). Not approved migration truth.",
+  "fixtures": [
+    {
+      "id": "p0_kbi_demo_v14",
+      "source_version": "14.0",
+      "module": "kbi_demo",
+      "path": "p0_kbi_demo_v14",
+      "targets": [],
+      "evidence": [
+        "EV-101",
+        "EV-103",
+        "EV-110"
+      ],
+      "findings": [
+        "F-SAFE-1",
+        "F-SAFE-5",
+        "F-PY-1",
+        "F-PY-2",
+        "F-XML-1",
+        "F-XML-2"
+      ],
+      "authority": "BASELINE",
+      "layout": "flat",
+      "note": "P0 reproduction fixture (audit Appendix A). Kept at its original path; the 002 T010 move is reconciled as not done.",
+      "input_digest": "8afe4fc19233db5c008a83cc92c7b5b00915aedf14769a706baba0799ac813b7"
+    },
+    {
+      "id": "17.0/kbi_demo",
+      "source_version": "17.0",
+      "module": "kbi_demo",
+      "path": "17.0/kbi_demo",
+      "targets": [
+        "18.0"
+      ],
+      "evidence": [
+        "EV-104",
+        "EV-120"
+      ],
+      "findings": [],
+      "authority": "PROVISIONAL",
+      "layout": "golden",
+      "input_digest": "1d78fd66beb2cab1d0e4cc647e5bbd430a7edd545771f53bd0801661f999fc4d"
+    }
+  ]
+}

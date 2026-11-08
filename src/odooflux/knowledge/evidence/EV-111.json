@@ -1,0 +1,45 @@
+{
+  "category": "tests",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "`SavepointCase` exists through 16.0 and is removed in 17.0",
+  "detection_method": "grep on pinned source",
+  "id": "EV-111",
+  "locations": [
+    {
+      "branch": "16.0",
+      "kind": "present",
+      "line": 826,
+      "match": "class SavepointCase(",
+      "path": "odoo/tests/common.py",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b"
+    },
+    {
+      "branch": "17.0",
+      "kind": "absent",
+      "line": null,
+      "match": "class SavepointCase(",
+      "path": "odoo/tests/common.py",
+      "revision": "9ef8d62331b128bcd288528e4639e0901d85fcc8",
+      "search_scope": "odoo/tests/common.py"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "python_runtime"
+  ],
+  "revision": "9f40bf622c5531739321e59276c307319198e22b",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "16.0",
+    "to": "16.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "17.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/9f40bf622c5531739321e59276c307319198e22b/odoo/tests/common.py#L826"
+}

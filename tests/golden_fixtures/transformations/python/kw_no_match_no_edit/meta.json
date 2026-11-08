@@ -1,0 +1,20 @@
+{
+  "description": "Keyword of a different call is not touched",
+  "operations": [
+    {
+      "op": "remove_keyword",
+      "call": "fields.Char",
+      "keyword": "size"
+    }
+  ],
+  "expect": "no-edit",
+  "reason": "no fields.Char call",
+  "spans": [
+    {
+      "locator": "keyword_removal",
+      "call": "fields.Char",
+      "keyword": "size",
+      "matches": 0
+    }
+  ]
+}

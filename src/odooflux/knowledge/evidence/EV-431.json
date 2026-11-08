@@ -1,0 +1,36 @@
+{
+  "category": "dependencies",
+  "checked_by": "tools/extract_core_modules.py (T046)",
+  "checked_on": "2026-11-07",
+  "description": "Core module directories with __manifest__.py in Odoo 13.0 at 4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+  "detection_method": "GitHub git-trees API listing of addons/ and odoo/addons/ directories at pinned SHA (tools/extract_core_modules.py semantics, directory names only)",
+  "id": "EV-431",
+  "locations": [
+    {
+      "branch": "13.0",
+      "kind": "present",
+      "line": null,
+      "match": "365 module directories",
+      "path": "addons",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691"
+    }
+  ],
+  "proposed_transformation": "none",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.dependency"
+  ],
+  "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+  "risk": "LOW",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "13.0",
+    "to": "13.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "13.0",
+    "to": "13.0"
+  },
+  "url": "https://github.com/odoo/odoo/tree/4cc086d330b73514fbc64a7fcf22d8a7a9f1b691/addons"
+}

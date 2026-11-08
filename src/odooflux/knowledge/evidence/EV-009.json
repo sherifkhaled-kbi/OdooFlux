@@ -1,0 +1,36 @@
+{
+  "category": "orm",
+  "checked_by": "planning-register-migration",
+  "checked_on": "2026-11-06",
+  "description": "18.0: new `check_access`, `has_access`, `_filtered_access` combine access rights and rules",
+  "detection_method": "n/a",
+  "id": "EV-009",
+  "locations": [
+    {
+      "branch": "19.0",
+      "kind": "present",
+      "line": 61,
+      "match": "New methods to check access rights and rules",
+      "path": "content/developer/reference/backend/orm/changelog.rst",
+      "revision": "706918083dbd7dbc8e70c658d3ca63d700f94228"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/documentation",
+  "required_validation": [
+    "documentation"
+  ],
+  "revision": "706918083dbd7dbc8e70c658d3ca63d700f94228",
+  "risk": "MEDIUM",
+  "rule_ids": [],
+  "source_applicability": {
+    "from": "17.0",
+    "to": "18.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "18.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/documentation/blob/706918083dbd7dbc8e70c658d3ca63d700f94228/content/developer/reference/backend/orm/changelog.rst#L61"
+}

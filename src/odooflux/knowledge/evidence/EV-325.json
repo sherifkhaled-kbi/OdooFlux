@@ -1,0 +1,120 @@
+{
+  "category": "data_files",
+  "checked_by": "research-006-phase3-t015",
+  "checked_on": "2026-11-07",
+  "description": "<act_window> expansion: 12.0 reads src_model and view_type attributes; 13.0+ renames src_model to binding_model; both feed res binding_model_id",
+  "detection_method": "grep on pinned source",
+  "id": "EV-325",
+  "locations": [
+    {
+      "branch": "12.0",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "path": "odoo/tools/convert.py",
+      "line": 356,
+      "match": "src_model = rec.get('src_model')",
+      "kind": "present"
+    },
+    {
+      "branch": "12.0",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "path": "odoo/tools/convert.py",
+      "line": 415,
+      "match": "'view_type': view_type,",
+      "kind": "present"
+    },
+    {
+      "branch": "12.0",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "path": "odoo/tools/convert.py",
+      "line": 438,
+      "match": "res['binding_model_id'] = self.env['ir.model']._get(src_model).id",
+      "kind": "present"
+    },
+    {
+      "branch": "12.0",
+      "revision": "ba1ba88874e2ae9716e59ec199eb739d58c3f771",
+      "path": "odoo/import_xml.rng",
+      "line": 283,
+      "match": "<rng:attribute name=\"src_model\" />",
+      "kind": "present"
+    },
+    {
+      "branch": "13.0",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "path": "odoo/tools/convert.py",
+      "line": 343,
+      "match": "binding_model = rec.get('binding_model')",
+      "kind": "present"
+    },
+    {
+      "branch": "13.0",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "path": "odoo/tools/convert.py",
+      "line": 418,
+      "match": "res['binding_model_id'] = self.env['ir.model']._get(binding_model).id",
+      "kind": "present"
+    },
+    {
+      "branch": "13.0",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "path": "odoo/tools/convert.py",
+      "line": null,
+      "match": "rec.get('src_model')",
+      "kind": "absent",
+      "search_scope": "odoo/tools/convert.py"
+    },
+    {
+      "branch": "13.0",
+      "revision": "4cc086d330b73514fbc64a7fcf22d8a7a9f1b691",
+      "path": "odoo/import_xml.rng",
+      "line": 261,
+      "match": "<rng:attribute name=\"binding_model\"/>",
+      "kind": "present"
+    },
+    {
+      "branch": "16.0",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "path": "odoo/tools/convert.py",
+      "line": 348,
+      "match": "binding_model = rec.get('binding_model')",
+      "kind": "present"
+    },
+    {
+      "branch": "16.0",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "path": "odoo/tools/convert.py",
+      "line": 423,
+      "match": "res['binding_model_id'] = self.env['ir.model']._get(binding_model).id",
+      "kind": "present"
+    },
+    {
+      "branch": "16.0",
+      "revision": "9f40bf622c5531739321e59276c307319198e22b",
+      "path": "odoo/tools/convert.py",
+      "line": null,
+      "match": "'view_type': view_type",
+      "kind": "absent",
+      "search_scope": "odoo/tools/convert.py"
+    }
+  ],
+  "proposed_transformation": "review-only",
+  "repository": "odoo/odoo",
+  "required_validation": [
+    "static.rescan"
+  ],
+  "revision": "9f40bf622c5531739321e59276c307319198e22b",
+  "risk": "MEDIUM",
+  "rule_ids": [
+    "16-17.xml.act-window-tag"
+  ],
+  "source_applicability": {
+    "from": "12.0",
+    "to": "13.0"
+  },
+  "status": "DOCUMENTED_NOT_TESTED",
+  "target_applicability": {
+    "from": "13.0",
+    "to": null
+  },
+  "url": "https://github.com/odoo/odoo/blob/4cc086d330b73514fbc64a7fcf22d8a7a9f1b691/odoo/tools/convert.py#L343"
+}
