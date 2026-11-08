@@ -1,0 +1,58 @@
+name: CI
+
+# Every push and every pull request must pass all jobs. Make these jobs required in the branch protection rule
+# (Settings > Branches > main > "Require status checks to pass") so a failing commit cannot be merged.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: tests (Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Test suite
+        run: tools/ci_check.sh tests
+
+  gates:
+    name: knowledge and release gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Knowledge Base, generated documents, traceability
+        run: tools/ci_check.sh gates
+
+  package:
+    name: wheel build and install
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build wheel and run installed-wheel tests
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          tools/ci_check.sh package
