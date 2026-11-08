@@ -1,0 +1,74 @@
+2026-11-07 11:30:45,746 1 WARNING ? odoo.tools.config: option --without-demo: since 19.0, invalid boolean value: 'all', assume True 
+2026-11-07 11:30:45,746 1 INFO ? odoo: Odoo version 19.0-20260504 
+2026-11-07 11:30:45,746 1 INFO ? odoo: Using configuration file at /etc/odoo/odoo.conf 
+2026-11-07 11:30:45,746 1 INFO ? odoo: addons paths: _NamespacePath(['/usr/lib/python3/dist-packages/odoo/addons', '/var/lib/odoo/addons/19.0', '/mnt/extra-addons', '/usr/lib/python3/dist-packages/addons']) 
+2026-11-07 11:30:45,746 1 INFO ? odoo: database: odoo@/var/run/postgresql:5432 
+2026-11-07 11:30:45,921 1 INFO ? odoo.service.server: HTTP service (werkzeug) running on 2d32fd91955a:8069 
+2026-11-07 11:30:45,953 1 INFO odoo odoo.tests.common: Importing test framework 
+2026-11-07 11:30:45,977 1 INFO odoo odoo.modules.loading: loading 1 modules... 
+2026-11-07 11:30:45,984 1 INFO odoo odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries (+0 extra) 
+2026-11-07 11:30:46,012 1 INFO odoo odoo.modules.loading: updating modules list 
+2026-11-07 11:30:46,014 1 INFO odoo odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
+2026-11-07 11:30:46,138 1 WARNING odoo odoo.modules.module: Missing `author` key in manifest for 'behavior_compare', defaulting to '' 
+2026-11-07 11:30:46,139 1 WARNING odoo odoo.modules.module: Missing `author` key in manifest for 'behavior_compare', defaulting to '' 
+2026-11-07 11:30:46,837 1 INFO odoo odoo.addons.base.models.ir_module: ALLOW access to module.button_upgrade on ['OdooFlux runtime fixture: behavior_compare'] to user __system__ #1 via n/a 
+2026-11-07 11:30:46,837 1 INFO odoo odoo.addons.base.models.ir_module: ALLOW access to module.update_list on ['OdooFlux runtime fixture: behavior_compare'] to user __system__ #1 via n/a 
+2026-11-07 11:30:46,946 1 WARNING odoo odoo.modules.module: Missing `author` key in manifest for 'behavior_compare', defaulting to '' 
+2026-11-07 11:30:47,718 1 INFO odoo odoo.addons.base.models.ir_module: ALLOW access to module.button_install on [] to user __system__ #1 via n/a 
+2026-11-07 11:30:47,737 1 INFO odoo odoo.modules.loading: loading 15 modules... 
+2026-11-07 11:30:47,737 1 INFO odoo odoo.modules.loading: Loading module behavior_compare (2/15) 
+2026-11-07 11:30:47,741 1 INFO odoo odoo.registry: module behavior_compare: creating or updating database tables 
+<string>:6: (WARNING/2) Line block ends without a blank line.
+<string>:6: (ERROR/3) Undefined substitution referenced: "---".
+<string>:6: (ERROR/3) Undefined substitution referenced: "---".
+2026-11-07 11:30:47,767 1 INFO odoo odoo.modules.loading: loading behavior_compare/security/ir.model.access.csv 
+2026-11-07 11:30:47,772 1 INFO odoo odoo.modules.loading: loading behavior_compare/views/fixture_views.xml 
+2026-11-07 11:30:47,793 1 WARNING odoo odoo.tests.common: A tests should be either at_install or post_install, which is not the case of <class 'odoo.addons.behavior_compare.tests.test_behavior.TestBehavior'> 
+2026-11-07 11:30:47,799 1 INFO odoo odoo.addons.behavior_compare.tests.test_behavior: Starting TestBehavior.test_fail_both ... 
+2026-11-07 11:30:47,800 1 INFO odoo odoo.addons.behavior_compare.tests.test_behavior: ====================================================================== 
+2026-11-07 11:30:47,800 1 ERROR odoo odoo.addons.behavior_compare.tests.test_behavior: FAIL: TestBehavior.test_fail_both
+Traceback (most recent call last):
+  File "/mnt/extra-addons/behavior_compare/tests/test_behavior.py", line 13, in test_fail_both
+    self.assertEqual(1, 2)
+AssertionError: 1 != 2
+ 
+2026-11-07 11:30:47,801 1 INFO odoo odoo.addons.behavior_compare.tests.test_behavior: Starting TestBehavior.test_regression ... 
+2026-11-07 11:30:47,802 1 INFO odoo odoo.addons.behavior_compare.tests.test_behavior: ====================================================================== 
+2026-11-07 11:30:47,802 1 ERROR odoo odoo.addons.behavior_compare.tests.test_behavior: FAIL: TestBehavior.test_regression
+Traceback (most recent call last):
+  File "/mnt/extra-addons/behavior_compare/tests/test_behavior.py", line 17, in test_regression
+    self.assertLess(version_info[0], 19, 'behaviour changed in 19.0')
+AssertionError: 19 not less than 19 : behaviour changed in 19.0
+ 
+2026-11-07 11:30:47,823 1 INFO odoo odoo.addons.base.models.ir_attachment: filestore gc 10 checked, 0 removed 
+2026-11-07 11:30:47,823 1 INFO odoo odoo.modules.loading: Module behavior_compare loaded in 0.09s (incl. 0.03s test), 58 queries (+12 test, +58 other) 
+2026-11-07 11:30:47,823 1 ERROR odoo odoo.modules.loading: Module behavior_compare: 2 failures, 0 errors of 3 tests 
+2026-11-07 11:30:47,970 1 INFO odoo odoo.modules.loading: 15 modules loaded in 0.23s, 58 queries (+70 extra) 
+2026-11-07 11:30:48,052 1 INFO odoo odoo.registry: verifying fields for every extended model 
+2026-11-07 11:30:48,158 1 ERROR odoo odoo.modules.loading: At least one test failed when loading the modules. 
+2026-11-07 11:30:48,164 1 INFO odoo odoo.registry: Registry changed, signaling through the database 
+2026-11-07 11:30:48,166 1 INFO odoo odoo.registry: Registry loaded in 2.244s 
+2026-11-07 11:30:48,166 1 INFO odoo odoo.service.server: Starting post tests 
+2026-11-07 11:30:48,167 1 INFO odoo odoo.addons.behavior_compare.tests.test_behavior: Starting TestBehavior.test_fail_both ... 
+2026-11-07 11:30:48,168 1 INFO odoo odoo.addons.behavior_compare.tests.test_behavior: ====================================================================== 
+2026-11-07 11:30:48,168 1 ERROR odoo odoo.addons.behavior_compare.tests.test_behavior: FAIL: TestBehavior.test_fail_both
+Traceback (most recent call last):
+  File "/mnt/extra-addons/behavior_compare/tests/test_behavior.py", line 13, in test_fail_both
+    self.assertEqual(1, 2)
+AssertionError: 1 != 2
+ 
+2026-11-07 11:30:48,168 1 INFO odoo odoo.addons.behavior_compare.tests.test_behavior: Starting TestBehavior.test_regression ... 
+2026-11-07 11:30:48,168 1 INFO odoo odoo.addons.behavior_compare.tests.test_behavior: ====================================================================== 
+2026-11-07 11:30:48,168 1 ERROR odoo odoo.addons.behavior_compare.tests.test_behavior: FAIL: TestBehavior.test_regression
+Traceback (most recent call last):
+  File "/mnt/extra-addons/behavior_compare/tests/test_behavior.py", line 17, in test_regression
+    self.assertLess(version_info[0], 19, 'behaviour changed in 19.0')
+AssertionError: 19 not less than 19 : behaviour changed in 19.0
+ 
+2026-11-07 11:30:48,169 1 INFO odoo odoo.addons.base.models.ir_attachment: filestore gc 0 checked, 0 removed 
+2026-11-07 11:30:48,169 1 INFO odoo odoo.service.server: 3 post-tests in 0.00s, 9 queries 
+2026-11-07 11:30:48,169 1 INFO odoo odoo.tests.stats: behavior_compare: 5 tests 0.00s 9 queries 
+2026-11-07 11:30:48,169 1 ERROR odoo odoo.tests.result: 4 failed, 0 error(s) of 6 tests when loading database 'odoo' 
+2026-11-07 11:30:48,169 1 INFO odoo odoo.service.server: Initiating shutdown 
+2026-11-07 11:30:48,169 1 INFO odoo odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+2026-11-07 11:30:48,428 1 INFO odoo odoo.sql_db: ConnectionPool(read/write;used=0/count=0/max=64): Closed 2 connections  

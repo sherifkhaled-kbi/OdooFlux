@@ -1,0 +1,5 @@
+2026-11-07 10:00:00,000 4242 ERROR odoo odoo.modules.module: Couldn't load module kbi_pyimport
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/odoo/modules/module.py", line 512, in load_openerp_module
+    __import__('odoo.addons.' + module_name)
+ModuleNotFoundError: No module named 'odoo.addons.kbi_pyimport'

@@ -1,0 +1,2 @@
+2026-11-07 10:00:00,000 4242 ERROR odoo odoo.modules.module: External dependency 'kbi_fake_pkg' not installed
+2026-11-07 10:00:00,000 4242 ERROR odoo odoo.modules.module: Python library not installed: kbi_old_pkg

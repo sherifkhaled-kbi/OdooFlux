@@ -1,0 +1,2 @@
+2026-11-07 10:00:00,000 4242 ERROR odoo odoo.tools.convert: File "/mnt/extra-addons/kbi_xml/data/data.xml" does not fit the required schema: Element 'field' has an unexpected attribute
+2026-11-07 10:00:00,000 4242 ERROR odoo odoo.tools.convert: while parsing /mnt/extra-addons/kbi_xml/views/views.xml:12: External ID not found in the system: kbi_xml.menu_missing

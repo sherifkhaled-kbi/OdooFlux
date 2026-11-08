@@ -1,0 +1,1 @@
+2026-11-07 10:00:00,000 4242 WARNING odoo odoo.modules.loading: Some modules are not loaded, some dependencies or manifest may be missing: ['kbi_missing']

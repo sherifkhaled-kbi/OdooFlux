@@ -1,0 +1,48 @@
+2026-11-07 11:27:45,441 1 INFO odoo odoo.modules.loading: loading broken_view/views/fixture_views.xml 
+2026-11-07 11:27:45,450 1 WARNING odoo odoo.modules.loading: Transient module states were reset 
+2026-11-07 11:27:45,452 1 ERROR odoo odoo.registry: Failed to load registry 
+2026-11-07 11:27:45,452 1 CRITICAL odoo odoo.service.server: Failed to initialize database `odoo`. 
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/odoo/service/server.py", line 1544, in preload_registries
+    registry = Registry.new(dbname, update_module=update_module, install_modules=config['init'], upgrade_modules=config['update'], reinit_modules=config['reinit'])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/odoo/tools/func.py", line 88, in locked
+    return func(inst, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/odoo/orm/registry.py", line 199, in new
+    load_modules(
+  File "/usr/lib/python3/dist-packages/odoo/modules/loading.py", line 464, in load_modules
+    load_module_graph(
+  File "/usr/lib/python3/dist-packages/odoo/modules/loading.py", line 217, in load_module_graph
+    load_data(env, idref, 'init', kind='data', package=package)
+  File "/usr/lib/python3/dist-packages/odoo/modules/loading.py", line 59, in load_data
+    convert_file(env, package.name, filename, idref, mode, noupdate=kind == 'demo')
+  File "/usr/lib/python3/dist-packages/odoo/tools/convert.py", line 693, in convert_file
+    convert_xml_import(env, module, fp, idref, mode, noupdate)
+  File "/usr/lib/python3/dist-packages/odoo/tools/convert.py", line 792, in convert_xml_import
+    obj.parse(doc.getroot())
+  File "/usr/lib/python3/dist-packages/odoo/tools/convert.py", line 663, in parse
+    self._tag_root(de)
+  File "/usr/lib/python3/dist-packages/odoo/tools/convert.py", line 616, in _tag_root
+    raise ParseError(msg) from None  # Restart with "--log-handler odoo.tools.convert:DEBUG" for complete traceback
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+odoo.tools.convert.ParseError: while parsing /mnt/extra-addons/broken_view/views/fixture_views.xml:3
+Error while validating view near:
+
+<form __validate__="1">
+                <field name="no_such_field"/>
+            </form>
+Field "no_such_field" does not exist in model "odooflux.fixture"
+
+View error context:
+{'file': '/mnt/extra-addons/broken_view/views/fixture_views.xml',
+ 'line': 2,
+ 'name': 'odooflux.fixture.form',
+ 'view': ir.ui.view(183,),
+ 'view.model': 'odooflux.fixture',
+ 'view.parent': ir.ui.view(),
+ 'xmlid': 'view_odooflux_fixture_form'}
+
+2026-11-07 11:27:45,457 1 INFO odoo odoo.service.server: Initiating shutdown 
+2026-11-07 11:27:45,457 1 INFO odoo odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+2026-11-07 11:27:45,457 1 INFO odoo odoo.sql_db: ConnectionPool(read/write;used=0/count=0/max=64): Closed 1 connections  

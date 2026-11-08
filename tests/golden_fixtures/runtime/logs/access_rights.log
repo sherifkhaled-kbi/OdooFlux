@@ -1,0 +1,41 @@
+2026-11-07 11:27:55,069 1 INFO odoo odoo.modules.loading: loading acl_missing_model/security/ir.model.access.csv 
+2026-11-07 11:27:55,077 1 ERROR odoo odoo.sql_db: bad query: b'INSERT INTO "ir_model_access" ("active", "create_date", "create_uid", "group_id", "model_id", "name", "perm_create", "perm_read", "perm_unlink", "perm_write", "write_date", "write_uid") VALUES (true, \'2026-11-07T11:27:54.478483\'::timestamp, 1, 1, 125, \'odooflux.fixture user\', false, true, false, false, \'2026-11-07T11:27:54.478483\'::timestamp, 1), (true, \'2026-11-07T11:27:54.478483\'::timestamp, 1, 1, DEFAULT, \'odooflux.missing user\', false, true, false, false, \'2026-11-07T11:27:54.478483\'::timestamp, 1) RETURNING "id"'
+ERROR: null value in column "model_id" of relation "ir_model_access" violates not-null constraint
+DETAIL:  Failing row contains (148, null, 1, 1, 1, odooflux.missing user, t, t, f, f, f, 2026-11-07 11:27:54.478483, 2026-11-07 11:27:54.478483).
+ 
+2026-11-07 11:27:55,079 1 ERROR odoo odoo.sql_db: bad query: b'INSERT INTO "ir_model_access" ("active", "create_date", "create_uid", "group_id", "name", "perm_create", "perm_read", "perm_unlink", "perm_write", "write_date", "write_uid") VALUES (true, \'2026-11-07T11:27:54.478483\'::timestamp, 1, 1, \'odooflux.missing user\', false, true, false, false, \'2026-11-07T11:27:54.478483\'::timestamp, 1) RETURNING "id"'
+ERROR: null value in column "model_id" of relation "ir_model_access" violates not-null constraint
+DETAIL:  Failing row contains (150, null, 1, 1, 1, odooflux.missing user, t, t, f, f, f, 2026-11-07 11:27:54.478483, 2026-11-07 11:27:54.478483).
+ 
+2026-11-07 11:27:55,101 1 WARNING odoo odoo.modules.loading: Transient module states were reset 
+2026-11-07 11:27:55,103 1 ERROR odoo odoo.registry: Failed to load registry 
+2026-11-07 11:27:55,103 1 CRITICAL odoo odoo.service.server: Failed to initialize database `odoo`. 
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/odoo/service/server.py", line 1544, in preload_registries
+    registry = Registry.new(dbname, update_module=update_module, install_modules=config['init'], upgrade_modules=config['update'], reinit_modules=config['reinit'])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/odoo/tools/func.py", line 88, in locked
+    return func(inst, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/odoo/orm/registry.py", line 199, in new
+    load_modules(
+  File "/usr/lib/python3/dist-packages/odoo/modules/loading.py", line 464, in load_modules
+    load_module_graph(
+  File "/usr/lib/python3/dist-packages/odoo/modules/loading.py", line 217, in load_module_graph
+    load_data(env, idref, 'init', kind='data', package=package)
+  File "/usr/lib/python3/dist-packages/odoo/modules/loading.py", line 59, in load_data
+    convert_file(env, package.name, filename, idref, mode, noupdate=kind == 'demo')
+  File "/usr/lib/python3/dist-packages/odoo/tools/convert.py", line 689, in convert_file
+    convert_csv_import(env, module, pathname, fp.read(), idref, mode, noupdate)
+  File "/usr/lib/python3/dist-packages/odoo/tools/convert.py", line 754, in convert_csv_import
+    raise Exception(env._(
+Exception: Module loading acl_missing_model failed: file acl_missing_model/security/ir.model.access.csv could not be processed:
+No matching record found for external id 'model_odooflux_missing' in field 'Model'
+Missing required value for the field 'Model' (model_id).
+Model: 'Model Access' (ir.model.access)
+- create/update: a mandatory field is not set
+- delete: another model requires the record being deleted, you can archive it instead
+
+2026-11-07 11:27:55,104 1 INFO odoo odoo.service.server: Initiating shutdown 
+2026-11-07 11:27:55,104 1 INFO odoo odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+2026-11-07 11:27:55,104 1 INFO odoo odoo.sql_db: ConnectionPool(read/write;used=0/count=0/max=64): Closed 2 connections  

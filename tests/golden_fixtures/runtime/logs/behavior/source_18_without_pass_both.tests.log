@@ -1,0 +1,59 @@
+2026-11-07 11:31:04,579 1 INFO ? odoo: Odoo version 18.0-20261015 
+2026-11-07 11:31:04,579 1 INFO ? odoo: Using configuration file at /etc/odoo/odoo.conf 
+2026-11-07 11:31:04,579 1 INFO ? odoo: addons paths: ['/usr/lib/python3/dist-packages/odoo/addons', '/var/lib/odoo/addons/18.0', '/mnt/extra-addons'] 
+2026-11-07 11:31:04,579 1 INFO ? odoo: database: odoo@/var/run/postgresql:5432 
+Warn: Can't find .pfb for face 'Courier'
+2026-11-07 11:31:04,673 1 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltopdf binary at /usr/local/bin/wkhtmltopdf 
+2026-11-07 11:31:04,680 1 INFO ? odoo.addons.base.models.ir_actions_report: Will use the Wkhtmltoimage binary at /usr/local/bin/wkhtmltoimage 
+2026-11-07 11:31:04,781 1 INFO ? odoo.service.server: HTTP service (werkzeug) running on ce2c87432aa5:8069 
+2026-11-07 11:31:04,821 1 INFO odoo odoo.tests.common: Importing test framework 
+2026-11-07 11:31:04,833 1 INFO odoo odoo.modules.loading: loading 1 modules... 
+2026-11-07 11:31:04,839 1 INFO odoo odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries (+0 extra) 
+2026-11-07 11:31:04,853 1 INFO odoo odoo.modules.loading: updating modules list 
+2026-11-07 11:31:04,855 1 INFO odoo odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
+2026-11-07 11:31:05,621 1 INFO odoo odoo.addons.base.models.ir_module: ALLOW access to module.button_upgrade on ['OdooFlux runtime fixture: behavior_compare'] to user __system__ #1 via n/a 
+2026-11-07 11:31:05,621 1 INFO odoo odoo.addons.base.models.ir_module: ALLOW access to module.update_list on ['OdooFlux runtime fixture: behavior_compare'] to user __system__ #1 via n/a 
+2026-11-07 11:31:06,505 1 INFO odoo odoo.addons.base.models.ir_module: ALLOW access to module.button_install on [] to user __system__ #1 via n/a 
+2026-11-07 11:31:06,528 1 INFO odoo odoo.modules.loading: loading 13 modules... 
+2026-11-07 11:31:06,528 1 INFO odoo odoo.modules.loading: Loading module behavior_compare (2/13) 
+2026-11-07 11:31:06,552 1 INFO odoo odoo.modules.registry: module behavior_compare: creating or updating database tables 
+<string>:6: (WARNING/2) Line block ends without a blank line.
+<string>:6: (ERROR/3) Undefined substitution referenced: "---".
+<string>:6: (ERROR/3) Undefined substitution referenced: "---".
+2026-11-07 11:31:06,579 1 INFO odoo odoo.modules.loading: loading behavior_compare/security/ir.model.access.csv 
+2026-11-07 11:31:06,585 1 INFO odoo odoo.modules.loading: loading behavior_compare/views/fixture_views.xml 
+2026-11-07 11:31:06,603 1 WARNING odoo odoo.tests.common: A tests should be either at_install or post_install, which is not the case of <class 'odoo.addons.behavior_compare.tests.test_behavior.TestBehavior'> 
+2026-11-07 11:31:06,615 1 INFO odoo odoo.addons.behavior_compare.tests.test_behavior: Starting TestBehavior.test_fail_both ... 
+2026-11-07 11:31:06,615 1 INFO odoo odoo.addons.behavior_compare.tests.test_behavior: ====================================================================== 
+2026-11-07 11:31:06,615 1 ERROR odoo odoo.addons.behavior_compare.tests.test_behavior: FAIL: TestBehavior.test_fail_both
+Traceback (most recent call last):
+  File "/mnt/extra-addons/behavior_compare/tests/test_behavior.py", line 13, in test_fail_both
+    self.assertEqual(1, 2)
+AssertionError: 1 != 2
+ 
+2026-11-07 11:31:06,617 1 INFO odoo odoo.addons.behavior_compare.tests.test_behavior: Starting TestBehavior.test_regression ... 
+2026-11-07 11:31:06,638 1 INFO odoo odoo.addons.base.models.ir_attachment: filestore gc 10 checked, 0 removed 
+2026-11-07 11:31:06,643 1 INFO odoo odoo.modules.loading: Module behavior_compare loaded in 0.12s (incl. 0.04s test), 61 queries (+9 test, +61 other) 
+2026-11-07 11:31:06,643 1 ERROR odoo odoo.modules.loading: Module behavior_compare: 1 failures, 0 errors of 3 tests 
+2026-11-07 11:31:06,812 1 INFO odoo odoo.modules.loading: 13 modules loaded in 0.28s, 61 queries (+70 extra) 
+2026-11-07 11:31:06,886 1 INFO odoo odoo.modules.registry: verifying fields for every extended model 
+2026-11-07 11:31:07,019 1 ERROR odoo odoo.modules.loading: At least one test failed when loading the modules. 
+2026-11-07 11:31:07,025 1 INFO odoo odoo.modules.registry: Registry changed, signaling through the database 
+2026-11-07 11:31:07,026 1 INFO odoo odoo.modules.registry: Registry loaded in 2.244s 
+2026-11-07 11:31:07,026 1 INFO odoo odoo.service.server: Starting post tests 
+2026-11-07 11:31:07,027 1 INFO odoo odoo.addons.behavior_compare.tests.test_behavior: Starting TestBehavior.test_fail_both ... 
+2026-11-07 11:31:07,028 1 INFO odoo odoo.addons.behavior_compare.tests.test_behavior: ====================================================================== 
+2026-11-07 11:31:07,028 1 ERROR odoo odoo.addons.behavior_compare.tests.test_behavior: FAIL: TestBehavior.test_fail_both
+Traceback (most recent call last):
+  File "/mnt/extra-addons/behavior_compare/tests/test_behavior.py", line 13, in test_fail_both
+    self.assertEqual(1, 2)
+AssertionError: 1 != 2
+ 
+2026-11-07 11:31:07,030 1 INFO odoo odoo.addons.behavior_compare.tests.test_behavior: Starting TestBehavior.test_regression ... 
+2026-11-07 11:31:07,032 1 INFO odoo odoo.addons.base.models.ir_attachment: filestore gc 0 checked, 0 removed 
+2026-11-07 11:31:07,033 1 INFO odoo odoo.service.server: 3 post-tests in 0.01s, 6 queries 
+2026-11-07 11:31:07,033 1 INFO odoo odoo.tests.stats: behavior_compare: 5 tests 0.01s 6 queries 
+2026-11-07 11:31:07,033 1 ERROR odoo odoo.tests.result: 2 failed, 0 error(s) of 6 tests when loading database 'odoo' 
+2026-11-07 11:31:07,033 1 INFO odoo odoo.service.server: Initiating shutdown 
+2026-11-07 11:31:07,033 1 INFO odoo odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+2026-11-07 11:31:07,286 1 INFO odoo odoo.sql_db: ConnectionPool(read/write;used=0/count=0/max=64): Closed 2 connections  
