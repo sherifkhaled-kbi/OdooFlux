@@ -46,14 +46,14 @@ Expected: `coverage show` prints the 8 metrics as fractions with denominators, a
 
 ```bash
 odooflux knowledge package validate odoo-17-18.ofkp --expect-digest <release_digest>   # the release_digest (release.json, release show), not the sha256 of the file
-odooflux knowledge package import odoo-17-18.ofkp --activate --downgrade-unverified --kb-home $KB2   # see note below
+odooflux knowledge package import odoo-17-18.ofkp --activate --kb-home $KB2   # see note below
 odooflux knowledge release list --kb-home $KB2
 odooflux migrate --module <module-dir> --from-version 17 --to-version 18 --kb-home $KB2 --report report.json --report-format json   # report shows release id and digest
 odooflux knowledge release rollback --kb-home $KB2   # needs a previous release (exit 1 otherwise)
 odooflux knowledge release deactivate --kb-home $KB2   # back to the built-in knowledge
 ```
 
-Note on `package import`: a release built from the built-in tree carries built-in FIX_ENABLED rules that have no official provenance. Without `--downgrade-unverified` the import is refused (exit 3, code P10) and nothing is installed; with it they are capped to DETECT_ONLY.
+Note on `package import`: a release built from the built-in tree carries built-in FIX_ENABLED rules. The import accepts a carried row only when it is byte-identical to the shipped built-in rule, checked against the verified shipped baseline (never by id); those rows stay FIX_ENABLED and the decision is recorded in the `release_installed` audit entry as `details.inherited_trust` (`rule_ids`, `baseline_digest`). Any other FIX_ENABLED row that fails the gates is refused (exit 3, code P10) and nothing is installed. `--downgrade-unverified` is an optional cap: it caps the refused rows to DETECT_ONLY, and it is not needed for a pipeline-built release.
 
 With no release activated, every command and output behaves exactly as before KAP.
 
@@ -62,14 +62,14 @@ With no release activated, every command and output behaves exactly as before KA
 | Try | Expected |
 |---|---|
 | `package import` of an archive with `../x` | exit 3 (`P01: dot segment`), nothing installed |
-| import a package whose FIX_ENABLED rule has no official evidence | without `--downgrade-unverified`: exit 3, P10 named, nothing installed; with it: exit 0, installed, capped to DETECT_ONLY |
+| import a pipeline-built package with carried built-in FIX_ENABLED rules | exit 0, installed; the byte-identical built-in rules stay FIX_ENABLED and are listed in the audit entry (`details.inherited_trust`). A FIX_ENABLED row that is not a shipped row and fails the gates: exit 3, P10 named, nothing installed |
 | `source fetch ID` without `--allow-network` | exit 2 (`needs the explicit --allow-network flag`), no socket call |
 | pinned SHA absent from the clone | exit 4, no snapshot written |
 | `release remove <active-id>` | exit 1 (`is ACTIVE; deactivate or activate another`) |
 
 ## Notes
 
-- **`package import` needs `--downgrade-unverified` for a pipeline-built release today.** The built-in FIX_ENABLED rules carried into the release have no official provenance, and gate P10 refuses them (open owner decision KAP-OD-K13). With the flag, the rules are capped to DETECT_ONLY and the release is recomputed. A downgraded install therefore has a different release id from the package: the import prints the new id, and the downgrade is audit-logged. `--expect-digest` checks the package's own release digest, not the installed id.
+- **`package import` does not need `--downgrade-unverified` for a pipeline-built release.** The built-in FIX_ENABLED rules carried into the release are accepted under owner decision D3 (OD-K13, implemented by feature 012) when they are byte-identical to the shipped built-in rules; the decision is recorded in the `release_installed` audit entry. `--downgrade-unverified` remains an optional cap for rows that are refused: with it they are capped to DETECT_ONLY, the release is recomputed, and the install gets a different release id from the package (the import prints the new id, and the downgrade is audit-logged). `--expect-digest` checks the package's own release digest, not the installed id.
 - **Section 3 values** are those the CLI prints for the fixtures in `test_quickstart.py`; the exit codes are the contract, the message wording may vary.
 - **Unofficial evidence does not reach a release yet.** `release build` refuses evidence whose url is outside the official allow-list (E002). An unofficial source can therefore generate and accept candidates, but its evidence cannot be packaged until that owner decision is made.
 

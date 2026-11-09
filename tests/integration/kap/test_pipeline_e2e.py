@@ -35,7 +35,6 @@ from odooflux.knowledge.acquisition.adapters.git_local import GitLocalAdapter
 from odooflux.knowledge.acquisition.sources import load_allow_list
 from odooflux.knowledge.extract import driver
 from odooflux.knowledge.ledger.ledger import Ledger
-from odooflux.knowledge.package.archive import PackageError
 from odooflux.knowledge.package.builder import export_package
 from odooflux.knowledge.package.importer import import_package
 from odooflux.knowledge.release.manifest import verify_release_tree
@@ -245,31 +244,40 @@ class TestBuildVariants(PipelineEndToEnd):
         package = export_package(release, self.base / "f" / "release.ofkp")
 
         # The pipeline never produces FIX_ENABLED rules. The release does carry the built-in FIX_ENABLED rules (the
-        # parent content, note 4: built-ins have no provenance), so Gate 1 (P10) refuses them by default.
+        # parent content, note 4: built-ins have no provenance). Feature 012 (D3): rows byte-identical to the shipped
+        # built-in rules are inherited trust, so a default import accepts them and records them in the audit entry.
         fix_rules = []
         for path in (release / "knowledge" / "compatibility").glob("*.rules.json"):
             fix_rules += [r for r in json.loads(path.read_text(encoding="utf-8")) if r.get("maturity") == "FIX_ENABLED"]
         self.assertTrue(fix_rules)
         self.assertTrue(all(r.get("origin") in (None, "BUILTIN") for r in fix_rules), "no pipeline-made FIX_ENABLED")
+        carried = sorted({r["id"] for r in fix_rules})
 
         second = self.base / "f" / "kb-second"
-        with self.assertRaises(PackageError) as ctx:
-            import_package(package.path, second)
-        self.assertEqual(ctx.exception.code, "P10")
-        refused = {r["id"] for r in fix_rules}
-        self.assertTrue(all(rid in str(ctx.exception) for rid in refused))
-        self.assertEqual(list((second / "releases").iterdir()), [], "a refused import installs nothing")
-        self.assertFalse((second / "active.json").exists())
-
-        imported = import_package(package.path, second, downgrade_unverified=True)
+        imported = import_package(package.path, second)
         self.assertTrue(imported.installed)
-        self.assertEqual(set(imported.downgraded_rules), refused)
+        self.assertEqual(imported.downgraded_rules, ())
         installed = second / "releases" / imported.release_id
         self.assertEqual(verify_release_tree(installed), [])
         self.assertEqual(fix_gate_findings(installed / "knowledge"), [])
+        installed_fix = set()
         for path in (installed / "knowledge" / "compatibility").glob("*.rules.json"):
-            for rule in json.loads(path.read_text(encoding="utf-8")):
-                self.assertNotEqual(rule.get("maturity"), "FIX_ENABLED", rule.get("id"))
+            installed_fix |= {r.get("id") for r in json.loads(path.read_text(encoding="utf-8"))
+                              if r.get("maturity") == "FIX_ENABLED"}
+        self.assertEqual(sorted(installed_fix), carried, "the carried built-in FIX_ENABLED rules stay FIX_ENABLED")
+
+        audit_lines = [json.loads(line) for line in (second / "audit.jsonl").read_text(encoding="utf-8").splitlines()]
+        installed_entries = [e for e in audit_lines
+                             if e["action"] == "release_installed" and e["target"] == imported.release_id]
+        self.assertEqual(len(installed_entries), 1)
+        inherited = installed_entries[0]["details"]["inherited_trust"]
+        self.assertEqual(inherited["rule_ids"], carried)
+        self.assertRegex(inherited["baseline_digest"], r"^[0-9a-f]{64}$")
+
+        # The downgrade option is still accepted, and changes nothing for this package (nothing to cap).
+        flagged = import_package(package.path, self.base / "f" / "kb-flag", downgrade_unverified=True)
+        self.assertTrue(flagged.installed)
+        self.assertEqual(flagged.downgraded_rules, ())
 
 if __name__ == "__main__":
     unittest.main()

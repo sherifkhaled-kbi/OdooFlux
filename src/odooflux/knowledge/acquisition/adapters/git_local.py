@@ -5,7 +5,8 @@ Reads a local clone given as a `local:<path>` URL. Probe and snapshot use `git` 
 in the clone; otherwise the adapter refuses (`REVISION_UNAVAILABLE`). An official local clone (`official=true`) must
 also prove its identity: its `origin` remote must equal `expected_origin` (normalised) and be allow-listed, else the
 probe fails with `OFFICIAL_IDENTITY_UNVERIFIED`, including when the pinned commit is absent. The verified origin is
-recorded as `origin_url`. This is a declared identity, not cryptographic proof (see `sources.official_origin`). It never resolves branches, tags or short
+recorded as `origin_url`. This is a declared identity, not cryptographic proof (see `sources.official_origin`). GIT_ENTERPRISE
+clones follow exactly the same rules, under the enterprise prefix. It never resolves branches, tags or short
 SHAs, and never substitutes another revision. Remote URLs never reach git: they are checked against the allow-list
 and then refused with `NETWORK_DISABLED` (network access lives only in `acquisition/fetch.py`).
 """

@@ -15,8 +15,9 @@ from odooflux.core.orchestrator.ai_pass import run_ai_pass
 from odooflux.core.orchestrator import knowledge_rules, run_inputs
 from odooflux.core.orchestrator.module_plan import plan_module
 from odooflux.dependencies.scan import scan_run_dependencies
+from odooflux.dependencies.unified import FINDING_ID
 from odooflux.discovery.modules import module_ref
-from odooflux.rules.shared.legacy_rules import Issue, MigrationReport
+from odooflux.rules.shared.legacy_rules import SEVERITY_WARNING, Issue, MigrationReport
 from odooflux.utils.hashing import digest_tree
 
 DONE_STATES = ("PROMOTED", "DONE", "BLOCKED", "FAILED")
@@ -108,11 +109,14 @@ class RunContext:
     steps: list = field(default_factory=list)  # rule step keys, e.g. ["17-18", "18-19"]
     dependency_findings: dict = field(default_factory=dict)
     gaps: list = field(default_factory=list)
+    coverage_messages: dict = field(default_factory=dict)  # module name -> KB-COVERAGE-INCOMPLETE text (feature 012)
 
 
 def build_run_context(state: dict, options: RunOptions, registries) -> RunContext:
     """Bind opted-in rules with the planned target (FR-017) and scan dependencies across all modules (FR-020)."""
     ctx = RunContext()
+    withheld = (state.get("knowledge_coverage") or {}).get("withheld") or {}
+    ctx.coverage_messages = {name: record["message"] for name, record in withheld.items()}
     ctx.dependency_findings, ctx.gaps = scan_run_dependencies(
         [m["path"] for m in state["modules"]], options.from_version, options.to_version)
     binder = getattr(registries, "run_rule_binder", None)
@@ -145,6 +149,12 @@ def _add_run_context(report, path: Path, run_ctx: RunContext) -> None:
             report.issues.append(Issue(file=f.path, line=f.line, severity=f.severity, category=f.rule_id,
                                        message=f.message, suggestion=f.suggestion, auto_fixable=False,
                                        evidence=list(f.evidence)))
+    if path.name in run_ctx.coverage_messages:
+        report.issues.append(Issue(
+            file=str(path), line=0, severity=SEVERITY_WARNING, category=FINDING_ID,
+            message=run_ctx.coverage_messages[path.name],
+            suggestion="Add the missing module inventory or dependency to the active knowledge release, then re-run",
+            auto_fixable=False))
 
 
 def _process_module(run, entry: dict, options: RunOptions, registries, layer3=None, run_ctx=None) -> None:
@@ -159,7 +169,7 @@ def _process_module(run, entry: dict, options: RunOptions, registries, layer3=No
             entry.update(status="BLOCKED", report=report_to_dict(report))
             return
     analysis, edits = plan_module(path, options.from_version, options.to_version, registries,
-                                  compute_edits=options.computes_edits,
+                                  compute_edits=options.computes_edits and not entry.get("fixes_withheld"),
                                   run_rules=run_ctx.rules if run_ctx else (),
                                   knowledge=run_ctx.knowledge if run_ctx else (),
                                   knowledge_steps=run_ctx.steps if run_ctx else ())
@@ -256,7 +266,15 @@ def run_pipeline(run, state: dict, registries, *, api_key=None, validate_text=No
         if hook is not None:
             hook(entry["name"])
     if options.ai and not state["ai_done"] and options.writes:
-        run_ai_pass(run, state, options, registries, api_key=api_key, validate_text=validate_text)
+        withheld = [m for m in state["modules"] if m.get("fixes_withheld")]
+        if withheld:  # feature 012: AI proposes no edit for a module whose fixes are withheld
+            ai_state = dict(state, modules=[m for m in state["modules"] if not m.get("fixes_withheld")])
+            if ai_state["modules"]:
+                run_ai_pass(run, ai_state, options, registries, api_key=api_key, validate_text=validate_text)
+            if "ai_usage" in ai_state:
+                state["ai_usage"] = ai_state["ai_usage"]
+        else:
+            run_ai_pass(run, state, options, registries, api_key=api_key, validate_text=validate_text)
         for entry in state["modules"]:
             run.save_module(entry)
         state["ai_done"] = True

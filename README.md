@@ -79,7 +79,20 @@ with static validation layers, and writes reports you can keep as evidence.
    - [11.7 Coverage metrics and gates](#117-coverage-metrics-and-gates)
    - [11.8 Security and limits](#118-security-and-limits)
    - [11.9 Where to read more](#119-where-to-read-more)
-12. [Project documentation](#12-project-documentation)
+12. [Keeping the knowledge base up to date (feature 012)](#12-keeping-the-knowledge-base-up-to-date-feature-012)
+   - [12.1 What `knowledge update` does and does not do](#121-what-knowledge-update-does-and-does-not-do)
+   - [12.2 Commands, flags and exit codes](#122-commands-flags-and-exit-codes)
+   - [12.3 Offline mode](#123-offline-mode)
+   - [12.4 Community and Enterprise in one knowledge base](#124-community-and-enterprise-in-one-knowledge-base)
+   - [12.5 When a new release becomes active](#125-when-a-new-release-becomes-active)
+   - [12.6 What "verified" means](#126-what-verified-means)
+   - [12.7 What is fixed automatically, and what is not](#127-what-is-fixed-automatically-and-what-is-not)
+   - [12.8 Confidentiality](#128-confidentiality)
+   - [12.9 Support dimensions](#129-support-dimensions)
+   - [12.10 Custom modules that depend on Enterprise modules](#1210-custom-modules-that-depend-on-enterprise-modules)
+   - [12.11 Installation](#1211-installation)
+   - [12.12 Where to read more](#1212-where-to-read-more)
+13. [Project documentation](#13-project-documentation)
 
 ---
 
@@ -1291,9 +1304,10 @@ was installed, or (with `--require-complete-kb`) is not COMPLETE. The run stops 
 Activate a valid release, or run `odooflux knowledge release deactivate` if you want the built-in knowledge on purpose.
 (Reproduced with the KAP commands in Section 11.)
 
-**A package import exits 3 with `P10: unverified FIX_ENABLED rule(s) refused`.** This is the default safety gate. Nothing is
-installed. Use `--downgrade-unverified` to cap those rules to `DETECT_ONLY`. The downgraded release has a new digest and
-id. (Reproduced.)
+**A package import exits 3 with `P10: unverified FIX_ENABLED rule(s) refused`.** This is the default safety gate for a
+FIX_ENABLED row that is not an accepted shipped built-in row (feature 012, D3). Nothing is installed. Use
+`--downgrade-unverified` to cap those rules to `DETECT_ONLY`. The downgraded release has a new digest and id. (Reproduced
+for the refusal path.)
 
 ## 11. Knowledge Base releases and acquisition (KAP)
 
@@ -1412,28 +1426,31 @@ odooflux knowledge release list --kb-home "$KB1"
 odooflux knowledge package export kr-XXXXXXXXXXXX -o release.ofkp --kb-home "$KB1"
 odooflux knowledge package validate release.ofkp                             # reader checks only
 odooflux knowledge package inspect release.ofkp                              # declared, not verified
-odooflux knowledge package import release.ofkp --kb-home "$KB2" --downgrade-unverified --activate
+odooflux knowledge package import release.ofkp --kb-home "$KB2" --activate
 odooflux knowledge release rollback --kb-home "$KB2"
 ```
 
-Real output (shortened):
+Real output (shortened; the import line is from the same run as the export, before feature 012 changed the import):
 
 ```text
 exported kr-19e3219c0c11 sha256=7209ef2e... entries=247
 valid kr-19e3219c0c11 19e3219c0c11...
 declared by package.json (not verified; run `package validate`)
-imported kr-121d875564e4 installed=True activated=True
-downgraded to DETECT_ONLY: 12-13.python.api-multi-removed, 14-15.qweb.t-esc-deprecated, ...
+imported kr-19e3219c0c11 installed=True activated=True
 rolled back; active: kr-8b81bbde3476 8b81bbde3476...
 ```
 
 What to expect from the import:
 
-- A release built from the shipped tree carries the built-in `FIX_ENABLED` rules. Those rules have no release
-  provenance, so a default `package import` **refuses** them: `P10: unverified FIX_ENABLED rule(s) refused: ...`,
+- A release built from the shipped tree carries the built-in `FIX_ENABLED` rules. A default `package import` accepts each
+  one that is **byte-identical** to the shipped built-in rule, checked against the verified shipped baseline (never by
+  id). Those rows stay `FIX_ENABLED`, and the decision is recorded in the `release_installed` audit entry as
+  `details.inherited_trust` (`rule_ids`, `baseline_digest`). No `--downgrade-unverified` is needed for this.
+- Any other `FIX_ENABLED` row that fails the gates is **refused**: `P10: unverified FIX_ENABLED rule(s) refused: ...`,
   exit **3**. Nothing is installed.
-- `--downgrade-unverified` caps those rules to `DETECT_ONLY` instead. The downgraded content has a new digest, so the
-  import installs a **new release id** (the source id is not kept). Keep this in mind when you compare ids.
+- `--downgrade-unverified` is an optional cap: it caps the refused rows to `DETECT_ONLY` instead. The downgraded content
+  has a new digest, so the import installs a **new release id** (the source id is not kept). Keep this in mind when you
+  compare ids.
 - `--expect-digest SHA` on `validate` or `import` rejects a package whose release digest differs (`P06`, exit 3).
 - A byte-level change to a package entry is caught by the archive checks (for example `P04: manifest size differs
   from archive header`, exit 3). A change to an installed release is caught when you activate it (exit **5**,
@@ -1484,9 +1501,9 @@ code and checked on the examples in this section.
 
 | Command | Purpose | Key options | Exit codes |
 |---|---|---|---|
-| `package export ID -o FILE` | Write a deterministic package for an installed release | `-o FILE` (required), `--include-enterprise-derived`, `--kb-home` | 0; 3 refused; 5 integrity |
+| `package export ID -o FILE` | Write a deterministic package for an installed release. Refuses internal and Enterprise-derived releases (they are never exported; there is no override flag) | `-o FILE` (required), `--kb-home` | 0; 3 refused; 5 integrity |
 | `package validate FILE` | Check a package; installs nothing | `--expect-digest SHA`, `--kb-home` | 0; 3 rejected (any `P..`) |
-| `package import FILE` | Verify, gate and install a package, atomically. Activates only with `--activate` | `--activate`, `--downgrade-unverified`, `--expect-digest SHA`, `--kb-home` | 0; 1 kb-home locked; 3 rejected (`P..`, including P10); 5 integrity |
+| `package import FILE` | Verify, gate and install a package, atomically. Activates only with `--activate`. Built-in FIX_ENABLED rows that are byte-identical to the shipped rules are accepted (D3, audited). `--downgrade-unverified` is an optional cap for refused rows | `--activate`, `--downgrade-unverified`, `--expect-digest SHA`, `--kb-home` | 0; 1 kb-home locked; 3 rejected (`P..`, including P10); 5 integrity |
 | `package list FILE` | List entries: sha256, size, path | `--kb-home`, `--json` | 0; 3 unreadable package |
 | `package inspect FILE` | Summary from `package.json`: declared, not verified | `--kb-home`, `--json` | 0; 3 unreadable package |
 
@@ -1643,8 +1660,10 @@ does not block a release. This is an open item in `specs/011-knowledge-acquisiti
 ### 11.8 Security and limits
 
 - **FIX_ENABLED is never produced by the pipeline.** Only `rule promote` can set it, and promotion re-checks gates 1 to 5
-  at promote, import and load time. An imported package never enables an unverified FIX_ENABLED rule. The default
-  `package import` refuses them (P10). `--downgrade-unverified` caps them to DETECT_ONLY instead.
+  at promote, import and load time. An imported package never enables an unverified FIX_ENABLED rule. A default
+  `package import` accepts the shipped built-in FIX_ENABLED rows that are byte-identical to the shipped tree (D3,
+  recorded in the audit entry) and refuses any other unverified row (P10). `--downgrade-unverified` caps refused rows to
+  DETECT_ONLY instead.
 - **Official source identity is a declared identity, not authenticity.** A source marked official must have an `origin`
   remote that matches its declared origin and is allow-listed. That is a check on a local clone's configuration. It is
   not a signature, and it proves nothing about who published the code.
@@ -1662,7 +1681,7 @@ does not block a release. This is an open item in `specs/011-knowledge-acquisiti
   It is not authenticated and no approver identity is verified. Authenticated approval is deferred to a future release
   (FE-1, see `docs/planning/kap/FUTURE_ENHANCEMENTS.md`).
 - **Known limits.** The git adapter has been tested only with git 2.43.0. A known `insteadOf` gap is recorded in the
-  test suite as an expected failure. The owner decisions that are still open (OD-K1 to OD-K13) are listed in
+  test suite as an expected failure. The owner decisions that are still open (OD-K1 to OD-K12; OD-K13 is implemented by feature 012 as D3) are listed in
   [docs/TECHNICAL_USAGE.md, section 13.8](docs/TECHNICAL_USAGE.md#138-kap-limitations-and-open-owner-decisions).
 
 ### 11.9 Where to read more
@@ -1679,7 +1698,200 @@ does not block a release. This is an open item in `specs/011-knowledge-acquisiti
   verification record (exact commands, counts, skipped and unexecuted tests).
 - [docs/reviews/fragments/kap.md](docs/reviews/fragments/kap.md): the KAP review fragment: every open decision and review item, all `PENDING_HUMAN_REVIEW`.
 
-## 12. Project documentation
+## 12. Keeping the knowledge base up to date (feature 012)
+
+Feature 012 adds four verbs under `odooflux knowledge`: `update`, `check`, `status` and `history`. They keep the installed
+knowledge release in step with the official Odoo branches. They build on the KAP release and package machinery in section 11,
+and they use the same kb-home. Operator guide: [docs/guides/KNOWLEDGE_UPDATE.md](docs/guides/KNOWLEDGE_UPDATE.md). Step-by-step
+commands: [specs/012-knowledge-base-auto-update/quickstart.md](specs/012-knowledge-base-auto-update/quickstart.md).
+
+### 12.1 What `knowledge update` does and does not do
+
+`odooflux knowledge update` is the one-command workflow. In a real (non-dry) run it:
+
+1. reads the official remotes with `git ls-remote` (branch heads only, nothing is downloaded at this step);
+2. plans which sources changed, which are carried forward unchanged, and which Enterprise sources are skipped;
+3. fetches each changed commit **by SHA** into a managed cache and verifies it;
+4. builds a candidate release in a staging directory, with the unchanged section 11 build pipeline;
+5. evaluates the activation rules (section 12.5) and, only if they allow it, swaps the active release pointer in one atomic step;
+6. appends the decision to the update history.
+
+It does **not**:
+
+- use the network in `migrate`. `migrate` reads only the active release, offline, as before;
+- use the network or write anything in `status` and `history`;
+- download knowledge at `pip install` time. The catalog ships inside the wheel (section 12.11);
+- support a newly discovered upstream version. A new version is reported (`NEW_VERSION_DISCOVERED`) with "migration support not
+  established". No migration path is added by an update;
+- promote any rule to `FIX_ENABLED` (section 12.7).
+
+### 12.2 Commands, flags and exit codes
+
+| Command | Flags | Network | Writes | Exit codes |
+|---|---|---|---|---|
+| `knowledge check` | `--json`, `--offline`, `--kb-home PATH` | `ls-remote` only; none with `--offline` or `ODOOFLUX_OFFLINE=1` | nothing | 0 check completed (updates may be available); 1 local state invalid; 2 usage; 4 CHECK_UNAVAILABLE (no Community source could be read, or the catalog could not be loaded) |
+| `knowledge update` | `--dry-run`, `--offline`, `--from N` and `--to M` (given together), `--require-enterprise`, `--json`, `--kb-home PATH` | `ls-remote` and fetch-by-SHA; none with `--offline`; `--dry-run` uses `ls-remote` only | a real run writes staging, the release, the pointer and the history; `--dry-run` writes nothing and takes no lock | 0 ACTIVE, NOOP or DRY_RUN; 1 BLOCKED; 2 usage (`--from` and `--to` not given together, or no extract toolkit); 3 ROLLED_BACK; 4 FAILED, or ACTIVE/NOOP/DRY_RUN when the remote comparison did not run (CHECK_UNAVAILABLE) |
+| `knowledge status` | `--json`, `--kb-home PATH` | none | nothing | 0 read; 1 local state invalid (the problem goes to stderr, nothing to stdout); 2 usage |
+| `knowledge history` | `--json`, `--limit N` (positive integer; newest N entries), `--kb-home PATH` | none | nothing | 0 read; 1 history chain invalid (stderr); 2 usage |
+
+The kb-home is `--kb-home`, else `ODOOFLUX_KB_HOME`, else the XDG data directory. An update outcome is one of `NOOP`, `ACTIVE`,
+`BLOCKED`, `FAILED`, `ROLLED_BACK` or `DRY_RUN`. A non-dry run records its decision in the history even when it is `BLOCKED`.
+Run in an empty kb-home without network access, `check --offline` gives this (verified by running it on this checkout):
+
+```text
+installed release: none (built-in knowledge only)
+mode: offline, no remote contacted
+status: CHECK_UNAVAILABLE
+...
+nothing could be read from the community remote
+```
+
+and exits 4.
+
+### 12.3 Offline mode
+
+- `--offline` on `check` or `update`, or `ODOOFLUX_OFFLINE=1` (`1`, `true` or `yes`, case-insensitive), disables every remote
+  call. Any truthy `offline` argument fails closed.
+- Offline, every source is reported `SKIPPED_OFFLINE` and nothing is acquired. An update cannot decide anything offline, so it
+  is `BLOCKED` with `CHECK_UNAVAILABLE` and exits 1. The current installed release stays active.
+- `--dry-run` plus `--offline` gives a plan with no remote contact.
+
+### 12.4 Community and Enterprise in one knowledge base
+
+There is one unified knowledge base. There is no edition flag. The active release holds Community and Enterprise knowledge
+together. The catalog lists the branches 12.0 to 19.0 for both editions.
+
+Enterprise sources need a git token, read from one of:
+
+- `ODOOFLUX_ENTERPRISE_TOKEN` (the environment variable), or
+- `ODOOFLUX_ENTERPRISE_TOKEN_FILE`, a file that must not be a symlink, must have no group or other permission bits, must be
+  owned by you, must be at most 4096 bytes and must hold a single UTF-8 token with no whitespace or control characters.
+
+The environment variable wins when both are set. A bad token configuration produces one warning that names only its closed
+code. The run then continues without a token. The token is never printed.
+
+Without credentials:
+
+- Enterprise sources are `SKIPPED_NO_CREDENTIALS`, and nothing is contacted for them;
+- Enterprise knowledge that is already installed is **carried forward** unchanged, and the Enterprise freshness is reported as
+  `STALE_UNVERIFIED`. It is not presented as current.
+
+`--require-enterprise` makes the update `BLOCKED` unless the Enterprise sources can be refreshed. It blocks on an Enterprise
+authentication failure, on an Enterprise source that is unavailable, and on missing Enterprise credentials
+(`ENTERPRISE_REQUIRED_UNAVAILABLE`). Enterprise freshness is `FRESH` only after a successful acquisition in the same run.
+
+### 12.5 When a new release becomes active
+
+The new release is built in staging first. It becomes active only through the atomic pointer swap of the existing
+`knowledge release activate` mechanism. The activation decision is made by the rules below.
+
+- A release with `FAILED` completeness is never activated.
+- Blocking codes: `COMPLETENESS_FAILED`, `CAPABILITY_LOST` (a rule was removed or retired and no supersede policy approved it),
+  `CAPABILITY_DOWNGRADED`, `FIX_NOT_TRUSTED`, `ENTERPRISE_COMPAT` (a carried Enterprise module lost a dependency) and
+  `INTEGRITY`.
+- `PARTIAL` completeness (incomplete coverage, unsupported transitions remain) is allowed **only when no blocking code applies**.
+  A PARTIAL release that loses a capability is blocked.
+
+Any block or failure keeps the previous release active. A blocked run records the reasons in the history and exits 1. If the
+pointer swap fails, the active pointer is checked. If it still names the previous release, the run is `ROLLED_BACK` (exit 3).
+If it cannot be confirmed (or names something else), the run is `FAILED` (exit 4).
+
+Two more guards apply:
+
+- **Update lock.** `<kb-home>/updates/.update.lock` is held for the whole run. A second update waits a bounded time and then
+  is `BLOCKED` with `CONCURRENT_UPDATE`.
+- **History chain.** `<kb-home>/updates/history.jsonl` is append-only and hash-chained. If the chain is broken, `status` and
+  `history` refuse with exit 1, and an update does not extend it.
+
+### 12.6 What "verified" means
+
+"Verified" means three separate checks. Passing them does not approve the knowledge.
+
+- **Provenance.** Each source commit is fetched by SHA and checked against the requested commit. The origin is the validated
+  HTTPS identity from the catalog. This is a declared identity, not a signature (section 11.8).
+- **Integrity.** Snapshot digests are recomputed, the release digest must match, and the package checks apply. A carried
+  source's retained snapshot is reused only if its manifest, its digest and every blob still match what the installed release recorded.
+- **Trust gates for `FIX_ENABLED` rows.** A row that is byte-identical to the shipped built-in row is trusted. Any other
+  `FIX_ENABLED` row must pass gates 1 to 5 (official, non-AI evidence bound in the verified provenance), and, when a
+  certification record governs it, that record must verify (section 12.7). A row's own `origin` claim is never used as trust.
+
+### 12.7 What is fixed automatically, and what is not
+
+- Generated rules (candidates) start as `DRAFT`. Acceptance admits only `DRAFT` or `DETECT_ONLY` rows and never a fixer.
+- **Nothing becomes `FIX_ENABLED` automatically today.** An update carries forward the `FIX_ENABLED` rows that are already in the
+  shipped tree, provided they are byte-identical (section 12.6). Any other `FIX_ENABLED` row must pass the trust gates, and
+  `rule promote` (a human action) remains the only way to set it.
+- **Certification records are verified where they appear, but no command issues them yet.** A record at
+  `knowledge/certifications/<rule_id>.json` is checked by gate 6 whenever a row is governed by one. The function that issues a
+  record has no caller outside the tests. No command in the repository creates one.
+
+The effect is that an update can keep or refresh detection rules and carry fixes that were already trusted. It does not add a
+new automatic fix.
+
+### 12.8 Confidentiality
+
+- An internal release (`release.json` with `confidentiality: "internal"`), and any release that holds Enterprise-derived
+  material, is **never exported**. `package export` refuses it (`EXPORT_REFUSED`). The importer refuses an internal package
+  before anything is staged (P12, `INTERNAL_RELEASE_REFUSED`), and `package validate` reports P12 too.
+- The gate reads the release bytes, not only the manifest, and it fails closed. There is no filter that strips metadata out
+  of an internal release.
+- Reports and views withhold Enterprise-derived evidence, rule and ledger records. Enterprise status is decided from the
+  verified provenance index, never from a record's own `confidentiality` field. A withheld record shows a fixed placeholder.
+  The stored release, evidence, ledger and package bytes are not changed.
+- **Known residual:** symbol names are not covered by this withholding (recorded in the feature brief). Do not treat views of an
+  internal release as free of Enterprise code.
+
+### 12.9 Support dimensions
+
+Every update report prints four support dimensions. They are reported separately and never inferred from one another:
+
+| Dimension | Value |
+|---|---|
+| Source availability | per source: verified provenance of the acquired snapshot |
+| Knowledge completeness | COMPLETE or PARTIAL, from the release |
+| Migration support | not established by an update |
+| Production certification | NOT_GRANTED |
+
+An update never implies production certification, and never implies migration support for a new Odoo version.
+
+### 12.10 Custom modules that depend on Enterprise modules
+
+When the active release ships inventories (`knowledge/inventory/<M.0>.json`), `migrate` checks each custom module's dependency
+closure against the source and target inventories. A module is:
+
+- **COMPLETE** when every dependency resolves on both versions, and, if the closure reaches an Enterprise module, both versions
+  carry an Enterprise source;
+- **INCOMPLETE** otherwise. The module gets a `KB-COVERAGE-INCOMPLETE` warning, its auto-fix edits are **withheld**, and
+  detection still runs for it. The warning suggests adding the missing module inventory or dependency to the active release.
+
+Messages name only counts for Enterprise facts. The module's own dependency names come from its manifest. With built-in
+knowledge (no release) there is no coverage check, and fixes run as before. The behaviour is tested by
+`tests/integration/kap/test_migrate_unified_inventory.py`.
+
+### 12.11 Installation
+
+The update catalog (`src/odooflux/knowledge/update/catalog.json`) and the new schemas are package data. `pyproject.toml` includes
+`knowledge/**/*.json` in the wheel. Nothing is fetched at `pip install` time.
+
+The packaging test builds a wheel offline, installs it into a clean virtual environment with no index and no dependencies, and
+runs the update verbs from outside the repository with a logging network guard. It is opt-in:
+
+```bash
+ODOOFLUX_PACKAGING_INSTALL=1 PYTHONPATH=src python3 -m unittest tests.integration.packaging.test_update_wheel
+```
+
+It passed (9 tests) on this checkout during the documentation pass. That is a local, offline run only. No live upstream was
+contacted.
+
+### 12.12 Where to read more
+
+- [docs/guides/KNOWLEDGE_UPDATE.md](docs/guides/KNOWLEDGE_UPDATE.md): the operator guide.
+- [specs/012-knowledge-base-auto-update/quickstart.md](specs/012-knowledge-base-auto-update/quickstart.md): the commands to run.
+- [specs/012-knowledge-base-auto-update/spec.md](specs/012-knowledge-base-auto-update/spec.md) and
+  [specs/012-knowledge-base-auto-update/tasks.md](specs/012-knowledge-base-auto-update/tasks.md): the specification and the task list.
+- [docs/TECHNICAL_USAGE.md](docs/TECHNICAL_USAGE.md), section 4.13: the developer view of the update manager.
+
+## 13. Project documentation
 
 | Document | What it covers |
 |---|---|

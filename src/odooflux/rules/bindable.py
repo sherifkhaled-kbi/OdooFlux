@@ -10,6 +10,7 @@ from odooflux.rules.manifest import files as manifest_files
 from odooflux.rules.manifest import hygiene as manifest_hygiene
 from odooflux.rules.models import renamed as models_renamed
 from odooflux.rules.owl import generic as owl_generic
+from odooflux.rules.python import certified as python_certified
 from odooflux.rules.python import generic as python_generic
 from odooflux.rules.python import sql_constraints as python_sql_constraints
 from odooflux.rules.security import acl_csv as security_acl_csv
@@ -28,6 +29,7 @@ BINDABLE_MODULES = {
     "odooflux.rules.javascript.generic": javascript_generic,
     "odooflux.rules.manifest.hygiene": manifest_hygiene,
     "odooflux.rules.manifest.files": manifest_files,
+    "odooflux.rules.python.certified": python_certified,
     "odooflux.rules.python.generic": python_generic,
     "odooflux.rules.python.sql_constraints": python_sql_constraints,
     "odooflux.rules.xml.generic": xml_generic,

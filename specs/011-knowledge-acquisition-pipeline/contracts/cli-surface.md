@@ -29,7 +29,7 @@ All under the existing entry point `odooflux knowledge ...` (`cli/knowledge.py` 
 | `knowledge coverage show|gates` | contracts/coverage-and-gates |
 | `knowledge release build [--dry-run] [--from-step N] [--allow-failed]` | contracts/release-lifecycle |
 | `knowledge release list|show ID|diff A B|activate ID|deactivate|rollback|remove ID|audit-verify` | kb-home management |
-| `knowledge package export ID -o FILE [--include-enterprise-derived]` | deterministic `.ofkp` |
+| `knowledge package export ID -o FILE` | deterministic `.ofkp` |
 | `knowledge package validate FILE [--expect-digest SHA]` | reader checks only, installs nothing |
 | `knowledge package import FILE [--activate] [--downgrade-unverified] [--expect-digest SHA]` | atomic |
 | `knowledge package list|inspect FILE` | manifest summary |

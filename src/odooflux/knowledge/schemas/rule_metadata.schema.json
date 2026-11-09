@@ -158,6 +158,11 @@
         "description": "Optional (feature 011). Revision counter matching the rule history sidecar.",
         "type": "integer",
         "minimum": 1
+      },
+      "approval": {
+        "description": "Optional (feature 012). The approval reference of a FIX_ENABLED row: a human reference, or an automated `auto-cert:<policy>:<record_digest>` (machine certification). Not part of the rule digest.",
+        "type": "string",
+        "minLength": 1
       }
     }
   }

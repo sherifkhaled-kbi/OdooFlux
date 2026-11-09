@@ -30,7 +30,7 @@ from odooflux.knowledge.ledger import dispositions as dsp
 from odooflux.knowledge.ledger.ledger import LedgerError
 from odooflux.knowledge.release.canonical import write_json_file
 
-__all__ = ["AcceptError", "accept"]
+__all__ = ["AcceptError", "accept", "accept_fix_rule", "ship_linked_evidence"]
 
 ACCEPTABLE_MATURITY = ("DRAFT", "DETECT_ONLY")
 SETTLED = ("RULE_CREATED", "EXISTING_RULE_LINKED")
@@ -49,11 +49,19 @@ def _evidence_by_id(records) -> dict:
     return by_id
 
 
-def accept(tree, candidate: dict, *, ledger, evidence, author=None, at=None) -> dict:
-    """Accept `candidate` into `tree` (a knowledge tree) and record RULE_CREATED on `ledger`.
+def _check_fix_shape(rule: dict) -> None:
+    """A pending FIX rule (Addendum F3): detect-only, no fixer, review required. Only certified promotion may attach a
+    fixer, and that is a later, separately checked write; a pending rule is never FIX_ENABLED."""
+    if rule.get("fixer_ref") is not None or rule.get("maturity") == "FIX_ENABLED":
+        raise AcceptError("a pending fix rule carries no fixer and is never FIX_ENABLED; the fixer is attached only by "
+                          "certified promotion")
+    if rule.get("maturity") != "DETECT_ONLY":
+        raise AcceptError(f"a pending fix rule is DETECT_ONLY, not {rule.get('maturity')!r}")
+    if rule.get("review_required") is not True:
+        raise AcceptError("a pending fix rule stays review_required until it is certified")
 
-    `evidence` is the list of EvidenceRecords the candidate cites (generator result["evidence"]). On success the
-    candidate's status becomes ACCEPTED and a summary dict is returned."""
+
+def _accept(tree, candidate: dict, *, ledger, evidence, author, at, fix: bool) -> dict:
     tree = Path(tree)
     if candidate.get("status") != "PROPOSED":
         raise AcceptError(f"candidate is {candidate.get('status')}; only PROPOSED candidates are accepted")
@@ -61,10 +69,13 @@ def accept(tree, candidate: dict, *, ledger, evidence, author=None, at=None) -> 
         raise AcceptError("detectors_unverified: the candidate's detector_ref was not checked against the bindable "
                           "detector table; regenerate it from verified templates")
     rule = candidate["rule"]
-    if rule.get("fixer_ref") is not None or rule.get("maturity") == "FIX_ENABLED":
-        raise AcceptError("a candidate never carries a fixer or FIX_ENABLED maturity")
-    if rule.get("maturity") not in ACCEPTABLE_MATURITY:
-        raise AcceptError(f"candidate maturity {rule.get('maturity')!r} is not acceptable")
+    if fix:
+        _check_fix_shape(rule)
+    else:
+        if rule.get("fixer_ref") is not None or rule.get("maturity") == "FIX_ENABLED":
+            raise AcceptError("a candidate never carries a fixer or FIX_ENABLED maturity")
+        if rule.get("maturity") not in ACCEPTABLE_MATURITY:
+            raise AcceptError(f"candidate maturity {rule.get('maturity')!r} is not acceptable")
     found = cf.detect(gen.read_rule_rows(tree), rule)
     if found:
         candidate["status"] = "CONFLICT"
@@ -121,3 +132,50 @@ def accept(tree, candidate: dict, *, ledger, evidence, author=None, at=None) -> 
     candidate["status"] = "ACCEPTED"
     return {"candidate_id": candidate["candidate_id"], "rule_id": rule_id, "evidence_ids": ev_ids,
             "status": "ACCEPTED"}
+
+
+def accept(tree, candidate: dict, *, ledger, evidence, author=None, at=None) -> dict:
+    """Accept `candidate` into `tree` (a knowledge tree) and record RULE_CREATED on `ledger`.
+
+    `evidence` is the list of EvidenceRecords the candidate cites (generator result["evidence"]). On success the
+    candidate's status becomes ACCEPTED and a summary dict is returned. A candidate never carries a fixer."""
+    return _accept(tree, candidate, ledger=ledger, evidence=evidence, author=author, at=at, fix=False)
+
+
+def accept_fix_rule(tree, candidate: dict, *, ledger, evidence, author=None, at=None) -> dict:
+    """Accept a FIX-PENDING rule (feature 012, Addendum F3): the same refusals and writes as `accept`, for a candidate
+    whose rule is DETECT_ONLY with no fixer and `review_required` true. The rule is written with origin GENERATED and
+    its evidence is shipped with it; the change gets RULE_CREATED. Nothing here makes a rule FIX_ENABLED, and the
+    machine confirmation that proves the pair is written by the caller (autofix), not here."""
+    return _accept(tree, candidate, ledger=ledger, evidence=evidence, author=author, at=at, fix=True)
+
+
+def ship_linked_evidence(tree, rule_id: str, record: dict, *, author=None, at=None) -> str:
+    """Ship `record`, the evidence of a change that links to the rule `rule_id`, into the release evidence store and cite
+    it from that rule (ops.link_evidence, one history revision; the rule's maturity, detector and params are untouched).
+
+    Only a rule with origin GENERATED (created by this build) takes linked evidence; any other origin is refused and
+    nothing is written. Idempotent: a rule that already cites the id is left as it is, and an identical file is reused,
+    so a resumed or repeated run never writes a second row or a second citation. The record keeps its own source_id,
+    revision and locations. Raises AcceptError, with nothing written, on any refusal. Returns the evidence id."""
+    tree = Path(tree)
+    problems = v.check(record, json.loads(eb.SCHEMA_PATH.read_text(encoding="utf-8")))
+    if problems:
+        raise AcceptError(f"linked evidence {record.get('id')} fails the schema: {problems[:3]}")
+    ev_id = record["id"]
+    try:
+        _, row = ops._find(tree, rule_id)
+    except ops.OpsError as exc:
+        raise AcceptError(str(exc)) from exc
+    if row.get("origin") != gen.GENERATED_ORIGIN:
+        raise AcceptError(f"rule {rule_id} is not GENERATED in this build; its linked evidence is not shipped")
+    path = tree / "evidence" / f"{ev_id}.json"
+    if path.exists() and json.loads(path.read_text(encoding="utf-8")) != record:
+        raise AcceptError(f"evidence {ev_id} already exists with different content; ids are never reused")
+    if ev_id in (row.get("evidence") or []):
+        return ev_id
+    try:
+        ops.link_evidence(tree, rule_id, ev_id, author=author, at=at, record=record)
+    except ops.OpsError as exc:
+        raise AcceptError(str(exc)) from exc
+    return ev_id

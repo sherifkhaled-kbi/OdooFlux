@@ -10,7 +10,10 @@ Per ledger change (sorted by change_id):
 - a change whose candidate id already exists in the candidate store (any status: PROPOSED, CONFLICT, ACCEPTED or
   REJECTED) is skipped entirely: no candidate, no evidence, no disposition. It is listed under `existing`, and the
   stored record is never rewritten, reset or resurrected;
-- an existing rule with the same step, detector_ref and params is linked (EXISTING_RULE_LINKED), not duplicated;
+- an existing rule with the same step, detector_ref and params is linked (EXISTING_RULE_LINKED), not duplicated. The
+  linked entry says whether that rule is GENERATED (`generated`); the pipeline ships the evidence of a generated link
+  only (candidates/accept.ship_linked_evidence) and withholds the others, recording them as skipped. Linked evidence
+  whose content is already held (tree or store) reuses that id, so a resumed run writes no second row;
 - otherwise a DRAFT candidate is built with one new EvidenceRecord. Candidates never carry a fixer_ref. An unconfirmed
   rename or replacement candidate is HUMAN_REVIEW and never names a replacement. Evidence from an unofficial source
   makes the rule review_required and labels it supplementary in `message`.
@@ -28,13 +31,18 @@ from odooflux.knowledge.authoring import conflicts as cf
 from odooflux.knowledge.candidates import evidence_builder as eb
 from odooflux.knowledge.candidates.templates import build_skeleton, load_templates, select_template
 from odooflux.knowledge.ledger import dispositions as dsp
+from odooflux.knowledge.release.canonical import canonical_bytes
 
-__all__ = ["GeneratorError", "ACTOR", "generate", "apply_dispositions", "read_rule_rows"]
+__all__ = ["GeneratorError", "ACTOR", "generate", "apply_dispositions", "read_rule_rows", "GENERATED_ORIGIN"]
 
 ACTOR = "KAP_GENERATOR"
 DISPOSED = ("RULE_CREATED", "EXISTING_RULE_LINKED")
 UNCONFIRMED_CLASSES = ("RENAMED_CANDIDATE", "REPLACEMENT_CANDIDATE", "UNKNOWN")
 CANDIDATE_MATURITY = "DRAFT"
+GENERATED_ORIGIN = "GENERATED"
+LINKED_NOT_GENERATED = "LINKED_RULE_NOT_GENERATED"  # a change matched a built-in, MANUAL or inherited rule: not shipped
+FIX_RULE_ACCEPTED = "FIX_RULE_ACCEPTED"  # the automatic FIX pipeline already settled this change (Addendum F3 step 3)
+PROBE_EVIDENCE_ID = "EV-000"  # placeholder id used only to compare content; a record with it is never written
 SUPPLEMENTARY = "Supplementary (unofficial source {sid}, not authoritative): "
 DETECTION_METHOD = "KAP deterministic: ledger change classified and matched to extraction template {tid}"
 TRANSFORMATION = "none; review only, no edit is proposed"
@@ -99,9 +107,39 @@ def _store_evidence_ids(tree_root, stored=None) -> set:
     return held
 
 
+def _evidence_record(change, evidence_id, *, rule_ids, source, risk, template_id, checked_on, checked_by) -> dict:
+    return eb.build_evidence(
+        change, evidence_id=evidence_id, rule_ids=rule_ids, source=source, risk=risk,
+        detection_method=DETECTION_METHOD.format(tid=template_id), proposed_transformation=TRANSFORMATION,
+        checked_on=checked_on, checked_by=checked_by)
+
+
+def _held_record(tree_root, record: dict):
+    """The evidence record already held (tree evidence dir or candidate store) with the same content as `record` apart
+    from its id, or None. A resumed or repeated run reuses that id, so the same linked evidence is never written twice."""
+    wanted = canonical_bytes({key: value for key, value in record.items() if key != "id"})
+    root = Path(tree_root)
+    for folder in (root / "evidence", root / "candidates" / "evidence"):
+        if not folder.is_dir():
+            continue
+        for path in sorted(folder.glob("EV-*.json")):
+            try:
+                held = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                continue
+            if not isinstance(held, dict) or held.get("id") != path.stem:
+                continue
+            if canonical_bytes({key: value for key, value in held.items() if key != "id"}) == wanted:
+                return held
+    return None
+
+
 def generate(ledger, *, tree_root, source: dict, checked_on: str, templates=None, known_detectors=None,
-             checked_by: str = eb.CHECKER, reserved_ids=()) -> dict:
+             checked_by: str = eb.CHECKER, reserved_ids=(), skip_change_ids=()) -> dict:
     """Candidates, evidence, links and proposed dispositions for `ledger`. See the module docstring.
+
+    `skip_change_ids` names changes already settled by the automatic FIX pipeline (a FIX-PENDING rule was accepted for
+    them): they get no candidate, no evidence and no disposition here, and are listed under `skipped`.
 
     `source` describes the source the ledger was built from: source_id, official, url, repository, revision, branch.
     New evidence ids skip every id in the tree evidence dir, the candidate store (all statuses), the ledger and
@@ -118,10 +156,14 @@ def generate(ledger, *, tree_root, source: dict, checked_on: str, templates=None
     result = {"candidates": [], "evidence": [], "linked": [], "dispositions": [], "skipped": [], "conflicts": [],
               "existing": [], "detectors_verified": verified}
     built = []
+    skipped_by_caller = set(skip_change_ids)
     for change in records:
         cid = change["change_id"]
         if change["disposition"] in DISPOSED:
             result["skipped"].append({"change_id": cid, "reason": "ALREADY_DISPOSED"})
+            continue
+        if cid in skipped_by_caller:
+            result["skipped"].append({"change_id": cid, "reason": FIX_RULE_ACCEPTED})
             continue
         template = select_template(change, templates)
         if template is None:
@@ -145,15 +187,23 @@ def generate(ledger, *, tree_root, source: dict, checked_on: str, templates=None
         unconfirmed = change["class"] in UNCONFIRMED_CLASSES and not confirmed
         link = None if unconfirmed else _find_equivalent(rows, rule)
         rule_ids = [link["id"]] if link else [rule["id"]]
-        ev_id = eb.next_evidence_id(used)
-        used.add(ev_id)
-        evidence = eb.build_evidence(
-            change, evidence_id=ev_id, rule_ids=rule_ids, source=source, risk=rule["risk"],
-            detection_method=DETECTION_METHOD.format(tid=template["template_id"]),
-            proposed_transformation=TRANSFORMATION, checked_on=checked_on, checked_by=checked_by)
+        shape = {"rule_ids": rule_ids, "source": source, "risk": rule["risk"], "template_id": template["template_id"],
+                 "checked_on": checked_on, "checked_by": checked_by}
+        if link:
+            probe = _evidence_record(change, PROBE_EVIDENCE_ID, **shape)
+            held = _held_record(tree_root, probe)
+            ev_id = held["id"] if held else eb.next_evidence_id(used)
+            used.add(ev_id)
+            evidence = {**probe, "id": ev_id}
+        else:
+            ev_id = eb.next_evidence_id(used)
+            used.add(ev_id)
+            evidence = _evidence_record(change, ev_id, **shape)
         result["evidence"].append(evidence)
         if link:
-            result["linked"].append({"change_id": cid, "rule_ids": [link["id"]], "evidence_ids": [ev_id]})
+            origin = link.get("origin")
+            result["linked"].append({"change_id": cid, "rule_ids": [link["id"]], "evidence_ids": [ev_id],
+                                     "origin": origin, "generated": origin == GENERATED_ORIGIN})
             result["dispositions"].append(_disposition(cid, "EXISTING_RULE_LINKED", rule_ids=[link["id"]],
                                                        evidence_ids=[ev_id]))
             continue

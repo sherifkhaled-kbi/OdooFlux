@@ -1,0 +1,207 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "odooflux.fix-certification/1",
+  "title": "FixCertification",
+  "description": "Automated certification record (feature 012, plan section 4, addendum A4). Digests only: no pass flag, no boolean check result. Verified by recomputation in odooflux.knowledge.update.certification.verify; the schema describes shape, the verifier describes validity. The change_class and evidence_sources keys is an addition to the A4 field list: the rule row carries no ledger class, so the class used at issue is bound into the record.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "policy_version",
+    "evidence_sources",
+    "rule_id",
+    "rule_digest",
+    "change_class",
+    "template_id",
+    "template_version",
+    "transformer",
+    "evidence",
+    "fixtures",
+    "outputs",
+    "checks",
+    "record_digest"
+  ],
+  "properties": {
+    "schema": {
+      "const": "odooflux.fix-certification/1"
+    },
+    "policy_version": {
+      "const": "1"
+    },
+    "evidence_sources": {
+      "description": "Sorted by source_id. Confidentiality comes from the caller's verified provenance index; a source missing from it is refused, never defaulted to public.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_id",
+          "confidentiality"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]{2,63}$"
+          },
+          "confidentiality": {
+            "enum": [
+              "public",
+              "enterprise"
+            ]
+          }
+        }
+      }
+    },
+    "rule_id": {
+      "type": "string",
+      "pattern": "^(\\d+-\\d+|\\*)\\.[a-z_]+\\.[a-z0-9-]+$"
+    },
+    "rule_digest": {
+      "$ref": "#/$defs/sha256"
+    },
+    "change_class": {
+      "enum": [
+        "ADDED",
+        "REMOVED",
+        "RENAMED_CANDIDATE",
+        "MOVED",
+        "SIGNATURE_CHANGED",
+        "BEHAVIOUR_CHANGED",
+        "DEPRECATED",
+        "REPLACEMENT_CANDIDATE",
+        "UNKNOWN",
+        "REPLACEMENT_CONFIRMED",
+        "DELEGATING_ALIAS",
+        "IDENTITY_DECORATOR_REMOVED"
+      ]
+    },
+    "template_id": {
+      "enum": [
+        "python.replace_call_name",
+        "python.replace_attribute",
+        "python.rename_keyword",
+        "python.remove_keyword",
+        "python.remove_decorator",
+        "python.rewrite_imported_symbol",
+        "python.remove_imported_decorator"
+      ]
+    },
+    "template_version": {
+      "const": 1
+    },
+    "transformer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "qualified_name",
+        "source_digest"
+      ],
+      "properties": {
+        "qualified_name": {
+          "type": "string",
+          "pattern": "^odooflux\\.(transformers\\.python|rules\\.python\\.certified)\\.[a-z_]+$"
+        },
+        "source_digest": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "digest"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^EV-\\d{3}$"
+          },
+          "digest": {
+            "$ref": "#/$defs/sha256"
+          }
+        }
+      }
+    },
+    "fixtures": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "positive_before_digest",
+        "positive_expected_digest",
+        "negative_digest"
+      ],
+      "properties": {
+        "positive_before_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "positive_expected_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "negative_digest": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "positive_output_digest",
+        "negative_output_digest",
+        "second_pass_digest"
+      ],
+      "properties": {
+        "positive_output_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "negative_output_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "second_pass_digest": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "positive",
+        "negative",
+        "idempotence",
+        "conflict",
+        "regression"
+      ],
+      "properties": {
+        "positive": {
+          "$ref": "#/$defs/sha256"
+        },
+        "negative": {
+          "$ref": "#/$defs/sha256"
+        },
+        "idempotence": {
+          "$ref": "#/$defs/sha256"
+        },
+        "conflict": {
+          "$ref": "#/$defs/sha256"
+        },
+        "regression": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "record_digest": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

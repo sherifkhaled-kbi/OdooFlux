@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "odooflux.knowledge-status/1",
+  "title": "OdooFlux knowledge status (feature 012, `odooflux knowledge status --json`)",
+  "description": "Read-only status of the installed knowledge. by_maturity counts each rule row at its effective maturity (a capped row counts as DETECT_ONLY).",
+  "type": "object",
+  "required": ["schema", "kind", "release_id", "digest", "completeness", "steps_covered", "installed_sources", "rules", "last_successful_update", "limitations"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"const": "odooflux.knowledge-status/1"},
+    "kind": {"enum": ["built-in", "external"]},
+    "release_id": {"type": ["string", "null"]},
+    "digest": {"type": ["string", "null"]},
+    "completeness": {"type": ["string", "null"]},
+    "steps_covered": {"type": "object"},
+    "installed_sources": {"type": "object"},
+    "rules": {
+      "type": "object",
+      "required": ["total", "by_maturity", "fix_enabled", "certification_governed"],
+      "additionalProperties": false,
+      "properties": {
+        "total": {"type": "integer", "minimum": 0},
+        "by_maturity": {"type": "object"},
+        "fix_enabled": {"type": "integer", "minimum": 0},
+        "certification_governed": {"type": "integer", "minimum": 0}
+      }
+    },
+    "last_successful_update": {
+      "type": ["object", "null"],
+      "required": ["seq", "timestamp", "new_release"],
+      "additionalProperties": false,
+      "properties": {
+        "seq": {"type": "integer", "minimum": 1},
+        "timestamp": {"type": "string"},
+        "new_release": {"type": ["string", "null"]}
+      }
+    },
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  }
+}

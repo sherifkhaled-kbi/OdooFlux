@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "odooflux.knowledge-update/1",
+  "title": "OdooFlux knowledge update report (UpdateResult.to_dict, feature 012)",
+  "description": "Output of `odooflux knowledge update --json`. Nested check, plan, acquisition, build, activation, changes and enterprise values are open objects whose shape is owned by their producers. The support dimensions are fixed and never inferred.",
+  "type": "object",
+  "required": ["schema", "outcome", "reasons", "dry_run", "offline", "previous_release", "new_release", "release_digest", "completeness", "check", "plan", "acquisition", "build", "activation", "changes", "carried_forward", "enterprise", "limitations", "support_dimensions", "history_seq"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"const": "odooflux.knowledge-update/1"},
+    "outcome": {"enum": ["NOOP", "ACTIVE", "BLOCKED", "FAILED", "ROLLED_BACK", "DRY_RUN"]},
+    "reasons": {"type": "array", "items": {"type": "string"}},
+    "dry_run": {"type": "boolean"},
+    "offline": {"type": "boolean"},
+    "previous_release": {"type": ["string", "null"]},
+    "new_release": {"type": ["string", "null"]},
+    "release_digest": {"type": ["string", "null"]},
+    "completeness": {"type": ["string", "null"]},
+    "check": {"type": ["object", "null"]},
+    "plan": {"type": ["object", "null"]},
+    "acquisition": {"type": ["object", "null"]},
+    "build": {"type": ["object", "null"]},
+    "activation": {"type": ["object", "null"]},
+    "changes": {"type": ["object", "null"]},
+    "carried_forward": {"type": "array"},
+    "enterprise": {"type": ["object", "null"]},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "support_dimensions": {
+      "type": "object",
+      "required": ["source_availability", "knowledge_completeness", "migration_support", "production_certification"],
+      "additionalProperties": false,
+      "properties": {
+        "source_availability": {"type": "string"},
+        "knowledge_completeness": {"type": "string"},
+        "migration_support": {"type": "string"},
+        "production_certification": {"const": "NOT_GRANTED"}
+      }
+    },
+    "history_seq": {"type": ["integer", "null"], "minimum": 1}
+  }
+}

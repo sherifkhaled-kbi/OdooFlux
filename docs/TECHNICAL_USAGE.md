@@ -15,7 +15,7 @@ For installation basics and the complete CLI reference, see [../README.md](../RE
 3. [Execution lifecycle](#3-execution-lifecycle)
    3.3 [Release build lifecycle (17 steps)](#33-release-build-lifecycle-17-steps)
 4. [Framework layers](#4-framework-layers)
-   4.12 [KAP injection design](#412-kap-injection-design)
+   4.12 [KAP injection design](#412-kap-injection-design) · 4.13 [Knowledge update manager (feature 012)](#413-knowledge-update-manager-feature-012)
 5. [Verification architecture](#5-verification-architecture)
    5.7 [KAP coverage metrics and gates](#57-kap-coverage-metrics-and-gates)
 6. [Knowledge base architecture](#6-knowledge-base-architecture)
@@ -592,6 +592,168 @@ What this means in the code:
   imports `parsers`.
 - The AI gateway factory is used only by `knowledge ai propose` (section 12.12).
 - The boundary is enforced by `test_extract_boundary.py` and `test_kap_import_graph.py` (section 12.10).
+
+### 4.13 Knowledge update manager (feature 012)
+
+**Status: implemented; no live upstream run.** The code is `src/odooflux/knowledge/update/` (the update manager), the CLI
+verbs in `src/odooflux/cli/kap_update.py`, and the update-related pieces of the KAP core listed below. Operator-facing
+behaviour is in [README section 12](../README.md#12-keeping-the-knowledge-base-up-to-date-feature-012). This section is the
+developer view. It was checked against the code and tests on 2026-11-09.
+
+**Architecture.** Each module has one job. Only `orchestrator.py` sequences them.
+
+| Module | What it does |
+|---|---|
+| `catalog.py` | Loads `catalog.json` (catalog schema 3), the official source list with branches and licence fields. Refuses the retired `ENTERPRISE_LOCAL` kind and placeholder licences. The catalog digest is computed from the parsed document and never stored in it. |
+| `discovery.py` | `read_installed_state` (the sources of the active release, or `valid=False` with a scrubbed problem) and `check` (one `ls-remote` per distinct repository, no writes, overall statuses from `model.OVERALL_STATUSES`). |
+| `planner.py` | Pure `plan_update`: which sources are acquired, carried or skipped, the unified step pairs, the planning fingerprint and `changed` inputs. Also `build_fingerprint` and `needs_build`. |
+| `acquire.py` | Turns a plan into verified clones in the managed cache plus registry specs. A required source that is not acquired or carried blocks the run. A failed non-required source falls back to its installed revision when one is known. |
+| `remote_git.py` | `ls_remote_heads` and `fetch_commit` (by SHA, verified). Every git call gets a fixed argv, a clean environment (no global config, no credential helper, no prompt, no SSH command), hooks off, a protocol allow-list and a timeout. `network_allowed` is the offline gate. |
+| `credentials.py` | Enterprise token resolution (environment first, then the token file, with the file rules in README 12.4). `Token` never reveals its value through `repr`, `str` or pickling. `reveal()` is for a child environment only. Writes a fixed askpass stub. |
+| `orchestrator.py` | `run_update`: lock, state and history checks, check, plan, acquire, build in `<kb-home>/staging/update/`, evaluate, activate, record. Holds the update lock for the whole run. Fault points `verify`, `lock`, `pointer` and `audit` exist for tests. |
+| `capability.py` | Capability comparison of two releases through the release loader (executable fields only). `diff_capabilities`, and `semantic_supersede_policy` for `pipeline.BuildPlan.supersede_policy`. |
+| `activation.py` | `evaluate` (pure; blocking codes in 12.5 of the README), `activate_release` (the one pointer swap, delegated to `cli.kap_release.activate`) and `block` (records a BLOCKED decision). Trust for FIX_ENABLED rows uses `safety.fix_row_trusted`. |
+| `inventory.py` | Unified Community and Enterprise module inventory: `build_part`, `merge` (a module declared by two sources is a conflict, not resolved), `verify_inventory`, `resolve`. Manifests are read with `ast.parse` and `ast.literal_eval` only. Nothing is executed. |
+| `certification.py` | The `odooflux.fix-certification/1` record: schema, canonical digests, evidence checks, `verify` (recomputes everything, trusts no stored pass flag), `issue`, and the process-wide executor authority (below). |
+| `history.py` | Append-only hash-chained `<kb-home>/updates/history.jsonl`. Appends run under the kb lock after a full verification. Corrupt lines raise `HistoryError` with a stable code. |
+| `fingerprint.py` | Deterministic fingerprints over the inputs that can change upstream-derived knowledge, and `explain_change`. |
+| `model.py` | Shared value types: source statuses, overall statuses, freshness values, `UPDATE_OUTCOMES`, `UPDATE_SCHEMA`, `CERTIFICATION_STATEMENT` (the four support dimensions). |
+| `report.py` | Pure renderers and JSON payload builders for `update`, `status` and `history`. No I/O, no clock. |
+
+Related modules outside the package: `dependencies/unified.py` (migrate coverage from the inventories),
+`knowledge/package/confidentiality.py` (internal-release gate), `knowledge/release/confidentiality_view.py` (view-time
+withholding), `knowledge/acquisition/adapters/retained.py` (`RetainedSnapshotAdapter`) and `transformers/certify_exec.py`
+(`FixCertifier`, the execution side of certification).
+
+**Composition root attachments (`builtins.build_context`).**
+
+- `attach_executor(_FIX_CERTIFIER)` attaches one `FixCertifier` per process. `_FIX_CERTIFIER` is a module-level instance in
+  `builtins.py`.
+- `registries.extract_toolkit = ExtractToolkit(detectors=detector_table(BINDABLE_MODULES))`. `kap_update.cmd_update` reads it
+  with `attached(args, "extract_toolkit")` and exits 2 when it is missing.
+- `registries.fix_executor` is **not** set by `builtins.py`, although the docstring of `transformers/certify_exec.py` says it is.
+  The executor is reachable only through `certification.trusted_executor()`.
+
+**Single-assignment certification executor.** `certification.attach_executor` stores the executor in a module global.
+Attaching the same object again is a no-op. Attaching a different object once one is attached raises
+`CERT_EXECUTOR_CONFLICT`. `issue` and `verify` read the executor through `trusted_executor()`. With no executor attached,
+`verify` returns `CERT_EXECUTOR_MISSING` and `issue` raises it (fail closed). The reason for the design: a verdict that gates
+a FIX_ENABLED rule must come from one authority. If a caller could supply its own executor, it could approve its own fix.
+Verdicts are cached per process in `safety._VERIFY_CACHE`, keyed on every input, and never persisted.
+
+**Pipeline additions (`knowledge/pipeline.py`).**
+
+- **Pair key.** `pair_key(pair)` is `pair["key"]` when given, else the step. It names the pair's ledger and accounting files.
+  Keys must match `[A-Za-z0-9._-]{1,48}` and be unique, so a Community pair and an Enterprise pair for one step need distinct keys.
+  Keys are recorded in the plan fingerprint only when they are given.
+- **`adapter_by_source`.** Maps a `source_id` to an adapter. It is consulted before the kind adapter. The update flow uses it to
+  supply `RetainedSnapshotAdapter` for carried sources.
+- **`emit_inventory`.** When `True`, the build writes `knowledge/inventory/<branch>.json`, and the flag enters the fingerprint.
+  An internal or Enterprise-derived release skips the export step.
+- **`supersede_policy`.** A callable (for example `capability.semantic_supersede_policy`) that may approve removals in addition
+  to the explicit supersede ids. Its name is recorded in the plan body. Its approvals are recorded in the build output and in
+  the `release_installed` audit entry. The plan body includes the new fields only when they are set, so existing fingerprints do
+  not change.
+
+**Trust contract changes.** Each line is one change, with the test files that guard it.
+
+1. Byte-identical shipped FIX_ENABLED rows are accepted at import (D3). The decision is audited as
+   `release_installed` `details.inherited_trust` (`rule_ids`, `baseline_digest`). Code: `release/safety.py`
+   (`is_shipped_builtin_rule`, `INHERITED_TRUST_RECORDABLE`), `package/importer.py`. Tests:
+   `tests/integration/kap/test_quickstart.py`, `tests/integration/kap/test_pipeline_e2e.py`.
+2. Gate 6 (automated certification record) is part of `safety.fix_row_trusted`, which the loader, the pipeline, the importer and
+   activation all call. Tests: `tests/unit/knowledge/kap/test_certified_fix_trust.py`,
+   `tests/unit/knowledge/update/test_certification.py`, `tests/unit/knowledge/update/test_activation.py`.
+3. Internal and Enterprise-derived releases are refused by export (`EXPORT_REFUSED`), by import (P12,
+   `INTERNAL_RELEASE_REFUSED`) and by `package validate` (P12). Tests: `tests/unit/knowledge/kap/test_internal_release_export.py`,
+   `tests/unit/knowledge/kap/test_package_builder.py`.
+4. Views withhold Enterprise-derived evidence, rule and ledger records, decided from the provenance index. Tests:
+   `tests/unit/knowledge/kap/test_confidentiality_view.py`, `tests/integration/kap/test_report_confidentiality.py`.
+5. Activation: PARTIAL is allowed only when no blocking code applies (D4). Tests: `tests/unit/knowledge/update/test_activation.py`.
+6. Unified coverage: a module whose closure is not covered is `KB-COVERAGE-INCOMPLETE`, and its fixes are withheld
+   (`fixes_withheld`). Tests: `tests/integration/kap/test_migrate_unified_inventory.py`, `tests/unit/dependencies/test_unified.py`.
+7. Carried sources use `RetainedSnapshotAdapter`, which re-verifies the stored manifest, digest and blobs before reuse. Tests:
+   `tests/unit/knowledge/kap/test_retained_adapter.py`, `tests/integration/kap/test_pipeline_unified.py`.
+8. Supersede policy: `CAPABILITY_LOST` can be approved by a policy, and the approval is recorded. Tests:
+   `tests/unit/knowledge/update/test_supersede_policy.py`, `tests/integration/kap/test_pipeline_supersede_policy.py`.
+9. Unified inventory: merge conflicts and literal-only manifest parsing. Tests: `tests/unit/knowledge/update/test_inventory.py`.
+
+**Fingerprint lifecycle.** There are two lifecycles. They share the input shape and must never be conflated.
+
+- **Planning fingerprint** (`planner.UpdatePlan.planning_fingerprint`). Source SHAs come from remote metadata, `snapshot_digests` is
+  always empty, and nothing has been acquired. It answers "what would be built".
+- **Build fingerprint** (`planner.build_fingerprint`). It carries the verified snapshot digest of every acquired or carried
+  source. It can only be computed after acquisition and verification.
+
+`planner.needs_build` treats a planning-form record as "no previous build inputs". Each ACTIVE and NOOP history record
+stores `details["build_inputs"]`, the `FingerprintInputs` form of the release it describes. The next run plans against it, with
+the snapshot digests emptied. A repeat run with no change therefore gives NOOP. The inputs are the source SHAs, the snapshot
+digests, the catalog digest, the extractor and rule-schema versions, the build configuration and the parent release.
+
+**Update lock and history chain.**
+
+- Lock: `<kb-home>/updates/.update.lock`, taken with `flock` in a 0700 directory. The wait is bounded (`LOCK_WAIT_SECONDS`,
+  5 seconds). Contention gives `BLOCKED` with `CONCURRENT_UPDATE` and changes nothing. A dry run takes no lock.
+- History: each line is one decision. `entry_hash` is the SHA-256 of the canonical JSON of the entry without `entry_hash`.
+  `prev_hash` is the previous line's `entry_hash`, and the first line uses 64 zeros. Editing, deleting, reordering or inserting a
+  line breaks the chain at that line, and `verify` names it. As in the audit log, truncating only the final line is not detectable.
+
+**JSON schemas.** The schema id is the `schema` field of each payload.
+
+| Schema id | Produced by | Shipped file |
+|---|---|---|
+| `odooflux.knowledge-update/1` | `UpdateResult.to_dict()` (`model.py`, `report.py`) | `src/odooflux/knowledge/schemas/update_report.schema.json` |
+| `odooflux.knowledge-status/1` | `report.status_payload` | `src/odooflux/knowledge/schemas/knowledge_status.schema.json` |
+| `odooflux.knowledge-history/1` | `report.history_payload` | **none shipped.** Tests check the id and the shape. |
+| `odooflux.knowledge-check/1` | `discovery.check` (`CheckReport.to_dict`) | **none shipped.** Tests check the id. |
+| `odooflux.inventory/1` | `inventory.py` | `src/odooflux/knowledge/schemas/inventory.schema.json` |
+| `odooflux.fix-certification/1` | `certification.py` | `src/odooflux/knowledge/schemas/fix_certification.schema.json` |
+
+The update and status schemas are validated by `tests/unit/knowledge/update/test_report.py` and `test_update_cli.py`, with the
+repository's stdlib schema checker.
+
+**Testing guide.** Run from the repository root. The `-t .` option is required (section 9.1).
+
+```bash
+# The update manager unit tests (614 tests; run on 2026-11-09, OK)
+PYTHONPATH=src python3 -m unittest discover -s tests/unit/knowledge/update -p 'test_*.py' -t .
+
+# Feature 012 integration and trust tests (100 tests; run on 2026-11-09, OK)
+PYTHONPATH=src python3 -m unittest tests.integration.kap.test_update_orchestrator \
+  tests.unit.knowledge.kap.test_certified_fix_trust tests.integration.kap.test_migrate_unified_inventory \
+  tests.unit.knowledge.kap.test_internal_release_export tests.unit.knowledge.kap.test_retained_adapter \
+  tests.integration.kap.test_pipeline_unified tests.integration.kap.test_pipeline_supersede_policy \
+  tests.integration.kap.test_quickstart
+
+# Opt-in packaging test: builds a wheel offline and installs it in a clean venv (9 tests; run on 2026-11-09, OK)
+ODOOFLUX_PACKAGING_INSTALL=1 PYTHONPATH=src python3 -m unittest tests.integration.packaging.test_update_wheel
+
+# Full suite (documented; not run in the pass that wrote this section)
+PYTHONPATH=src python3 -m unittest discover -s tests -p 'test_*.py' -t .
+```
+
+`run_update` accepts injected `ls_remote`, `fetch` and `transport_for` callables, and the orchestrator tests use them. Set
+`ODOOFLUX_OFFLINE=1` to make any CLI run in a test environment refuse the network. The token variables in tests are dummy
+values. No live-upstream test exists for this feature.
+
+**Extension rules.**
+
+- **Never add a caller-supplied executor.** Certification takes one process-wide executor, attached once by the composition
+  root. Do not add an `executor=` parameter, and do not build a second executor.
+- **Never read a record's `confidentiality` field.** Enterprise status comes from the verified provenance index
+  (`certification.source_confidentiality_from_index`, `sources.is_enterprise_kind`). The inventory's `confidentiality` value is set
+  by the caller from the source kind. It is an artifact field, not a field read from a release record.
+- **Never reference `KNOWLEDGE_ROOT` from new modules.** Take the kb-home or the release handle as a parameter, and resolve paths
+  with `release/resolver.py`.
+- Core modules import only the standard library and core packages. `certification.py` must not import `transformers`.
+- A new verb is one entry in `_VERBS` in `kap_update.py` and one handler. `register` does not change.
+
+**Known gaps (checked in code).**
+
+- `certification.issue` has no caller outside the tests. No command issues a record, so the update help text's "certify" step
+  currently creates none.
+- `transformers/certify_exec.py` describes an attachment (`registries.fix_executor`) that the composition root does not make.
+- The `knowledge-history/1` and `knowledge-check/1` payloads have no shipped JSON schema file.
 
 ---
 
@@ -1807,12 +1969,20 @@ not granted. The owner decisions below are pending in the review register.
 | OD-K13 | Built-in FIX_ENABLED rules in a built release |
 
 OD-K13 has two parts. Part A is an established invariant: an unverified FIX_ENABLED rule in a non-built-in release is refused on
-import unless downgraded, and it is capped at load. Part B is open product policy. It asks whether carried-forward built-in rows
-should be accepted on import (grandfathered by identity with the shipped row, as they are at load), kept refused, or capped. It
-also asks whether a release built from the built-in parent should import by default without `--downgrade-unverified`.
+import unless downgraded, and it is capped at load. Part B asked whether carried-forward built-in rows should be accepted on
+import, kept refused, or capped, and whether a release built from the built-in parent should import by default without
+`--downgrade-unverified`.
+
+**Part B is implemented by feature 012 (decision D3).** A FIX_ENABLED row that is byte-identical to the shipped built-in row is
+accepted at import by byte identity, never by id. The decision is audited as `release_installed` `details.inherited_trust`. Any
+other unverified FIX_ENABLED row is still refused (P10), and `--downgrade-unverified` remains an optional cap. The owner
+decision register still lists OD-K13 as `PENDING (human)` until a human records a decision. Code: `release/safety.py`
+(`is_shipped_builtin_rule`), `package/importer.py`. Guarding tests: `tests/integration/kap/test_quickstart.py` (step 3b) and
+`tests/integration/kap/test_pipeline_e2e.py`. Section 4.13 lists the trust-contract changes.
+
 Part A is recorded in [planning/kap/INTEGRATION_NOTES.md](planning/kap/INTEGRATION_NOTES.md), where OD-K13 is classified.
-The observed behaviour in the documentation pass matches that classification: the default import refused the ten built-in
-FIX_ENABLED rules with P10, and `--downgrade-unverified` installed the release with them capped to DETECT_ONLY.
+Before feature 012, the default import refused the ten built-in FIX_ENABLED rules with P10, and `--downgrade-unverified` installed
+the release with them capped to DETECT_ONLY. That behaviour no longer applies to byte-identical built-in rows.
 
 **Open items recorded in the integration notes** ([planning/kap/INTEGRATION_NOTES.md](planning/kap/INTEGRATION_NOTES.md)):
 

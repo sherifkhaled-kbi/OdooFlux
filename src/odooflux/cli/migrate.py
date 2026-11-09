@@ -16,7 +16,9 @@ from odooflux.core.orchestrator.plan import build_plan
 from odooflux.core.orchestrator.provisional import provisional_for
 from odooflux.core.orchestrator.run import (
     RunOptions, SourceChangedError, new_state, report_from_dict, reports_from_state, run_pipeline)
+from odooflux.dependencies.unified import FINDING_ID, UnifiedError, migration_coverage, withheld_records
 from odooflux.discovery.modules import find_modules, module_ref
+from odooflux.knowledge.loader import RELEASE_TREE
 from odooflux.knowledge.release.coverage_check import check_transition_coverage
 from odooflux.knowledge.release.model import KnowledgeReleaseError
 from odooflux.knowledge.release.resolver import resolve_knowledge
@@ -151,6 +153,16 @@ def run_migrate(args, ctx, graph, failures) -> int:
             print(f"BLOCKED: {reason}")
         return 4
 
+    handle = ctx.knowledge  # the single handle of this run (set by main.run from resolve_migrate_knowledge)
+    unified = None  # feature 012: Community + Enterprise coverage from the active release's inventories
+    if not handle.builtin:
+        try:
+            unified = migration_coverage(Path(handle.root) / RELEASE_TREE, from_v, to_v,
+                                         {ref.name: list(ref.depends) for ref in refs})
+        except UnifiedError as exc:
+            print(f"ERROR: knowledge inventory: {exc}")
+            return 4
+
     state_dir = default_state(args)
     scanned = list(paths) + [Path(a).resolve() for a in addons]
     problem = check_state_dir(state_dir, scanned)
@@ -183,9 +195,14 @@ def run_migrate(args, ctx, graph, failures) -> int:
         state["provisional"] = label
     if new_ai:
         state["ai_config"] = ai_cfg.to_dict()  # no credential is ever stored
-    handle = ctx.knowledge  # the single handle of this run (set by main.run from resolve_migrate_knowledge)
     coverage = check_transition_coverage(handle, [s.id for s in plan.steps])
     state["knowledge_release"] = knowledge_release_block(handle)
+    withheld = withheld_records(unified) if unified is not None else {}
+    if withheld:  # only when an inventory exists and a module is INCOMPLETE; otherwise the state is unchanged
+        state["knowledge_coverage"] = {"withheld": withheld}
+        for entry in state["modules"]:
+            if entry["name"] in withheld:
+                entry["fixes_withheld"] = True
     if coverage.warnings:
         state["knowledge_warnings"] = list(coverage.warnings)
     if not coverage.verified:
@@ -217,6 +234,8 @@ def run_migrate(args, ctx, graph, failures) -> int:
         print(f"  Knowledge: release {handle.release_id} (digest {handle.digest})")
     for warning in coverage.warnings:
         print(f"  Knowledge: {warning}")
+    if withheld:
+        print(f"  Coverage: {len(withheld)} module(s) INCOMPLETE; fixes withheld ({FINDING_ID})")
     if write_mode:
         print("  Backup  : " + ("verified before each module's first write" if options.backup
                                 else "NONE (--no-backup): this run is not reversible"))

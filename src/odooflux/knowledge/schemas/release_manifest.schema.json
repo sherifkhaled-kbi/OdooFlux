@@ -136,6 +136,16 @@
               "null"
             ],
             "pattern": "^ss-[0-9a-f]{12}$"
+          },
+          "confidentiality": {
+            "const": "enterprise"
+          },
+          "licence_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "licence_access": {
+            "const": "ENTERPRISE_AUTHORIZED"
           }
         }
       }
@@ -179,6 +189,9 @@
         "PARTIAL",
         "FAILED"
       ]
+    },
+    "confidentiality": {
+      "const": "internal"
     },
     "build": {
       "type": "object",

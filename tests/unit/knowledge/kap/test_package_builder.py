@@ -142,10 +142,13 @@ class TestPackageBuilder(unittest.TestCase):
         meta = {**META, "sources": [{"source_id": "enterprise-local", "revision": "17.0", "snapshot_digest": "ab" * 32,
                                      "official": True, "status": "VERIFIED", "enterprise_derived": True}]}
         release = _make_release(self.tmp / "ent", meta=meta)
-        with self.assertRaises(PackageError):
+        with self.assertRaises(PackageError) as ctx:
             export_package(release, self.tmp / "ent.ofkp")
-        info = export_package(release, self.tmp / "ent2.ofkp", include_enterprise_derived=True)
-        self.assertTrue(info.contains_enterprise_derived)
+        self.assertEqual(ctx.exception.code, "EXPORT_REFUSED")
+        self.assertFalse((self.tmp / "ent.ofkp").exists())
+        # No override exists any more (W3-Y): the keyword is gone, not a bypass.
+        with self.assertRaises(TypeError):
+            export_package(release, self.tmp / "ent2.ofkp", include_enterprise_derived=True)
 
     def test_export_self_check_reads_back(self):
         info = export_package(self.release, self.tmp / "ok.ofkp")

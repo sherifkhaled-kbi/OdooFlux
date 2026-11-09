@@ -13,6 +13,9 @@ from odooflux.cli.kap_common import register_all
 from odooflux.knowledge.checks import validate_knowledge
 from odooflux.knowledge.loader import KNOWLEDGE_ROOT, load_knowledge
 from odooflux.knowledge.matrix import OverclaimError, generate
+from odooflux.knowledge.release.confidentiality_view import (
+    view_enterprise_source_ids, redact_kb_findings, redact_refresh_report)
+from odooflux.knowledge.release.safety import load_provenance_index
 from odooflux.knowledge.refresh import apply_report, refresh
 
 REPO_ROOT = KNOWLEDGE_ROOT.parents[2]
@@ -50,7 +53,7 @@ def build_parser():
 
 def cmd_validate(args) -> int:
     kb = load_knowledge(Path(args.path))
-    findings = validate_knowledge(kb)
+    findings = redact_kb_findings(kb, validate_knowledge(kb), load_provenance_index(kb.root))
     for f in findings:
         print(f.line())
     errors = sum(1 for f in findings if f.severity == "ERROR")
@@ -63,7 +66,8 @@ def cmd_refresh(args) -> int:
     kb = load_knowledge(Path(args.path))
     repos = {name: Path(path) for name, path in args.repo}
     report = refresh(kb, repos, dict(args.revision), search_candidates=args.search_candidates)
-    text = json.dumps(report, indent=2, sort_keys=True) + "\n"
+    shown = redact_refresh_report(report, kb.evidence, view_enterprise_source_ids(kb.root))
+    text = json.dumps(shown, indent=2, sort_keys=True) + "\n"
     if args.report:
         Path(args.report).write_text(text, encoding="utf-8")
     else:

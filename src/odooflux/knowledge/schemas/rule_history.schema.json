@@ -59,7 +59,8 @@
               "add_test",
               "promote",
               "import",
-              "supersede"
+              "supersede",
+              "certify"
             ]
           },
           "summary": {

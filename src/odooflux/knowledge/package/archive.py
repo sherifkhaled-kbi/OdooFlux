@@ -36,7 +36,7 @@ _ENCRYPTED_FLAG = 0x1
 
 
 class PackageError(Exception):
-    """A package was rejected. `code` is P01..P11, LIMIT_EXCEEDED or ZIP_CORRUPT; `entry` is the offending name."""
+    """A package was rejected. `code` is P01..P12, EXPORT_REFUSED, LIMIT_EXCEEDED or ZIP_CORRUPT; `entry` is the offending name."""
 
     def __init__(self, code: str, detail: str, entry=None):
         self.code = code

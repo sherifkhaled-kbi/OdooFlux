@@ -32,8 +32,9 @@ def register_all(sub, modules=None) -> list:
     so a broken group is never silently dropped. `kap_candidates` joins this list when its module exists."""
     if modules is None:
         from odooflux.cli import (kap_candidates, kap_coverage, kap_extract, kap_package, kap_release, kap_rule,
-                                  kap_source)
-        modules = (kap_candidates, kap_coverage, kap_extract, kap_package, kap_release, kap_rule, kap_source)
+                                  kap_source, kap_update)
+        modules = (kap_candidates, kap_coverage, kap_extract, kap_package, kap_release, kap_rule, kap_source,
+                   kap_update)
     registered = []
     for module in modules:
         module.register(sub)

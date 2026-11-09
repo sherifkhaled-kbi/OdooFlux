@@ -2,7 +2,8 @@
 027).
 
 Verbs: export ID -o FILE, validate FILE [--expect-digest], import FILE [--activate] [--downgrade-unverified]
-[--expect-digest], list FILE, inspect FILE.
+[--expect-digest], list FILE, inspect FILE. Internal and Enterprise-derived releases are refused by export, import and
+validate (EXPORT_REFUSED, P12); there is no flag that overrides it.
 
 `validate`, `list` and `inspect` install nothing: they stream into a scratch directory that is removed afterwards.
 `import` goes through `knowledge/package/importer.py`, which is atomic and leaves kb-home unchanged on any refusal.
@@ -41,10 +42,21 @@ def _emit(args, payload, lines) -> None:
             print(line)
 
 
+# Appended to an EXPORT_REFUSED message. No public or Community-only projection of an internal release exists: it is
+# not built, not produced by a flag, and not derived by filtering. A Community-only release is exported as usual.
+EXPORT_REFUSED_NOTE = ("no public or Community-only projection of this release exists; the export is refused and "
+                       "nothing is written. Export a release built from Community sources only.")
+
+
 def cmd_export(args) -> int:
     home = _home(args)
     release_dir = _release_dir(home, args.release_id)
-    info = export_package(release_dir, args.output, include_enterprise_derived=args.include_enterprise_derived)
+    try:
+        info = export_package(release_dir, args.output)
+    except PackageError as exc:
+        if exc.code == "EXPORT_REFUSED":
+            raise PackageError("EXPORT_REFUSED", f"{exc.detail}; {EXPORT_REFUSED_NOTE}", exc.entry) from None
+        raise
     KbAudit(home, uuid.uuid4().hex).record("package_exported", target=info.release_id, details={"sha256": info.sha256})
     payload = {"release_id": info.release_id, "release_digest": info.release_digest, "sha256": info.sha256,
                "entry_count": info.entry_count, "total_size": info.total_size,
@@ -134,7 +146,6 @@ def register(subparsers) -> None:
     export = verbs.add_parser("export", help="write a deterministic package for an installed release")
     export.add_argument("release_id")
     export.add_argument("-o", "--output", required=True, metavar="FILE")
-    export.add_argument("--include-enterprise-derived", action="store_true")
     export.set_defaults(kap_handler=_guarded(cmd_export))
     _common(export)
 

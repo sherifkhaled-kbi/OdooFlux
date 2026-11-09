@@ -297,10 +297,25 @@ def retire_rule(tree, rule_id: str, *, reason: str, author=None, at=None, supers
                    author=author, at=at)
 
 
-def link_evidence(tree, rule_id: str, evidence_id: str, *, author=None, at=None) -> dict:
+def link_evidence(tree, rule_id: str, evidence_id: str, *, author=None, at=None, record=None) -> dict:
+    """Cite evidence `evidence_id` from an existing rule, as one history revision. Without `record` the evidence file
+    must already be in the tree. With `record` (its evidence dict, whose id is `evidence_id`) the file is written in the
+    same transaction, so a refused revision leaves no file behind; an identical file already there is reused, a
+    different one is refused (ids are never reused). The rule's other fields are untouched."""
     tree = Path(tree)
-    if evidence_id not in load_knowledge(tree).evidence:
-        raise OpsError(f"unknown evidence {evidence_id}")
+    files = ()
+    if record is None:
+        if evidence_id not in load_knowledge(tree).evidence:
+            raise OpsError(f"unknown evidence {evidence_id}")
+    else:
+        if not isinstance(record, dict) or record.get("id") != evidence_id:
+            raise OpsError(f"the evidence record must carry the id {evidence_id}")
+        target = tree / "evidence" / f"{evidence_id}.json"
+        if target.exists():
+            if json.loads(target.read_text(encoding="utf-8")) != record:
+                raise OpsError(f"evidence {evidence_id} already exists with different content; ids are never reused")
+        else:
+            files = [(target, (json.dumps(record, indent=2, sort_keys=True) + "\n").encode("utf-8"))]
     _, row = _find(tree, rule_id)
     if evidence_id in row.get("evidence", []):
         raise OpsError(f"{evidence_id} is already linked to {rule_id}")
@@ -310,7 +325,7 @@ def link_evidence(tree, rule_id: str, evidence_id: str, *, author=None, at=None)
         return new, {"evidence": evidence_id}
 
     return _revise(tree, rule_id, action="link_evidence", change=change,
-                   summary=f"linked {evidence_id}", author=author, at=at)
+                   summary=f"linked {evidence_id}", author=author, at=at, files=files)
 
 
 def add_test(tree, rule_id: str, *, kind: str, fixture, author=None, at=None) -> dict:

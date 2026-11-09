@@ -7,6 +7,7 @@ Structural facts come from `odooflux.parsers.python` (stdlib `ast`); nothing is 
 - `method`: a `def` in a class body; `attrs` hold args, defaults and decorators, plus `deprecated` when a decorator
   or a `warnings.warn(..., DeprecationWarning)` call marks it; `body_digest` is the sha256 of the body's AST dump;
 - `function`: a module-level `def`, keyed `addon.name`, so a move between files is a MOVED change;
+  `proof` (F1, outside attrs) carries the structural facts of `extract/proofs.py` for machine confirmation;
 - `import`: `from odoo... import name`, keyed by path, so the same import in two files never collides.
 
 Hints (`source: docs`): a docstring line `Replaces ``old``` on a method pairs the method with its predecessor.
@@ -20,6 +21,7 @@ import re
 
 from odooflux.knowledge.extract import classify as c
 from odooflux.knowledge.extract.driver import ParseFailure, require_toolkit
+from odooflux.knowledge.extract.proofs import function_proofs
 
 __all__ = ["PythonOrmExtractor", "EXTRACTORS", "TOKEN_CAP"]
 
@@ -156,6 +158,7 @@ class PythonOrmExtractor:
     def facts(self, text: str, path: str, toolkit=None) -> list:
         tree = self._tree(text, path, toolkit)
         addon = _addon_of(path)
+        proofs = function_proofs(text, path) or {}
         out = []
         for node in tree.body:
             if isinstance(node, ast.ImportFrom) and node.level == 0 and (node.module or "").split(".")[0] == "odoo":
@@ -163,7 +166,11 @@ class PythonOrmExtractor:
                     out.append(_fact(f"{path}::import::{node.module}.{alias.name}", "import", {}, "", node.lineno))
             elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 subject = f"{addon}.{node.name}" if addon else node.name
-                out.append(_fact(subject, "function", _func_attrs(node), _body_digest(node), node.lineno))
+                # `proof` is outside `attrs` on purpose: classify compares every function attr as signature, so adding
+                # attrs would turn BEHAVIOUR_CHANGED drafts into SIGNATURE_CHANGED ones. Drafts stay byte-identical.
+                fact = _fact(subject, "function", _func_attrs(node), _body_digest(node), node.lineno)
+                fact["proof"] = proofs.get(node.name)
+                out.append(fact)
             elif isinstance(node, ast.ClassDef):
                 out.extend(_class_facts(node, path))
         return out
@@ -173,7 +180,15 @@ class PythonOrmExtractor:
         if doc.tree is None:
             return []
         found = []
+        addon = _addon_of(path)
         for node in doc.tree.body:
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                # A top-level function is a subject named like its fact (`addon.name`, or the bare name): the same
+                # docstring hint names the pair (feature 012, Addendum F1 S1). Drafts are not affected.
+                new = f"{addon}.{node.name}" if addon else node.name
+                for old in REPLACES_RE.findall(ast.get_docstring(node) or ""):
+                    found.append({"from": f"{addon}.{old}" if addon else old, "to": new, "source": "docs"})
+                continue
             if not isinstance(node, ast.ClassDef):
                 continue
             model, _, _ = _model_name(node)

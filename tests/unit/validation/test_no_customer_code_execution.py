@@ -18,8 +18,10 @@ IMPORTLIB_ALLOW = PLUGIN_LOADER
 # knowledge/acquisition/adapters/git_local.py: the same pattern as knowledge/refresh.py: read-only git plumbing against a
 # LOCAL clone, shell=False, cleared environment, no system or global git config, core.fsmonitor off; the exact command set
 # is pinned by tests/unit/knowledge/kap/test_git_local_readonly.py. It never executes scanned code.
+# knowledge/update/remote_git.py: read-only/hardened `git ls-remote` and shallow fetch by SHA (feature 012). Fixed argv,
+# shell=False, scrubbed env, hooks disabled, protocol whitelist; fetched content is never checked out or executed.
 SUBPROCESS_ALLOW_PREFIX = ("validation/runtime/", "validation/behavioral/", "knowledge/refresh.py",
-                           "knowledge/acquisition/adapters/git_local.py")
+                           "knowledge/acquisition/adapters/git_local.py", "knowledge/update/remote_git.py")
 
 
 def violations(source: str, rel: str) -> list:

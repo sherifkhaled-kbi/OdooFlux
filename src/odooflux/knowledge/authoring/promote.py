@@ -17,6 +17,7 @@ from pathlib import Path
 from odooflux.knowledge.authoring import ops
 from odooflux.knowledge.loader import load_knowledge
 from odooflux.knowledge.release.safety import BUILTIN_ORIGINS, FIX_ENABLED, gate_findings, load_provenance_index
+from odooflux.knowledge.update.certification import REFERENCE_PREFIX
 
 
 class PromoteError(ops.OpsError):
@@ -33,6 +34,8 @@ def _approval_ref(approval, promoter: str) -> str:
         raise PromoteError("promotion needs a non-empty approval reference (--approval)")
     if ref.lower() in (promoter.lower(), "unknown"):
         raise PromoteError("the approval reference cannot be the promoter's own identity (no self-approval)")
+    if ref.lower().startswith(f"{REFERENCE_PREFIX}:"):
+        raise PromoteError("an automated certification reference (auto-cert:) is not a human approval")
     return ref
 
 

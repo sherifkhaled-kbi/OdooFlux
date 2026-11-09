@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "odooflux.machine-confirmation/1",
+  "title": "MachineConfirmation",
+  "description": "Machine confirmation record (feature 012, addendum F2). A separate artifact, never a ledger confirmed:true and never a MANUAL action. Structural witness and digests only: no source text. Verified by odooflux.knowledge.update.machine_confirmation.verify (L1, release tree only) and verify_sources (L2, retained snapshots); this schema describes shape, the verifier describes validity.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "policy_version",
+    "rule_id",
+    "change_id",
+    "derived_class",
+    "ledger_entry",
+    "subject",
+    "module",
+    "old",
+    "new",
+    "witness",
+    "witness_digest",
+    "sources",
+    "evidence",
+    "proof_tool",
+    "derived_params",
+    "rule_digest",
+    "record_digest"
+  ],
+  "properties": {
+    "schema": {
+      "const": "odooflux.machine-confirmation/1"
+    },
+    "policy_version": {
+      "const": "1"
+    },
+    "rule_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "change_id": {
+      "type": "string",
+      "pattern": "^CH-[0-9a-f]{16}$"
+    },
+    "derived_class": {
+      "enum": ["REPLACEMENT_CONFIRMED", "DELEGATING_ALIAS", "IDENTITY_DECORATOR_REMOVED"]
+    },
+    "ledger_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["class", "confirmed", "entry_digest"],
+      "properties": {
+        "class": {
+          "enum": ["REPLACEMENT_CANDIDATE", "BEHAVIOUR_CHANGED", "DEPRECATED", "REMOVED"]
+        },
+        "confirmed": {
+          "const": false
+        },
+        "entry_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domain", "kind", "subject_key"],
+      "properties": {
+        "domain": {
+          "const": "python_orm"
+        },
+        "kind": {
+          "const": "function"
+        },
+        "subject_key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        }
+      }
+    },
+    "module": {
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)*$",
+      "maxLength": 400
+    },
+    "old": {
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,119}$"
+    },
+    "new": {
+      "type": ["string", "null"],
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,119}$"
+    },
+    "witness": {
+      "type": "object"
+    },
+    "witness_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["side", "source_id", "snapshot_id", "revision", "path", "blob_sha256", "line"],
+        "properties": {
+          "side": {
+            "enum": ["from", "to"]
+          },
+          "source_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "snapshot_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "revision": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "blob_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "line": {
+            "type": ["integer", "null"],
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "digest"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^EV-\\d{3}$"
+          },
+          "digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "proof_tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "source_digest"],
+      "properties": {
+        "id": {
+          "const": "proofs/1"
+        },
+        "source_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "derived_params": {
+      "type": "object"
+    },
+    "rule_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "record_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

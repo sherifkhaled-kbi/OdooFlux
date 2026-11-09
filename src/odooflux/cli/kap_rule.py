@@ -25,6 +25,8 @@ from odooflux.knowledge.authoring.ops import TEST_KINDS
 from odooflux.knowledge.candidates.templates import detector_params_problem
 from odooflux.knowledge.checks import validate_knowledge
 from odooflux.knowledge.loader import KNOWLEDGE_ROOT, load_knowledge
+from odooflux.knowledge.release.confidentiality_view import redact_kb_findings
+from odooflux.knowledge.release.safety import load_provenance_index
 
 CREATE_CHOICES = ("DRAFT", "DETECT_ONLY")
 RISKS = ("LOW", "MEDIUM", "HIGH")
@@ -185,7 +187,8 @@ def _inspect(args) -> int:
 def _validate(args) -> int:
     tree = _tree(args, write=False)
     kb = load_knowledge(tree)
-    findings = validate_knowledge(kb, strict_builtin=args.strict_builtin)
+    findings = redact_kb_findings(kb, validate_knowledge(kb, strict_builtin=args.strict_builtin),
+                                  load_provenance_index(tree))
     if args.id:
         findings = [f for f in findings if f.pointer == args.id]
     for finding in findings:

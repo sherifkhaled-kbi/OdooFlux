@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ModuleInventory",
+  "description": "Unified Community + Enterprise module inventory (feature 012, plan addendum B3). Built from acquired snapshots by static ast.literal_eval of __manifest__.py; nothing is executed. Keys of 'modules' are module names matching ^[a-z0-9_]{1,64}$; that key rule cannot be expressed in the stdlib checker subset, so verify_inventory enforces it together with the record shape in $defs.module. A module present in more than one source is never resolved: it is listed in 'conflicts' and absent from 'modules'. Enterprise records carry only module facts (no paths, no file contents).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "sources",
+    "modules",
+    "conflicts",
+    "unparsed",
+    "digest"
+  ],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "odooflux.inventory/1"
+    },
+    "sources": {
+      "type": "array",
+      "description": "Declared sources, sorted by source_id, unique.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_id",
+          "confidentiality"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$"
+          },
+          "confidentiality": {
+            "type": "string",
+            "enum": [
+              "public",
+              "enterprise"
+            ]
+          }
+        }
+      }
+    },
+    "modules": {
+      "type": "object",
+      "description": "Module name -> record described by $defs.module. Sorted by name. Conflicted and unparsed modules are not present here."
+    },
+    "conflicts": {
+      "type": "array",
+      "description": "Modules declared by two or more sources. Sorted by module; each sources list is sorted and has at least two entries.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "module",
+          "sources"
+        ],
+        "properties": {
+          "module": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]{1,64}$"
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$"
+            }
+          }
+        }
+      }
+    },
+    "unparsed": {
+      "type": "array",
+      "description": "Manifests that could not be read as a literal dict. Records carry the closed parse error code only; sorted by (module, source_id).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "module",
+          "source_id",
+          "code"
+        ],
+        "properties": {
+          "module": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]{1,64}$"
+          },
+          "source_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$"
+          },
+          "code": {
+            "type": "string",
+            "enum": [
+              "TOO_LARGE",
+              "SYNTAX",
+              "NOT_A_DICT_LITERAL",
+              "NOT_LITERAL",
+              "DUPLICATE_KEY",
+              "BAD_DEPENDS",
+              "BAD_FLAG",
+              "DUPLICATE_IN_SOURCE"
+            ]
+          }
+        }
+      }
+    },
+    "digest": {
+      "type": "string",
+      "description": "sha256 of the canonical JSON of every other key.",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "$defs": {
+    "part": {
+      "type": "object",
+      "description": "One source's module facts, as built by build_part. Recognised module roots only: <m>/__manifest__.py at repo root, addons/<m>/__manifest__.py, odoo/addons/<m>/__manifest__.py. Deeper manifests are ignored and counted in skipped_nested. Module records are checked in code.",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "confidentiality",
+        "modules",
+        "skipped",
+        "skipped_nested",
+        "parse_errors"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$"
+        },
+        "confidentiality": {
+          "type": "string",
+          "enum": [
+            "public",
+            "enterprise"
+          ]
+        },
+        "modules": {
+          "type": "object",
+          "description": "Module name -> record with depends, installable, auto_install, manifest_digest, path_digest and optional parse_error."
+        },
+        "skipped": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Root-level manifests and module roots whose directory name fails the name rule."
+        },
+        "skipped_nested": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Manifests deeper than the three recognised module roots."
+        },
+        "parse_errors": {
+          "type": "array",
+          "description": "Sorted names of modules whose record carries parse_error.",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]{1,64}$"
+          }
+        }
+      }
+    },
+    "module": {
+      "type": "object",
+      "description": "Record for one resolved module. Exactly these keys; a module record never carries paths or file contents.",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "confidentiality",
+        "depends",
+        "installable",
+        "auto_install",
+        "manifest_digest"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$"
+        },
+        "confidentiality": {
+          "type": "string",
+          "enum": [
+            "public",
+            "enterprise"
+          ]
+        },
+        "depends": {
+          "type": "array",
+          "description": "Validated module names, sorted, unique.",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[a-z0-9_]{1,64}$"
+          }
+        },
+        "installable": {
+          "type": "boolean"
+        },
+        "auto_install": {
+          "type": "boolean",
+          "description": "A literal list in the manifest maps to true when non-empty."
+        },
+        "manifest_digest": {
+          "type": "string",
+          "description": "sha256 of the manifest bytes.",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    }
+  }
+}

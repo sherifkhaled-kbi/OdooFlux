@@ -37,7 +37,7 @@ from odooflux.utils.redaction import redact_text
 
 FAULT_POINTS = ("verify", "lock", "pointer", "audit")
 _RELEASE_ID = re.compile(r"^kr-[0-9a-f]{12}$")
-GIT_KINDS = ("GIT_COMMUNITY",)  # adapters the build constructs; any other kind fails its source as IO_ERROR
+GIT_KINDS = ("GIT_COMMUNITY", "GIT_ENTERPRISE")  # adapters the build constructs; other kinds fail as IO_ERROR
 STOP_EXIT = {"SOURCE_REQUIRED_FAILED": EXIT_SOURCE_UNAVAILABLE, "SOURCE_REQUIRED_NOT_VERIFIED": EXIT_SOURCE_UNAVAILABLE,
              "CHECKSUM_MISMATCH": EXIT_INTEGRITY, "MANIFEST_INCONSISTENT": EXIT_INTEGRITY,
              "PROVENANCE_INVALID": EXIT_INTEGRITY, "RELEASE_INTEGRITY": EXIT_INTEGRITY}

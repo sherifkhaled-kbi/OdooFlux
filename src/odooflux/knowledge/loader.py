@@ -119,23 +119,42 @@ def load_active_knowledge(handle) -> KnowledgeBase:
     The built-in handle loads exactly what `load_knowledge(handle.root)` loads. Any other handle loads
     `<handle.root>/knowledge`; a missing tree raises `KnowledgeReleaseError` and never falls back to the built-in tree.
     FIX_ENABLED rules of a non-built-in release that fail promotion gates 1 to 5 are capped to DETECT_ONLY with a
-    `KAP_FIX_CAPPED` warning (REQ-KAP-039). Built-in rules are grandfathered and never capped here.
+    `KAP_FIX_CAPPED` warning (REQ-KAP-039). Built-in rules are grandfathered and never capped here. A non-built-in FIX_ENABLED
+    row stays FIX_ENABLED only when `safety.fix_row_trusted` says so (gates 1 to 5, plus its certification record when
+    certification governs the row). A record that exists but fails verification is named in the finding.
     """
     if handle.builtin:
         return load_knowledge(handle.root)
     from odooflux.knowledge.release.model import KnowledgeReleaseError  # lazy: release modules import this module
-    from odooflux.knowledge.release.safety import fix_gate_findings
+    from odooflux.knowledge.release.safety import fix_row_trusted, is_shipped_builtin_rule, load_provenance_index, \
+        rule_gate_context
 
     tree = Path(handle.root) / RELEASE_TREE
     if not tree.is_dir():
         raise KnowledgeReleaseError(f"release {handle.release_id}: knowledge tree is missing ({tree})")
     kb = load_knowledge(tree)
-    failing = {f["rule_id"]: f for f in fix_gate_findings(tree)}
+    index = load_provenance_index(tree)
+    snapshot_dir = tree.resolve().parent / "snapshots"
+    context = rule_gate_context(kb)
+    failing = {}
+    for rule in kb.rules:
+        if not isinstance(rule, dict) or rule.get("maturity") != "FIX_ENABLED" or is_shipped_builtin_rule(rule):
+            continue
+        evidence_rows = [kb.evidence[eid] for eid in rule.get("evidence") or []
+                         if isinstance(eid, str) and eid in kb.evidence]
+        trusted, found = fix_row_trusted(rule, tree, evidence_rows, index, kb=kb, snapshot_dir=snapshot_dir,
+                                         context=context)
+        if not trusted and found:
+            failing[str(rule.get("id", "?"))] = found[-1]
     for rule in kb.rules:
         if isinstance(rule, dict) and rule.get("id") in failing and rule.get("maturity") == "FIX_ENABLED":
+            finding = failing[rule["id"]]
             rule["maturity"] = "DETECT_ONLY"
+            if finding["code"] == "cert-verify-failed":
+                reason = f"certification record fails verification ({finding['detail']})"
+            else:
+                reason = f"gate {finding['gate']} {finding['code']}"
             kb.load_findings.append(Finding(
                 KAP_FIX_CAPPED, "compatibility/*.rules.json", str(rule["id"]),
-                f"FIX_ENABLED capped to DETECT_ONLY: gate {failing[rule['id']]['gate']} "
-                f"{failing[rule['id']]['code']}", severity="WARNING"))
+                f"FIX_ENABLED capped to DETECT_ONLY: {reason}", severity="WARNING"))
     return kb

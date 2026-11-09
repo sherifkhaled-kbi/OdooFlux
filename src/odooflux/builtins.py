@@ -15,10 +15,14 @@ from odooflux.core.contracts.plugins import Registries
 from odooflux.core.orchestrator.run_inputs import RunRuleBinder
 from odooflux.knowledge.loader import RELEASE_TREE, load_active_knowledge
 from odooflux.knowledge.release.resolver import resolve_knowledge
+from odooflux.knowledge.update.certification import attach_executor
 from odooflux.rules.bindable import BINDABLE_MODULES
 from odooflux.parsers.python.document import PythonParser  # noqa: F401  (registered below)
 from odooflux.parsers.xml.wellformed import XmlParser
 from odooflux.parsers.extract_toolkit import ExtractToolkit, detector_table
+from odooflux.transformers.certify_exec import FixCertifier
+
+_FIX_CERTIFIER = FixCertifier(modules=BINDABLE_MODULES)  # one per process: certification accepts one attached executor (re-attach is a no-op)
 from odooflux.reporting import register_default_renderers
 from odooflux.validation.dependency.integrity import check_integrity
 from odooflux.validation.static.rescan import RescanValidator
@@ -89,6 +93,7 @@ def build_context(knowledge_path: Path = KNOWLEDGE_FILE, handle=None) -> Context
     registries.run_rule_binder = _HandleRuleBinder(rows, BINDABLE_MODULES, None if handle is None or handle.builtin
                                                    else tree)
     registries.extract_toolkit = ExtractToolkit(detectors=detector_table(BINDABLE_MODULES))  # REQ-ARC-001: KAP adapters
+    attach_executor(_FIX_CERTIFIER)  # feature 012: the process's certification authority (certification.py)
     registries.ai_gateway_factory = ai_gateway_factory  # KAP `ai propose` only; lazy (D-08, see the factory)
     return Context(registries=registries, transitions=transitions, versions=versions, layer3=layer3,
                    knowledge=handle, rebuild=_rebuild)

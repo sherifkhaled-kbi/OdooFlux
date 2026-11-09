@@ -28,7 +28,7 @@ gates() {
 
 package() {
     step "wheel build and installed-wheel tests"
-    ODOOFLUX_PACKAGING_INSTALL=1 "$PY" -m unittest tests.integration.packaging.test_wheel_install -v
+    ODOOFLUX_PACKAGING_INSTALL=1 "$PY" -m unittest discover -s tests/integration/packaging -p 'test_*.py' -t . -v
 }
 
 case "${1:-all}" in

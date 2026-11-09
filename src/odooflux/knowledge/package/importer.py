@@ -1,7 +1,8 @@
 """Package importer: stage, verify, gate, atomic move, optional activate (REQ-KAP-025, REQ-KAP-026, REQ-KAP-027;
 contracts/knowledge-package-format.md "Reader algorithm" and P10, contracts/release-lifecycle.md "Activation").
 
-Order: validate into `<kb-home>/staging/` (P01 to P09, P11), then P10: every FIX_ENABLED rule in the package is
+Order: P12 first, on a scratch read outside kb-home (an internal or Enterprise-derived package is refused before
+anything is staged). Then validate into `<kb-home>/staging/` (P01 to P09, P11), then P10: every FIX_ENABLED rule in the package is
 re-gated locally with `release/safety.py` (built-in-origin rules included, because a package is never trusted). A
 failing rule is refused by default. With `downgrade_unverified` it is capped to DETECT_ONLY in the staged tree and the
 release manifest is recomputed, so the installed release digest describes the bytes that are installed.
@@ -15,20 +16,21 @@ changed on failure. `fault_at` injects a failure at a named boundary for tests.
 import json
 import os
 import shutil
+import tempfile
 import uuid
 from dataclasses import dataclass
 from pathlib import Path
 
-from odooflux.knowledge.package.archive import PackageError
+from odooflux.knowledge.package.archive import PackageError, read_package_archive
 from odooflux.knowledge.package.builder import SUMS_NAME
 from odooflux.knowledge.package.archive import MANIFEST_NAME as PACKAGE_MANIFEST
-from odooflux.knowledge.package.validate import validate_package
+from odooflux.knowledge.package.validate import check_internal, validate_package
 from odooflux.knowledge.release.audit import KbAudit
 from odooflux.knowledge.release.canonical import write_json_file
 from odooflux.knowledge.release.manifest import MANIFEST_NAME as RELEASE_MANIFEST, META_FIELDS, STATE_NAME, \
     require_intact, write_release_manifest
 from odooflux.knowledge.release.model import KnowledgeReleaseError, ReleaseState
-from odooflux.knowledge.release.safety import fix_gate_findings
+from odooflux.knowledge.release.safety import package_fix_findings
 from odooflux.knowledge.release.store import ACTIVE_NAME, KbLock, build_pointer, ensure_layout, read_active, \
     utc_now, write_active
 from odooflux.utils.atomic import atomic_write_text
@@ -89,12 +91,24 @@ def _restore_pointer(home: Path, previous) -> None:
         write_active(home, previous)
 
 
+def _refuse_internal_archive(archive) -> None:
+    """P12 before anything is staged. The package is read by the safe reader into a scratch directory outside kb-home
+    (its P01 to P08 checks apply) and refused when its release is internal or Enterprise-derived."""
+    with tempfile.TemporaryDirectory() as scratch:
+        staged = read_package_archive(archive, scratch)
+        try:
+            check_internal(staged.staging_dir, staged.manifest)
+        finally:
+            staged.discard()
+
+
 def import_package(archive, kb_home, *, activate: bool = False, downgrade_unverified: bool = False,
                    expect_digest: str = None, running_version: str = None, fault_at: str = None) -> ImportResult:
     """Import a package into kb-home atomically. Raises PackageError (P-code) on rejection, KbLockedError if another
     process holds kb-home, ImportFault only when `fault_at` is set. kb-home is unchanged on any raise."""
     if fault_at is not None and fault_at not in FAULT_POINTS:
         raise ValueError(f"unknown fault point {fault_at!r}")
+    _refuse_internal_archive(archive)
     home = ensure_layout(kb_home)
     with KbLock(home):
         _fault("extract", fault_at)
@@ -110,7 +124,7 @@ def import_package(archive, kb_home, *, activate: bool = False, downgrade_unveri
             _strip_package_files(staging)
             downgraded = ()
             _fault("gates", fault_at)
-            findings = fix_gate_findings(staging / "knowledge", include_builtin=True)
+            findings, inherited, baseline = package_fix_findings(staging / "knowledge")
             if findings:
                 rule_ids = sorted({f["rule_id"] for f in findings})
                 if not downgrade_unverified:
@@ -118,7 +132,7 @@ def import_package(archive, kb_home, *, activate: bool = False, downgrade_unveri
                 _cap_rules(staging / "knowledge", set(rule_ids))
                 meta = {key: validated.release[key] for key in sorted(META_FIELDS)}
                 write_release_manifest(staging, meta)
-                if fix_gate_findings(staging / "knowledge", include_builtin=True):
+                if package_fix_findings(staging / "knowledge")[0]:
                     raise PackageError("P10", "FIX_ENABLED rules still fail gates after downgrade")
                 downgraded = tuple(rule_ids)
             require_intact(staging)
@@ -151,8 +165,10 @@ def import_package(archive, kb_home, *, activate: bool = False, downgrade_unveri
             _fault("audit", fault_at)
             audit = KbAudit(home, uuid.uuid4().hex)
             if not already:
-                details = {"downgraded_rules": list(downgraded)} if downgraded else None
-                audit.record("release_installed", target=release_id, details=details)
+                details = {"downgraded_rules": list(downgraded)} if downgraded else {}
+                if inherited:  # D3: shipped rows accepted by byte identity with the verified baseline (never by id)
+                    details["inherited_trust"] = {"rule_ids": list(inherited), "baseline_digest": baseline}
+                audit.record("release_installed", target=release_id, details=details or None)
             if activated:
                 audit.record("release_activated", target=release_id)
         except BaseException:

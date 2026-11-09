@@ -22,6 +22,7 @@ from pathlib import Path
 
 from odooflux import __version__
 from odooflux.knowledge.package.archive import MANIFEST_NAME, PackageError, read_package_archive
+from odooflux.knowledge.package.confidentiality import assess, refusal_text
 from odooflux.knowledge.release.manifest import MANIFEST_NAME as RELEASE_MANIFEST, STATE_NAME, require_intact
 from odooflux.utils.redaction import scan_for_canaries, scan_for_shapes
 
@@ -95,19 +96,22 @@ def _zip_bytes_to(path: Path, members: list) -> None:
             zf.writestr(info, data)
 
 
-def export_package(release_dir, out_path, *, include_enterprise_derived: bool = False, canaries=()) -> PackageInfo:
+def export_package(release_dir, out_path, *, canaries=()) -> PackageInfo:
     """Write the deterministic package for `release_dir` to `out_path` (replaced atomically).
 
-    Raises KnowledgeReleaseError if the release tree does not verify, PackageError (P09, EXPORT_REFUSED, P03) if
-    content is refused. Nothing is written on refusal."""
+    Internal (confidentiality "internal") and Enterprise-derived releases are never exported: the gate in
+    `package/confidentiality.py` is evaluated on the release tree first and refuses with EXPORT_REFUSED. There is no
+    option to override it. Raises KnowledgeReleaseError if the release tree does not verify, PackageError
+    (EXPORT_REFUSED, P09, P03) if content is refused. Nothing is written on refusal."""
     release_dir = Path(release_dir)
     out_path = Path(out_path)
     require_intact(release_dir)
     release = json.loads((release_dir / RELEASE_MANIFEST).read_text(encoding="utf-8"))
 
-    enterprise = any(isinstance(s, dict) and s.get("enterprise_derived") is True for s in release.get("sources", []))
-    if enterprise and not include_enterprise_derived:
-        raise PackageError("EXPORT_REFUSED", "release contains Enterprise-derived records; not exported by default")
+    reasons = assess(release_dir)
+    if reasons:
+        raise PackageError("EXPORT_REFUSED", "release is internal or Enterprise-derived and is never exported: "
+                           + refusal_text(reasons))
 
     names = [RELEASE_MANIFEST] + _release_files(release_dir)
     members = {}
@@ -129,7 +133,7 @@ def export_package(release_dir, out_path, *, include_enterprise_derived: bool = 
         "entries": entries,
         "entry_count": len(entries),
         "total_size": total,
-        "contains_enterprise_derived": enterprise,
+        "contains_enterprise_derived": False,  # always false: internal and Enterprise-derived releases are refused
         "redaction_scan": {"status": "PASSED", "scanner_version": SCANNER_VERSION},
     }
     package_bytes = (json.dumps(package, indent=2, sort_keys=True) + "\n").encode("utf-8")
@@ -153,4 +157,4 @@ def export_package(release_dir, out_path, *, include_enterprise_derived: bool = 
     digest = hashlib.sha256(out_path.read_bytes()).hexdigest()
     return PackageInfo(path=out_path, release_id=release["release_id"], release_digest=release["release_digest"],
                        sha256=digest, entry_count=len(entries), total_size=total,
-                       contains_enterprise_derived=enterprise)
+                       contains_enterprise_derived=False)

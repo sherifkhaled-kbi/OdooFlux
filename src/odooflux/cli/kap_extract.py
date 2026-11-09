@@ -24,6 +24,9 @@ from odooflux.knowledge.ledger import dispositions as disp
 from odooflux.knowledge.ledger.dispositions import DISPOSITIONS, DispositionError
 from odooflux.knowledge.ledger.ledger import Ledger, LedgerError
 from odooflux.knowledge.release.canonical import canonical_bytes, write_json_file
+from odooflux.knowledge.release.confidentiality_view import (
+    WITHHELD_PATH, active_enterprise_snapshot_ids, redact_change_record)
+from odooflux.knowledge.release.model import KnowledgeReleaseError
 
 __all__ = ["register", "full_registry", "cmd_extract"]
 
@@ -115,14 +118,21 @@ def cmd_list(args) -> int:
 
 def cmd_show(args) -> int:
     ledger = _open_ledger(args.ledger)
-    record = ledger.get(args.change_id)
+    try:  # Enterprise locations and detail of the active release are withheld; an unresolvable release refuses
+        enterprise = active_enterprise_snapshot_ids(args.kb_home)
+    except KnowledgeReleaseError as exc:
+        raise LedgerError(f"active knowledge release cannot be verified, so ledger show is refused: {exc}") from exc
+    record = redact_change_record(ledger.get(args.change_id), enterprise)
     if args.json:
         sys.stdout.write(canonical_bytes(record).decode("utf-8") + "\n")
     else:
         for key in ("change_id", "class", "domain", "subject_key", "disposition", "confirmed", "proposed_by"):
             print(f"{key}: {record[key]}")
         for loc in record["locations"]:
-            print(f"location: {loc['snapshot_id']} {loc['path']}:{loc['line']}")
+            if loc["path"] == WITHHELD_PATH:
+                print(f"location: {loc['snapshot_id']} {WITHHELD_PATH}")
+            else:
+                print(f"location: {loc['snapshot_id']} {loc['path']}:{loc['line']}")
     return EXIT_OK
 
 

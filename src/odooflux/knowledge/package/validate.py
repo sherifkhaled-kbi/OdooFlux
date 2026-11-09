@@ -1,6 +1,7 @@
-"""Reader validation of a package on its staged tree (P04, P06, P07, P09, P11; contracts/knowledge-package-format.md).
+"""Reader validation of a package on its staged tree (P04, P06, P07, P09, P11, P12; contracts/knowledge-package-format.md).
 
-`validate_package(archive, staging_root)` runs the streaming reader (P01 to P05, P08), then P07 compatibility, P06
+`validate_package(archive, staging_root)` runs the streaming reader (P01 to P05, P08), then P12 (internal or
+Enterprise-derived release, `package/confidentiality.py`), P07 compatibility, P06
 hash and digest verification, P04 release file set, P09 redaction scan, the optional `--expect-digest` check, and
 P11 (`knowledge validate` rules on the staged `knowledge/` tree). Any failure discards the staging directory and
 raises PackageError. Success returns the staged tree, which the caller either moves into kb-home or discards.
@@ -18,6 +19,7 @@ from odooflux.knowledge.loader import KNOWLEDGE_ROOT, load_knowledge
 from odooflux.knowledge.package.archive import MANIFEST_NAME, PackageError, read_package_archive
 from odooflux.knowledge.package.builder import SUMS_NAME, sums_text
 from odooflux.knowledge.package.compat import check_compat, check_release_format
+from odooflux.knowledge.package.confidentiality import assess, declares_enterprise, refusal_text
 from odooflux.knowledge.release.canonical import digest_obj
 from odooflux.knowledge.release.manifest import MANIFEST_NAME as RELEASE_MANIFEST
 from odooflux.knowledge.release.model import release_id_from_digest
@@ -122,9 +124,29 @@ def _check_knowledge(staging: Path):
     return tree
 
 
+def check_internal(staging: Path, manifest: dict) -> None:
+    """P12 (INTERNAL_RELEASE_REFUSED): an internal or Enterprise-derived release never leaves the machine.
+
+    Runs before any other release check, so an internal release is reported as P12 rather than as a schema failure
+    (its `confidentiality` and Enterprise source fields are outside the public schema). A release.json that cannot be
+    read as an object is left to P06. The detail carries reason labels and counts only."""
+    try:
+        release = json.loads((staging / RELEASE_MANIFEST).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return
+    if not isinstance(release, dict):
+        return
+    reasons = assess(staging)
+    if declares_enterprise(manifest):
+        reasons.append("package.json declares Enterprise-derived content")
+    if reasons:
+        raise PackageError("P12", "internal release refused: " + refusal_text(reasons), RELEASE_MANIFEST)
+
+
 def _validate_staged(staged, running_version, expect_digest) -> ValidatedPackage:
     manifest = staged.manifest
     staging = staged.staging_dir
+    check_internal(staging, manifest)
     _schema_problems(manifest, "package_manifest", MANIFEST_NAME)
     check_compat(manifest, running_version)
     computed = {entry.path: entry.sha256 for entry in staged.entries}

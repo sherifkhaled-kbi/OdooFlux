@@ -27,6 +27,7 @@
     "kind": {
       "enum": [
         "GIT_COMMUNITY",
+        "GIT_ENTERPRISE",
         "DOCS",
         "UPGRADE_SCRIPTS",
         "ENTERPRISE_LOCAL",

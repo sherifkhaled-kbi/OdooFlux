@@ -30,7 +30,7 @@ Classification of quickstart lines that do NOT work as written (before this task
 | `coverage show --release <kr-id>` | 1m | works | needs `--kb-home` (or `ODOOFLUX_KB_HOME`) |
 | `package export <kr-id> -o odoo-17-18.ofkp` | 1n | works | |
 | `package validate ... --expect-digest <sha256>` | 2a | DOCUMENTATION DEFECT | the flag takes the package `release_digest`, not the sha256 of the file (the file sha256 is refused, exit 3, P06) |
-| `package import ... --activate` | 2b | DOCUMENTATION DEFECT | refused (exit 3, P10) for a release built from the built-in tree; `--downgrade-unverified` is required (intended, INTEGRATION_NOTES note 4) |
+| `package import ... --activate` | 2b | DOCUMENTATION DEFECT (resolved by feature 012, D3) | was refused (exit 3, P10) for a release built from the built-in tree; now accepted as written: byte-identical shipped FIX_ENABLED rows are inherited trust and audited, so `--downgrade-unverified` is not needed |
 | `release list` | 2c | works | |
 | `migrate <paths> --source 17.0 --target 18.0` | 2d | DOCUMENTATION DEFECT + FIXTURE DEFECT | positional paths, `--source`, `--target` do not exist (`--module`, `--from-version`, `--to-version`); the synthetic release covers 16-17 only |
 | `release rollback` ("back to the previous release or built-in") | 2e | DOCUMENTATION DEFECT | rollback needs a previous release (exit 1 otherwise); the built-in is `release deactivate` (step 2f) |
@@ -100,7 +100,7 @@ STEP_FOR_LINE = {
     "odooflux knowledge coverage show --release <kr-id> --kb-home $KB": "1m",
     "odooflux knowledge package export <kr-id> -o odoo-17-18.ofkp --kb-home $KB": "1n",
     "odooflux knowledge package validate odoo-17-18.ofkp --expect-digest <release_digest>": "2a",
-    "odooflux knowledge package import odoo-17-18.ofkp --activate --downgrade-unverified --kb-home $KB2": "2b",
+    "odooflux knowledge package import odoo-17-18.ofkp --activate --kb-home $KB2": "2b",
     "odooflux knowledge release list --kb-home $KB2": "2c",
     "odooflux migrate --module <module-dir> --from-version 17 --to-version 18 --kb-home $KB2 --report report.json "
     "--report-format json": "2d",
@@ -110,7 +110,7 @@ STEP_FOR_LINE = {
 # Section 3 table rows (first column, as written in the quickstart) -> step.
 STEP_FOR_TABLE_ROW = {
     "`package import` of an archive with `../x`": "3a",
-    "import a package whose FIX_ENABLED rule has no official evidence": "3b",
+    "import a pipeline-built package with carried built-in FIX_ENABLED rules": "3b",
     "`source fetch ID` without `--allow-network`": "3c",
     "pinned SHA absent from the clone": "3d",
     "`release remove <active-id>`": "3e",
@@ -352,11 +352,12 @@ class QuickstartAcceptance(unittest.TestCase):
         self._check("2a", code == 3, f"file sha256 is not the expected digest (exit {code}, want 3)")
         k1 = self.base / "k1"
         code, _, err = self._cli("knowledge", "package", "import", str(self.pkg), "--kb-home", str(k1))
-        self._check("2b0", code == 3 and "P10" in err and not (k1 / "active.json").exists(),
-                    f"as written (no --downgrade-unverified): exit {code}, P10 named, nothing active")
+        installed_k1 = list((k1 / "releases").iterdir()) if (k1 / "releases").exists() else []
+        self._check("2b0", code == 0 and len(installed_k1) == 1,
+                    f"as written, no --downgrade-unverified: exit {code} (want 0), release installed "
+                    f"(inherited built-in fixes): {len(installed_k1)} installed")
         self.k2 = self.base / "k2"
-        self._run("2b", ["knowledge", "package", "import", str(self.pkg), "--activate", "--downgrade-unverified",
-                         "--kb-home", str(self.k2)])
+        self._run("2b", ["knowledge", "package", "import", str(self.pkg), "--activate", "--kb-home", str(self.k2)])
         active = json.loads((self.k2 / "active.json").read_text(encoding="utf-8"))
         self.installed_id = active["release_id"]
         _, out, _ = self._run("2c", ["knowledge", "release", "list", "--kb-home", str(self.k2)])
@@ -420,19 +421,25 @@ class QuickstartAcceptance(unittest.TestCase):
         installed = list((k4 / "releases").iterdir()) if (k4 / "releases").exists() else []
         self._check("3a", installed == [] and not (k4 / "active.json").exists() and not (self.base / "x").exists(),
                     "nothing installed, no file written outside")
-        # 3b: FIX_ENABLED without official evidence refused; --downgrade-unverified caps it
+        # 3b: a pipeline-built package carries built-in FIX_ENABLED rules. Feature 012 (D3): the rows that are byte-identical
+        # to the shipped built-in rules are accepted by default, they stay FIX_ENABLED, and the decision is audited
+        # (release_installed, details.inherited_trust). Refusal of a genuinely untrusted FIX_ENABLED row (P10) is covered
+        # by tests/integration/kap/test_provenance_e2e.py, not here.
         if getattr(self, "release_id", None) is None:
             self._blocked("3b", "section 1 release build did not produce a release")
             return
         k6 = self.base / "k6"
         code, _, err = self._cli("knowledge", "package", "import", str(self.pkg), "--kb-home", str(k6))
         installed = list((k6 / "releases").iterdir()) if (k6 / "releases").exists() else []
-        self._check("3b", code == 3 and "P10" in err and installed == [] and not (k6 / "active.json").exists(),
-                    f"refused without downgrade: exit {code}, P10 named, nothing installed")
-        self._run("3b", ["knowledge", "package", "import", str(self.pkg), "--downgrade-unverified", "--kb-home", str(k6)])
-        fix = [r.get("id") for path in (k6 / "releases").glob("*/knowledge/compatibility/*.rules.json")
-               for r in json.loads(path.read_text(encoding="utf-8")) if r.get("maturity") == "FIX_ENABLED"]
-        self._check("3b", fix == [], f"FIX_ENABLED rules left after the cap: {fix}")
+        self._check("3b", code == 0 and len(installed) == 1 and "P10" not in err,
+                    f"default import accepted: exit {code} (want 0), release installed: {len(installed)}")
+        fix = sorted({r.get("id") for path in (k6 / "releases").glob("*/knowledge/compatibility/*.rules.json")
+                      for r in json.loads(path.read_text(encoding="utf-8")) if r.get("maturity") == "FIX_ENABLED"})
+        audit = [json.loads(line) for line in (k6 / "audit.jsonl").read_text(encoding="utf-8").splitlines()]
+        inherited = [e["details"].get("inherited_trust", {}).get("rule_ids") for e in audit
+                     if e["action"] == "release_installed"]
+        self._check("3b", bool(fix) and inherited == [fix],
+                    f"built-in FIX_ENABLED rules retained and audited: {len(fix)} retained, audited {inherited}")
         # 3c: source fetch without --allow-network: exit 2, no socket
         before = self.net.call_count
         self._run("3c", ["knowledge", "source", "fetch", FROM_ID, "--registry", str(self.registry),

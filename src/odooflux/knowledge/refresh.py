@@ -39,11 +39,26 @@ def _commit_exists(repo: Path, rev: str) -> bool:
     return rev in _local_commits(repo)
 
 
+def _candidate_paths(repo: Path, loc: dict, rev: str) -> list:
+    """Paths at *rev* that contain the match text and share the location's basename (max 10)."""
+    # `git grep -l` prints "REV:path" (one colon). A basename pathspec only matches root-level files, so
+    # search the whole tree and keep the paths that carry the same basename.
+    basename = loc["path"].rsplit("/", 1)[-1]
+    found = _git(repo, "grep", "-l", "-F", loc["match"], rev).stdout
+    hits_paths = {line.split(":", 1)[1] for line in found.splitlines() if ":" in line}
+    return sorted(p for p in hits_paths if p.rsplit("/", 1)[-1] == basename)[:10]
+
+
 def classify_location(repo: Path, loc: dict, rev: str, search_candidates: bool = False) -> dict:
     """Classify one location at *rev*. Returns {result, new_line, candidates}. Candidate paths for a
     missing match come from a whole-tree search, which is slow on partial clones, so it is opt-in."""
     if not repo or not _commit_exists(repo, rev):
         return {"result": UNAVAILABLE, "new_line": None, "candidates": []}
+
+    def missing():
+        candidates = _candidate_paths(repo, loc, rev) if search_candidates else []
+        return {"result": "missing", "new_line": None, "candidates": candidates}
+
     if loc["kind"] == "absent":
         scope = loc.get("search_scope") or loc["path"]
         text = _show(repo, rev, scope)
@@ -54,8 +69,8 @@ def classify_location(repo: Path, loc: dict, rev: str, search_candidates: bool =
         present = bool(listing.strip()) or _show(repo, rev, loc["path"]) is not None
         return {"result": "unchanged" if present else "missing", "new_line": None, "candidates": []}
     text = _show(repo, rev, loc["path"])
-    if text is None:
-        return {"result": "missing", "new_line": None, "candidates": []}
+    if text is None:  # path renamed or removed: the match may now live under another path
+        return missing()
     lines = text.splitlines()
     line = loc["line"]
     if 1 <= line <= len(lines) and loc["match"] in lines[line - 1]:
@@ -65,12 +80,8 @@ def classify_location(repo: Path, loc: dict, rev: str, search_candidates: bool =
     if hits:
         nearest = min(hits, key=lambda n: abs(n - line))
         return {"result": "moved", "new_line": nearest, "candidates": hits}
-    if not search_candidates:
-        return {"result": "missing", "new_line": None, "candidates": []}
-    # Path renamed or match gone elsewhere: search the whole revision for the match text.
-    found = _git(repo, "grep", "-l", "-F", loc["match"], rev, "--", loc["path"].rsplit("/", 1)[-1]).stdout
-    candidates = sorted({line.split(":", 2)[1] for line in found.splitlines() if line.count(":") >= 2})
-    return {"result": "missing", "new_line": None, "candidates": candidates[:10]}
+    # Match gone from the window: search the whole revision for the match text.
+    return missing()
 
 
 def refresh(kb, repos: dict, revisions: dict, search_candidates: bool = False) -> dict:

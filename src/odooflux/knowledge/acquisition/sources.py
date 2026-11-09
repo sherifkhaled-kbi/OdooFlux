@@ -18,21 +18,37 @@ from pathlib import Path
 from odooflux.knowledge import validator as v
 from odooflux.knowledge.acquisition.blobstore import SourceError
 from odooflux.knowledge.loader import KNOWLEDGE_ROOT
+from odooflux.utils.redaction import redact_text
 
 __all__ = [
     "SourceError", "RegistryError", "SourceRegistry", "ADAPTERS", "register_adapter", "KINDS", "STATUSES",
     "TRANSITIONS", "load_allow_list", "require_allowed", "normalize", "validate_spec", "normalize_origin",
     "origin_under_prefix", "origin_allowed", "official_origin", "verify_declared_origin", "OFFICIAL_PREFIX",
-    "CREDENTIALS_CODE", "has_url_credentials",
+    "CREDENTIALS_CODE", "has_url_credentials", "GIT_KINDS", "ENTERPRISE_KINDS", "is_enterprise_kind",
+    "ENTERPRISE_CONFIDENTIALITY", "ENTERPRISE_LICENCE_ACCESS", "ENTERPRISE_ENTRY_FIELDS", "LICENCE_CODE",
+    "licence_problem", "enterprise_entry_problem",
 ]
 
 KINDS = (
-    "GIT_COMMUNITY", "DOCS", "UPGRADE_SCRIPTS", "ENTERPRISE_LOCAL", "OCA", "OPENUPGRADE", "SNAPSHOT_PACK", "DIRECTORY",
+    "GIT_COMMUNITY", "GIT_ENTERPRISE", "DOCS", "UPGRADE_SCRIPTS", "ENTERPRISE_LOCAL", "OCA", "OPENUPGRADE",
+    "SNAPSHOT_PACK", "DIRECTORY",
 )
-GIT_KINDS = ("GIT_COMMUNITY", "DOCS", "UPGRADE_SCRIPTS", "OCA", "OPENUPGRADE")
+GIT_KINDS = ("GIT_COMMUNITY", "GIT_ENTERPRISE", "DOCS", "UPGRADE_SCRIPTS", "OCA", "OPENUPGRADE")
 FORCED_UNOFFICIAL = ("OCA", "OPENUPGRADE")
 # the only remote prefixes for which official=true is valid
-OFFICIAL_PREFIX = {"GIT_COMMUNITY": "https://github.com/odoo/odoo/", "DOCS": "https://github.com/odoo/documentation/"}
+OFFICIAL_PREFIX = {
+    "GIT_COMMUNITY": "https://github.com/odoo/odoo/",
+    "GIT_ENTERPRISE": "https://github.com/odoo/enterprise/",
+    "DOCS": "https://github.com/odoo/documentation/",
+}
+# Enterprise kinds hold licensed content. Classification is by kind only, never by a record field. ENTERPRISE_LOCAL is
+# never official; GIT_ENTERPRISE may be official under the same identity rules as GIT_COMMUNITY, plus a licence.
+ENTERPRISE_KINDS = ("GIT_ENTERPRISE", "ENTERPRISE_LOCAL")
+ENTERPRISE_CONFIDENTIALITY = "enterprise"
+ENTERPRISE_LICENCE_ACCESS = "ENTERPRISE_AUTHORIZED"
+# provenance fields carried only by enterprise entries (all three or none)
+ENTERPRISE_ENTRY_FIELDS = ("confidentiality", "licence_id", "licence_access")
+LICENCE_CODE = "LICENCE_UNVERIFIED"
 # closed failure codes (data-model SourceSpec.failure_reason); the text after the code is free
 FAILURE_CODES = ("REVISION_UNAVAILABLE", "CHECKSUM_MISMATCH", "AUTH_REQUIRED", "NOT_ALLOWLISTED", "IO_ERROR",
                  "OFFICIAL_IDENTITY_UNVERIFIED")
@@ -124,7 +140,7 @@ def origin_allowed(url: str, allow_list: list) -> bool:
 
 def official_origin(kind: str, url: str, allow_list: list):
     """The normalised origin when *url* is an allow-listed https URL under the official prefix of *kind*
-    (GIT_COMMUNITY or DOCS); None otherwise. Shared by the git-local adapter and release gate 1.
+    (a kind in OFFICIAL_PREFIX); None otherwise. Shared by the git-local adapter and release gate 1.
 
     Trust statement: a configured git remote URL is only a declared identity. It is NOT cryptographic proof of
     repository authenticity. This contract checks consistency between the declared origin, the allow-list, the pinned
@@ -149,6 +165,42 @@ def verify_declared_origin(remote: str, expected: str, kind: str, allow_list: li
     return official_origin(kind, remote, allow_list)
 
 
+def is_enterprise_kind(kind) -> bool:
+    """True for a source kind whose content is Enterprise-licensed (see ENTERPRISE_KINDS)."""
+    return kind in ENTERPRISE_KINDS
+
+
+def licence_problem(licence_access, licence_id):
+    """None when an Enterprise licence is verifiable: `ENTERPRISE_AUTHORIZED` access and a real licence identifier.
+    The message names the field and never repeats its value, because a value here may be a credential."""
+    if licence_access != ENTERPRISE_LICENCE_ACCESS:
+        return "licence_access must be ENTERPRISE_AUTHORIZED"
+    if not isinstance(licence_id, str) or not licence_id.strip():
+        return "licence_id must be a non-empty string"
+    if licence_id.strip().upper() == "UNKNOWN":
+        return "licence_id must name a licence, not UNKNOWN"
+    if redact_text(licence_id) != licence_id:
+        return "licence_id must be an identifier, not a credential-shaped value"
+    return None
+
+
+def enterprise_entry_problem(entry: dict):
+    """Coherence of the enterprise fields of one provenance entry, or None when coherent. Shared by
+    `provenance.verify_provenance` and release gate 1, so both refuse the same forgeries. A GIT_ENTERPRISE entry must
+    say confidentiality "enterprise" and carry a verifiable licence. ENTERPRISE_LOCAL is never official. Every other
+    kind must carry no enterprise field."""
+    kind = entry.get("kind")
+    if kind == "ENTERPRISE_LOCAL":
+        return "enterprise-local source is never official or shipped"
+    if kind == "GIT_ENTERPRISE":
+        if entry.get("confidentiality") != ENTERPRISE_CONFIDENTIALITY:
+            return "GIT_ENTERPRISE entry must carry confidentiality enterprise"
+        return licence_problem(entry.get("licence_access"), entry.get("licence_id"))
+    if any(key in entry for key in ENTERPRISE_ENTRY_FIELDS):
+        return f"{kind} entry must not carry enterprise fields"
+    return None
+
+
 def validate_spec(spec: dict, allow_list: list) -> list:
     """Problems as (pointer, message) pairs. An empty list means the spec may be registered."""
     creds = [pointer for pointer, value in (("/url", spec.get("url")), ("/expected_origin", spec.get("expected_origin")))
@@ -169,7 +221,7 @@ def validate_spec(spec: dict, allow_list: list) -> list:
     if spec["official"]:
         prefix = OFFICIAL_PREFIX.get(kind)
         if prefix is None:
-            problems.append(("/official", "official=true needs kind GIT_COMMUNITY or DOCS"))
+            problems.append(("/official", "official=true needs kind GIT_COMMUNITY, GIT_ENTERPRISE or DOCS"))
         elif url.startswith("local:"):
             if not expected:
                 problems.append(("/expected_origin", "official local clone needs expected_origin, the https URL "
@@ -177,8 +229,7 @@ def validate_spec(spec: dict, allow_list: list) -> list:
             elif official_origin(kind, expected, allow_list) is None:
                 problems.append(("/expected_origin", f"expected_origin must be under {prefix}"))
         elif not url.startswith(prefix):
-            problems.append(("/official", f"official=true needs kind GIT_COMMUNITY or DOCS under "
-                                          f"{OFFICIAL_PREFIX.get('GIT_COMMUNITY')} or {OFFICIAL_PREFIX['DOCS']}"))
+            problems.append(("/official", f"official=true needs kind {kind} under {prefix}"))
     if not url.startswith("local:") and not any(url.startswith(p) for p in allow_list):
         problems.append(("/url", "remote URL is not under an allow-listed prefix"))
     return problems

@@ -16,6 +16,13 @@ no network, no AI call: the AI proposal is not part of this run (AI stays off, D
   gets `build_started` and `build_completed` (with the outcome); the release actions go through `release/audit.py`.
 - Destructive changes against the parent release (`release/diff.py`) need the plan's `supersede` ids, or the build
   stops. `supersede` is a recorded flag, not an authenticated approval (FE-1, deferred).
+  A `supersede_policy` (e.g. `update.capability.semantic_supersede_policy`) may approve removals in addition; its
+  approvals are recorded in the build output and in the `release_installed` audit entry.
+
+Pairs may carry a `key` (default: the step). Ledgers and accounting files are named by the key, so pairs that share a
+step (Community and Enterprise for one transition) need distinct keys. `adapter_by_source` overrides the kind adapter
+for one source (a retained snapshot). `emit_inventory` writes `knowledge/inventory/<branch>.json`. An internal or
+Enterprise-derived release is never exported, so step 13 is skipped for it.
 
 The release is built in `<staging>/release` (knowledge tree under `knowledge/`, provenance, snapshots, coverage).
 Its completeness comes only from the coverage gates. A FAILED completeness stops the build (step 12) unless
@@ -33,7 +40,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from odooflux.knowledge.acquisition.blobstore import BlobStore, SourceError
-from odooflux.knowledge.acquisition.sources import FAILURE_CODES, RegistryError, SourceRegistry
+from odooflux.knowledge.acquisition.sources import FAILURE_CODES, RegistryError, SourceRegistry, is_enterprise_kind
+from odooflux.knowledge import autofix
 from odooflux.knowledge.authoring import conflicts
 from odooflux.knowledge.authoring.checks import authoring_findings
 from odooflux.knowledge.candidates import accept as acc
@@ -44,7 +52,9 @@ from odooflux.knowledge.coverage import manifest as cm
 from odooflux.knowledge.coverage.gates import PARTIAL_ALLOWED, decide
 from odooflux.knowledge.ledger.ledger import Ledger
 from odooflux.knowledge.loader import is_builtin_path, load_knowledge
+from odooflux.knowledge.update import inventory
 from odooflux.knowledge.package.builder import export_package
+from odooflux.knowledge.package.confidentiality import assess
 from odooflux.knowledge.package.validate import validate_package
 from odooflux.knowledge.release.audit import KbAudit
 from odooflux.knowledge.release.canonical import canonical_bytes, digest_obj, write_json_file
@@ -52,7 +62,8 @@ from odooflux.knowledge.release.diff import diff_releases
 from odooflux.knowledge.release.manifest import verify_release_tree, write_release_manifest
 from odooflux.knowledge.release.model import KnowledgeReleaseError, ReleaseState
 from odooflux.knowledge.release.provenance import SNAPSHOT_DIRNAME, sources_meta, verify_provenance, write_provenance
-from odooflux.knowledge.release.safety import fix_gate_findings
+from odooflux.knowledge.release.safety import FIX_ENABLED, fix_row_trusted, is_shipped_builtin_rule, \
+    load_provenance_index, rule_gate_context
 from odooflux.knowledge.release.store import KbLock, ensure_layout, set_release_state
 from odooflux.utils.redaction import redact_text, scrub
 
@@ -67,6 +78,8 @@ RELEASES_DIR = "releases"
 DATA_DIRS = ("evidence", "compatibility", "official_sources", "schemas")  # schemas: note 69 (COMPLETE tree)
 DATA_FILES = ("gaps.json",)
 LABEL = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
+PAIR_KEY = re.compile(r"[A-Za-z0-9._-]{1,48}")  # fullmatch; a pair key names its ledger and accounting files
+INVENTORY_VERSION = re.compile(r"[A-Za-z0-9._-]{1,32}")  # a source branch names its inventory file
 RUN_OK, RUN_SKIPPED, RUN_FAILED = "OK", "SKIPPED", "FAILED"
 TOOL_SCHEMA_VERSIONS = {"evidence": "1", "rule_metadata": "1"}
 _PUBLIC_TREE = "https://github.com/{repository}/tree/{revision}"
@@ -108,6 +121,16 @@ class BuildPlan:
     secrets: tuple = ()
     allow_list: object = None
     source_meta: dict = field(default_factory=dict)  # source_id -> {"repository": "owner/name", "committed": date?}
+    # Pair keys: a pair may carry `key` (default = its step). Pairs that share a step need distinct keys.
+    adapter_by_source: dict = field(default_factory=dict)  # source_id -> adapter, consulted before the kind adapter
+    emit_inventory: bool = False  # write release/knowledge/inventory/<branch>.json (in the fingerprint when True)
+    # callable(diff, parent_dir, new_release_dir) -> {id: reason}: removals it approves count as supersede ids. Its
+    # `policy_name` is in the fingerprint and the approvals are in the audit trail. None keeps today's behaviour.
+    supersede_policy: object = None
+    # Automatic FIX pipeline (feature 012, Addendum F3): callable(record, store) -> proof, or None. None means no FIX-PENDING
+    # rule is ever proposed in this build (every change keeps its detect-only candidate). Its `policy_name` is in the
+    # fingerprint, so a resumed run never reuses candidates made under another prover.
+    autofix_prover: object = None
 
 
 @dataclass
@@ -154,14 +177,48 @@ def _mask(text, plan) -> str:
     return redact_text(scrub(str(text), plan.secrets))
 
 
+def pair_key(pair: dict) -> str:
+    """The key that names a pair's ledger and accounting files: `key` when given, else the step (NN-NN)."""
+    return pair.get("key", pair["step"])
+
+
+def _pair_keys(plan: BuildPlan) -> list:
+    """Every pair key, validated. A key is unique across pairs, so two pairs with one step must have distinct keys."""
+    keys = [pair_key(pair) for pair in plan.pairs]
+    for key in keys:
+        if not isinstance(key, str) or not PAIR_KEY.fullmatch(key):
+            raise ValueError("pair key must be 1-48 characters from A-Z a-z 0-9 . _ -")
+    duplicated = sorted({key for key in keys if keys.count(key) > 1})
+    if duplicated:
+        raise ValueError(f"duplicate pair key(s) {', '.join(duplicated)}: pairs that share a step need distinct keys")
+    return keys
+
+
 def plan_fingerprint(plan: BuildPlan, allow_failed: bool = False) -> str:
-    """Digest of everything that defines the run. A change here invalidates every step (pinned config and revisions)."""
-    return digest_obj({
+    """Digest of everything that defines the run. A change here invalidates every step (pinned config and revisions).
+    `pairs` carries a `key` only when one was given, and `emit_inventory` is recorded only when it is True, so a plan
+    that uses neither keeps its earlier fingerprint."""
+    _pair_keys(plan)
+    body = {
         "label": plan.label, "specs": plan.specs, "pairs": plan.pairs, "created_at": plan.created_at,
         "checked_on": plan.checked_on, "author": plan.author, "tool_version": plan.tool_version,
         "supersede": sorted(plan.supersede), "parent": plan.parent_dir.name if plan.parent_dir else None,
         "allow_failed": bool(allow_failed), "source_meta": plan.source_meta,
-    })
+    }
+    if plan.emit_inventory:
+        body["emit_inventory"] = True
+    if plan.supersede_policy is not None:
+        body["supersede_policy"] = _policy_name(plan.supersede_policy)
+    if plan.autofix_prover is not None:
+        body["autofix_prover"] = _policy_name(plan.autofix_prover, "autofix_prover")
+    return digest_obj(body)
+
+
+def _policy_name(policy, label: str = "supersede_policy") -> str:
+    name = getattr(policy, "policy_name", None)
+    if not isinstance(name, str) or not name:
+        raise ValueError(f"{label} must carry a non-empty string policy_name")
+    return name
 
 
 def destructive_unapproved(entries: list, supersede) -> list:
@@ -274,7 +331,9 @@ def run_build(home, plan: BuildPlan, *, steps=None, dry_run: bool = False, from_
         audit = KbAudit(home, plan.label, secrets=plan.secrets)
         ctx.audit = audit
         audit.record("build_started", target=plan.label, outcome="ok", details={"fingerprint": fingerprint})
-        workdir.mkdir(parents=True, exist_ok=True)
+        # Created 0700 (a new directory only): Enterprise blobs may be retained here, and they are never part of a
+        # release or package. The workdir is stable per label, so the blob store persists across runs.
+        workdir.mkdir(parents=True, exist_ok=True, mode=0o700)
         try:
             result = _execute(ctx, steps, fingerprint, from_step)
         except (OSError, KnowledgeReleaseError, ValueError) as exc:
@@ -333,7 +392,7 @@ def _acquire(ctx: Ctx) -> dict:
     store = BlobStore(ctx.path("store"))
     for spec in plan.specs:
         sid = spec["source_id"]
-        adapter = plan.adapters.get(spec.get("kind"))
+        adapter = plan.adapter_by_source[sid] if sid in plan.adapter_by_source else plan.adapters.get(spec.get("kind"))
         try:
             if adapter is None:
                 raise SourceError("IO_ERROR", sid, f"no adapter for kind {spec.get('kind')}")
@@ -395,8 +454,8 @@ def _extract(ctx: Ctx) -> dict:
         drafts, document = ctx.plan.extract(from_snap, to_snap, pair["step"], BlobStore(ctx.path("store")))
         ledger = Ledger.create(pair["step"], from_snap, to_snap, drafts, clock=lambda: ctx.plan.created_at)
         ctx.path("ledgers").mkdir(parents=True, exist_ok=True)
-        ledger.save(ctx.path("ledgers", f"{pair['step']}.json"))
-        ctx.write(("accounting", f"{pair['step']}.json"), document)
+        ledger.save(ctx.path("ledgers", f"{pair_key(pair)}.json"))
+        ctx.write(("accounting", f"{pair_key(pair)}.json"), document)
         out.append({"step": pair["step"], "changes": len(ledger.records()), "unresolved": len(ledger.unresolved())})
     return {"pairs": out}
 
@@ -404,7 +463,7 @@ def _extract(ctx: Ctx) -> dict:
 def _classify(ctx: Ctx) -> dict:
     counts: dict = {}
     for pair in ctx.plan.pairs:
-        for change in Ledger.load(ctx.path("ledgers", f"{pair['step']}.json")).records():
+        for change in Ledger.load(ctx.path("ledgers", f"{pair_key(pair)}.json")).records():
             counts[change["class"]] = counts.get(change["class"], 0) + 1
     return {"classes": {k: counts[k] for k in sorted(counts)}}
 
@@ -439,11 +498,57 @@ def _evidence(ctx: Ctx) -> dict:
             revisions.append(entry)
             added.append(rec["revision"])
     write_json_file(revisions_path, revisions)
-    return {"revisions_catalogued": added}
+    output = {"revisions_catalogued": added}
+    if ctx.plan.emit_inventory:
+        output["inventory"] = _emit_inventory(ctx, tree)
+    return output
 
 
-def _pinned_ledger(ctx: Ctx, step: str) -> Ledger:
-    body = Ledger.load(ctx.path("ledgers", f"{step}.json")).to_dict()
+def _emit_inventory(ctx: Ctx, tree: Path) -> list:
+    """One module inventory per source branch (`inventory/<branch>.json`), built from the VERIFIED snapshots of this run
+    (carried ones included). Enterprise kinds keep module facts only (inventory.build_part). Parts of one branch are
+    merged; a module declared by two sources is recorded as a conflict, never resolved."""
+    store = BlobStore(ctx.path("store"))
+    by_branch: dict = {}
+    for rec in _records(ctx):
+        if rec["status"] == "VERIFIED":
+            spec = _spec_for(ctx, rec["source_id"])
+            by_branch.setdefault(spec["branch"], []).append(spec)
+    written = []
+    for branch in sorted(by_branch):
+        if not INVENTORY_VERSION.fullmatch(str(branch)):
+            raise StepStop("INVENTORY_BRANCH_INVALID", f"branch {branch!r} cannot name an inventory file")
+        parts = [inventory.build_part(_load_snapshot(ctx, spec["source_id"]), store, source_id=spec["source_id"],
+                                      confidentiality="enterprise" if is_enterprise_kind(spec.get("kind"))
+                                      else "public")
+                 for spec in sorted(by_branch[branch], key=lambda item: item["source_id"])]
+        document = inventory.merge(parts)
+        findings = inventory.verify_inventory(document)
+        if findings:
+            raise StepStop("INVENTORY_INVALID",
+                           f"{branch}: {len(findings)} finding(s); first {_mask(findings[0], ctx.plan)}")
+        (tree / "inventory").mkdir(parents=True, exist_ok=True)
+        write_json_file(tree / "inventory" / f"{branch}.json", document)
+        written.append(f"inventory/{branch}.json")
+    return written
+
+
+def _pair_sides(ctx: Ctx, pair: dict) -> dict:
+    """The two sides of a pair as the automatic FIX prover reads them (addendum F3): identity, verification, the file
+    digests of the snapshot and the evidence source. Nothing here is trusted by itself; the proof re-reads the blobs."""
+    sides = {}
+    for side in ("from", "to"):
+        sid = pair[side]
+        snap = _load_snapshot(ctx, sid)
+        source = _candidate_source(ctx, _spec_for(ctx, sid))
+        sides[side] = {"source_id": sid, "snapshot_id": snap["snapshot_id"], "revision": snap["revision"],
+                       "verified": _verified(ctx, sid), "official": source["official"],
+                       "entries": {entry["path"]: entry["sha256"] for entry in snap["entries"]}, "source": source}
+    return sides
+
+
+def _pinned_ledger(ctx: Ctx, key: str) -> Ledger:
+    body = Ledger.load(ctx.path("ledgers", f"{key}.json")).to_dict()
     entries = {entry["change_id"]: entry for entry in body["entries"]}
     return Ledger(body["step"], body["from"], body["to"], entries, clock=lambda: ctx.plan.created_at)
 
@@ -468,14 +573,42 @@ def _candidates(ctx: Ctx) -> dict:
     templates = load_templates(known_detectors=ctx.plan.known_detectors)
     summary = {"candidates": 0, "accepted": 0, "refused": [], "evidence": 0, "conflicts": 0}
     for pair in ctx.plan.pairs:
-        ledger = _pinned_ledger(ctx, pair["step"])
+        ledger = _pinned_ledger(ctx, pair_key(pair))
+        # Automatic FIX rules first: a change they settle gets no ordinary detect-only candidate (Addendum F3 step 3).
+        sides = _pair_sides(ctx, pair) if ctx.plan.autofix_prover is not None else None
+        fix = autofix.plan_pair(ledger, tree, prove=ctx.plan.autofix_prover, store=ctx.path("store"),
+                                author=ctx.plan.author, at=ctx.plan.created_at, sources=sides,
+                                checked_on=ctx.plan.checked_on)
+        _note_fix(summary, fix)
         result = gen.generate(ledger, tree_root=tree, source=_candidate_source(ctx, _spec_for(ctx, pair["to"])),
                               checked_on=ctx.plan.checked_on, templates=templates,
-                              known_detectors=ctx.plan.known_detectors)
+                              known_detectors=ctx.plan.known_detectors,
+                              skip_change_ids={item["change_id"] for item in fix["accepted"]})
+        held_back = [link for link in result["linked"] if not link.get("generated")]
+        if held_back:
+            # Links to a rule this build did not generate are withheld: no disposition, no evidence, no citation.
+            withheld_changes = {link["change_id"] for link in held_back}
+            withheld_ids = {eid for link in held_back for eid in link["evidence_ids"]}
+            result["dispositions"] = [d for d in result["dispositions"] if d["change_id"] not in withheld_changes]
+            result["evidence"] = [r for r in result["evidence"] if r["id"] not in withheld_ids]
+            summary.setdefault("skipped_links", []).extend(
+                {"change_id": link["change_id"], "reason": gen.LINKED_NOT_GENERATED,
+                 "rule_id": link["rule_ids"][0], "origin": link.get("origin")} for link in held_back)
+            result["linked"] = [link for link in result["linked"] if link.get("generated")]
         gen.apply_dispositions(ledger, result, tree_root=tree)
         (store / "evidence").mkdir(parents=True, exist_ok=True)
         for record in result["evidence"]:
             write_json_file(store / "evidence" / f"{record['id']}.json", record)
+        by_id = {record["id"]: record for record in result["evidence"]}
+        for link in result["linked"]:
+            ev_id = link["evidence_ids"][0]
+            try:
+                acc.ship_linked_evidence(tree, link["rule_ids"][0], by_id[ev_id], author=ctx.plan.author,
+                                         at=ctx.plan.created_at)
+            except acc.AcceptError as exc:
+                raise StepStop("LINKED_EVIDENCE_REFUSED", _mask(f"{link['change_id']}: {exc}", ctx.plan)) from None
+            (store / "evidence" / f"{ev_id}.json").unlink(missing_ok=True)
+            summary["linked"] = summary.get("linked", 0) + 1
         for cand in result["candidates"]:
             write_json_file(store / f"{cand['candidate_id']}.json", cand)
         if result["conflicts"]:
@@ -498,8 +631,17 @@ def _candidates(ctx: Ctx) -> dict:
             for eid in evidence_ids:
                 (store / "evidence" / f"{eid}.json").unlink(missing_ok=True)
             summary["accepted"] += 1
-        ledger.save(ctx.path("ledgers", f"{pair['step']}.json"))
+        ledger.save(ctx.path("ledgers", f"{pair_key(pair)}.json"))
     return summary
+
+
+def _note_fix(summary: dict, fix: dict) -> None:
+    """Record the FIX-PENDING rules and the coded refusals of one pair. Keys appear only when there is something to say,
+    so a build with no automatic FIX rule keeps its earlier summary shape."""
+    if fix["accepted"]:
+        summary.setdefault("autofix_pending", []).extend(item["rule_id"] for item in fix["accepted"])
+    if fix["refused"]:
+        summary.setdefault("autofix_refused", []).extend(fix["refused"])
 
 
 def _schema_validate(ctx: Ctx) -> dict:
@@ -532,10 +674,45 @@ def _parent_rules(ctx: Ctx) -> dict:
     return {row["id"]: row for row in _rule_rows(parent_tree)} if parent_tree.is_dir() else {}
 
 
+def _fix_trust_findings(tree: Path) -> list:
+    """Findings for every FIX_ENABLED row of the staged tree that the loader's trust predicate refuses. Byte-identical
+    shipped rows are skipped, as the loader skips them. A row without a certification record gets exactly the gate 1 to 5
+    findings that `safety.fix_gate_findings` gives, so the build gate is unchanged for such rows. A row whose record is
+    invalid or forged fails here (SAFETY_NOT_VERIFIED at G-SAFE)."""
+    kb = load_knowledge(tree)
+    index = load_provenance_index(tree)
+    snapshot_dir = tree.resolve().parent / "snapshots"
+    context = rule_gate_context(kb)
+    findings = []
+    for rule in kb.rules:
+        if not isinstance(rule, dict) or rule.get("maturity") != FIX_ENABLED or is_shipped_builtin_rule(rule):
+            continue
+        evidence_rows = [kb.evidence[eid] for eid in rule.get("evidence") or []
+                         if isinstance(eid, str) and eid in kb.evidence]
+        trusted, found = fix_row_trusted(rule, tree, evidence_rows, index, kb=kb, snapshot_dir=snapshot_dir,
+                                         context=context)
+        if not trusted:
+            findings += found
+    return findings
+
+
+def _pending_row_findings(tree: Path, rule_id: str) -> list:
+    return [finding for finding in _fix_trust_findings(tree) if finding["rule_id"] == rule_id]
+
+
 def _rule_tests(ctx: Ctx) -> dict:
     tree = _stage_tree(ctx)
+    # Provenance is written before any trust check: gate 1 reads release/provenance. Step 10 writes the same file too,
+    # and the write is idempotent (it depends only on VERIFIED records), so this only moves it ahead of the check.
+    _write_release_provenance(ctx)
+    pending = ctx.outputs.get("candidates", {}).get("autofix_pending", [])
+    # Certification of automatic FIX rules (Addendum F3 step 4). Any failure demotes the row to its pending form.
+    demoted = autofix.promote_certified(
+        tree, pending, trust=_pending_row_findings,
+        certify=lambda root, rule_id: autofix.certify_row(root, rule_id, blob_root=ctx.path("store"),
+                                                          author=ctx.plan.author, at=ctx.plan.created_at))
     parent = _parent_rules(ctx)
-    safety = fix_gate_findings(tree)
+    safety = _fix_trust_findings(tree)
     unsafe = {f["rule_id"] for f in safety}
     release_rules = []
     for row in _rule_rows(tree):
@@ -547,7 +724,7 @@ def _rule_tests(ctx: Ctx) -> dict:
             "validation_passed": True,  # schema and authoring checks (steps 7 and 8) passed for every row
             "safety_passed": row["id"] not in unsafe,
         })
-    return {"release_rules": release_rules, "safety_findings": safety}
+    return {"release_rules": release_rules, "safety_findings": safety, "autofix_demoted": demoted}
 
 
 def _redaction_scan(release: Path) -> list:
@@ -571,9 +748,9 @@ def _coverage_data(ctx: Ctx, rules_out: dict) -> dict:
     changes, accounting, transitions = [], [], []
     for pair in ctx.plan.pairs:
         step = pair["step"]
-        document = ctx.read(("accounting", f"{step}.json"))
+        document = ctx.read(("accounting", f"{pair_key(pair)}.json"))
         accounting.append(document)
-        records = Ledger.load(ctx.path("ledgers", f"{step}.json")).records()
+        records = Ledger.load(ctx.path("ledgers", f"{pair_key(pair)}.json")).records()
         changes.extend(records)
         transitions.append({
             "step": step, "sources_verified": _verified(ctx, pair["from"]) and _verified(ctx, pair["to"]),
@@ -653,12 +830,21 @@ def _gates(ctx: Ctx) -> dict:
 
 
 def _steps_covered(ctx: Ctx) -> list:
+    """One row per distinct step. Its ledger digest is the sha256 of the ledger file when one pair carries the step,
+    else a digest over the step's pair ledgers keyed by pair key (sorted), so each pair's ledger is covered."""
     manifest = json.loads((ctx.workdir / "release" / "coverage" / "coverage-manifest.json").read_text(encoding="utf-8"))
-    rows = []
+    keys_by_step: dict = {}
     for pair in ctx.plan.pairs:
-        ledger_bytes = ctx.path("ledgers", f"{pair['step']}.json").read_bytes()
-        rows.append({"step": pair["step"], "completeness": manifest["completeness"],
-                     "ledger_digest": hashlib.sha256(ledger_bytes).hexdigest()})
+        keys_by_step.setdefault(pair["step"], []).append(pair_key(pair))
+    rows = []
+    for step, keys in keys_by_step.items():
+        ledger_hashes = {key: hashlib.sha256(ctx.path("ledgers", f"{key}.json").read_bytes()).hexdigest()
+                         for key in keys}
+        if len(keys) == 1:
+            ledger_digest = ledger_hashes[keys[0]]
+        else:
+            ledger_digest = digest_obj({key: ledger_hashes[key] for key in sorted(keys)})
+        rows.append({"step": step, "completeness": manifest["completeness"], "ledger_digest": ledger_digest})
     return sorted(rows, key=lambda row: row["step"])
 
 
@@ -681,21 +867,34 @@ def _build_package(ctx: Ctx) -> dict:
                                                 "build_time": plan.created_at, "host_free": True},
     }
     written = write_release_manifest(release, meta, secrets=plan.secrets)
-    destructive = []
+    destructive, supersede, approved = [], set(plan.supersede), {}
     if plan.parent_dir is not None:
         diff = diff_releases(plan.parent_dir, release)
         destructive = sorted(e["id"] for e in diff.entries if e.get("destructive"))
-        unapproved = destructive_unapproved(diff.entries, plan.supersede)
+        if plan.supersede_policy is not None:
+            approved = {str(rid): str(reason) for rid, reason in
+                        sorted(plan.supersede_policy(diff, plan.parent_dir, release).items())}
+            supersede |= set(approved)
+        unapproved = destructive_unapproved(diff.entries, supersede)
         if unapproved:
             raise StepStop("DESTRUCTIVE_NEEDS_SUPERSEDE", f"removed without approval: {', '.join(unapproved)}")
-    return {"release_id": written["release_id"], "release_digest": written["release_digest"],
-            "completeness": completeness, "destructive": destructive, "supersede": sorted(plan.supersede),
-            "dev_only": completeness == "FAILED"}
+    out = {"release_id": written["release_id"], "release_digest": written["release_digest"],
+           "completeness": completeness, "destructive": destructive,
+           "supersede": sorted(plan.supersede) if plan.supersede_policy is None else sorted(supersede),
+           "dev_only": completeness == "FAILED"}
+    if plan.supersede_policy is not None:
+        out["supersede_policy"] = _policy_name(plan.supersede_policy)
+        out["approved"] = approved
+    return out
 
 
 def _validate_package(ctx: Ctx) -> dict:
     if ctx.outputs["build-package"]["completeness"] == "FAILED":
         return {"status": RUN_SKIPPED, "reason": "NOT_EXPORTABLE"}
+    if assess(ctx.workdir / "release"):
+        # Internal and Enterprise-derived releases are refused by the exporter, by design and with no override. The
+        # same gate decides here, so there is no package to round-trip; the release is still verified by step 17.
+        return {"status": RUN_SKIPPED, "reason": "INTERNAL_NOT_EXPORTABLE"}
     scratch = Path(tempfile.mkdtemp(prefix="validate-", dir=str(ctx.workdir)))
     try:
         archive = scratch / "check.ofkp"
@@ -720,8 +919,11 @@ def _publish(ctx: Ctx) -> dict:
     dest.parent.mkdir(parents=True, exist_ok=True)
     os.replace(ctx.workdir / "release", dest)
     set_release_state(ctx.home, rid, ReleaseState.INSTALLED)  # the run already holds the kb-home lock
-    ctx.audit.record("release_installed", target=rid, outcome="ok",
-                     details={"digest": ctx.outputs["build-package"]["release_digest"]})
+    details = {"digest": ctx.outputs["build-package"]["release_digest"]}
+    if ctx.plan.supersede_policy is not None:
+        built = ctx.outputs["build-package"]
+        details.update({"supersede_policy": built["supersede_policy"], "approved": built["approved"]})
+    ctx.audit.record("release_installed", target=rid, outcome="ok", details=details)
     return {"release_id": rid, "path": f"{RELEASES_DIR}/{rid}"}
 
 

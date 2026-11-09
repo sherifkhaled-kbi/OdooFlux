@@ -10,6 +10,7 @@ import hashlib
 import json
 from pathlib import Path
 
+from odooflux.knowledge.acquisition.sources import ENTERPRISE_CONFIDENTIALITY
 from odooflux.knowledge.release.canonical import CanonicalError, digest_obj, write_json_file
 from odooflux.utils.redaction import scrub
 from odooflux.knowledge.release.model import KnowledgeReleaseError, release_id_from_digest
@@ -21,6 +22,9 @@ EXCLUDED_ROOT_FILES = frozenset({MANIFEST_NAME, STATE_NAME})
 META_FIELDS = frozenset({"label", "parent_release", "framework", "schema_versions", "sources", "steps_covered",
                          "coverage_manifest_digest", "completeness", "build"})
 COMPUTED_FIELDS = frozenset({"release_id", "release_digest", "format", "files"})
+# optional top-level key, present only when a source is an enterprise source. Derived here, never supplied by a caller.
+CONFIDENTIALITY_KEY = "confidentiality"
+INTERNAL_CONFIDENTIALITY = "internal"
 
 
 def _scan(tree_root: Path) -> list:
@@ -44,6 +48,12 @@ def _digested_body(manifest: dict) -> dict:
     return {k: v for k, v in manifest.items() if k not in ("release_id", "release_digest")}
 
 
+def _carries_enterprise(sources) -> bool:
+    """True when any sources[] item is an enterprise source (its `confidentiality` says so)."""
+    return isinstance(sources, list) and any(
+        isinstance(item, dict) and item.get(CONFIDENTIALITY_KEY) == ENTERPRISE_CONFIDENTIALITY for item in sources)
+
+
 def build_manifest(tree_root, meta: dict, *, secrets=()) -> dict:
     """Hash every file under `tree_root` and return the complete manifest. Writes nothing.
 
@@ -55,11 +65,13 @@ def build_manifest(tree_root, meta: dict, *, secrets=()) -> dict:
     missing = META_FIELDS - set(meta)
     if missing:
         raise KnowledgeReleaseError(f"manifest metadata missing fields: {sorted(missing)}")
-    forbidden = COMPUTED_FIELDS & set(meta)
+    forbidden = (COMPUTED_FIELDS | {CONFIDENTIALITY_KEY}) & set(meta)
     if forbidden:
         raise KnowledgeReleaseError(f"manifest metadata must not set computed fields: {sorted(forbidden)}")
     body = {"format": FORMAT, "files": _scan(Path(tree_root))}
     body.update({key: meta[key] for key in sorted(META_FIELDS)})
+    if _carries_enterprise(meta["sources"]):  # the key is added only when it is true, so public bodies are unchanged
+        body[CONFIDENTIALITY_KEY] = INTERNAL_CONFIDENTIALITY
     digest = digest_obj(body)
     return {"release_id": release_id_from_digest(digest), **body, "release_digest": digest}
 

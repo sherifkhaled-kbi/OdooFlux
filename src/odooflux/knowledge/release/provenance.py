@@ -20,22 +20,29 @@ trust anchor (signed tags, maintainer-published hashes) would close that gap. Th
 
 Local paths never reach provenance: an official local clone records its verified https origin as `url`, and any other
 `local:` url is written as `LOCAL_URL_PLACEHOLDER`, so package redaction (absolute paths) is never triggered.
+
+Enterprise entries (kind GIT_ENTERPRISE, feature 012 Wave 3) are the only entries that carry three extra fields:
+`confidentiality` ("enterprise"), `licence_id` and `licence_access` ("ENTERPRISE_AUTHORIZED"). They follow the same
+identity rules as Community entries, under the enterprise prefix. The kind decides the classification. A record field
+never does. Enterprise snapshot manifests (paths and hashes, never content) are shipped in the internal release like any
+other, and `release.json` then carries the top-level `confidentiality: internal` key (manifest.py).
 """
 
 import json
 from pathlib import Path
 
-from odooflux.knowledge.acquisition.sources import CREDENTIALS_CODE, FORCED_UNOFFICIAL, OFFICIAL_PREFIX, \
-    has_url_credentials, load_allow_list, normalize_origin, official_origin
+from odooflux.knowledge.acquisition.sources import CREDENTIALS_CODE, ENTERPRISE_CONFIDENTIALITY, \
+    ENTERPRISE_ENTRY_FIELDS, FORCED_UNOFFICIAL, LICENCE_CODE, OFFICIAL_PREFIX, enterprise_entry_problem, \
+    has_url_credentials, licence_problem, load_allow_list, normalize_origin, official_origin
 from odooflux.knowledge.release.canonical import canonical_bytes, digest_obj, write_json_file
-from odooflux.knowledge.release.manifest import MANIFEST_NAME
+from odooflux.knowledge.release.manifest import CONFIDENTIALITY_KEY, INTERNAL_CONFIDENTIALITY, MANIFEST_NAME
 from odooflux.knowledge.release.model import KnowledgeReleaseError
 from odooflux.knowledge.release.safety import IDENTITY_CODE, PINNED_REVISION, SNAPSHOT_ID
 from odooflux.utils.redaction import redact_text
 
 __all__ = [
-    "PROVENANCE_RELPATH", "SNAPSHOT_DIRNAME", "ENTRY_FIELDS", "SOURCE_META_FIELDS", "LOCAL_URL_PLACEHOLDER",
-    "write_provenance", "sources_meta", "verify_provenance",
+    "PROVENANCE_RELPATH", "SNAPSHOT_DIRNAME", "ENTRY_FIELDS", "SOURCE_META_FIELDS", "ENTERPRISE_FIELDS",
+    "LOCAL_URL_PLACEHOLDER", "write_provenance", "sources_meta", "verify_provenance",
 ]
 
 SNAPSHOT_DIRNAME = "snapshots"
@@ -43,8 +50,11 @@ PROVENANCE_RELPATH = "provenance/sources.json"
 ENTRY_FIELDS = ("source_id", "kind", "url", "origin_url", "revision", "snapshot_id", "snapshot_digest", "official",
                 "status")
 SOURCE_META_FIELDS = ("source_id", "revision", "snapshot_digest", "official", "status", "origin_url", "snapshot_id")
+# optional, present only on enterprise entries and on the release.json sources items that bind them
+ENTERPRISE_FIELDS = ENTERPRISE_ENTRY_FIELDS
 LOCAL_URL_PLACEHOLDER = "local:redacted"
 ENTERPRISE_CODE = "ENTERPRISE_DERIVED_REFUSED"
+ENTERPRISE_KIND = "GIT_ENTERPRISE"
 USABLE_STATUS = "VERIFIED"
 
 
@@ -84,8 +94,17 @@ def _entry_for(rec: dict, snap, allow: list) -> dict:
                          ("origin_url", snap.get("origin_url") if snap else None)):
         if has_url_credentials(value):  # a configuration error: refused, never normalised into an identity
             _fail(f"{sid}: {label} carries credentials ({CREDENTIALS_CODE}); remove user:password from the URL")
-    if rec.get("enterprise_derived") is True:  # note 35: licensed content, never shipped
+    # note 35: licensed content is never shipped. An enterprise kind is recognised by its kind, never by a record field.
+    if kind == "ENTERPRISE_LOCAL":
+        _fail(f"{sid}: enterprise-local source is never shipped ({ENTERPRISE_CODE})")
+    if rec.get("enterprise_derived") is True and kind != ENTERPRISE_KIND:
         _fail(f"{sid}: enterprise_derived source; its snapshot is not shipped ({ENTERPRISE_CODE})")
+    if kind == ENTERPRISE_KIND:
+        if not (official and status == USABLE_STATUS):
+            _fail(f"{sid}: enterprise source must be official and VERIFIED to ship ({ENTERPRISE_CODE})")
+        problem = licence_problem(rec.get("licence_access"), rec.get("licence_id"))
+        if problem is not None:  # names the field only; a licence value is never echoed
+            _fail(f"{sid}: {problem} ({LICENCE_CODE})")
     if status != USABLE_STATUS:
         _fail(f"{sid}: status {status!r} is not {USABLE_STATUS}; only verified sources ship in a release")
     if snap is None:
@@ -119,7 +138,7 @@ def _entry_for(rec: dict, snap, allow: list) -> dict:
     url = rec.get("url")
     if official:
         if kind not in OFFICIAL_PREFIX or kind in FORCED_UNOFFICIAL:
-            _fail(f"{sid}: official source needs kind GIT_COMMUNITY or DOCS")
+            _fail(f"{sid}: official source needs kind GIT_COMMUNITY, GIT_ENTERPRISE or DOCS")
         if _is_local(url):
             if origin is None:
                 _fail(f"{sid}: official local clone has no verified origin_url ({IDENTITY_CODE})")
@@ -130,10 +149,14 @@ def _entry_for(rec: dict, snap, allow: list) -> dict:
             out_url = url
     else:
         out_url = LOCAL_URL_PLACEHOLDER if _is_local(url) else url
-    return {
+    entry = {
         "source_id": sid, "kind": kind, "url": out_url, "origin_url": origin, "revision": revision,
         "snapshot_id": snapshot_id, "snapshot_digest": recomputed, "official": official, "status": USABLE_STATUS,
     }
+    if kind == ENTERPRISE_KIND:  # licence verified above; the enterprise fields are present on these entries only
+        entry.update({"confidentiality": ENTERPRISE_CONFIDENTIALITY, "licence_id": rec["licence_id"],
+                      "licence_access": rec["licence_access"]})
+    return entry
 
 
 def write_provenance(release_dir, snapshots: list, registry_entries: list) -> list:
@@ -180,7 +203,9 @@ def sources_meta(entries: list) -> list:
         missing = [key for key in SOURCE_META_FIELDS if key not in entry]
         if missing:
             _fail(f"provenance entry {entry.get('source_id')!r} lacks {missing}")
-        out.append({key: entry[key] for key in SOURCE_META_FIELDS})
+        item = {key: entry[key] for key in SOURCE_META_FIELDS}
+        item.update({key: entry[key] for key in ENTERPRISE_FIELDS if key in entry})  # enterprise entries only
+        out.append(item)
     return out
 
 
@@ -202,12 +227,17 @@ def verify_provenance(release_dir) -> None:
         release = json.loads((root / MANIFEST_NAME).read_text(encoding="utf-8"))
     except (OSError, ValueError):
         _fail(f"{MANIFEST_NAME} is missing or unreadable")
+    if not isinstance(release, dict):
+        _fail(f"{MANIFEST_NAME} is not a JSON object")
     problems = []
 
+    # an entry has exactly ENTRY_FIELDS (public), or ENTRY_FIELDS plus all of ENTERPRISE_FIELDS (enterprise)
+    allowed_shapes = (set(ENTRY_FIELDS), set(ENTRY_FIELDS) | set(ENTERPRISE_FIELDS))
     by_id = {}
     for entry in entries:
-        if not isinstance(entry, dict) or set(entry) != set(ENTRY_FIELDS):
-            problems.append("malformed provenance entry (fields differ from ENTRY_FIELDS)")
+        if not isinstance(entry, dict) or set(entry) not in allowed_shapes:
+            problems.append("malformed provenance entry (fields are neither ENTRY_FIELDS nor ENTRY_FIELDS plus all "
+                            "enterprise fields)")
             continue
         if entry["source_id"] in by_id:
             problems.append(f"{entry['source_id']}: duplicated provenance entry")
@@ -224,11 +254,27 @@ def verify_provenance(release_dir) -> None:
         problems.append(f"{sid}: in release.json sources but not in provenance")
     for sid in sorted(set(by_id) & set(release_by_id), key=str):
         bound = {key: release_by_id[sid].get(key) for key in SOURCE_META_FIELDS}
-        if bound != {key: by_id[sid][key] for key in SOURCE_META_FIELDS}:
+        differs = bound != {key: by_id[sid][key] for key in SOURCE_META_FIELDS}
+        # optional enterprise fields: present on both sides with equal values, or absent on both
+        differs = differs or any((key in release_by_id[sid]) != (key in by_id[sid])
+                                 or release_by_id[sid].get(key) != by_id[sid].get(key) for key in ENTERPRISE_FIELDS)
+        if differs:
             problems.append(f"{sid}: release.json sources differ from provenance")
+
+    # the top-level key marks a release that carries enterprise sources, and only such a release (derived from entries)
+    enterprise_sources = sorted(str(sid) for sid, entry in by_id.items()
+                                if entry.get("confidentiality") == ENTERPRISE_CONFIDENTIALITY)
+    if enterprise_sources and release.get(CONFIDENTIALITY_KEY) != INTERNAL_CONFIDENTIALITY:
+        problems.append(f"release.json must carry {CONFIDENTIALITY_KEY} {INTERNAL_CONFIDENTIALITY}: it lists "
+                        f"enterprise sources")
+    if not enterprise_sources and CONFIDENTIALITY_KEY in release:
+        problems.append(f"release.json carries {CONFIDENTIALITY_KEY} without any enterprise source")
 
     referenced = set()
     for sid, entry in sorted(by_id.items(), key=lambda item: str(item[0])):
+        coherence = enterprise_entry_problem(entry)
+        if coherence is not None:
+            problems.append(f"{sid}: {coherence}")
         origin = entry["origin_url"]
         if has_url_credentials(entry["url"]) or has_url_credentials(origin):
             problems.append(f"{sid}: source url carries credentials ({CREDENTIALS_CODE})")
