@@ -156,6 +156,17 @@ def plan_update(catalog, check, installed, *, token_available: bool, require_ent
         draft = _Draft(sid, entry.edition, entry.version, entry.repository, entry.branch, None, "SKIP",
                        entry.edition == "community" or require_enterprise, "", is_installed,
                        redistribution=entry.redistribution, installed_sha=installed_sha)
+        if pair_filter is not None and _major(entry.version) not in pair_filter:
+            # Scoped update (`--from N --to M`): a source outside the pair is never acquired, never required and
+            # never blocks. An installed one keeps its trusted revision (carried forward, not refetched).
+            draft.required = False
+            if is_installed:
+                draft.action, draft.target_sha = "CARRY_FORWARD", installed_sha
+                draft.note = "outside the selected pair; installed revision carried forward"
+            else:
+                draft.note = "outside the selected pair; not acquired"
+            drafts.append(draft)
+            continue
         if read and (entry.edition == "community" or token_available):
             if not is_installed:
                 draft.action, draft.target_sha, draft.note = "ACQUIRE", remote, "not installed; acquire"
@@ -187,7 +198,7 @@ def plan_update(catalog, check, installed, *, token_available: bool, require_ent
                              "installed, absent from the current catalog; carried forward, never removed", True,
                              installed_sha=inst.revisions[sid]))
 
-    if community_unread or "CHECK_UNAVAILABLE" in check.statuses:
+    if community_unread or (pair_filter is None and "CHECK_UNAVAILABLE" in check.statuses):
         blocks.append("CHECK_UNAVAILABLE")
     if require_enterprise:
         blocks.extend(code for code in _ENTERPRISE_PRIORITY if code in ent_codes)

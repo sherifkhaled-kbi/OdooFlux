@@ -64,3 +64,9 @@ real-source evidence.
 7. **Security notes.** The Enterprise token is visible in the git child's environment to same-user processes while git runs; the fetch size guard has bounded overshoot; HTTPS auth exercised only through stubs and local repositories.
 
 Production certification: **NOT_GRANTED**. Migration support for any newly discovered version: **NOT_ESTABLISHED**. Real-source pilot 16.0 to 17.0: **NOT_RUN** (no authorized local official snapshots).
+
+## RC closure addendum (2026-11-10)
+
+- S1/S2/S3 proofs refuse import-time module effects (`MODULE_EFFECT`); Enterprise symbol names, rule text and source ids/revisions are withheld in shareable output; `knowledge-check/1` and `knowledge-history/1` schemas ship; scoped `update --from N --to M` acquires only that pair (planner), `ODOOFLUX_FETCH_TIMEOUT` added.
+- Full regression: 3782 tests OK (65 skipped opt-in, 1 expected failure). Wheel workflows 29/29 (system python with setuptools). Gates rc=0.
+- Real-source pilot 16.0 to 17.0: NOT COMPLETED. Scoped acquisition fetched only 16.0 (verified, cached) and 17.0 stalled twice (git `curl 28`, under 1000 B/s for 60 s, then `bad pack header`; plain `git fetch` reproduces it). No real-source FIX_ENABLED, DETECT_ONLY or BLOCKED result exists. Production certification: NOT_GRANTED.

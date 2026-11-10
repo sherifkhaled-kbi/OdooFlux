@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "odooflux.knowledge-check/1",
+  "title": "OdooFlux knowledge update check (feature 012, `odooflux knowledge check --json`)",
+  "description": "Read-only comparison of the installed knowledge sources with the official remotes. Revisions of Enterprise sources are replaced by a digest stand-in in shared output, so revision fields are plain strings.",
+  "type": "object",
+  "required": ["schema", "statuses", "sources", "new_versions", "affected_transitions", "enterprise_freshness", "catalog_digest", "offline", "installed_release"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"const": "odooflux.knowledge-check/1"},
+    "statuses": {
+      "type": "array",
+      "items": {"enum": ["NO_UPDATE", "SOURCE_REVISION_AVAILABLE", "KNOWLEDGE_UPDATE_AVAILABLE", "NEW_VERSION_DISCOVERED", "TRANSITION_NOT_YET_SUPPORTED", "CHECK_UNAVAILABLE", "LOCAL_STATE_INVALID"]}
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source_id", "edition", "version", "remote_sha", "installed_sha", "status", "detail"],
+        "additionalProperties": false,
+        "properties": {
+          "source_id": {"type": "string"},
+          "edition": {"enum": ["community", "enterprise"]},
+          "version": {"type": "string"},
+          "remote_sha": {"type": ["string", "null"]},
+          "installed_sha": {"type": ["string", "null"]},
+          "status": {"enum": ["OK", "SKIPPED_OFFLINE", "SKIPPED_NO_CREDENTIALS", "AUTH_FAILED", "UNAVAILABLE"]},
+          "detail": {"type": "string"}
+        }
+      }
+    },
+    "new_versions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["edition", "version", "branch", "remote_sha"],
+        "additionalProperties": false,
+        "properties": {
+          "edition": {"enum": ["community", "enterprise"]},
+          "version": {"type": "string"},
+          "branch": {"type": "string"},
+          "remote_sha": {"type": "string"}
+        }
+      }
+    },
+    "affected_transitions": {"type": "array", "items": {"type": "string", "pattern": "^[0-9]+-[0-9]+$"}},
+    "enterprise_freshness": {"enum": ["FRESH", "OUTDATED", "STALE_UNVERIFIED", "NOT_INSTALLED", "UNKNOWN"]},
+    "catalog_digest": {"type": "string"},
+    "offline": {"type": "boolean"},
+    "installed_release": {"type": ["string", "null"]}
+  }
+}

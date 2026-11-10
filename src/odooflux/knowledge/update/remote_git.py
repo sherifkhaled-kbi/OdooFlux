@@ -64,7 +64,18 @@ __all__ = [
 ]
 
 LS_REMOTE_TIMEOUT = 30  # seconds
-FETCH_TIMEOUT = 300  # seconds
+FETCH_TIMEOUT_ENV = "ODOOFLUX_FETCH_TIMEOUT"
+
+
+def _fetch_timeout(default: int = 300, low: int = 60, high: int = 7200) -> int:
+    """Wall-clock bound of one source fetch in seconds. `ODOOFLUX_FETCH_TIMEOUT` raises it for slow links (a shallow
+    odoo/odoo fetch is a few hundred MB); a stalled transfer still fails early through the low-speed limit. Invalid or
+    out-of-range values are ignored, never trusted."""
+    raw = os.environ.get(FETCH_TIMEOUT_ENV, "")
+    return int(raw) if raw.isdigit() and low <= int(raw) <= high else default
+
+
+FETCH_TIMEOUT = _fetch_timeout()  # seconds
 MAX_FETCH_BYTES = 1 << 30  # size bound on the managed cache repository after a fetch
 MAX_LS_REMOTE_BYTES = 1 << 20  # 1 MiB of advertisement
 MAX_LS_REMOTE_LINES = 5000

@@ -25,7 +25,7 @@ from odooflux.knowledge.authoring.ops import TEST_KINDS
 from odooflux.knowledge.candidates.templates import detector_params_problem
 from odooflux.knowledge.checks import validate_knowledge
 from odooflux.knowledge.loader import KNOWLEDGE_ROOT, load_knowledge
-from odooflux.knowledge.release.confidentiality_view import redact_kb_findings
+from odooflux.knowledge.release.confidentiality_view import redact_kb_findings, redact_rule_rows
 from odooflux.knowledge.release.safety import load_provenance_index
 
 CREATE_CHOICES = ("DRAFT", "DETECT_ONLY")
@@ -167,7 +167,9 @@ def _retire(args) -> int:
 
 
 def _inspect(args) -> int:
-    report = ops.inspect_rule(_tree(args, write=False), args.id)
+    tree = _tree(args, write=False)
+    report = ops.inspect_rule(tree, args.id)
+    report["rule"] = redact_rule_rows(load_knowledge(tree), [report["rule"]])[0]  # Enterprise-derived text withheld
     if args.json:
         _emit(report)
         return EXIT_OK

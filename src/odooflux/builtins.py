@@ -14,6 +14,7 @@ from odooflux.ai.providers.legacy_anthropic import LegacyAnthropicProvider
 from odooflux.core.contracts.plugins import Registries
 from odooflux.core.orchestrator.run_inputs import RunRuleBinder
 from odooflux.knowledge.loader import RELEASE_TREE, load_active_knowledge
+from odooflux.knowledge.release.confidentiality_view import redact_rule_rows
 from odooflux.knowledge.release.resolver import resolve_knowledge
 from odooflux.knowledge.update.certification import attach_executor
 from odooflux.rules.bindable import BINDABLE_MODULES
@@ -68,6 +69,14 @@ def knowledge_tree(handle) -> Path:
     return Path(handle.root) if handle.builtin else Path(handle.root) / RELEASE_TREE
 
 
+def _redacted_rows(handle):
+    """Rule rows of the handle's release with Enterprise-derived messages withheld (confidentiality_view)."""
+    def load() -> list:
+        kb = load_active_knowledge(handle)
+        return redact_rule_rows(kb, kb.rules)
+    return load
+
+
 def build_context(knowledge_path: Path = KNOWLEDGE_FILE, handle=None) -> Context:
     """*handle* is the single knowledge handle of a migrate run: the rule binder, versions registry, L3 integrity and
     AI escalation all read its tree. Without a handle the process default applies (binder resolves lazily)."""
@@ -78,7 +87,7 @@ def build_context(knowledge_path: Path = KNOWLEDGE_FILE, handle=None) -> Context
         tree = knowledge_tree(handle)
         versions, transitions = load_version_data(knowledge_root=tree)
         layer3 = _layer3_for(tree)
-        rows = (lambda: load_active_knowledge(handle).rules)
+        rows = _redacted_rows(handle)
     registries = Registries()
     for version in versions:
         registries.versions.register(version)
@@ -179,7 +188,7 @@ def default_context() -> _DeferredContext:
 
 def _active_rule_rows() -> list:
     """Rule rows of the knowledge release resolved for this process (built-in unless a release is active)."""
-    return load_active_knowledge(resolve_knowledge()).rules
+    return _redacted_rows(resolve_knowledge())()
 
 
 def _layer3(path, to_version: int):

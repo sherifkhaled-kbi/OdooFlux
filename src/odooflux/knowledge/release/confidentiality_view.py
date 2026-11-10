@@ -14,7 +14,9 @@ index-derived id sets in; public records (no Enterprise id) come back as the sam
 byte for byte as before.
 """
 
+import hashlib
 import json
+import re
 from dataclasses import replace
 from pathlib import Path as _Path
 
@@ -22,8 +24,8 @@ from odooflux.knowledge.acquisition.sources import is_enterprise_kind
 
 __all__ = ["WITHHELD_MESSAGE", "WITHHELD_PATH", "enterprise_source_ids", "enterprise_snapshot_ids",
            "is_enterprise_record", "is_enterprise_location", "redact_evidence_view", "redact_change_record",
-           "redact_refresh_report", "redact_findings", "redact_kb_findings", "enterprise_evidence_files",
-           "active_enterprise_snapshot_ids", "strict_provenance_index", "view_enterprise_source_ids"]
+           "redact_refresh_report", "redact_findings", "redact_kb_findings", "redact_rule_rows", "enterprise_output_tokens", "scrub_enterprise_output", "WITHHELD_SUGGESTION", "enterprise_evidence_files",
+           "active_enterprise_snapshot_ids", "withheld_symbol", "strict_provenance_index", "view_enterprise_source_ids"]
 
 WITHHELD_MESSAGE = "message withheld: the record is Enterprise-derived"
 WITHHELD_PATH = "<enterprise location withheld>"
@@ -76,6 +78,15 @@ def is_enterprise_location(location, enterprise_snapshot_ids_) -> bool:
     return isinstance(location, dict) and location.get("snapshot_id") in enterprise_snapshot_ids_
 
 
+def withheld_symbol(subject_key) -> str:
+    """Stable stand-in for an Enterprise symbol name: the domain-and-kind prefix stays, the name becomes a digest."""
+    text = subject_key if isinstance(subject_key, str) else ""
+    prefix = text.rsplit("::", 1)[0] if "::" in text else ""
+    digest = hashlib.sha256(text.encode("utf-8")).hexdigest()[:12]
+    kind = prefix.rsplit("::", 1)[-1] if prefix else "symbol"
+    return f"<enterprise {kind} {digest}>"
+
+
 def redact_change_record(record: dict, enterprise_snapshot_ids_) -> dict:
     """A ledger change with an Enterprise location: that location keeps its snapshot id only, and `detail` (attribute
     values read from the snapshot) is withheld. A change with no Enterprise location comes back unchanged."""
@@ -87,6 +98,7 @@ def redact_change_record(record: dict, enterprise_snapshot_ids_) -> dict:
     view["locations"] = [{"snapshot_id": loc.get("snapshot_id"), "path": WITHHELD_PATH, "line": None, "sha256": None}
                          if is_enterprise_location(loc, enterprise_snapshot_ids_) else loc for loc in locations]
     view["detail"] = {"withheld": _ENTERPRISE}
+    view["subject_key"] = withheld_symbol(record.get("subject_key"))
     return view
 
 
@@ -167,6 +179,79 @@ def redact_kb_findings(kb, findings, index) -> list:
     if not ids:
         return findings
     return redact_findings(findings, enterprise_evidence_files(kb.evidence, kb.evidence_files, ids))
+
+
+WITHHELD_SUGGESTION = "see the internal knowledge release for the remediation details"
+
+
+def redact_rule_rows(kb, rows) -> list:
+    """Rule rows of a loaded tree with `message` and `suggestion` withheld on Enterprise-derived rows (a rule is
+    Enterprise-derived when it cites an Enterprise evidence row of the verified provenance index). These texts name
+    symbols of the Enterprise sources and reach migration reports. Matching, ids, params and fixers are unchanged.
+    For an installed release whose index is unusable every row is withheld (no source can be shown as public)."""
+    from odooflux.knowledge.release.model import KnowledgeReleaseError
+    try:
+        index = strict_provenance_index(kb.root) if getattr(kb, "root", None) is not None else None
+    except KnowledgeReleaseError:
+        index, withhold_all = None, True
+    else:
+        withhold_all = False
+    ids = enterprise_source_ids(index)
+    if not ids and not withhold_all:
+        return rows
+    out = []
+    for row in rows:
+        if withhold_all or is_enterprise_record(row, ids, kb.evidence):
+            row = {**row, "message": WITHHELD_MESSAGE, "suggestion": WITHHELD_SUGGESTION}
+        out.append(row)
+    return out
+
+
+_HEX_REVISION = re.compile(r"\b[0-9a-f]{40}(?:[0-9a-f]{24})?\b")
+_MIN_TOKEN = 6
+
+
+def _release_index_or_none(release_dir):
+    """Provenance index of one installed release directory, or the string 'invalid' when it cannot be trusted."""
+    from odooflux.knowledge.release.model import KnowledgeReleaseError
+    try:
+        return strict_provenance_index(_Path(release_dir) / "knowledge")
+    except KnowledgeReleaseError:
+        return "invalid"
+
+
+def enterprise_output_tokens(kb_home) -> tuple:
+    """(tokens, withhold_all) for the Enterprise sources of every release in a kb-home: each Enterprise source id,
+    upstream revision and snapshot id of a verified provenance index. A release whose index cannot be trusted sets
+    `withhold_all`, because no source of it can be shown as public."""
+    releases = _Path(kb_home) / "releases"
+    tokens, withhold_all = set(), False
+    for release_dir in sorted(releases.iterdir()) if releases.is_dir() else []:
+        if not release_dir.is_dir():
+            continue
+        index = _release_index_or_none(release_dir)
+        if index == "invalid":
+            withhold_all = True
+            continue
+        for entry in _enterprise_entries(index):
+            for key in ("source_id", "revision", "snapshot_id"):
+                value = entry.get(key)
+                if isinstance(value, str) and len(value) >= _MIN_TOKEN:
+                    tokens.add(value)
+    return frozenset(tokens), withhold_all
+
+
+def scrub_enterprise_output(text: str, kb_home, extra_tokens=()) -> str:
+    """Rendered update/status/history/check output with Enterprise source ids, revisions and snapshot ids replaced by
+    a short digest stand-in (stable, so rows stay comparable). When some release's provenance is unusable, every full
+    commit-like hex string is withheld as well. Public text comes back unchanged."""
+    tokens, withhold_all = enterprise_output_tokens(kb_home)
+    tokens = tokens | {t for t in extra_tokens if isinstance(t, str) and len(t) >= _MIN_TOKEN}
+    for token in sorted(tokens, key=len, reverse=True):
+        text = text.replace(token, "<enterprise " + hashlib.sha256(token.encode("utf-8")).hexdigest()[:8] + ">")
+    if withhold_all:
+        text = _HEX_REVISION.sub("<withheld>", text)
+    return text
 
 
 def redact_findings(findings, withheld_files) -> list:

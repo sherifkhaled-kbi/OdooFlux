@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "odooflux.knowledge-history/1",
+  "title": "OdooFlux knowledge update history (feature 012, `odooflux knowledge history --json`)",
+  "description": "Rows of the verified, hash-chained update history, newest first. The CLI refuses to print an unverified chain, so `chain` is always verified. Source ids and revisions of Enterprise sources are replaced by a digest stand-in in shared output.",
+  "type": "object",
+  "required": ["schema", "chain", "entries"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"const": "odooflux.knowledge-history/1"},
+    "chain": {"const": "verified"},
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["seq", "timestamp", "outcome", "previous_release", "new_release", "source_revisions", "changes", "activation", "failure_reason"],
+        "additionalProperties": false,
+        "properties": {
+          "seq": {"type": "integer", "minimum": 1},
+          "timestamp": {"type": "string"},
+          "outcome": {"type": "string"},
+          "previous_release": {"type": ["string", "null"]},
+          "new_release": {"type": ["string", "null"]},
+          "source_revisions": {"type": "object", "additionalProperties": {"type": "string"}},
+          "changes": {"type": ["object", "null"]},
+          "activation": {"type": ["object", "null"]},
+          "failure_reason": {"type": ["string", "null"]}
+        }
+      }
+    }
+  }
+}

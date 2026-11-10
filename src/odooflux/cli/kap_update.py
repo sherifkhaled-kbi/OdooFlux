@@ -48,6 +48,7 @@ from odooflux.knowledge.update import remote_git as rg
 from odooflux.knowledge.update import report
 from odooflux.knowledge.update.catalog import CatalogError, load_catalog
 from odooflux.knowledge.update.history import HistoryError, UpdateHistory
+from odooflux.knowledge.release.confidentiality_view import scrub_enterprise_output
 from odooflux.utils.redaction import redact_text
 
 __all__ = ["register", "cmd_check"]
@@ -152,7 +153,7 @@ def cmd_check(args) -> int:
     else:
         text = "\n".join(_human_lines(report, installed.problem)) + "\n"
     secrets = (token,) if token is not None else ()
-    sys.stdout.write(redact_text(text, secrets=secrets))
+    sys.stdout.write(_shown(redact_text(text, secrets=secrets), args, report.to_dict()))
     return _exit_code(report)
 
 
@@ -187,6 +188,17 @@ def _positive_int(text: str) -> int:
 
 def _kb_home_arg(parser, help_text: str) -> None:
     parser.add_argument("--kb-home", default=None, metavar="PATH", help=help_text)
+
+
+def _shown(text: str, args, check=None) -> str:
+    """Output text with Enterprise source ids and revisions withheld (confidentiality_view). `check` is a
+    CheckReport dict: the remote revisions it read from Enterprise sources are not in any provenance index yet."""
+    extra = set()
+    for source in (check or {}).get("sources") or []:
+        if isinstance(source, dict) and source.get("edition") == "enterprise":
+            extra.update(v for v in (source.get("source_id"), source.get("remote_sha"), source.get("installed_sha"))
+                         if isinstance(v, str))
+    return scrub_enterprise_output(text, _kb_home(args), extra)
 
 
 def _kb_home(args) -> Path:
@@ -258,7 +270,7 @@ def cmd_update(args) -> int:
     else:
         text = report.render_update(result)
     secrets = (token,) if token is not None else ()
-    sys.stdout.write(redact_text(text, secrets=secrets))
+    sys.stdout.write(_shown(redact_text(text, secrets=secrets), args, result.check))
     return _update_exit_code(result)
 
 
@@ -319,7 +331,7 @@ def cmd_status(args) -> int:
         text = canonical_bytes(payload).decode("utf-8") + "\n"
     else:
         text = report.render_status(payload)
-    sys.stdout.write(text)
+    sys.stdout.write(_shown(text, args))
     return EXIT_OK
 
 
@@ -337,7 +349,7 @@ def cmd_history(args) -> int:
         text = canonical_bytes(report.history_payload(rows)).decode("utf-8") + "\n"
     else:
         text = report.render_history(rows)
-    sys.stdout.write(text)
+    sys.stdout.write(_shown(text, args))
     return EXIT_OK
 
 

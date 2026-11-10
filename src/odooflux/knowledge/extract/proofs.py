@@ -58,7 +58,7 @@ REFUSAL_CODES = frozenset({
     "STAR_IMPORT", "MODULE_GETATTR", "NESTED_DEFINITION", "BINDING_CONFLICT", "DEF_MISSING", "NOT_PLAIN_DEF",
     "LEDGER_SOURCE", "S1_NOT_IDENTICAL", "S1_HINT_MISSING", "S1_GLOBAL_REF", "S2_NOT_ALIAS", "S2_SIGNATURE",
     "S2_CHAIN", "S2_CYCLE", "S2_GLOBAL_REF", "S3_NOT_IDENTITY", "S3_STILL_BOUND",
-    "S2_DEFAULT_NOT_IMMUTABLE", "S1_REFLECTIVE", "S2_REFLECTIVE", "S3_REFLECTIVE", "MODULE_STATEMENT",
+    "S2_DEFAULT_NOT_IMMUTABLE", "S1_REFLECTIVE", "S2_REFLECTIVE", "S3_REFLECTIVE", "MODULE_STATEMENT", "MODULE_EFFECT",
 })
 # Names whose use lets code observe or rebind the pair outside its own text (review item 5). A module that touches one
 # of them, on either side, is refused by every class: the proof reads the module text, not what the module does at run
@@ -83,7 +83,8 @@ _COMPREHENSIONS = (ast.ListComp, ast.SetComp, ast.GeneratorExp, ast.DictComp)
 _BINDING_KINDS = frozenset({"def", "class", "store", "global", "except", "match"})
 _WARNINGS_KIND = "import:" + hashlib.sha256(ast.dump(ast.parse("import warnings").body[0]).encode("utf-8")).hexdigest()
 _TOP_KEYS = frozenset({"ledger_class", "source_kind", "module", "old", "new", "from", "to", "proof_side"})
-_SIDE_KEYS = frozenset({"star_import", "bindings", "all_names", "nested_hits", "defs", "reflective", "statement_hits"})
+_SIDE_KEYS = frozenset({"star_import", "bindings", "all_names", "nested_hits", "defs", "reflective", "statement_hits",
+                        "module_effects"})
 _DEF_KEYS = frozenset({"is_async", "decorator_count", "signature", "def_digest", "free_names", "declares_global",
                        "nested_scope", "docstring_replaces", "forward_shape", "identity_shape", "immutable_defaults"})
 _SIG_KEYS = frozenset({"positional", "posonly", "vararg", "kwonly", "kwarg", "defaults", "kw_defaults"})
@@ -466,6 +467,111 @@ def _module_bindings(tree):
     return bindings, star
 
 
+# Import-time effect policy. The proofs read module text, so a module that does anything at import beyond the safe
+# subset below is refused whether or not the statement mentions the pair (e.g. `os.sep = "x"`). Safe subset: imports,
+# definitions, class bodies of safe statements, docstring, assignments to plain names from effect-free expressions, and
+# if/try wrappers of those. An expression is effect-free when its only calls are to an allow-listed builtin constructor
+# or framework helper; decorators and default values are expressions evaluated at import and follow the same rule.
+SAFE_CALL_NAMES = frozenset({
+    "getLogger", "logging.getLogger", "namedtuple", "collections.namedtuple", "frozenset", "set", "dict", "list",
+    "tuple", "str", "int", "float", "bool", "len", "object", "property", "staticmethod", "classmethod", "re.compile",
+    "_lt", "functools.wraps", "functools.lru_cache", "functools.partial",
+})
+SAFE_CALL_ROOTS = frozenset({"fields", "api"})
+_EFFECT_FREE_NODES = (ast.NamedExpr, ast.Await, ast.Yield, ast.YieldFrom)
+
+
+def _dotted(node):
+    parts = []
+    while isinstance(node, ast.Attribute):
+        parts.append(node.attr)
+        node = node.value
+    if isinstance(node, ast.Name):
+        parts.append(node.id)
+        return ".".join(reversed(parts))
+    return None
+
+
+def _expr_effects(node) -> set:
+    """Effect codes of one expression evaluated at import time; Lambda bodies run later and are not walked."""
+    out = set()
+    stack = [node]
+    while stack:
+        cur = stack.pop()
+        if isinstance(cur, ast.Lambda):
+            stack.extend(cur.args.defaults + [d for d in cur.args.kw_defaults if d is not None])
+            continue
+        if isinstance(cur, _EFFECT_FREE_NODES):
+            out.add("Expr." + type(cur).__name__)
+        elif isinstance(cur, ast.Call):
+            name = _dotted(cur.func)
+            if name is None:
+                out.add("Call.dynamic")
+            elif name not in SAFE_CALL_NAMES and name.split(".")[0] not in SAFE_CALL_ROOTS:
+                out.add("Call." + name)
+        stack.extend(ast.iter_child_nodes(cur))
+    return out
+
+
+def _def_effects(node) -> set:
+    out = set()
+    for dec in node.decorator_list:
+        out |= _expr_effects(dec)
+    a = node.args
+    for d in [*a.defaults, *[d for d in a.kw_defaults if d is not None]]:
+        out |= _expr_effects(d)
+    return out
+
+
+def _stmt_effects(stmt, position) -> set:
+    if isinstance(stmt, (ast.Import, ast.ImportFrom, ast.Pass)):
+        return set()
+    if isinstance(stmt, _DEF_TYPES):
+        return _def_effects(stmt)
+    if isinstance(stmt, ast.ClassDef):
+        out = set()
+        for e in [*stmt.decorator_list, *stmt.bases, *[k.value for k in stmt.keywords]]:
+            out |= _expr_effects(e)
+        for i, sub in enumerate(stmt.body):
+            out |= _stmt_effects(sub, i)
+        return out
+    if isinstance(stmt, ast.Expr):
+        if position == 0 and isinstance(stmt.value, ast.Constant) and isinstance(stmt.value.value, str):
+            return set()
+        return {"Expr"}
+    if isinstance(stmt, ast.Assign):
+        if not all(isinstance(t, ast.Name) or (isinstance(t, ast.Tuple) and all(isinstance(e, ast.Name) for e in t.elts))
+                   for t in stmt.targets):
+            return {"Assign.target"} | _expr_effects(stmt.value)
+        return _expr_effects(stmt.value)
+    if isinstance(stmt, (ast.AnnAssign, ast.AugAssign)):
+        if not isinstance(stmt.target, ast.Name):
+            return {"Assign.target"}
+        return _expr_effects(stmt.value) if stmt.value is not None else set()
+    if isinstance(stmt, ast.If):
+        out = _expr_effects(stmt.test)
+        for i, sub in enumerate(stmt.body + stmt.orelse):
+            out |= _stmt_effects(sub, i + 1)
+        return out
+    if isinstance(stmt, ast.Try):
+        out = set()
+        for h in stmt.handlers:
+            if h.type is not None:
+                out |= _expr_effects(h.type)
+        for i, sub in enumerate(stmt.body + stmt.orelse + stmt.finalbody
+                                + [x for h in stmt.handlers for x in h.body]):
+            out |= _stmt_effects(sub, i + 1)
+        return out
+    return {"Stmt." + type(stmt).__name__}
+
+
+def _module_effects(tree) -> list:
+    out = set()
+    for position, stmt in enumerate(tree.body):
+        out |= _stmt_effects(stmt, position)
+    return sorted(out)
+
+
 def module_facts(text, path, watch=()):
     """Structural facts of one module version, or None when the path is not a module or the text does not parse.
     `watch` names the symbols whose nested definitions are reported in `nested_hits`."""
@@ -496,6 +602,7 @@ def module_facts(text, path, watch=()):
         "defs": dict(sorted(defs.items())),
         "reflective": _reflective_hits(tree),
         "statement_hits": _statement_hits(tree, watch),
+        "module_effects": _module_effects(tree),
     }
 
 
@@ -526,7 +633,8 @@ def function_proofs(text, path):
 def _side_view(facts, watch) -> dict:
     return {"star_import": facts["star_import"], "bindings": facts["bindings"], "all_names": facts["all_names"],
             "nested_hits": facts["nested_hits"], "defs": {n: facts["defs"][n] for n in watch if n in facts["defs"]},
-            "reflective": facts["reflective"], "statement_hits": facts["statement_hits"]}
+            "reflective": facts["reflective"], "statement_hits": facts["statement_hits"],
+            "module_effects": facts["module_effects"]}
 
 
 def prove(*, ledger_class, source_kind=None, old, new=None, from_path, to_path, from_text, to_text):
@@ -641,6 +749,9 @@ def _side_problem(side, names) -> bool:
     if not isinstance(side["reflective"], list) or not all(x in REFLECTIVE_NAMES for x in side["reflective"]):
         return True
     if not isinstance(side["statement_hits"], list) or not all(x in names for x in side["statement_hits"]):
+        return True
+    effects = side["module_effects"]
+    if not isinstance(effects, list) or not all(isinstance(x, str) and _TOKEN.fullmatch(x) for x in effects):
         return True
     defs = side["defs"]
     if not isinstance(defs, dict) or not set(defs) <= set(names):
@@ -801,6 +912,9 @@ def check_witness(witness):
     for side in ("from", "to"):
         if witness[side]["statement_hits"]:
             return _refuse("MODULE_STATEMENT", f"{side} version has a module-level statement over the pair")
+    for side in ("from", "to"):
+        if witness[side]["module_effects"]:
+            return _refuse("MODULE_EFFECT", f"{side} version has an unverified import-time effect")
     rule, params = result
     return Proof(derived_class=DERIVED_NAME[rule], module=witness["module"], old=witness["old"],
                  new=witness["new"], derived_params=params, witness=copy.deepcopy(witness),

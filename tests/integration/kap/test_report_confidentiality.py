@@ -33,7 +33,7 @@ from tests.integration.kap.test_package_lifecycle import META
 
 PROBE = mwr.PROBE
 EVIDENCE = "EV-101"
-ENTERPRISE_SOURCE = "odoo-enterprise-12.0"
+ENTERPRISE_SOURCE = "ofcanary-enterprise-source-77ab"
 COMMUNITY_SOURCE = "odoo-community-12.0"
 ENTERPRISE_SNAPSHOT = "ss-" + "e1" * 6
 COMMUNITY_SNAPSHOT = "ss-" + "c2" * 6
@@ -41,7 +41,11 @@ SNAP_OLD = {"snapshot_id": "ss-" + "0a" * 6, "snapshot_digest": "0a" * 32}
 CANARY_MATCH = "ofcanary_enterprise_match_4e1d"
 CANARY_PATH = "ofcanary_enterprise_path_8b7c"
 CANARY_DESC = "ofcanary_enterprise_description_c3a9"
-CANARIES = (CANARY_MATCH, CANARY_PATH, CANARY_DESC)
+CANARY_SYMBOL = "ofcanary_enterprise_symbol_5f20"
+CANARY_SOURCE = "ofcanary-enterprise-source-77ab"
+CANARY_REVISION = "5ec2e7" + "0" * 34
+CANARY_MESSAGE = "ofcanary_enterprise_message_91de"
+CANARIES = (CANARY_MESSAGE, CANARY_MATCH, CANARY_PATH, CANARY_DESC, CANARY_SYMBOL, CANARY_SOURCE, CANARY_REVISION)
 WITHHELD = "<enterprise location withheld>"
 
 
@@ -108,9 +112,17 @@ class ReleaseConfidentialityTests(unittest.TestCase):
             if loc["kind"] == "absent":
                 loc["search_scope"] = f"odoo/{CANARY_PATH}.py"
         evidence_path.write_text(json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        rules_path = tree / "knowledge" / "compatibility" / "12-13.rules.json"
+        rows = json.loads(rules_path.read_text(encoding="utf-8"))
+        for row in rows:
+            if row.get("id") == PROBE:
+                row["message"] = f"{CANARY_MESSAGE} removed symbol"
+                row["suggestion"] = f"use {CANARY_MESSAGE}"
+        rules_path.write_text(json.dumps(rows, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         url = "https://github.com/odoo/enterprise" if kind == "GIT_ENTERPRISE" else "https://github.com/odoo/odoo"
         provenance = {"sources": [{
-            "source_id": source, "kind": kind, "url": url, "origin_url": None, "revision": self.rev,
+            "source_id": source, "kind": kind, "url": url, "origin_url": None,
+            "revision": CANARY_REVISION if kind == "GIT_ENTERPRISE" else self.rev,
             "snapshot_id": snapshot, "snapshot_digest": "ee" * 32, "official": True, "status": "VERIFIED"}]}
         (tree / "provenance" / "sources.json").write_text(json.dumps(provenance, indent=2, sort_keys=True) + "\n",
                                                            encoding="utf-8")
@@ -126,7 +138,7 @@ class ReleaseConfidentialityTests(unittest.TestCase):
     def _ledger(self, name: str, snapshot: str):
         """A ledger with one change located in `snapshot`; its detail carries a canary attribute value.
         Returns (path, change_id)."""
-        drafts = [{"domain": "python_orm", "kind": "field", "subject_key": "sale.demo.order::field::amount",
+        drafts = [{"domain": "python_orm", "kind": "field", "subject_key": f"sale.demo.order::field::{CANARY_SYMBOL}",
                    "class": "SIGNATURE_CHANGED", "detail": {"from": CANARY_DESC, "to": "Monetary"},
                    "locations": [{"snapshot_id": snapshot, "path": f"{CANARY_PATH}.py", "line": 7,
                                   "sha256": "a" * 64}],
@@ -172,7 +184,7 @@ class ReleaseConfidentialityTests(unittest.TestCase):
             "update check": self.knowledge("check", "--offline", "--kb-home", home),
             "coverage show": self.knowledge("coverage", "show", "--release", rid, "--kb-home", home),
             "candidates list": self.knowledge("candidates", "list", "--path", tree),
-            "ledger list": self.knowledge("ledger", "list", "--ledger", str(ledger)),
+            "ledger list": self.knowledge("ledger", "list", "--ledger", str(ledger), "--kb-home", home),
             "ledger show": self.knowledge("ledger", "show", cid, "--ledger", str(ledger), "--kb-home", home),
             "ledger show --json": self.knowledge("ledger", "show", cid, "--ledger", str(ledger),
                                                  "--kb-home", home, "--json"),
@@ -236,7 +248,9 @@ class ReleaseConfidentialityTests(unittest.TestCase):
         self.assertNotIn(WITHHELD, results["ledger show"][1])
         self.assertIn(f"{CANARY_PATH}.py", json.loads(results["ledger show --json"][1])["locations"][0]["path"])
         (_out, _err), findings, _files = self.migrate_outputs(public, "pub-migrate")
-        self.assertTrue([f for f in findings if f.get("rule_id") == PROBE])
+        probe = [f for f in findings if f.get("rule_id") == PROBE]
+        self.assertTrue(probe)
+        self.assertIn(CANARY_MESSAGE, probe[0].get("message", ""))  # public rule text is shown as authored
 
 
 if __name__ == "__main__":

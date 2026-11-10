@@ -106,7 +106,11 @@ def cmd_extract(args) -> int:
 
 def cmd_list(args) -> int:
     ledger = _open_ledger(args.ledger)
-    rows = [r for r in ledger.records()
+    try:  # Enterprise symbol names of the active release are withheld; an unresolvable release refuses
+        enterprise = active_enterprise_snapshot_ids(args.kb_home)
+    except KnowledgeReleaseError as exc:
+        raise LedgerError(f"active knowledge release cannot be verified, so ledger list is refused: {exc}") from exc
+    rows = [redact_change_record(r, enterprise) for r in ledger.records()
             if (args.class_name is None or r["class"] == args.class_name)
             and (args.disposition is None or r["disposition"] == args.disposition)]
     lines = [f"{r['change_id']} {r['class']} {r['disposition']} {r['domain']} {r['subject_key']}" for r in rows]

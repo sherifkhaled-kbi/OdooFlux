@@ -305,7 +305,8 @@ class ScopeTests(unittest.TestCase):
         state = installed()
         p = plan(check(c_over={"17.0": sha("c2", "17.0")}), state, only_pair=("18", "19"),
                  last_inputs=previous_inputs(state))
-        self.assertEqual(p.decision, "BUILD")
+        # 17.0 changed upstream but is outside the scoped pair: it is carried, not refetched, so nothing builds
+        self.assertEqual(p.decision, "NOOP")
         self.assertEqual(p.pairs, [])
 
 
