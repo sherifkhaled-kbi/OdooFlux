@@ -93,6 +93,9 @@ def build_parser() -> argparse.ArgumentParser:
     mig.add_argument("--plugin", action="append", default=[], metavar="MODULE:ATTR")
     mig.add_argument("--enable-rule", action="append", default=[], metavar="RULE_ID",
                      help="opt in to a DETECT_ONLY rule that needs run inputs, e.g. *.manifest.version-prefix")
+    mig.add_argument("--experimental-fixes", action="store_true", default=False,
+                     help="with --fix: also apply implemented but NOT certified fixers to DETECT_ONLY rules "
+                          "(attrs/states to modifier expressions); reported as fix_class experimental")
     mig.add_argument("--kb-home", default=None, metavar="PATH",
                      help="knowledge release home (default: $ODOOFLUX_KB_HOME, else the user data directory); "
                           "resolved once per run; no active release means the built-in knowledge")

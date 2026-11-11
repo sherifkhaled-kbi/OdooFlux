@@ -59,10 +59,12 @@ def bind_run_rules(rows, modules, run_params: dict, enabled) -> tuple:
 
 
 class RunRuleBinder:
-    """Injected by the composition root: ``rows_loader`` returns the rule metadata rows (loaded lazily, once)."""
+    """Injected by the composition root: ``rows_loader`` returns the rule metadata rows (loaded lazily, once).
+    ``experimental`` (an ``ExperimentalFixers``) is offered to ``for_steps`` when a run asks for experimental fixes."""
 
-    def __init__(self, rows_loader, modules):
+    def __init__(self, rows_loader, modules, experimental=None):
         self._load, self._modules, self._rows = rows_loader, modules, None
+        self._experimental = experimental
 
     def rows(self) -> list:
         if self._rows is None:
@@ -75,6 +77,8 @@ class RunRuleBinder:
     def __call__(self, run_params: dict, enabled) -> tuple:
         return bind_run_rules(self.rows(), self._modules, run_params, enabled)
 
-    def for_steps(self, run_params: dict, steps) -> tuple:
-        """(rules, gaps): the knowledge rules selected by the plan's step keys (WS-E)."""
-        return knowledge_rules.bind_knowledge_rules(self.rows(), self._modules, run_params, steps)
+    def for_steps(self, run_params: dict, steps, experimental: bool = False) -> tuple:
+        """(rules, gaps): the knowledge rules selected by the plan's step keys (WS-E). ``experimental`` (the run's
+        ``--experimental-fixes``) adds the registry fixers to DETECT_ONLY rules; off, the result is unchanged."""
+        fixers = self._experimental if experimental else None
+        return knowledge_rules.bind_knowledge_rules(self.rows(), self._modules, run_params, steps, fixers)

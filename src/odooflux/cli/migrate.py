@@ -101,6 +101,9 @@ def run_migrate(args, ctx, graph, failures) -> int:
         args.no_color = True
     if args.backup and args.no_backup:
         return _usage("--backup and --no-backup are mutually exclusive")
+    experimental = bool(getattr(args, "experimental_fixes", False))
+    if experimental and not args.fix:  # AD-1: opt-in fixes exist only inside a fix run (or its dry run)
+        return _usage("--experimental-fixes requires --fix (it is never applied in analyze mode)")
     try:
         from_v, to_v = normalize(args.from_version), normalize(args.to_version)
     except UnsupportedVersionError as exc:
@@ -186,7 +189,7 @@ def run_migrate(args, ctx, graph, failures) -> int:
         backup=not args.no_backup, fail_on=args.fail_on, ai=do_ai or new_ai, ai_verbose=args.ai_verbose,
         allow_unverified=args.allow_unverified, module_paths=[str(p) for p in paths],
         addons_paths=[str(a) for a in addons], skip=list(args.skip),
-        enable_rules=list(getattr(args, "enable_rule", None) or []))
+        enable_rules=list(getattr(args, "enable_rule", None) or []), experimental_fixes=experimental)
     run = RunDir.create(state_dir, reversible=options.backup, with_backup=write_mode)
     state = new_state(run, plan, options, plan.modules)
     label = provisional_for(options.module_paths, options.from_version, options.to_version,
@@ -222,6 +225,8 @@ def run_migrate(args, ctx, graph, failures) -> int:
     print("  Fix     : " + ("YES (writes enabled)" if write_mode else
                             "DRY RUN (planned edits only, nothing written)" if args.fix else
                             "NO (analyze only)"))
+    if experimental:
+        print("  Experimental: ON (implemented, not certified fixers on DETECT_ONLY rules; fix_class experimental)")
     print(f"  Target  : Odoo {to_v}")
     print(f"  AI Fix  : {'YES (legacy-anthropic)' if do_ai else 'NO'}")
     if ai_cfg.enabled:

@@ -42,10 +42,10 @@ def _validators(registries) -> list:
 
 
 def _file_step(path: str, from_version: int, to_version: int, registries, run_rules, knowledge, knowledge_steps,
-               *, transform: bool):
+               *, transform: bool, file_log=None):
     """Legacy step for the file plus the knowledge rules of its kind. The fixing transform runs the legacy
     fixer first, then the FIX_ENABLED knowledge fixers on its output (a construct the legacy fixer already
-    changed is not found again, so nothing is edited twice)."""
+    changed is not found again, so nothing is edited twice). ``file_log`` collects experimental records."""
     mine = knowledge_rules.rules_for_file(knowledge, path)
     step = step_for(path, from_version, to_version, transform=transform,
                     extra_rules=_extra_rules(registries) + list(run_rules))
@@ -53,7 +53,7 @@ def _file_step(path: str, from_version: int, to_version: int, registries, run_ru
         return step
     step.rules = step.rules + mine
     if transform:
-        extra = knowledge_rules.fixing_transform(mine, knowledge_steps)
+        extra = knowledge_rules.fixing_transform(mine, knowledge_steps, file_log)
         if extra is not None:
             legacy = step.transform
             step.transform = (lambda p, t: extra(p, legacy(p, t) if legacy else t))
@@ -61,7 +61,7 @@ def _file_step(path: str, from_version: int, to_version: int, registries, run_ru
 
 
 def plan_module(module_path, from_version: int, to_version: int, registries, *,
-                compute_edits: bool, run_rules=(), knowledge=(), knowledge_steps=()):
+                compute_edits: bool, run_rules=(), knowledge=(), knowledge_steps=(), experimental_log=None):
     """
     Analyze every file of a module. Returns (report, edits). Nothing is written here: edits carry
     the validated fixed text, and rejected edits carry the parser error (FR-015).
@@ -93,8 +93,8 @@ def plan_module(module_path, from_version: int, to_version: int, registries, *,
     if scan_csv:
         others = others + [f for f in files if f.suffix.lower() == ".csv"]
 
-    def issues_of(findings, path):
-        return knowledge_rules.deduplicate([to_issue(f, path, known) for f in findings], set(known))
+    def issues_of(findings, path, handled=frozenset()):
+        return knowledge_rules.deduplicate([to_issue(f, path, known) for f in findings], set(known), handled)
 
     edits = []
     for fp in dict.fromkeys(manifests + others):
@@ -110,23 +110,34 @@ def plan_module(module_path, from_version: int, to_version: int, registries, *,
                                           knowledge_steps, transform=False), path, text, validators)
             report.issues.extend(issues_of(outcome.findings, path))
             continue
+        file_log: list = []
         step = _file_step(path, from_version, to_version, registries, run_rules, knowledge, knowledge_steps,
-                          transform=True)
+                          transform=True, file_log=file_log)
         outcome = run_step(step, path, text, validators)
-        before = issues_of(outcome.findings, path)
+        handled = knowledge_rules.handled_lines(file_log, path)  # known only after the transform ran
+        before = issues_of(outcome.findings, path, handled)
+        refused_at = {(rec["rule_id"], refusal["line"]) for rec in file_log for refusal in rec["refused"]}
+        for issue in before:  # an element its experimental fixer refused is for the developer, not auto-fixable
+            if (issue.category, issue.line) in refused_at:
+                issue.auto_fixable = False
         report.issues.extend(before)
         if outcome.rejected:
             edits.append(FileEdit(path=fp, dest=fp, original=text, fixed=text, issues=before,
                                   rejection=outcome.rejection))
             continue
+        if experimental_log is not None:  # conversions and refusals of experimental rules, for the report
+            experimental_log.extend(file_log)
         if outcome.output == text and not renamed:
             continue
         dest = new_manifest if renamed else fp
         after_errors: list = []
-        after = issues_of(detect(step.rules, path, outcome.output, after_errors), path)
+        after = issues_of(detect(step.rules, path, outcome.output, after_errors), path, handled)
         # SC-005: only a FIX_ENABLED knowledge rule (or a legacy row) can be marked fixed; a DETECT_ONLY finding
-        # whose construct vanished stays open for the reviewer.
-        resolved = [i for i in resolved_by_rescan(before, after) if i.maturity in ("", "FIX_ENABLED")]
+        # whose construct vanished stays open for the reviewer. The one exception is an experimental rule that
+        # converted something in this file (its finding is the one its fixer acted on).
+        converted_by = {r["rule_id"] for r in file_log if r["converted"]}
+        resolved = [i for i in resolved_by_rescan(before, after)
+                    if i.maturity in ("", "FIX_ENABLED") or i.category in converted_by]
         edits.append(FileEdit(path=fp, dest=dest, original=text, fixed=outcome.output, issues=before,
                               resolved=resolved,
                               edits=diff_to_edits(path, text, outcome.output)))

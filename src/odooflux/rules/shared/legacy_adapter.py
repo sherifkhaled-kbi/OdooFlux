@@ -53,7 +53,7 @@ def fixer_for(path: str, from_version: int, to_version: int):
     if kind == "py":
         return lambda p, t: apply_python_fixes(t, from_version, to_version=to_version)
     if kind == "xml":
-        return lambda p, t: apply_xml_fixes(t, from_version)
+        return lambda p, t: apply_xml_fixes(t, from_version, to_version=to_version)
     return None
 
 

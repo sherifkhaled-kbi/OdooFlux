@@ -146,6 +146,14 @@
                 },
                 "suggestion": {
                   "type": "string"
+                },
+                "fix_class": {
+                  "enum": [
+                    "certified",
+                    "experimental",
+                    "legacy",
+                    null
+                  ]
                 }
               }
             }
@@ -499,6 +507,33 @@
         "files_written": {
           "type": "integer",
           "minimum": 0
+        },
+        "experimental": {
+          "type": "object",
+          "required": [
+            "rules_enabled",
+            "edits_applied",
+            "applied",
+            "refused"
+          ],
+          "properties": {
+            "rules_enabled": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "edits_applied": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "applied": {
+              "type": "array"
+            },
+            "refused": {
+              "type": "array"
+            }
+          }
         }
       }
     },

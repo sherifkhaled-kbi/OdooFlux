@@ -22,7 +22,25 @@ def _evidence(items, urls: dict) -> list:
     return out
 
 
-def _finding(issue, module_root: str, urls: dict = None) -> dict:
+FIX_CLASSES = ("certified", "experimental", "legacy")
+
+
+def _fix_class(issue, experimental_ids):
+    """Who would fix this finding. Only computed for a run that enabled experimental fixes (``experimental_ids``
+    is not None); otherwise None and the finding carries no ``fix_class`` key at all."""
+    if experimental_ids is None:
+        return None
+    maturity = getattr(issue, "maturity", "")
+    if maturity == "FIX_ENABLED":
+        return "certified"
+    if maturity == "DETECT_ONLY" and issue.category in experimental_ids:
+        return "experimental"
+    if not maturity and issue.auto_fixable:
+        return "legacy"
+    return None
+
+
+def _finding(issue, module_root: str, urls: dict = None, fix_class: str = None) -> dict:
     rel = issue.file[len(module_root):].lstrip("/") if issue.file.startswith(module_root) else issue.file
     return {
         "id": finding_id(issue.category, rel, issue.line, issue.message),
@@ -39,7 +57,52 @@ def _finding(issue, module_root: str, urls: dict = None) -> dict:
         "status": issue.status,
         **({"maturity": issue.maturity, "review_required": issue.review_required}
            if getattr(issue, "maturity", "") else {}),  # knowledge-rule findings only (WS-E)
+        **({"fix_class": fix_class} if fix_class is not None else {}),  # experimental runs only (AD-1)
     }
+
+
+def _edit_classes(entry: dict, issues: list, experimental_ids) -> dict:
+    """{file path: fix_class} for the edited files of a module (experimental runs only)."""
+    converted = {rec["path"] for rec in entry.get("experimental") or [] if rec.get("converted")}
+    classes = {}
+    for issue in issues:
+        cls = _fix_class(issue, experimental_ids)
+        if issue.auto_fixable and cls in ("certified", "legacy"):
+            classes.setdefault(issue.file, cls)
+    for path in converted:
+        classes[path] = "experimental"
+    return classes
+
+
+def _classed_edits(edits: list, entry: dict, issues: list, experimental_ids) -> list:
+    """The module's edit records; with experimental fixes enabled each carries its file's ``fix_class``."""
+    if experimental_ids is None:
+        return edits
+    classes = _edit_classes(entry, issues, experimental_ids)
+    # an edit no knowledge rule accounts for comes from the legacy layer (manifest version, legacy XML fixers)
+    return [{**edit, "fix_class": classes.get(edit["path"], "legacy")} for edit in edits]
+
+
+def _relative(path: str, root: str) -> str:
+    return path[len(root):].lstrip("/") if path.startswith(root) else path
+
+
+def _experimental_summary(block: dict, entries: list, modules: list) -> dict:
+    """summary.experimental: rules enabled, the conversions applied (with before and after), and the elements
+    refused with their reason. Built from the per-module records the run stored (AD-1)."""
+    applied, refused = [], []
+    for entry, module in zip(entries, modules):
+        for rec in entry.get("experimental") or []:
+            rel = _relative(rec["path"], module["path"])
+            for c in rec["converted"]:
+                applied.append({"rule_id": rec["rule_id"], "path": rel, "line": c["line"],
+                                "element": c["element"], "before": c["before"], "after": c["after"],
+                                "fix_class": "experimental"})
+            for r in rec["refused"]:
+                refused.append({"rule_id": rec["rule_id"], "path": rel, "line": r["line"],
+                                "element": r["element"], "reason": r["reason"]})
+    return {"rules_enabled": list(block.get("rules") or []), "edits_applied": len(applied),
+            "applied": applied, "refused": refused}
 
 
 def _layer_results(entry: dict, report) -> dict:
@@ -79,7 +142,8 @@ def attach_inventory(module: dict, entry: dict) -> dict:
     return module
 
 
-def module_result(entry: dict, report, plan_allow_unverified: bool, urls: dict = None) -> dict:
+def module_result(entry: dict, report, plan_allow_unverified: bool, urls: dict = None,
+                  experimental_ids=None) -> dict:
     issues = report.issues
     open_items = [i for i in issues if i.status in ("OPEN", "NEEDS_REVIEW")]
     results = _layer_results(entry, report)
@@ -108,9 +172,9 @@ def module_result(entry: dict, report, plan_allow_unverified: bool, urls: dict =
         "status_inputs_digest": decision.inputs_digest,
         "layers": serialise_layers(results),
         "processing": entry["status"],
-        "findings": sorted((_finding(i, root, urls) for i in issues),
+        "findings": sorted((_finding(i, root, urls, _fix_class(i, experimental_ids)) for i in issues),
                            key=lambda f: (f["path"], f["line"], f["rule_id"])),
-        "edits": entry.get("edits", []),
+        "edits": _classed_edits(entry.get("edits", []), entry, issues, experimental_ids),
         "fixes_applied": report.fixes_applied,
         "promoted_files": list(entry.get("promoted_files", [])),
         "rejections": list(entry.get("rejections", [])),
@@ -170,7 +234,9 @@ def build_report(state: dict, reports: list, *, run_log_path: str = "", evidence
     caller from the knowledge handle; supplying it sets schema_version 1.1.0. All are optional and additive: omitting
     them keeps the original model byte for byte."""
     plan = state["plan"]
-    modules = [module_result(m, r, plan["allow_unverified"], evidence_urls)
+    experimental = state.get("experimental")  # present only for a run with --experimental-fixes (AD-1)
+    experimental_ids = frozenset(experimental.get("rules") or []) if experimental is not None else None
+    modules = [module_result(m, r, plan["allow_unverified"], evidence_urls, experimental_ids)
                for m, r in zip(state["modules"], reports)]
     ai_usage = ai_usage if ai_usage is not None else state.get("ai_usage")
     if ai_usage is None:
@@ -203,6 +269,8 @@ def build_report(state: dict, reports: list, *, run_log_path: str = "", evidence
         "ai_usage": ai_usage,
         "warnings": list(warnings or []),
     }
+    if experimental is not None:
+        report["summary"]["experimental"] = _experimental_summary(experimental, state["modules"], modules)
     if provisional:
         report["provisional"] = provisional
     if knowledge_release is not None:

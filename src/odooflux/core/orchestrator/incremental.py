@@ -123,7 +123,8 @@ class IncrementalIndex:
             "files": tree_digest(entry["path"]),
             "ruleset": self._ruleset, "tool": self._tool,
             "options": [options.from_version, options.to_version, options.mode, options.allow_unverified,
-                        sorted(options.enable_rules)],
+                        sorted(options.enable_rules),
+                        *(["experimental-fixes"] if getattr(options, "experimental_fixes", False) else [])],
             "context": _context_projection(entry, run_ctx),
         }
         return hashlib.sha256(json.dumps(facts, sort_keys=True, default=str).encode("utf-8")).hexdigest()

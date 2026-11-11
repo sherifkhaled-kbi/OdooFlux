@@ -89,8 +89,9 @@ Outcome `ACTIVE`, release `kr-15b35d46b2a4`, completeness `PARTIAL`, rc 0, 17 pi
 | `coverage/inputs.json` | 52,465,276 bytes (was 237,074,142; limit 67,108,864) |
 | Timings | extract 2 min 20 s; candidates 35 min 9 s; whole build 14:21:28 to 15:02:24 |
 
-`migrate --fix` on a disposable 16.0 module (isolated release): 1 edit applied (manifest version bump, a shipped
-inherited-trust rule), 0 rejected, L1 to L3 PASS; 3 findings `needs_review` (`attrs` removal, `name_get`, info). A second
+`migrate --fix` on a disposable 16.0 module (isolated release): 1 edit applied (manifest version bump; **correction 2026-11-11:** it comes from the
+uncertified legacy layer, `apply_manifest_fixes`, not from a shipped FIX_ENABLED row: the KB row `*.manifest.version-prefix`
+is DETECT_ONLY and opt-in), 0 rejected, L1 to L3 PASS; 3 findings `needs_review` (`attrs` removal, `name_get`, info). A second
 run applied 0 edits, wrote 0 files and left the tree byte-identical (it adds a "manifest declares 17.x" warning).
 No generated rule produced a finding or an edit on that fixture.
 
@@ -102,3 +103,44 @@ being linked to the equivalent accepted rule.
 
 Limits: one pair, Community only, one fixture; machine suspend killed one earlier run (timeout across suspend); not a
 production certification. Production certification: NOT_GRANTED. Migration support for other pairs: NOT_ESTABLISHED.
+
+## Automation slice 1: experimental attrs/states fixer and legacy-layer findings (2026-11-11)
+
+Plan: [automation-roadmap.md](automation-roadmap.md). Implemented: T0 (legacy XML fixer gated by target version), T1
+(`odooflux migrate --fix --experimental-fixes`, registry in `rules/experimental/`, report `fix_class` and
+`summary.experimental`), T2 (strict-subset `attrs`/`states` conversion; `16-17.xml.attrs-removed` and
+`16-17.xml.states-attribute-removed` stay DETECT_ONLY and uncertified). D1 (a field named like an expression-context
+variable, such as `uid`, was converted) was found by QA and fixed with failing-first tests.
+
+Measured on 249 official 16.0 community modules copied from the cached snapshot and renamed with a `kbi_` prefix
+(unprefixed names collide with the release inventory, and the dependency-coverage check correctly withholds fixes):
+
+| Measure | Result |
+|---|---|
+| `attrs` occurrences in the corpus XML | 3,835 |
+| converted by the experimental fixer | 944 (24.6 %) |
+| refused, with reason | 2,647: not-in-form 1,408; falsy-literal 766; nested-view 373; non-literal-value 39; unsupported-operator 31; malformed-domain 11; dotted-field 10; same-modifier-exists 9 |
+| semantic check of the 944 conversions (independent evaluator over each domain's literals plus other and None) | 944 equivalent, 0 mismatches |
+| XML files changed / became malformed | 243 / 0 |
+| second pass | 0 edits, no file differs |
+| classified not-in-form refusals | 99 % are inherited-view fragments (`position=` patches), not unsafe semantics |
+
+Coverage so far is 24.6 % of `attrs` occurrences. A path to about 90 % of `attrs` (plan, not measured): inherited
+fragments (up to +36.7 points), falsy literals (up to +20.0), nested views (up to +9.7).
+
+## Known defects (pinned by `tests/regression/test_known_defects_d2_d4.py`, behaviour deliberately unchanged)
+
+* **D2, confirmed certified-mode correctness defect.** The legacy `states=` rewrite
+  (`legacy_rules._convert_states_to_invisible`) runs under plain `--fix`, is uncertified, and converts without checking
+  that the view's model has a `state` field, so it can produce a view Odoo 17 rejects. It predates Feature 012. It does not
+  change the Feature 012 automatic-fix results (no generated FIX_ENABLED rule exists), but it does mean plain `--fix` is
+  not limited to certified rules: it also runs the legacy regex layer.
+* **D3.** A `--dry-run` report states `recovery.reversible: true` with a rollback command although nothing was written.
+* **D4.** A 16 to 17 report flags `<tree>` as "deprecated in v18" (CRITICAL, auto-fixable). A narrower detector fix was
+  tried and reverted because `tests/unit/knowledge/test_legacy_precedence.py` deliberately asserts forward-looking
+  findings; it needs an owner decision.
+* **D6.** On 2 of 249 official modules (`hr_skills_slides`, `hr_skills_survey`) the legacy XML fixer produces malformed XML.
+  The L1 validator rejects the edit (fail-safe), but the module's other edits are withheld too. Same with and without the
+  experimental flag.
+* Fixed in this slice: the legacy XML fixer rewrote `<tree>` to `<list>`, `view_mode` and chatter blocks for targets
+  below 18, which breaks views on 17.

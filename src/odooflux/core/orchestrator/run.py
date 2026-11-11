@@ -41,6 +41,7 @@ class RunOptions:
     addons_paths: list = field(default_factory=list)
     skip: list = field(default_factory=list)
     enable_rules: list = field(default_factory=list)  # opt-in run-input rule ids (FR-019)
+    experimental_fixes: bool = False  # --experimental-fixes (AD-1): registry fixers on DETECT_ONLY rules; needs fix
 
     @property
     def writes(self) -> bool:
@@ -67,13 +68,20 @@ def report_from_dict(data: dict) -> MigrationReport:
     return report
 
 
+def _options_record(options: RunOptions) -> dict:
+    record = {**asdict(options), "reversible": options.backup}
+    if not options.experimental_fixes:  # a run without the flag stores exactly the options it always stored
+        record.pop("experimental_fixes")
+    return record
+
+
 def new_state(run, plan, options: RunOptions, modules: list) -> dict:
     return {
         "schema": "odooflux.runstate/1",
         "run_id": run.run_id,
         "mode": options.mode,
         "status": "RUNNING",
-        "options": {**asdict(options), "reversible": options.backup},
+        "options": _options_record(options),
         "plan": {"source": plan.source, "target": plan.target, "steps": [s.id for s in plan.steps],
                  "status": plan.status, "reasons": plan.reasons, "cycles": plan.cycles,
                  "allow_unverified": plan.allow_unverified},
@@ -124,8 +132,10 @@ def build_run_context(state: dict, options: RunOptions, registries) -> RunContex
         ctx.steps = (knowledge_rules.step_keys(state["plan"]["steps"]) if state["plan"].get("steps")
                      else knowledge_rules.step_keys_for_range(options.from_version, options.to_version))
         ctx.knowledge, knowledge_gaps = binder.for_steps(run_inputs.run_params_for(state["plan"]["target"]),
-                                                         ctx.steps)
+                                                         ctx.steps, experimental=options.experimental_fixes)
         ctx.gaps = ctx.gaps + knowledge_gaps
+    if options.experimental_fixes:  # report block: which experimental fixers this run bound (none when unbound)
+        state["experimental"] = {"rules": sorted(r.key for r in ctx.knowledge if r.experimental)}
     if options.enable_rules:
         binder = getattr(registries, "run_rule_binder", None)
         if binder is None:
@@ -168,11 +178,15 @@ def _process_module(run, entry: dict, options: RunOptions, registries, layer3=No
             run.log.append("module_blocked", module=name, reason=report.block_reason)
             entry.update(status="BLOCKED", report=report_to_dict(report))
             return
+    experimental_log = [] if options.experimental_fixes else None
     analysis, edits = plan_module(path, options.from_version, options.to_version, registries,
                                   compute_edits=options.computes_edits and not entry.get("fixes_withheld"),
                                   run_rules=run_ctx.rules if run_ctx else (),
                                   knowledge=run_ctx.knowledge if run_ctx else (),
-                                  knowledge_steps=run_ctx.steps if run_ctx else ())
+                                  knowledge_steps=run_ctx.steps if run_ctx else (),
+                                  experimental_log=experimental_log)
+    if experimental_log is not None:
+        entry["experimental"] = experimental_log
     report.issues = analysis.issues
     report.actions = analysis.actions
     if run_ctx is not None:

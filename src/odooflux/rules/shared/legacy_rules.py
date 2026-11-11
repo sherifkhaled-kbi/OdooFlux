@@ -731,7 +731,11 @@ def _convert_states_to_invisible(content: str) -> str:
     return pattern.sub(_replace, content)
 
 
-def apply_xml_fixes(content: str, from_version: int) -> str:
+def apply_xml_fixes(content: str, from_version: int, to_version: int = 19) -> str:
+    """
+    Legacy XML fixes. Conversions that Odoo 18 introduced (<tree> -> <list>, view_type/view_mode
+    'tree' -> 'list', the chatter block) run only for to_version >= 18; the others run for every target.
+    """
     # <openerp> → <odoo>
     content = re.sub(r'<openerp>', '<odoo>', content)
     content = re.sub(r'</openerp>', '</odoo>', content)
@@ -742,65 +746,66 @@ def apply_xml_fixes(content: str, from_version: int) -> str:
     # groups_id= → groups=
     content = re.sub(r'\bgroups_id\s*=', 'groups=', content)
 
-    # v18+: <tree> → <list>
-    content = re.sub(r'<tree\b', '<list', content)
-    content = re.sub(r'</tree>', '</list>', content)
-    content = re.sub(
-        r'(\bview_type\s*=\s*["\'])tree(["\'])',
-        r'\1list\2',
-        content,
-    )
-    content = re.sub(
-        r'(\bview_mode\s*=\s*["\'][^"\']*?)\btree\b',
-        r'\1list',
-        content,
-    )
-
-    def _fix_view_mode_field(m):
-        # FIX: use m.group(3) for closing tag, not hardcoded '</field>'
-        return m.group(1) + m.group(2).replace('tree', 'list') + m.group(3)
-
-    content = re.sub(
-        r'(<field[^>]+name=["\']view_mode["\'][^>]*>)([^<]*)(</field>)',
-        _fix_view_mode_field,
-        content,
-    )
-    content = re.sub(
-        r'(<field[^>]+name=["\']view_type["\'][^>]*>)([^<]*)(</field>)',
-        lambda mm: mm.group(1) + mm.group(2).replace('tree', 'list') + mm.group(3),
-        content,
-    )
-
-    # ── Chatter auto-fixes ────────────────────────────────────────────────────
-
-    # FIX: safer chatter div replacement using a depth-counter approach
-    # to avoid eating nested </div> tags
-    content = _replace_chatter_div(content)
-
-    for _chatter_field in ('message_ids', 'activity_ids', 'message_follower_ids'):
+    if to_version >= 18:
+        # v18+: <tree> → <list>
+        content = re.sub(r'<tree\b', '<list', content)
+        content = re.sub(r'</tree>', '</list>', content)
         content = re.sub(
-            r'<field[^>]+name=["\']' + _chatter_field + r'["\'][^/]*/\s*>',
-            '',
+            r'(\bview_type\s*=\s*["\'])tree(["\'])',
+            r'\1list\2',
             content,
         )
         content = re.sub(
-            r'<field[^>]+name=["\']' + _chatter_field + r'["\'][^>]*>.*?</field>',
-            '',
+            r'(\bview_mode\s*=\s*["\'][^"\']*?)\btree\b',
+            r'\1list',
+            content,
+        )
+
+        def _fix_view_mode_field(m):
+            # FIX: use m.group(3) for closing tag, not hardcoded '</field>'
+            return m.group(1) + m.group(2).replace('tree', 'list') + m.group(3)
+
+        content = re.sub(
+            r'(<field[^>]+name=["\']view_mode["\'][^>]*>)([^<]*)(</field>)',
+            _fix_view_mode_field,
+            content,
+        )
+        content = re.sub(
+            r'(<field[^>]+name=["\']view_type["\'][^>]*>)([^<]*)(</field>)',
+            lambda mm: mm.group(1) + mm.group(2).replace('tree', 'list') + mm.group(3),
+            content,
+        )
+
+        # ── Chatter auto-fixes (v18+) ─────────────────────────────────────────
+
+        # FIX: safer chatter div replacement using a depth-counter approach
+        # to avoid eating nested </div> tags
+        content = _replace_chatter_div(content)
+
+        for _chatter_field in ('message_ids', 'activity_ids', 'message_follower_ids'):
+            content = re.sub(
+                r'<field[^>]+name=["\']' + _chatter_field + r'["\'][^/]*/\s*>',
+                '',
+                content,
+            )
+            content = re.sub(
+                r'<field[^>]+name=["\']' + _chatter_field + r'["\'][^>]*>.*?</field>',
+                '',
+                content,
+                flags=re.DOTALL,
+            )
+
+        content = re.sub(
+            r'<field[^>]+widget=["\']mail_thread["\'][^/]*/\s*>',
+            '<chatter/>',
+            content,
+        )
+        content = re.sub(
+            r'<field[^>]+widget=["\']mail_thread["\'][^>]*>.*?</field>',
+            '<chatter/>',
             content,
             flags=re.DOTALL,
         )
-
-    content = re.sub(
-        r'<field[^>]+widget=["\']mail_thread["\'][^/]*/\s*>',
-        '<chatter/>',
-        content,
-    )
-    content = re.sub(
-        r'<field[^>]+widget=["\']mail_thread["\'][^>]*>.*?</field>',
-        '<chatter/>',
-        content,
-        flags=re.DOTALL,
-    )
 
     content = re.sub(r'\n{3,}', '\n\n', content)
     return content

@@ -15,9 +15,22 @@ with static validation layers, and writes reports you can keep as evidence.
 > - **Runtime validation (install and behaviour checks in Docker) is not reachable from the CLI.** Every
 >   analysis run reports layers L4 and L5 as skipped. See [Section 9](#9-verification-and-statuses).
 > - **Optional AI assistance is off by default**, and no knowledge-base rule is currently marked as eligible for it.
-> - **Knowledge Base releases (KAP, Section 11) are built and installed locally and offline.** Normal `migrate` runs
->   never download anything. No real Odoo corpus build has been run; every automated test uses synthetic fixtures,
->   and the live (network, real clone, Docker) tests are opt-in and have not been run.
+> - **Knowledge Base releases (KAP, Section 11; updates, Section 12) are built and installed locally.** Normal `migrate`
+>   runs never download anything; `odooflux knowledge update` is the only command that does. One real build has been run:
+>   official Community 16.0 to 17.0, activated but `PARTIAL`, with no generated automatic fix (Section 12.13). The live
+>   Docker (runtime) tests are opt-in and have not been run.
+> - **Plain `migrate --fix` also runs an older, uncertified legacy layer** (manifest version, `states=`, and similar), in
+>   addition to the knowledge rules. Known limits are listed in
+>   [specs/012-knowledge-base-auto-update/verification.md](specs/012-knowledge-base-auto-update/verification.md) ("Known defects").
+> - **New: opt-in experimental fixes** (`migrate --fix --experimental-fixes`, Section 12.14): tested but uncertified
+>   `attrs` to modifier-expression conversion, clearly labelled in the report.
+>
+> **What is new in this release candidate** (details in the sections named):
+> `odooflux knowledge update | check | status | history` keep the knowledge base current from the official branches, offline-first and
+> with atomic activation (Section 12); `knowledge update --from 16 --to 17` fetches only those two versions (12.13);
+> `migrate --fix --experimental-fixes` converts `attrs` to `invisible`/`readonly`/`required` expressions (12.14); the legacy XML
+> fixer no longer rewrites `<tree>` to `<list>` for targets below 18; Enterprise symbol names, source ids and revisions are
+> withheld from shareable output (12.8).
 >
 > Command behaviour, options, defaults and exit codes in this document were checked against the 0.2.0
 > implementation on Linux with Python 3.12.3.
@@ -91,7 +104,10 @@ with static validation layers, and writes reports you can keep as evidence.
    - [12.9 Support dimensions](#129-support-dimensions)
    - [12.10 Custom modules that depend on Enterprise modules](#1210-custom-modules-that-depend-on-enterprise-modules)
    - [12.11 Installation](#1211-installation)
-   - [12.12 Where to read more](#1212-where-to-read-more)
+   - [12.12 Reading the update reports](#1212-reading-the-update-reports)
+   - [12.13 Scoped update and the real-source result (Odoo 16.0 to 17.0)](#1213-scoped-update-and-the-real-source-result-odoo-160-to-170)
+   - [12.14 Experimental fixes (`migrate --fix --experimental-fixes`)](#1214-experimental-fixes-migrate---fix---experimental-fixes)
+   - [12.15 Where to read more](#1215-where-to-read-more)
 13. [Project documentation](#13-project-documentation)
 
 ---
@@ -613,6 +629,7 @@ and a target outside it (for example `20`) is rejected with exit 2.
 | `--no-backup` | off | Skip the pre-write backup. The run is marked not reversible and `rollback` cannot restore it. Cannot be combined with `--diff` in write mode (exit 2). |
 | `--allow-unverified` | off | Run even when a step has not been researched. A module that would otherwise pass the static checks is then `NEEDS_REVIEW` (status reason `unverified_plan`). |
 | `--enable-rule RULE_ID` | none (repeatable) | Opt in to a `DETECT_ONLY` rule that needs run inputs, for example `*.manifest.version-prefix`. Unknown IDs exit 2. |
+| `--experimental-fixes` | off | With `--fix` only (otherwise exit 2): let implemented, tested but **uncertified** fixers edit files for rules that stay `DETECT_ONLY` in the knowledge base. Today: `attrs` to `invisible`/`readonly`/`required` for plain `<form>` views. Edits are marked `fix_class: experimental` and listed under `summary.experimental` in the JSON report; everything refused stays a finding. See [Section 12.14](#1214-experimental-fixes-migrate---fix---experimental-fixes). |
 | `--plugin MODULE:ATTR` | none (repeatable) | Load an explicit plugin. A plugin that fails to load is reported and skipped; the run continues. Plugins are never loaded automatically. |
 
 **Output**
@@ -893,7 +910,7 @@ non-default state directory.
 
 ### 6.10 Option count
 
-> This count predates the KAP verbs and the two `migrate` knowledge options (`--kb-home`, `--require-complete-kb`).
+> This count predates the KAP verbs and the `migrate` options `--kb-home`, `--require-complete-kb` and `--experimental-fixes`.
 > The KAP verbs are listed in [Section 11.5](#115-command-reference-and-exit-codes). The count below was not
 > recomputed for this release.
 
@@ -1316,8 +1333,8 @@ for the refusal path.)
 > maintainer tools for building, checking, packaging and activating Knowledge Base releases. You do not need
 > them to run a migration.
 >
-> **Production certification is not granted, and no real Odoo corpus build has been run.** All tests use
-> synthetic fixtures. The live tests (network, real clone, Docker) are opt-in, and they have not been run.
+> **Production certification is not granted.** Most tests use synthetic fixtures; one real Community 16.0 to 17.0 build has
+> been run (Section 12.13). The live Docker (runtime) tests are opt-in, and they have not been run.
 
 The examples below were run in a temporary directory, against synthetic 16.0 to 17.0 repositories built by the
 test fixtures, with the 0.2.0 code. Paths, identifiers, digests and timestamps are shortened or replaced with
@@ -1818,15 +1835,18 @@ Two more guards apply:
 ### 12.7 What is fixed automatically, and what is not
 
 - Generated rules (candidates) start as `DRAFT`. Acceptance admits only `DRAFT` or `DETECT_ONLY` rows and never a fixer.
-- **Nothing becomes `FIX_ENABLED` automatically today.** An update carries forward the `FIX_ENABLED` rows that are already in the
+- **Automatic fixes are derived and certified, and rare.** An update can create a `FIX_ENABLED` rule without a human approval only
+  for three machine-proven classes (a documented replacement with an identical body, a pure forwarding alias, a removed identity
+  decorator), each with a machine-confirmation record and an `auto-cert:` certificate that is re-proven at build, import, load and
+  activation. On the real 16.0 to 17.0 pair none qualified (Section 12.13). An update also carries forward the `FIX_ENABLED` rows that are already in the
   shipped tree, provided they are byte-identical (section 12.6). Any other `FIX_ENABLED` row must pass the trust gates, and
   `rule promote` (a human action) remains the only way to set it.
-- **Certification records are verified where they appear, but no command issues them yet.** A record at
-  `knowledge/certifications/<rule_id>.json` is checked by gate 6 whenever a row is governed by one. The function that issues a
-  record has no caller outside the tests. No command in the repository creates one.
+- **Certification records are issued only by the build pipeline** (no `knowledge rule certify` command exists) and are verified
+  wherever they appear: `knowledge/certifications/<rule_id>.json` is re-checked by gate 6 for every governed row. `rule promote`
+  (a human action) refuses `auto-cert:` references, and the ledger `confirmed` flag stays human-only.
 
-The effect is that an update can keep or refresh detection rules and carry fixes that were already trusted. It does not add a
-new automatic fix.
+The effect is that an update keeps or refreshes detection rules, carries fixes that were already trusted, and may add a derived
+fix only when the proof holds. Anything else stays detect-only.
 
 ### 12.8 Confidentiality
 
@@ -1838,8 +1858,12 @@ new automatic fix.
 - Reports and views withhold Enterprise-derived evidence, rule and ledger records. Enterprise status is decided from the
   verified provenance index, never from a record's own `confidentiality` field. A withheld record shows a fixed placeholder.
   The stored release, evidence, ledger and package bytes are not changed.
-- **Known residual:** symbol names are not covered by this withholding (recorded in the feature brief). Do not treat views of an
-  internal release as free of Enterprise code.
+- Enterprise-derived symbol names, rule messages and suggestions, ledger subject keys, and Enterprise source ids, revisions and
+  snapshot ids are withheld in `ledger list|show`, `rule inspect`, migration reports and `knowledge check|update|status|history`
+  (text and JSON). If a release's provenance cannot be trusted, rule texts are withheld and commit-like values are masked.
+- **Known residual:** the scrubbing matches known identifiers from the installed releases' provenance. Free text a person typed
+  into a rule is not recognised. This is not a secrecy boundary against someone who can read the kb-home: never share an internal
+  release or the kb-home.
 
 ### 12.9 Support dimensions
 
@@ -1883,7 +1907,63 @@ ODOOFLUX_PACKAGING_INSTALL=1 PYTHONPATH=src python3 -m unittest tests.integratio
 It passed (9 tests) on this checkout during the documentation pass. That is a local, offline run only. No live upstream was
 contacted.
 
-### 12.12 Where to read more
+### 12.12 Reading the update reports
+
+`knowledge check --json` and `knowledge history --json` follow the shipped schemas `odooflux.knowledge-check/1` and
+`odooflux.knowledge-history/1` (`src/odooflux/knowledge/schemas/knowledge_check.schema.json`, `knowledge_history.schema.json`), next
+to `odooflux.knowledge-status/1`.
+
+### 12.13 Scoped update and the real-source result (Odoo 16.0 to 17.0)
+
+```text
+export ODOOFLUX_KB_HOME=/path/to/kb-home          # optional; default is the XDG data directory
+odooflux knowledge check                          # read-only, ls-remote only
+odooflux knowledge update --from 16 --to 17       # fetch and build only 16.0 and 17.0, then activate
+odooflux knowledge status                         # what is active, how many rules per maturity
+odooflux knowledge history                        # verified, hash-chained update history
+```
+
+- `--from N --to M` plans, requires and fetches only the Community sources of that pair (and the Enterprise sources of those
+  versions only when a token is configured). Other catalog versions are neither downloaded nor required, and an installed one keeps
+  its trusted revision. Without `--from/--to` the whole catalog is acquired.
+- A first fetch of `odoo/odoo` is a few hundred MB. On a slow link set `ODOOFLUX_FETCH_TIMEOUT` (seconds, 60 to 7200, default 300)
+  and, if brief stalls abort a transfer, `ODOOFLUX_FETCH_LOW_SPEED_TIME` (seconds under 1000 bytes/s, 60 to 900, default 60). Both
+  apply to the one git process; nothing is written to a git config.
+- **Measured result** (one real run, Community only, no Enterprise credentials): outcome `ACTIVE`, completeness `PARTIAL`, 156,921
+  ledger changes, 3,345 rule candidates of which 2,786 were accepted as `DRAFT` detection rules (559 refused as duplicates of an
+  accepted rule), and **0 automatic fixes** (all 37,847 eligible changes were refused by the prover; in a 3,000-change sample 74 % were
+  files removed in 17.0, 19 % changed bodies that are not pure forwarding aliases, 7 % not Python model functions). About 2 minutes to extract and 35 to
+  accept the candidates on one core. Coverage metrics, scale notes and the defects found are in
+  [specs/012-knowledge-base-auto-update/verification.md](specs/012-knowledge-base-auto-update/verification.md).
+- `migrate --fix` on a disposable 16.0 module against that release applied one edit (manifest version, from the legacy layer) and a
+  second run applied none.
+
+### 12.14 Experimental fixes (`migrate --fix --experimental-fixes`)
+
+Plain `migrate --fix` applies shipped `FIX_ENABLED` knowledge rules and the older legacy layer. It does **not** convert `attrs`, which
+Odoo 17 rejects. The opt-in experimental mode does, for a strict, deterministic subset:
+
+```text
+odooflux migrate --addons-path ./custom_addons --from-version 16 --to-version 17 --fix --experimental-fixes \
+    --report report.json --report-format json
+# preview first, nothing written:  add --dry-run        # undo a run:  odooflux rollback <run-id>
+```
+
+- **Converted:** `attrs` domains on elements of a plain `<form>` view whose leaves are `field =, !=, in, not in literal` (non-falsy
+  literals), combined with `&`, `|`, `!`, for the keys `invisible`, `readonly`, `required`, for example
+  `attrs="{'invisible': [('state', '=', 'draft')]}"` becomes `invisible="state == 'draft'"`.
+- **Refused, left as a finding with a coded reason:** falsy literals (`False`, `0`, `''`), dotted fields (`parent.x`), field names that
+  are expression variables (`uid`, `context`, `today`, ...), an element that already has the same modifier, nested list/kanban
+  views, inherited-view fragments, unsupported operators, malformed domains.
+- **Reporting:** each applied edit shows `fix_class: experimental`, the rule id and the before/after text; `summary.experimental`
+  counts applied and refused elements. Without the flag the report has no experimental keys.
+- **Safety:** the knowledge-base rules stay `DETECT_ONLY` and no certification record is created; the flag is rejected without
+  `--fix`; a second run changes nothing; per-file atomic writes, backup and `rollback` apply as for any `--fix` run.
+- **Measured** on 249 official 16.0 modules (3,835 `attrs`): 944 converted (24.6 %), all semantically equivalent under an independent
+  check, 2,647 refused with reasons (the largest group, 1,408, is inherited-view fragments) It is **not** certified and not a
+  claim of full coverage; review the diff before committing it.
+
+### 12.15 Where to read more
 
 - [docs/guides/KNOWLEDGE_UPDATE.md](docs/guides/KNOWLEDGE_UPDATE.md): the operator guide.
 - [specs/012-knowledge-base-auto-update/quickstart.md](specs/012-knowledge-base-auto-update/quickstart.md): the commands to run.

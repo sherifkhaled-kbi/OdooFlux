@@ -54,6 +54,7 @@ class BoundRule:
     detector_params: dict = field(default_factory=dict)
     fixer_params: dict = field(default_factory=dict)
     gap: str = ""  # INFO gap: why the rule is skipped for this run (a required run input is missing)
+    experimental: bool = False  # the fixer comes from the experimental registry (AD-1); maturity is unchanged
 
     def detect(self, document):
         if self.detector is None:
@@ -140,12 +141,16 @@ def _split_params(params: dict, funcs: list, problems: list, names: list, run_pa
     return result
 
 
-def bind_rule(meta: dict, modules: Mapping, run_params: dict | None = None) -> BoundRule:
+def bind_rule(meta: dict, modules: Mapping, run_params: dict | None = None, *, experimental=None) -> BoundRule:
     """Bind one rule metadata row (data-model.md RuleMetadata) against ``modules``, a mapping from module
     name to module object (``odooflux.rules.bindable.BINDABLE_MODULES``). Raises ``BindingError`` listing
     every problem, prefixed with the rule id. ``run_params`` (e.g. the planned target) is passed only to
     functions that declare the keyword; ``None`` keeps the static-only behaviour. A rule whose function
-    requires a run key the run lacks binds with no detector and a ``gap`` message (skipped, never raised)."""
+    requires a run key the run lacks binds with no detector and a ``gap`` message (skipped, never raised).
+
+    ``experimental`` (AD-1) is an opt-in registry entry (``rules.experimental.registry.ExperimentalFix``) whose
+    fixer is attached to a DETECT_ONLY row for this run. The row's maturity, review flag and tests are not changed.
+    Without it the "fixer_ref requires FIX_ENABLED" rule applies unchanged."""
     rid = meta.get("id") or ""
     problems = []
     if not rid:
@@ -166,6 +171,15 @@ def bind_rule(meta: dict, modules: Mapping, run_params: dict | None = None) -> B
     if not params_ok:
         problems.append("params must be a mapping")
     detector_ref, fixer_ref = meta.get("detector_ref"), meta.get("fixer_ref")
+    if experimental is not None:  # explicit experimental branch: only a DETECT_ONLY row without a fixer of its own
+        if maturity != "DETECT_ONLY":
+            problems.append("experimental fixer requires DETECT_ONLY maturity")
+        elif fixer_ref is not None:
+            problems.append("experimental fixer on a row that already has a fixer_ref")
+        else:
+            fixer_ref = experimental.fixer_ref
+            if isinstance(params, dict):
+                params = {**params, **experimental.params}
 
     if maturity == "RETIRED":
         if detector_ref is not None or fixer_ref is not None:
@@ -174,7 +188,7 @@ def bind_rule(meta: dict, modules: Mapping, run_params: dict | None = None) -> B
         problems.append(f"detector_ref is required for maturity {maturity}")
     if review and fixer_ref is not None:
         problems.append("review_required rule must not have a fixer_ref")
-    if fixer_ref is not None and maturity != "FIX_ENABLED":
+    if fixer_ref is not None and maturity != "FIX_ENABLED" and experimental is None:
         problems.append("fixer_ref requires FIX_ENABLED maturity")
     if maturity == "FIX_ENABLED" and fixer_ref is None:
         problems.append("FIX_ENABLED rule has no fixer_ref")
@@ -198,7 +212,8 @@ def bind_rule(meta: dict, modules: Mapping, run_params: dict | None = None) -> B
     if needs_run:
         gap = (f"INFO: rule {rid} skipped: run input not supplied: {', '.join(sorted(needs_run))}"
                " (unbound-needs-run-context)")
-        return BoundRule(rule_id=rid, maturity=maturity, review_required=review, context=context, gap=gap)
+        return BoundRule(rule_id=rid, maturity=maturity, review_required=review, context=context, gap=gap,
+                         experimental=experimental is not None)
     return BoundRule(rule_id=rid, maturity=maturity, review_required=review, context=context,
                      detector=detector, fixer=fixer, detector_params=detector_params,
-                     fixer_params=fixer_params)
+                     fixer_params=fixer_params, experimental=experimental is not None)

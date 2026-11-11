@@ -269,7 +269,19 @@ The update manager is tested offline with synthetic local repositories and injec
 
 Run a module with `python -m unittest tests.unit.knowledge.update.test_orchestrator -v`. The feature's verification status is recorded in `specs/012-knowledge-base-auto-update/verification.md` by its owner.
 
-## 19. Real-source scale (verified on Odoo 16.0 to 17.0)
+## 19. What plain `migrate --fix` applies, and the experimental mode
+
+Plain `odooflux migrate --fix` applies two kinds of edits: shipped `FIX_ENABLED` knowledge rules (certified or inherited trust)
+**and an older, uncertified legacy layer** of regex rewrites (manifest version, `states=`, `openerp` imports, `@api.multi` and
+similar). The legacy XML rewrites meant for Odoo 18 (`<tree>` to `<list>`, chatter) are limited to targets of 18 and later.
+Known limits of that layer are listed in `specs/012-knowledge-base-auto-update/verification.md`, "Known defects".
+
+`--fix --experimental-fixes` additionally lets implemented, tested but **uncertified** fixers edit files for rules that stay
+`DETECT_ONLY` in the knowledge base. Today that is `attrs` to `invisible`/`readonly`/`required` expressions for plain `<form>`
+views (strict subset; everything else is refused with a coded reason and stays a finding). The report marks these edits
+`fix_class: experimental` and adds a `summary.experimental` block. The flag is rejected without `--fix`.
+
+## 20. Real-source scale (verified on Odoo 16.0 to 17.0)
 
 A full Community 16.0 to 17.0 build was run end to end from official sources (see `specs/012-knowledge-base-auto-update/verification.md`). What it showed, and what changed because of it:
 
@@ -281,7 +293,7 @@ A full Community 16.0 to 17.0 build was run end to end from official sources (se
 - **Evidence ids** are `EV-` plus at least three digits (`EV-1000` follows `EV-999`).
 - **Ambiguous renames are capped** (see section 8).
 
-## 20. Platform, verification and certification status
+## 21. Platform, verification and certification status
 
 - **Operating systems.** Verified on Linux only. The update lock uses POSIX file locking (`fcntl`), so macOS is expected to work but was not verified, and Windows is not supported for `knowledge update`.
 - **Offline guard.** `migrate` is offline by construction; the no-network check is enforced in-process (a test patches sockets), not by the operating system.

@@ -6,6 +6,11 @@ of the rule's kind. Only ``FIX_ENABLED`` rules have a fixer, and their edits go 
 existing validate and re-scan path; ``DETECT_ONLY`` rules never edit (SC-005). ``DRAFT``/``RETIRED`` rows and rules
 that declare a run key (opt-in via ``--enable-rule``) are not selected here. Rule rows and the bindable module
 table are injected by the composition root; nothing is imported from the rule packages.
+
+Experimental fixes (AD-1): with ``--experimental-fixes`` a selected DETECT_ONLY row that has an entry in the
+experimental registry gets that entry's fixer. Such a rule is marked ``experimental``, its row keeps DETECT_ONLY, and
+its edits go through the same ``apply_edits`` path. The registry is a code table, not the KB; the composition root
+injects it as an ``ExperimentalFixers`` value, so this module never imports the rule packages.
 """
 
 import dataclasses
@@ -75,15 +80,22 @@ class KnowledgeRule:
     contract_version = 1
     depends: tuple = ()
 
-    def __init__(self, bound, meta: dict):
+    def __init__(self, bound, meta: dict, experimental=None):
         self._bound = bound
+        self._experimental = experimental  # the registry entry when this rule runs an experimental fixer
         self.key = bound.rule_id
         self.step = meta.get("step") or "*"
         self.maturity = bound.maturity
         self.review_required = bound.review_required
         self.evidence = tuple(meta.get("evidence") or ())
         self.fixes = bound.fixer is not None
+        self.experimental = experimental is not None
+        self.fix_class = "experimental" if self.experimental else ("certified" if self.fixes else "")
         self._kinds = tuple(meta.get("file_kinds") or ())
+
+    def explain(self, document):
+        """The experimental plan (conversions and refusals) for ``document``; None for other rules. Pure."""
+        return self._experimental.explain(document) if self._experimental is not None else None
 
     def applies_to(self, path: str) -> bool:
         return not self._kinds or file_kind(path) in self._kinds
@@ -98,19 +110,37 @@ class KnowledgeRule:
         return self._bound.fix(document) if self.fixes and self.applies_to(document.path) else []
 
 
-def bind_knowledge_rules(rows, modules, run_params: dict, steps) -> tuple:
-    """(rules, gaps). A row that does not bind is an INFO gap, never an exception or a silent skip."""
+@dataclasses.dataclass(frozen=True)
+class ExperimentalFixers:
+    """The experimental registry as injected by the composition root: ``entries`` maps a rule id to an entry (its
+    ``fixer_ref``, ``params`` and ``explain``); ``modules`` resolves those fixer references, as the bindable table does
+    for ordinary rows."""
+
+    entries: object
+    modules: object
+
+
+def bind_knowledge_rules(rows, modules, run_params: dict, steps,
+                          experimental: ExperimentalFixers | None = None) -> tuple:
+    """(rules, gaps). A row that does not bind is an INFO gap, never an exception or a silent skip.
+
+    ``experimental`` (``None`` keeps the default behaviour exactly) offers registry fixers. One is used only for a
+    selected DETECT_ONLY row with a matching entry; its fixer resolves through ``experimental.modules``."""
     rules, gaps = [], []
     for meta in select_rows(rows, modules, steps):
+        entry = None
+        if experimental is not None and meta.get("maturity") == "DETECT_ONLY":
+            entry = experimental.entries.get(meta.get("id"))
+        bind_modules = {**modules, **experimental.modules} if entry is not None else modules
         try:
-            bound = bind_rule(meta, modules, run_params)
+            bound = bind_rule(meta, bind_modules, run_params, experimental=entry)
         except BindingError as exc:
             gaps.append(f"INFO: rule {meta.get('id')} skipped: {exc}")
             continue
         if bound.gap:
             gaps.append(bound.gap)
             continue
-        rules.append(KnowledgeRule(bound, meta))
+        rules.append(KnowledgeRule(bound, meta, entry))
     return rules, gaps
 
 
@@ -118,9 +148,21 @@ def rules_for_file(rules, path: str) -> list:
     return [r for r in rules if r.applies_to(path)]
 
 
-def fixing_transform(rules, steps):
+def _experimental_record(rule, path: str, document):
+    """The conversions and refusals an experimental rule reports for this document (None when it has neither)."""
+    plan = rule.explain(document)
+    if plan is None or not (plan.converted or plan.refused):
+        return None
+    return {"rule_id": rule.key, "path": path,
+            "converted": [{"line": c.line, "element": c.element, "before": c.before, "after": c.after,
+                           "note": c.note} for c in plan.converted],
+            "refused": [{"line": r.line, "element": r.element, "reason": r.reason} for r in plan.refused]}
+
+
+def fixing_transform(rules, steps, log=None):
     """``callable(path, text) -> text`` applying the FIX_ENABLED rules step by step, or None when none apply.
-    Edits go through ``apply_edits`` (overlap resolution, stale-span checks); the caller validates the result."""
+    Edits go through ``apply_edits`` (overlap resolution, stale-span checks); the caller validates the result.
+    ``log`` (a list) receives one record per file and experimental rule that converted or refused something."""
     fixers = [r for r in rules if r.fixes]
     if not fixers:
         return None
@@ -132,6 +174,9 @@ def fixing_transform(rules, steps):
             batch = [r for r in mine if r.step == step]
             document = Document.from_text(path, text)
             edits = [e for r in batch for e in r.fix(document)]
+            if log is not None:
+                log.extend(record for record in (_experimental_record(r, path, document)
+                                                 for r in batch if r.experimental) if record)
             if edits:
                 text = apply_edits(document, edits, precedence=[r.key for r in batch]).text
         return text
@@ -139,8 +184,19 @@ def fixing_transform(rules, steps):
     return transform
 
 
-def deduplicate(issues, knowledge_ids) -> list:
-    """Drop knowledge-rule issues on a file line already reported by an overlapping legacy category."""
+def handled_lines(file_log, path: str) -> frozenset:
+    """(file, line, rule id) of each construct an experimental rule converted or refused in ``path`` (AD-1)."""
+    return frozenset((path, line, record["rule_id"]) for record in file_log
+                     for line in [c["line"] for c in record["converted"]] + [r["line"] for r in record["refused"]])
+
+
+def deduplicate(issues, knowledge_ids, handled=frozenset()) -> list:
+    """Drop knowledge-rule issues on a file line already reported by an overlapping legacy category.
+
+    ``handled`` holds (file, line, rule id) for constructs an experimental rule acted on or refused (AD-1). Its
+    knowledge finding is kept, and the overlapping legacy row on that line is dropped, so the construct is reported
+    once. A knowledge finding the experimental rule never saw (for example a states= that the legacy layer already
+    converted) follows the ordinary rule above."""
     legacy: dict = {}
     for issue in issues:
         if issue.category not in knowledge_ids:
@@ -153,6 +209,12 @@ def deduplicate(issues, knowledge_ids) -> list:
         return any((i.file, i.line, other) in seen for rid, cats in LEGACY_CATEGORIES.items() if i.category in cats
                    for other in (*cats, rid) if other != i.category)
 
+    def superseded(i) -> bool:  # a legacy row whose construct an experimental rule handled on the same line
+        return i.category not in knowledge_ids and any(
+            (i.file, i.line, rid) in handled for rid, cats in LEGACY_CATEGORIES.items() if i.category in cats)
+
     return [i for i in issues
             if not retired_duplicate(i)
-            and not (i.category in knowledge_ids and covered(i.category, i.line, legacy.get(i.file, {})))]
+            and not superseded(i)
+            and not (i.category in knowledge_ids and (i.file, i.line, i.category) not in handled
+                     and covered(i.category, i.line, legacy.get(i.file, {})))]
