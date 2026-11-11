@@ -14,6 +14,7 @@ from odooflux.core.jobs.workspace import make_workspace
 from odooflux.core.orchestrator.ai_pass import run_ai_pass
 from odooflux.core.orchestrator import knowledge_rules, run_inputs
 from odooflux.core.orchestrator.module_plan import plan_module
+from odooflux.core.orchestrator.status import PARTIAL_STATUS
 from odooflux.dependencies.scan import scan_run_dependencies
 from odooflux.dependencies.unified import FINDING_ID
 from odooflux.discovery.modules import module_ref
@@ -199,39 +200,44 @@ def _process_module(run, entry: dict, options: RunOptions, registries, layer3=No
         run.log.append("edit_rejected", module=name, path=str(edit.path),
                        rules=sorted({i.category for i in edit.issues}), reason=edit.rejection)
         entry["rejections"].append(edit.rejection)
-    if options.mode == "dry_run" and not rejections:
-        report.planned_files = [str(e.dest) for e in edits]
+        entry.setdefault("refused_files", {})[str(edit.path)] = edit.rejection  # the open findings of this file name it
+    # Only changes that passed validation are staged and promoted. A file whose change was refused is not in this
+    # list (it keeps its bytes); the other files of the module are still written (approved partial-migration policy).
+    writable = [e for e in edits if e.fixed != e.original or e.dest != e.path]
+    if options.mode == "dry_run":
+        report.planned_files = [str(e.dest) for e in writable]
     entry["edits"] = [{"path": str(e.path), "dest": str(e.dest),
+                       "validation": e.validation.as_dict(),
                        "spans": [{"start": s.start, "end": s.end, "before": s.before, "after": s.after}
                                  for s in e.edits]}
-                      for e in edits if not e.rejection]
-    if options.writes and edits and not rejections:
+                      for e in writable]
+    if options.writes and writable:
         try:
             work_root = make_workspace(run, name, path)
-            stage_edits(work_root, path, edits)
-            audit_staged(run, path, edits)
+            stage_edits(work_root, path, writable)
+            audit_staged(run, path, writable)
         except OSError as exc:
             report.blocked, report.block_reason = True, f"workspace failed: {exc}"
             run.log.append("module_blocked", module=name, reason=report.block_reason)
             entry.update(status="BLOCKED", report=report_to_dict(report))
             return
         ok, reason, written = promote_module(
-            path, work_root, edits, run,
+            path, work_root, writable, run,
             backup_root=backup_root if options.backup else None)
         if ok:
-            for edit in edits:
+            for edit in writable:
                 for issue in edit.resolved:
                     issue.fix_applied = True
                 report.written_files.append(str(edit.dest))
                 if edit.dest != edit.path:
                     report.actions = [[True, t] if t.endswith(f"{edit.path.name} -> {edit.dest.name}")
                                       else [d, t] for d, t in report.actions]
-            report.fixes_applied += len(edits)
+            report.fixes_applied += len(writable)
             entry["promoted_files"] = written
             entry["status"] = "PROMOTED"
         else:
             report.blocked, report.block_reason = True, reason
-            unwritten = [str(e.dest) for e in edits if str(e.dest) not in written]
+            unwritten = [str(e.dest) for e in writable if str(e.dest) not in written]
             report.issues.append(Issue(
                 file=str(path), line=0, severity="CRITICAL", category="Write Failed",
                 message=(f"{reason}. Written: {', '.join(written) or 'none'}. "
@@ -240,9 +246,10 @@ def _process_module(run, entry: dict, options: RunOptions, registries, layer3=No
             entry["status"] = "BLOCKED"
     elif rejections:
         entry["status"] = "FAILED"
-        report.block_reason = "edit rejected by validation"
     else:
         entry["status"] = "DONE"
+    if rejections and not report.blocked:  # incomplete because of refused edits: the developer must act
+        entry["migration_status"] = PARTIAL_STATUS
     entry["report"] = report_to_dict(report)
 
 

@@ -80,7 +80,8 @@
               "STATIC_VALIDATED",
               "NEEDS_REVIEW",
               "FAILED",
-              "BLOCKED"
+              "BLOCKED",
+              "PARTIAL — DEVELOPER ACTION REQUIRED"
             ]
           },
           "status_reasons": {
@@ -103,6 +104,10 @@
                 "status"
               ],
               "properties": {
+                "column": {
+                  "type": "integer",
+                  "minimum": 0
+                },
                 "severity": {
                   "enum": [
                     "CRITICAL",
@@ -154,6 +159,47 @@
                     "legacy",
                     null
                   ]
+                },
+                "location": {
+                  "type": "object",
+                  "required": [
+                    "path",
+                    "line",
+                    "column"
+                  ],
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "line": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        {
+                          "const": "UNKNOWN"
+                        }
+                      ]
+                    },
+                    "column": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        {
+                          "const": "UNKNOWN"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "reason_not_fixed": {
+                  "type": "string"
+                },
+                "developer_action": {
+                  "type": "string"
                 }
               }
             }
@@ -310,6 +356,28 @@
           },
           "rejections": {
             "type": "array"
+          },
+          "refused_files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "path",
+                "reason",
+                "changes_kept"
+              ],
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "changes_kept": {
+                  "type": "boolean"
+                }
+              }
+            }
           },
           "runtime": {
             "type": "object",
@@ -499,6 +567,10 @@
               "minimum": 0
             },
             "rejected": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "planned": {
               "type": "integer",
               "minimum": 0
             }

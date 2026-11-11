@@ -7,12 +7,13 @@ The console script and the launcher both enter through :func:`main`.
 import os
 import sys
 from dataclasses import dataclass, field
+from functools import partial
 from pathlib import Path
 
 from odooflux.ai.integration import EscalationPass
 from odooflux.ai.providers.legacy_anthropic import LegacyAnthropicProvider
 from odooflux.core.contracts.plugins import Registries
-from odooflux.core.orchestrator.knowledge_rules import ExperimentalFixers
+from odooflux.core.orchestrator.knowledge_rules import ExperimentalFixers, effective_maturity
 from odooflux.core.orchestrator.run_inputs import RunRuleBinder
 from odooflux.knowledge.loader import RELEASE_TREE, load_active_knowledge
 from odooflux.knowledge.release.confidentiality_view import redact_rule_rows
@@ -101,9 +102,12 @@ def build_context(knowledge_path: Path = KNOWLEDGE_FILE, handle=None) -> Context
     registries.ai_providers.register(LegacyAnthropicProvider())
     registries.ai_providers.register(EscalationPass(layer3=layer3, knowledge_root=tree))
     register_default_renderers(registries)
+    experimental = ExperimentalFixers(entries=experimental_registry.ENTRIES, modules=experimental_registry.MODULES,
+                                      views=experimental_registry.MODULE_VIEWS)
     registries.run_rule_binder = _HandleRuleBinder(
-        rows, BINDABLE_MODULES, None if handle is None or handle.builtin else tree,
-        experimental=ExperimentalFixers(entries=experimental_registry.ENTRIES, modules=experimental_registry.MODULES))
+        rows, BINDABLE_MODULES, None if handle is None or handle.builtin else tree, experimental=experimental)
+    # AF-3: read-time effective maturity for `knowledge status` (stored rows are never changed)
+    registries.rule_maturity = partial(effective_maturity, modules=BINDABLE_MODULES, experimental=experimental)
     registries.extract_toolkit = ExtractToolkit(detectors=detector_table(BINDABLE_MODULES))  # REQ-ARC-001: KAP adapters
     attach_executor(_FIX_CERTIFIER)  # feature 012: the process's certification authority (certification.py)
     registries.ai_gateway_factory = ai_gateway_factory  # KAP `ai propose` only; lazy (D-08, see the factory)

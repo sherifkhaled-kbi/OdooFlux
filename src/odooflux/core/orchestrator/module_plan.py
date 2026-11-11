@@ -1,16 +1,18 @@
 """Per-module analysis and edit planning (P0 behaviour, now expressed through the engine)."""
 
+import difflib
 import re
 from pathlib import Path
 
 from odooflux.core.contracts.records import Finding
 from odooflux.core.engine.apply import FileEdit, diff_to_edits
 from odooflux.core.engine.rescan import resolved_by_rescan
-from odooflux.core.engine.step_runner import detect, run_step
+from odooflux.core.engine.step_runner import Step, detect, run_step, run_steps
 from odooflux.core.orchestrator import knowledge_rules
 from odooflux.discovery.manifest import MANIFEST_NAMES
 from odooflux.discovery.modules import iter_module_files
 from odooflux.rules.shared.legacy_adapter import step_for
+from odooflux.rules.shared.legacy_overlap import LEGACY_CATEGORIES
 from odooflux.rules.shared.legacy_rules import (
     Issue, MigrationReport, SEVERITY_CRITICAL, SEVERITY_WARNING, _read_file)
 
@@ -41,6 +43,23 @@ def _validators(registries) -> list:
     return registries.validators.all() if registries is not None else []
 
 
+def _finding_family(item) -> str:
+    """The legacy category a finding belongs to. An experimental rule row and the legacy row it replaces (after a
+    fix, the same construct is often reported by the legacy row) are one finding for the re-scan."""
+    legacy = LEGACY_CATEGORIES.get(item.category)
+    return legacy[0] if legacy else item.category
+
+
+def _touched_by(old: str, new: str):
+    """Predicate: the original line (1-based) of an issue was replaced or removed by the fix."""
+    old_lines, new_lines = old.splitlines(), new.splitlines()
+    changed = set()
+    for tag, i1, i2, _j1, _j2 in difflib.SequenceMatcher(None, old_lines, new_lines, autojunk=False).get_opcodes():
+        if tag != "equal":
+            changed.update(range(i1 + 1, max(i2, i1 + 1) + 1))
+    return lambda item: item.line in changed
+
+
 def _file_step(path: str, from_version: int, to_version: int, registries, run_rules, knowledge, knowledge_steps,
                *, transform: bool, file_log=None):
     """Legacy step for the file plus the knowledge rules of its kind. The fixing transform runs the legacy
@@ -58,6 +77,41 @@ def _file_step(path: str, from_version: int, to_version: int, registries, run_ru
             legacy = step.transform
             step.transform = (lambda p, t: extra(p, legacy(p, t) if legacy else t))
     return step
+
+
+def _stages(path: str, from_version: int, to_version: int, registries, run_rules, knowledge, knowledge_steps):
+    """The file's fixing transform split into ordered stages: the legacy fixer, then each FIX_ENABLED knowledge step
+    in plan order. Returns (steps, logs); ``logs[i]`` collects the experimental records of stage i."""
+    mine = knowledge_rules.rules_for_file(knowledge, path)
+    legacy = step_for(path, from_version, to_version, transform=True,
+                      extra_rules=_extra_rules(registries) + list(run_rules))
+    steps, logs = [Step(step_id=legacy.step_id, rules=[], transform=legacy.transform)], [[]]
+    order = {key: i for i, key in enumerate(knowledge_steps)}
+    for step_key in sorted({r.step for r in mine if r.fixes}, key=lambda s: order.get(s, -1)):
+        log: list = []
+        steps.append(Step(step_id=step_key, rules=[], transform=knowledge_rules.fixing_transform(
+            [r for r in mine if r.step == step_key], [step_key], log)))
+        logs.append(log)
+    return steps, logs
+
+
+def _salvage(path: str, from_version: int, to_version: int, registries, run_rules, knowledge, knowledge_steps,
+             validators, text: str, file_log: list):
+    """The file after its refused whole-file transform, rebuilt stage by stage: each stage is validated on its own,
+    and the output of the last VALID stage is kept (run_steps stops at the first refusal, so the refused stage's
+    output is its input). Returns (kept_text, verdict); verdict is None when no stage changed the text. ``file_log``
+    receives the experimental records of the kept stages only."""
+    steps, logs = _stages(path, from_version, to_version, registries, run_rules, knowledge, knowledge_steps)
+    del file_log[:]
+    outcomes = run_steps(steps, path, text, validators)
+    kept = outcomes[-1].output
+    if kept == text:
+        return text, None
+    for index, outcome in enumerate(outcomes):
+        if not outcome.rejected:
+            file_log.extend(logs[index])
+    verdict = next((o.verdict for o in reversed(outcomes) if not o.rejected and o.verdict is not None), None)
+    return kept, verdict
 
 
 def plan_module(module_path, from_version: int, to_version: int, registries, *,
@@ -114,6 +168,16 @@ def plan_module(module_path, from_version: int, to_version: int, registries, *,
         step = _file_step(path, from_version, to_version, registries, run_rules, knowledge, knowledge_steps,
                           transform=True, file_log=file_log)
         outcome = run_step(step, path, text, validators)
+        rejection, fixed, verdict = "", outcome.output, outcome.verdict
+        if outcome.rejected:  # the whole-file transform was refused: keep the valid stages of it (AD-05, policy)
+            rejection = outcome.rejection
+            if renamed:  # the manifest rename cannot be split from its content: the file keeps its bytes and name
+                del file_log[:]
+                fixed = text
+            else:
+                fixed, kept_verdict = _salvage(path, from_version, to_version, registries, run_rules, knowledge,
+                                               knowledge_steps, validators, text, file_log)
+                verdict = kept_verdict or outcome.verdict
         handled = knowledge_rules.handled_lines(file_log, path)  # known only after the transform ran
         before = issues_of(outcome.findings, path, handled)
         refused_at = {(rec["rule_id"], refusal["line"]) for rec in file_log for refusal in rec["refused"]}
@@ -121,31 +185,35 @@ def plan_module(module_path, from_version: int, to_version: int, registries, *,
             if (issue.category, issue.line) in refused_at:
                 issue.auto_fixable = False
         report.issues.extend(before)
-        if outcome.rejected:
-            edits.append(FileEdit(path=fp, dest=fp, original=text, fixed=text, issues=before,
-                                  rejection=outcome.rejection))
-            continue
         if experimental_log is not None:  # conversions and refusals of experimental rules, for the report
             experimental_log.extend(file_log)
-        if outcome.output == text and not renamed:
+        if rejection and fixed == text:  # nothing kept: the file keeps its bytes and its name, its findings stay open
+            edits.append(FileEdit(path=fp, dest=fp, original=text, fixed=text, issues=before,
+                                  rejection=rejection, validation=verdict))
+            continue
+        if fixed == text and not renamed:
             continue
         dest = new_manifest if renamed else fp
         after_errors: list = []
-        after = issues_of(detect(step.rules, path, outcome.output, after_errors), path, handled)
+        after = issues_of(detect(step.rules, path, fixed, after_errors), path, handled)
         # SC-005: only a FIX_ENABLED knowledge rule (or a legacy row) can be marked fixed; a DETECT_ONLY finding
         # whose construct vanished stays open for the reviewer. The one exception is an experimental rule that
         # converted something in this file (its finding is the one its fixer acted on).
         converted_by = {r["rule_id"] for r in file_log if r["converted"]}
-        resolved = [i for i in resolved_by_rescan(before, after)
+        resolved = [i for i in resolved_by_rescan(before, after, key=_finding_family, touched=_touched_by(
+                        text, fixed))
                     if i.maturity in ("", "FIX_ENABLED") or i.category in converted_by]
-        edits.append(FileEdit(path=fp, dest=dest, original=text, fixed=outcome.output, issues=before,
-                              resolved=resolved,
-                              edits=diff_to_edits(path, text, outcome.output)))
+        edits.append(FileEdit(path=fp, dest=dest, original=text, fixed=fixed, issues=before,
+                              resolved=resolved, rejection=rejection,
+                              edits=diff_to_edits(path, text, fixed), validation=verdict))
     for edit in edits:
         if edit.rejection:
+            kept = edit.fixed != edit.original
             report.issues.append(Issue(
                 file=str(edit.path), line=0, severity=SEVERITY_WARNING, category="Fix Rejected",
-                message=f"{edit.path.name}: {edit.rejection}. No file in this module is written.",
+                message=(f"{edit.path.name}: {edit.rejection}. "
+                         + ("The refused change is not applied; the valid changes to this file are kept."
+                            if kept else "The file is left unchanged.")),
                 suggestion="Edit this file by hand; its findings stay open",
                 auto_fixable=False, rejection_reason=edit.rejection))
     return report, edits

@@ -118,7 +118,9 @@ class DiffApplyTests(unittest.TestCase):
                     self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
                 self.assertEqual(_tree(tmp / "pristine"), _tree(tmp / "work"))
 
-    def test_rejected_module_excluded_and_listed(self):
+    def test_rejected_module_exports_its_accepted_edit(self):
+        """PA-3 cleanup: a module with refused edits is partial; its accepted edit is exported (refused files are not:
+        tests/unit/reporting/test_column_and_dry_run.py covers the refused file)."""
         from odooflux.reporting.exporters.diff import export_diff
         from tests.unit.reporting.helpers import golden
         model = golden("failed")
@@ -126,9 +128,8 @@ class DiffApplyTests(unittest.TestCase):
                                          "dest": "/work/kbi_stock_custom/models/stock.py",
                                          "spans": [{"start": 0, "end": 1, "before": "a", "after": "b"}]}]
         result = export_diff(model, lambda module, path: b"a\n")
-        self.assertEqual(result.patch, "")
-        self.assertEqual(result.index["excluded_modules"][0]["module"], "kbi_stock_custom")
-        self.assertIn("protected_identifier_changed", result.index["excluded_modules"][0]["reasons"][1])
+        self.assertIn("a/kbi_stock_custom/models/stock.py", result.patch)
+        self.assertEqual(result.index["excluded_modules"], [])
 
     def test_missing_original_is_an_error_not_a_guess(self):
         from odooflux.reporting.exporters.diff import OriginalUnavailableError, export_diff

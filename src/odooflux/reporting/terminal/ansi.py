@@ -9,7 +9,8 @@ from odooflux.reporting.terminal.progress import progress_lines, stage_line
 RESET = "\x1b[0m"
 STYLES = {"bold": "1", "red": "31", "green": "32", "yellow": "33", "blue": "34", "cyan": "36", "dim": "2"}
 STATUS_STYLE = {"VERIFIED_SUCCESS": "green", "INSTALL_VERIFIED": "green", "STATIC_VALIDATED": "cyan",
-                "NEEDS_REVIEW": "yellow", "FAILED": "red", "BLOCKED": "red"}
+                "NEEDS_REVIEW": "yellow", "FAILED": "red", "BLOCKED": "red",
+                "PARTIAL — DEVELOPER ACTION REQUIRED": "yellow"}
 SEVERITY_STYLE = {"CRITICAL": "red", "WARNING": "yellow", "INFO": "blue", "FIXED": "green", "REJECTED": "red"}
 LAYER_NAMES = {1: "L1 syntax", 2: "L2 static re-scan", 3: "L3 dependency integrity", 4: "L4 runtime install",
                5: "L5 behaviour"}
@@ -84,8 +85,25 @@ def _finding_label(f: dict) -> str:
     return f["severity"] if f["status"] in ("OPEN", "NEEDS_REVIEW") else f["status"]
 
 
-def _loc(f: dict) -> str:
-    return f"L{f['line']}" + (f":{f['column']}" if f.get("column") else "")
+def location_text(f: dict) -> str:
+    """``L<line>:<column>`` from the model's normalised location. ``UNKNOWN`` replaces a line the source does not give
+    (AD-06) and, likewise, a column it does not give (PA-5)."""
+    loc = f.get("location") or {}
+    line = loc.get("line", f["line"])
+    if not isinstance(line, int) or line < 1:
+        return "UNKNOWN"
+    column = loc.get("column", f.get("column", 0))
+    known = isinstance(column, int) and not isinstance(column, bool) and column >= 1
+    return f"L{line}:{column if known else 'UNKNOWN'}"
+
+
+def refusal_outcome(item: dict, mode: str) -> str:
+    """What became of a refused file. 'original kept' is said only for a file that is left as it was."""
+    if not item.get("changes_kept"):
+        return "edit refused; original kept"
+    if mode == "dry_run":
+        return "refused change not applied; valid changes to this file are planned"
+    return "refused change not applied; valid changes to this file are kept"
 
 
 def _layers_text(module: dict, with_reason: bool = False) -> str:
@@ -152,21 +170,22 @@ def render_terminal(report: dict, options: RendererOptions = None, *, is_tty: bo
     section("MODULE RESULTS")
     layers_w = max((display_width(_layers_text(m)) for m in modules), default=0)
     fixed_w = rej_w = 8
-    name_budget = W - (1 + STATUS_W + 1 + 10 + 1 + 5 + 1 + rej_w + 1 + layers_w)
+    status_w = max([STATUS_W] + [display_width(m["status"]) for m in modules])  # PARTIAL labels are longer
+    name_budget = W - (1 + status_w + 1 + 1 + 10 + 1 + 5 + 1 + rej_w + 1 + layers_w)  # the space after the name too
     table = modules and name_budget >= 12 and W >= TABLE_MIN_COLUMNS
     if table:
         name_w = min(max(display_width(sanitize_text(m["name"])) for m in modules), name_budget)
-        emit(" " + _pad("Status", STATUS_W) + " " + _pad("Module", name_w) + " " + _pad("Open C/W/I", 10) + " "
+        emit(" " + _pad("Status", status_w) + " " + _pad("Module", name_w) + " " + _pad("Open C/W/I", 10) + " "
              + _pad("Fixed", 5) + " " + _pad("Rejected", rej_w) + " Layers")
         for m in modules:
             name_lines = wrap(sanitize_text(m["name"]), name_w)
-            first = (" " + _pad(m["status"], STATUS_W, paint(m["status"], STATUS_STYLE[m["status"]], "bold")) + " "
+            first = (" " + _pad(m["status"], status_w, paint(m["status"], STATUS_STYLE[m["status"]], "bold")) + " "
                      + _pad(name_lines[0], name_w) + " " + _pad(_open_cwi(m), 10) + " "
                      + _pad(str(_count(m, "FIXED")), 5) + " " + _pad(str(_count(m, "REJECTED")), rej_w) + " "
                      + _layers_text(m))
             emit(first)
             for extra in name_lines[1:]:
-                emit(" " + " " * STATUS_W + " " + extra)
+                emit(" " + " " * status_w + " " + extra)
     else:
         for m in modules:
             emit(" " + paint(m["status"], STATUS_STYLE[m["status"]], "bold") + "  " + sanitize_text(m["name"]))
@@ -196,17 +215,18 @@ def render_terminal(report: dict, options: RendererOptions = None, *, is_tty: bo
             for f in items[:options.max_findings_per_file]:
                 label = _finding_label(f)
                 status = f" [{f['status']}]" if f["status"] != "FIXED" else ""
-                prefix_plain = f"{label:<8} {_loc(f)}  {sanitize_text(f['rule_id'])}{status}"
+                prefix_plain = f"{label:<8} {location_text(f)}  {sanitize_text(f['rule_id'])}{status}"
                 lines = wrap(prefix_plain, W, "  ", "      ")
                 lines[0] = lines[0].replace(label, paint(label, SEVERITY_STYLE.get(label, "bold"), "bold"), 1)
                 emit(*lines)
                 emit(*wrap(sanitize_text(f["message"]), W, "           "))
-                if f["status"] != "FIXED":
-                    if f.get("suggestion"):
-                        emit(*wrap("Action: " + sanitize_text(f["suggestion"]), W, "           ", "                   "))
-                    if f.get("rejection_reason"):
-                        emit(*wrap("Rejected: " + sanitize_text(f["rejection_reason"]), W, "           ",
-                                   "                    "))
+                if f["status"] != "FIXED":  # one compact line: why it was not fixed, and what the developer does
+                    parts = ([f"Not fixed: {sanitize_text(f['reason_not_fixed'])}"] if f.get("reason_not_fixed")
+                             else [])
+                    if f.get("developer_action"):
+                        parts.append(f"Action: {sanitize_text(f['developer_action'])}")
+                    if parts:
+                        emit(*wrap(". ".join(parts), W, "           ", "                   "))
                     for ev in f.get("evidence", []):
                         emit(*wrap("Evidence: " + _evidence_text(ev), W, "           ", "                    "))
             hidden = len(items) - options.max_findings_per_file
@@ -216,12 +236,19 @@ def render_terminal(report: dict, options: RendererOptions = None, *, is_tty: bo
         emit("  none to show")
 
     # REJECTED EDITS ---------------------------------------------------------------------------------------
-    rejected = [(m["name"], r) for m in modules for r in m["rejections"]]
+    rejected = [(m, r) for m in modules for r in m["rejections"]]
     if rejected:
         section(f"REJECTED EDITS ({len(rejected)})")
-        for name, reason in rejected:
-            text = reason if isinstance(reason, str) else str(reason)
-            emit(*wrap(f"{sanitize_text(name)}: reason: {sanitize_text(text)} - file left unchanged", W, "  ", "      "))
+        for m in modules:
+            refused = m.get("refused_files") or []
+            for item in refused:  # the file names its own outcome: a partial module keeps its valid changes
+                emit(*wrap(f"{sanitize_text(m['name'])}: {sanitize_text(item['path'])}: reason: "
+                           f"{sanitize_text(item['reason'])} - {refusal_outcome(item, report['run']['mode'])}",
+                           W, "  ", "      "))
+            for reason in m["rejections"][len(refused):]:  # a rejection the run state did not name by file
+                text = reason if isinstance(reason, str) else str(reason)
+                emit(*wrap(f"{sanitize_text(m['name'])}: reason: {sanitize_text(text)} - edit refused "
+                           "(file not recorded)", W, "  ", "      "))
     else:
         section("REJECTED EDITS: none")
 

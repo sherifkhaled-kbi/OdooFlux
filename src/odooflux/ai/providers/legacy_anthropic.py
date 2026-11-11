@@ -280,7 +280,8 @@ def fix_bundle(reports: list, module_paths: list, api_key: str, verbose: bool = 
     if ai_notes and verbose:
         print(f"  [AI] Notes: {ai_notes}")
 
-    # Plan each module's AI edits, validate them, then write each module all-or-nothing (FR-015).
+    # Plan each module's AI edits and validate each file on its own (approved partial-migration policy): an invalid
+    # output refuses that file only; its valid siblings are still written and a refused file keeps its bytes.
     plans: dict = {}  # module name -> (module_path, report, [FileEdit])
     for file_key, (filepath_str, original, issues, report, module_path) in file_map.items():
         fp = Path(filepath_str)
@@ -304,28 +305,31 @@ def fix_bundle(reports: list, module_paths: list, api_key: str, verbose: bool = 
 
     fixed_count = 0
     for module_name, (module_path, report, edits) in plans.items():
-        rejected = [e for e in edits if e.rejection]
-        if rejected:
-            for edit in rejected:
-                rel = edit.path.relative_to(module_path)
-                print(f"  [AI] ⚠ {module_name}/{rel} — rejected: {edit.rejection}")
-                report.issues.append(Issue(
-                    file=str(edit.path), line=0, severity=SEVERITY_WARNING,
-                    category="Fix Rejected",
-                    message=f"AI output for {rel.as_posix()} rejected: {edit.rejection}. "
-                            f"No AI edit in {module_name} was written.",
-                    suggestion="Fix this file by hand; its findings stay open",
-                    auto_fixable=False, rejection_reason=edit.rejection,
-                ))
-                run.log.append("edit_rejected", module=module_name, path=str(edit.path),
-                           rules=sorted({i.category for i in edit.issues}),
-                           reason=edit.rejection, source="ai")
+        accepted = []
+        for edit in edits:
+            if not edit.rejection:
+                accepted.append(edit)
+                continue
+            rel = edit.path.relative_to(module_path)
+            print(f"  [AI] ⚠ {module_name}/{rel} — rejected: {edit.rejection}")
+            report.issues.append(Issue(
+                file=str(edit.path), line=0, severity=SEVERITY_WARNING,
+                category="Fix Rejected",
+                message=f"AI output for {rel.as_posix()} rejected: {edit.rejection}. "
+                        f"This file was left unchanged; the other files of {module_name} are not affected.",
+                suggestion="Fix this file by hand; its findings stay open",
+                auto_fixable=False, rejection_reason=edit.rejection,
+            ))
+            run.log.append("edit_rejected", module=module_name, path=str(edit.path),
+                       rules=sorted({i.category for i in edit.issues}),
+                       reason=edit.rejection, source="ai")
+        if not accepted:
             continue
-        written = write_module(module_path, edits, report)
+        written = write_module(module_path, accepted, report)
         if report.blocked:
             print(f"  [AI] ✗ {module_name} — write failed, module restored; see report")
             continue
-        for edit in edits:
+        for edit in accepted:
             print(f"  [AI] ✓ {module_name}/{edit.path.relative_to(module_path)}")
         fixed_count += written
 

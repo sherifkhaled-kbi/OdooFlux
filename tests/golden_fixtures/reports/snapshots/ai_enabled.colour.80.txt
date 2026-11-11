@@ -11,9 +11,10 @@ Stages: Discover > Plan > Workspace > Step N/M > Validate L1-L5 > Promote >
 
 [1mFINDINGS[0m
 kbi_ai_mod/models/m.py
-  [33;1mWARNING[0m  L4  ai:provider/model [NEEDS_REVIEW]
+  [33;1mWARNING[0m  L4:UNKNOWN  ai:provider/model [NEEDS_REVIEW]
            ai proposed
-           Action: Apply the documented replacement
+           Not fixed: no automatic fixer for this finding. Action: Apply the
+                   documented replacement
            Evidence: EV-110
 
 [1mREJECTED EDITS: none[0m

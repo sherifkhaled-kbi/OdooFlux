@@ -6,6 +6,18 @@ For installation basics and the complete CLI reference, see [../README.md](../RE
 
 **Status of this document.** It describes the code as it exists in the repository on 2026-11-07. The framework is implemented, but **no human review has been recorded and production certification is not granted**. Zero migration paths are currently supported. Read section 13 before making any claim about the tool's accuracy.
 
+## About and attribution
+
+| Item | Value |
+|---|---|
+| Company | KnowledgeBI |
+| Website | https://www.knowledgebi.net |
+| Developer | Sherif Khaled |
+| Copyright | © 2026 KnowledgeBI. All rights reserved. |
+
+The CLI prints the same attribution in `odooflux --help` and `odooflux --version`. The source of the text is
+`ATTRIBUTION_LINES` in `src/odooflux/cli/main.py`. The CLI reference is in [README section 6](../README.md#6-complete-cli-reference).
+
 ## Table of contents
 
 1. [System architecture](#1-system-architecture)

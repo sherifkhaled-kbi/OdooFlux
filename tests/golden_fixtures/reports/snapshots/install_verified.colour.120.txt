@@ -8,7 +8,7 @@ Stages: Discover > Plan > Workspace > Step N/M > Validate L1-L5 > Promote > Repo
 
 [1mFINDINGS[0m
 kbi_install_ok/models/m.py
-  [32;1mFIXED[0m    L2  17-18.py.x
+  [32;1mFIXED[0m    L2:UNKNOWN  17-18.py.x
            fixed
 
 [1mREJECTED EDITS: none[0m

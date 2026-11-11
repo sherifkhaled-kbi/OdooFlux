@@ -8,7 +8,7 @@ from ..integration.helpers import new_tmp, run_cli_main
 SPEC = "contract.samples.raising_plugins:PLUGIN"
 
 
-MANIFEST = "{'name': 'clean', 'version': '14.0.1.0.0', 'depends': ['base']}\n"
+MANIFEST = "{'name': 'clean', 'version': '14.0.1.0.0', 'depends': ['base'], 'license': 'LGPL-3'}\n"
 
 
 def _run(plugin=True, manifest=True):

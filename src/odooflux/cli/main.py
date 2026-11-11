@@ -4,6 +4,7 @@ import argparse
 import sys
 from pathlib import Path
 
+from odooflux import __version__
 from odooflux.cli import deprecations
 from odooflux.cli.ai_options import add_ai_arguments
 from odooflux.cli.plugins import load_plugins
@@ -13,6 +14,18 @@ from odooflux.core.jobs.state_dir import default_state_dir
 SUBCOMMANDS = ("migrate", "plan", "rollback", "resume", "versions")
 DEPRECATED_API_KEY = ("WARNING: --api-key is deprecated (D-10): it can leak through shell history. "
                       "Set ANTHROPIC_API_KEY instead.")
+
+# Official attribution. The single source for `--help` and `--version`; the docs repeat these facts verbatim.
+ATTRIBUTION_LINES = (
+    "Company: KnowledgeBI | Website: https://www.knowledgebi.net",
+    "Developer: Sherif Khaled",
+    "Copyright: © 2026 KnowledgeBI. All rights reserved.",
+)
+
+
+def version_text() -> str:
+    """Output of ``odooflux --version``: the version, then the attribution lines."""
+    return "\n".join((f"odooflux {__version__}", *ATTRIBUTION_LINES))
 
 
 class SafeParser(argparse.ArgumentParser):
@@ -36,7 +49,11 @@ def _common_sources(parser):
 def build_parser() -> argparse.ArgumentParser:
     parser = SafeParser(
         prog="odooflux", description="Analyze and auto-fix Odoo module(s) for migration",
-        epilog="Subcommands: migrate (default), plan, rollback, resume, versions.")
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="\n".join(("Subcommands: migrate (default), plan, rollback, resume, versions, knowledge.", "",
+                          *ATTRIBUTION_LINES)))
+    parser.add_argument("--version", action="version", version=version_text(),
+                        help="print the version and attribution, then exit")
     sub = parser.add_subparsers(dest="command", metavar="COMMAND")
 
     mig = sub.add_parser("migrate", help="analyze, optionally fix (default)",
@@ -120,6 +137,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     ver = sub.add_parser("versions", help="list registry versions and research status")
     ver.add_argument("--plugin", action="append", default=[], metavar="MODULE:ATTR")
+    # listed for discovery only: run() hands `knowledge ...` to cli.knowledge before this parser ever sees it
+    sub.add_parser("knowledge", help="inspect and update the knowledge base (status, update, check, ...)", add_help=False)
     return parser
 
 
@@ -130,6 +149,9 @@ def run(argv, ctx) -> int:
     if deprecations.api_key_removed() and any(deprecations.names_api_key(t) for t in argv):
         print(deprecations.API_KEY_REMOVED_MESSAGE.format(removed=deprecations.API_KEY_REMOVED_IN), file=sys.stderr)
         return 2  # D-10: before any parsing, so no error text can quote the value
+    if argv[:1] == ["--version"]:  # before the legacy "migrate" prefix below would capture it
+        print(version_text())
+        return 0
     if argv and argv[0] == "knowledge":
         from odooflux.cli.knowledge import main as knowledge_main
         return knowledge_main(argv[1:], registries=ctx.registries)

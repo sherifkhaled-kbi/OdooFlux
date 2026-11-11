@@ -128,6 +128,65 @@ Measured on 249 official 16.0 community modules copied from the cached snapshot 
 Coverage so far is 24.6 % of `attrs` occurrences. A path to about 90 % of `attrs` (plan, not measured): inherited
 fragments (up to +36.7 points), falsy literals (up to +20.0), nested views (up to +9.7).
 
+## Report hash audit (VR-5)
+
+Scope: `tests/golden_fixtures/reports/**` and `PRE_CHANGE_HASHES` in `tests/unit/reporting/test_report_release.py`,
+against HEAD. Method: structural diff of the 10 scenario goldens; line diff of the 60 snapshot files; all 7 renderers of
+the 10 scenarios rendered from HEAD (`git archive`) and from the working tree, each changed path or line mapped to a
+category. Every HEAD pin reproduces HEAD output and every current pin reproduces current output.
+
+| Cat | Meaning | Changed paths |
+|---|---|---|
+| A | dry run: `recovery.reversible`/`rollback_cmd` cleared, `summary.edits.planned`, `applied` 0 | 24 |
+| B | unresolved findings only: `location`, `reason_not_fixed`, `developer_action` (11 findings) | 33 |
+| C | PARTIAL: `status`, `status_reasons`, `modules_by_status`; additive `refused_files` | 25 |
+| D | `location.column` is `UNKNOWN` (inside B; no int column in any golden) | 11 |
+| E | dry run: `modules[].reversible` false | 7 |
+| F | `validation` key on edits | 0 (no golden carries it) |
+| G | `fix_class` / `experimental` | 0 |
+| H | unexpected | 0 |
+
+JSON: 89 changed paths in 10 goldens; `reconcile` checks pass (modules_by_status, findings, edits applied/planned/rejected
+against module sums; FIXED findings have no unresolved-only field; fix-mode recovery and reversible unchanged).
+
+Hash table: 70 entries, 54 changed against HEAD (json 20, html 10, sarif 12, terminal 12) and 16 unchanged (sarif and
+terminal of blocked, install_verified, provisional, verified_success). Sarif changes are one `properties.reason_not_fixed`
+per unresolved finding (11 per form); the sarif message already carried the action. Unchanged terminal pins are explained
+by the default terminal not listing FIXED findings and by no dry-run wording change there.
+
+Snapshots (plain and colour, widths 60/80/120): every added line is A, B, C, D or the PA-6 table layout; no overflow or
+truncation at any width.
+
+Unexpected finding, fixed: the HTML badge and tile emitted the raw status as the class, so
+`class="badge status-PARTIAL — DEVELOPER ACTION REQUIRED"` split into several tokens and matched no CSS rule. Fix:
+`_status_css_class` in `reporting/html/html.py` (first word of the status) and a `.status-PARTIAL` colour. Failing-first
+test `test_html_status_class_is_one_css_token`. The 10 html pins were re-pinned; each html output differs from its
+pre-fix form only by the CSS rule and the class token.
+
+Corrected: the `PRE_CHANGE_HASHES` header claimed the sarif pins were unchanged and that scenarios without unresolved
+findings were unchanged. Both were wrong and the comment is rewritten.
+
+Observations, no change made:
+* Dry-run goldens with `fix_applied` findings and `fixes` greater than edit files (for example `static_validated`: 3 fixes,
+  1 edit file) are synthetic. A real dry run never sets `fix_applied`, so it cannot produce FIXED findings. `planned` counts
+  edit files, which matches the fix-run `applied` unit (`run.py` adds `len(writable)`).
+* `refused_files` is empty in every golden, so `changes_kept` is not covered by a golden.
+* The D3 bullet under Known defects is stale. `test_known_defects_d2_d4.D3DryRunClaimsReversible` already asserts the fixed
+  behaviour and passes.
+* `tests/unit/reporting/renderer_hashes.json` is untracked, referenced by nothing, and matches 10 current and 22 HEAD pins.
+  It is stale and not part of this audit.
+
+Focused tests: `discover -s tests/unit/reporting`: 162 OK, 1 skipped. `discover -s tests/integration/reporting`: 36 OK.
+`test_report_release`: 10 OK. `tests.integration.test_provisional_corpus` and `tests.unit.knowledge.kap.test_migrate_coverage`:
+14 of 16 pass. The 2 failures compare a real `migrate` JSON report with `tests/golden_fixtures/17.0/kbi_demo/expected/18.0/report.json`
+and the `kbi_demo` expected report. Both pass at HEAD. The differing paths are: `developer_action` on finding 12 (the AF-9
+addition, absent from the golden), finding 12 and 17 `id`/`message`/`severity`/`suggestion`, `status_inputs_digest`, and
+`summary` findings and open_findings info/warning. This is golden drift in the `kbi_demo` area, which was not touched.
+The reporting renderers are not implicated: both tests compare JSON only.
+
+Outcome: report output is consistent with the approved categories, with one renderer defect fixed. Open: the `kbi_demo`
+golden drift (owner of `kbi_demo`), the untracked stale `renderer_hashes.json`, and the stale D3 bullet.
+
 ## Known defects (pinned by `tests/regression/test_known_defects_d2_d4.py`, behaviour deliberately unchanged)
 
 * **D2, confirmed certified-mode correctness defect.** The legacy `states=` rewrite
@@ -135,12 +194,79 @@ fragments (up to +36.7 points), falsy literals (up to +20.0), nested views (up t
   that the view's model has a `state` field, so it can produce a view Odoo 17 rejects. It predates Feature 012. It does not
   change the Feature 012 automatic-fix results (no generated FIX_ENABLED rule exists), but it does mean plain `--fix` is
   not limited to certified rules: it also runs the legacy regex layer.
-* **D3.** A `--dry-run` report states `recovery.reversible: true` with a rollback command although nothing was written.
-* **D4.** A 16 to 17 report flags `<tree>` as "deprecated in v18" (CRITICAL, auto-fixable). A narrower detector fix was
-  tried and reverted because `tests/unit/knowledge/test_legacy_precedence.py` deliberately asserts forward-looking
-  findings; it needs an owner decision.
+* **D3 (fixed).** A `--dry-run` report now states `recovery.reversible: false` and no rollback command, since nothing was
+  written. `tests.regression.test_known_defects_d2_d4.D3DryRunClaimsReversible` asserts this and passes (FC-3, re-run
+  2026-11-11).
+* **D4 (resolved as detection; article-based, not verified against 17.0 source).** A 16 to 17 report no longer flags
+  `<tree>`: the `<tree>` to `<list>` row is gated to the 18 and 19 targets, because the community article places that change
+  at v18 and `<tree>` is valid for 17. A 17 to 18 report keeps the v18 wording. The `<tree>` to `<list>` rewrite by the
+  XML fixer is separate and unchanged here.
 * **D6.** On 2 of 249 official modules (`hr_skills_slides`, `hr_skills_survey`) the legacy XML fixer produces malformed XML.
   The L1 validator rejects the edit (fail-safe), but the module's other edits are withheld too. Same with and without the
   experimental flag.
 * Fixed in this slice: the legacy XML fixer rewrote `<tree>` to `<list>`, `view_mode` and chatter blocks for targets
   below 18, which breaks views on 17.
+
+## VR-3 / VR-2: article-derived detection rows (Medium article, verified 2026-11-11)
+
+Article: "Odoo Migration Decoded 16→17→18→19 … (Part 1)" by Osama (@eng.osama1998). **Limitation: article not retrievable
+(HTTP 403) on the one permitted WebFetch; an ordinary WebSearch by title did not return it.** No bypass, mirror or archive was
+used. Every row below is therefore checked against official sources only, not against the article text. Status key:
+verified-official (cited Odoo or Python source), contradicted (official evidence differs; gate or severity changed or lowered),
+unverified (no official evidence found; the gate is marked "gate unverified" in the code).
+
+| Rule | Gate now (from / target) | Evidence status | Note |
+|---|---|---|---|
+| name_get | from < 17, WARNING | verified-official | 17.0 `models.py` warns "Since 17.0, deprecated method, read display_name instead"; 17.0 ORM changelog. Replacement is `display_name`, not `_compute_display_name` |
+| read_group | target 19, WARNING (was from < 17) | contradicted for 17; verified-official for 19 | 17.0 and 18.0 `read_group()` have no deprecation note. 19.0 ORM changelog, "Odoo Online 18.2" entry: deprecated for backend use, use `_read_group`. Mapping 18.2 to 19.0 is inferred |
+| invalidate_cache / flush | from < 17, WARNING (kept) | verified-official | 16.0 `models.py` defines both with DeprecationWarning; 17.0 `models.py` defines neither. See FC-1 |
+| HTML body (`body=` string with `<`) | from < 17, WARNING | verified-official | 16.0 `mail_thread.py` passes body through; 17.0 escapes a plain str body (`escape(body)`) and keeps `Markup` |
+| `from odoo.fields import Command` | any, INFO (was from < 17, CRITICAL) | contradicted | 17.0 `odoo/__init__.py` imports Command from `odoo.fields`; the path works |
+| post_init_hook(cr, registry) | from < 17, CRITICAL | verified-official | 16.0 `loading.py` calls `(cr, registry)`; 17.0 calls `(env)` |
+| _render_qweb_pdf | from < 17, INFO (was WARNING) | contradicted | 17.0 `ir_actions_report.py` defines it with no deprecation note |
+| distutils | any, WARNING | verified-official (Python, not Odoo) | Python 3.12 what's new: removed (PEP 632) |
+| utcnow | any, INFO | verified-official (Python, not Odoo) | Python 3.12 what's new: `utcnow()` deprecated |
+| @http.route type='json' | target 18 and target 19, WARNING (was 19 only) | verified-official | 19.0 branch `upgrade_code/18.1-02-route-jsonrpc.py` rewrites `json` to `jsonrpc`; 18.0 HTTP docs list only `json`/`http` |
+| t-raw | any, WARNING (was from < 17, CRITICAL) | verified-official (deprecation); gate contradicted | 17.0, 18.0, 19.0 QWeb docs: "Deprecated since version 15.0", still supported |
+| t-esc to t-out | target 18, INFO (was WARNING) | contradicted | 17.0, 18.0, 19.0 QWeb docs: alias of t-out, "Not yet formally deprecated" |
+| kanban-box to card | target 18, WARNING (kept) | verified-official | 18.0 `kanban_arch_parser.js` says `"kanban-box" is deprecated` in favour of a `card` template. See FC-1 |
+| inline `<script>` in QWeb | target 18, WARNING (kept) | unverified (gate unverified) | Article only |
+| createElement('script') | target 18, WARNING (kept) | unverified (gate unverified) | Article only; CSP claim not verified |
+| SCSS @import | any, INFO (was WARNING) | verified-official for Dart Sass; contradicted for Odoo 17 | Dart Sass deprecated `@import` in 1.80.0 (removal 3.0.0). Odoo 17.0 compiles SCSS with libsass (`assetsbundle.py`) |
+| SCSS division `/` | any, INFO (was WARNING) | verified-official for Dart Sass; contradicted for Odoo 17 | Dart Sass `math.div` since 1.33.0; no removal version on the page. Same libsass point |
+| manifest `license` missing | any, INFO (was WARNING, from < 17) | contradicted | 17.0 manifest docs: `license` defaults to LGPL-3, so it is optional |
+| `<tree>` to `<list>` | target 18 and 19 (unchanged) | verified-official | 18.0 branch `upgrade_code/17.5-01-tree-to-list.py` |
+
+Verification of gates: the 16-to-17, 17-to-18, 18-to-19, 16-to-19 and 17-to-19 pairs are covered in
+`tests/unit/test_legacy_article_detections.py` (20 tests OK; see FC-1 below for the two rows changed in this step).
+
+Golden fixture: `tests/golden_fixtures/17.0/kbi_demo/expected/18.0/report.json` was regenerated (only this file). The diff from
+the previous expected file is limited to the intended finding changes: the t-esc finding (WARNING to INFO, new text), the
+kanban-box message ("(unverified)"), and the values derived from them (finding ids, `status_inputs_digest`, which hashes the
+open critical/warning/review counts, and the warning and info counts). Other working-tree changes to this file were already present before this step and are unaffected.
+
+FC-1 (2026-11-11): the kanban-box message and suggestion changed again, so the same file was regenerated once more with a
+one-off script that calls the harness `run_case` for kbi_demo 17.0 to 18.0 (no other golden file touched). The golden test
+passes. The kanban finding is now the verified wording. The rule's own suggestion is "Rename the kanban-box template to
+t-name="card"". The HEAD file already has the KB-rule finding with the same deprecation wording.
+
+### FC-1 (kanban-box, invalidate_cache/flush, inline script, KB rule 17-18.xml.kanban-box-deprecated)
+
+Official sources only. Each `raw.githubusercontent.com` URL is a branch head fetched through WebFetch (summaries, not byte
+reads, and long files were paged). The Medium article was not used.
+
+| Item | Evidence (sources tried) | Status | Action taken |
+|---|---|---|---|
+| (a) `invalidate_cache()` / `flush()` | `odoo/odoo` 16.0, 17.0, 18.0 `odoo/models.py` (raw URLs, pages 0-100k, 100-200k, 200-300k). 16.0 defines `invalidate_cache` and `flush` with `DeprecationWarning` ("use invalidate_model(), invalidate_recordset() or env.invalidate_all()" and "use flush_model(), flush_recordset() or env.flush_all()"). 17.0 defines neither (only `invalidate_model`, `flush_model`, `*_recordset`). The ORM changelog (`/documentation/17.0/developer/reference/backend/orm/changelog.html`, `/18.0/...`) names none of them; the 15.4 entry introduced the new API. Not read: the last 23k characters of 17.0 and the last 10k of 18.0 | verified-official (deprecated in 16.0, absent in 17.0) | Gate kept at from < 17. Messages now name the 16.0 deprecation and the replacement. Tests assert the 16-to-17 and 16-to-19 findings and the absence for 17-to-18 and 17-to-19 |
+| (b) `kanban-box` template | `odoo/odoo` 18.0 `addons/web/static/src/views/kanban/kanban_arch_parser.js`: comment `"kanban-box" is deprecated`, runtime `console.warn`, replacement is a `card` template. 17.0 same file: only a `NOTE ON 't-name="kanban-box"'` comment. 19.0 same file: only the `card` constant, no `kanban-box` or deprecation wording. `kanban-card` appears nowhere; the new name is `card`. The 18.0 upgrade_code listing (`/tree/18.0/odoo/upgrade_code`) has no kanban script | verified-official (deprecated in 18.0) | Gate kept at the 18 target. Message reads "deprecated in Odoo 18.0 in favour of a 'card' template". Suggestion changed to rename to `t-name="card"`. Test assertions updated. The 19.0 target has no legacy row; it is covered by KB rule 18-19.xml.kanban-box-removed (not edited) |
+| (c) inline `<script>` in QWeb; `document.createElement('script')` and CSP | WebSearch (`odoo.com` and `github.com` domains) returned the 18.0 Security and QWeb docs, and odoo/odoo issue #22404 (CSP without `unsafe-inline`, about older versions). No official 18.0 or 19.0 change found | unverified | Rows unchanged. "gate unverified" comments and wording kept in `legacy_rules.py` and the test file |
+| (d) KB rule `17-18.xml.kanban-box-deprecated` (EV-119) | The rule's claim (17.0 has the name, 18.0 deprecates it for `card`, 19.0 does not read it) matches (b). EV-119's cited revisions (`9ef8d62`, `75d6abe`) were not fetched; the branch heads above were. Line numbers in the WebFetch summaries are approximate | verified-official, consistent with EV-119 | No KB JSON, digest or release data edited. Recommended action for the KB owner: keep the rule. Optionally re-check EV-119 line numbers against the pinned revisions |
+
+FC-1 tests: `tests.unit.test_legacy_article_detections` 20 OK, `tests.unit.test_legacy_xml_version_gating`,
+`tests.unit.test_legacy_xml_wellformed`, `tests.integration.test_golden_migrations`, `tests.regression.test_known_defects_d2_d4`,
+`tests.unit.knowledge.test_legacy_precedence`, `tests.contract.test_plugin_exception`: all OK (60 tests across the seven modules).
+
+Note: the Known defects D3 entry is fixed (FC-3 above). Lines in the Observations block and the Outcome paragraph of the
+earlier report still call the D3 bullet stale. These were left unchanged per the FC-3 scope. That block also describes
+`tests/unit/reporting/renderer_hashes.json` as present: it was untracked, unreferenced by any code, tool or test, and
+stale, and was removed in FC-4 (owner-approved).

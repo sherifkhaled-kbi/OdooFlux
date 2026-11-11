@@ -8,6 +8,8 @@ a FAILED module; INFO never fails a build unless ``--fail-on info``. ``--fail-on
 from dataclasses import dataclass
 from typing import Optional
 
+from odooflux.core.orchestrator.status import PARTIAL_STATUS
+
 OK, THRESHOLD, USAGE, REJECTED, BLOCKED = 0, 1, 2, 3, 4
 FAIL_ON_CHOICES = ("none", "critical", "warning", "info")
 FAIL_ON_STATUSES = ("FAILED", "NEEDS_REVIEW")
@@ -64,7 +66,10 @@ def exit_code(report: dict, policy: ExitPolicy = None, *, write_mode: bool = Fal
         if any(f["status"] in ("OPEN", "NEEDS_REVIEW") and _RANK[f["severity"]] >= floor
                for m in modules for f in m["findings"]):
             return THRESHOLD
-    if any(m["status"] in policy.statuses for m in modules):
+    failing = set(policy.statuses)
+    if "FAILED" in failing:  # a PARTIAL module is an incomplete migration: it fails the same gate as a FAILED one
+        failing.add(PARTIAL_STATUS)
+    if any(m["status"] in failing for m in modules):
         return THRESHOLD
     return OK
 

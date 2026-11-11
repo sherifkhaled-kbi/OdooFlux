@@ -9,8 +9,8 @@ D2  The legacy `states=` -> `invisible="state not in [...]"` regex runs under pl
     view's model has a `state` field, so it can produce a view that Odoo 17 rejects. It is a correctness defect of an
     UNCERTIFIED rewrite that plain `--fix` performs.
 D3  A `--dry-run` report claims `recovery.reversible: true` and prints a rollback command for a run that wrote nothing.
-D4  A 16 -> 17 report flags `<tree>` as "deprecated in v18" (CRITICAL, auto-fixable) although `<tree>` is the valid
-    tag for 17.
+D4  (resolved) A 16 -> 17 report flagged `<tree>` as "deprecated in v18" (CRITICAL, auto-fixable) although `<tree>`
+    is the valid tag for 17. Detection now gates the row to the 18 and 19 targets; 17 -> 18 keeps the v18 wording.
 """
 
 import json
@@ -27,26 +27,26 @@ REPO = Path(__file__).resolve().parents[2]
 
 
 class D2StatesWithoutStateField(unittest.TestCase):
-    @unittest.expectedFailure
     def test_states_is_left_alone_when_no_state_field_is_verified(self):
         view = '<form><button name="go" states="draft,done"/></form>\n'  # the fixer has no model information
         out = apply_xml_fixes(view, 16, 17)
-        self.assertIn('states="draft,done"', out)  # today: rewritten to invisible="state not in ['draft', 'done']"
+        self.assertIn('states="draft,done"', out)  # left for the experimental fixer / detection
 
-    def test_current_behaviour_is_pinned(self):
-        out = apply_xml_fixes('<form><button name="go" states="draft,done"/></form>\n', 16, 17)
-        self.assertIn("state not in ['draft', 'done']", out)  # flips when D2 is corrected: update both tests
+    def test_states_is_rewritten_only_when_the_state_field_is_verified(self):
+        out = apply_xml_fixes('<form><button name="go" states="draft,done"/></form>\n', 16, 17,
+                              verified_state_field=True)
+        self.assertIn("state not in ['draft', 'done']", out)
 
 
 class D4TreeFlaggedAsV18On17Target(unittest.TestCase):
-    @unittest.expectedFailure
     def test_no_tree_deprecation_finding_for_a_17_target(self):
         found = {i.category for i in scan_content("<form/>\n<tree>\n<field name='a'/>\n</tree>\n", "v.xml", 16, 17)}
         self.assertNotIn("Tree Tag Renamed", found)
 
-    def test_current_behaviour_is_pinned(self):
-        found = {i.category for i in scan_content("<tree>\n</tree>\n", "v.xml", 16, 17)}
-        self.assertIn("Tree Tag Renamed", found)  # flips when D4 is corrected: update both tests
+    def test_17_to_18_keeps_the_v18_tree_finding(self):
+        issues = [i for i in scan_content("<tree>\n</tree>\n", "v.xml", 17, 18) if i.category == "Tree Tag Renamed"]
+        self.assertEqual(len(issues), 1)
+        self.assertIn("v18", issues[0].message)
 
 
 class D3DryRunClaimsReversible(unittest.TestCase):
@@ -65,14 +65,10 @@ class D3DryRunClaimsReversible(unittest.TestCase):
                             "json"], cwd=tmp, env=env, capture_output=True, text=True, timeout=120)
             return json.loads(report.read_text(encoding="utf-8"))
 
-    @unittest.expectedFailure
     def test_dry_run_is_not_reported_as_reversible(self):
         recovery = self._dry_run_report()["recovery"]
-        self.assertFalse(recovery.get("reversible"))  # today: True, with a rollback command
-
-    def test_current_behaviour_is_pinned(self):
-        recovery = self._dry_run_report()["recovery"]
-        self.assertTrue(recovery.get("reversible"))  # flips when D3 is corrected: update both tests
+        self.assertFalse(recovery.get("reversible"))
+        self.assertIsNone(recovery.get("rollback_cmd"))  # nothing was written, so there is nothing to roll back
 
 
 if __name__ == "__main__":

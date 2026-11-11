@@ -1,18 +1,23 @@
 """Fix attribution by re-scan (FR-008, FR-016, R-04)."""
 
 
-def resolved_by_rescan(before: list, after: list, key=lambda item: item.category) -> list:
+def resolved_by_rescan(before: list, after: list, key=lambda item: item.category, touched=None) -> list:
     """
     Items of *before* that the re-scan no longer reports. Pairs are formed by key and line
     distance, closest pairs first; each post-fix item accounts for at most one pre-fix item, so a
     persisting item never counts as fixed. A moved finding is still found (by key and proximity).
+
+    ``touched(item)`` says whether the fix edited the item's line. On a distance tie an untouched item is
+    paired first, so the persisting finding keeps its identity and the edited one is the one reported as fixed
+    (a line-number tie alone cannot tell two findings of one category apart).
     """
+    touched = touched or (lambda item: False)
     pairs = sorted(
-        ((abs(a.line - b.line), i, j)
+        ((abs(a.line - b.line), bool(touched(b)), i, j)
          for i, b in enumerate(before) for j, a in enumerate(after) if key(a) == key(b)),
-        key=lambda t: (t[0], t[1], t[2]))
+        key=lambda t: (t[0], t[1], t[2], t[3]))
     matched_before, matched_after = set(), set()
-    for _distance, i, j in pairs:
+    for _distance, _touched, i, j in pairs:
         if i in matched_before or j in matched_after:
             continue
         matched_before.add(i)

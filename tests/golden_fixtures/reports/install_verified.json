@@ -61,6 +61,7 @@
       "path": "/work/kbi_install_ok",
       "processing": "DONE",
       "promoted_files": [],
+      "refused_files": [],
       "rejections": [],
       "reversible": true,
       "runtime": {

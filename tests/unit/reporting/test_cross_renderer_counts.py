@@ -88,6 +88,9 @@ class CrossRendererTests(unittest.TestCase):
                 plain = re.sub(r"\x1b\[[0-9;]*m", "", text)
                 for module, pm in per.items():
                     row = re.search(rf"^ *\S+ +{re.escape(module)} +(\d+)/(\d+)/(\d+) +(\d+) +(\d+) ", plain, re.M)
+                    if row is None:  # the table gives way to a two-line block when a status label is wider than it
+                        row = re.search(rf"^ .*{re.escape(module)}\n   open C/W/I (\d+)/(\d+)/(\d+)   fixed (\d+)   "
+                                        rf"rejected (\d+)$", plain, re.M)
                     self.assertTrue(row, f"{name}: no row for {module}")
                     self.assertEqual(tuple(map(int, row.groups())),
                                      (pm["c"], pm["w"], pm["i"], pm["fixed"], pm["rejected"]), (name, module))

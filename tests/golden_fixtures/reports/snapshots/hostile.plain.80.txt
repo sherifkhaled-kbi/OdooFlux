@@ -4,17 +4,19 @@ Stages: Discover > Plan > Workspace > Step N/M > Validate L1-L5 > Promote >
   Report
 
 MODULE RESULTS
- FAILED  kbi_hostile
+ PARTIAL — DEVELOPER ACTION REQUIRED  kbi_hostile
    open C/W/I 1/0/0   fixed 0   rejected 0
    layers: L1 FAIL L2 PASS L3 PASS L4 SKIPPED L5 SKIPPED
-  Reasons  kbi_hostile: layer_failed:L1, open_critical_findings
+  Reasons  kbi_hostile: rejected_edits:1, layer_failed:L1,
+           open_critical_findings
 
 FINDINGS
 kbi_hostile/views/<b>x</b>.xml
-  CRITICAL L1  r.<U+001B>[31mbad [NEEDS_REVIEW]
+  CRITICAL L1:UNKNOWN  r.<U+001B>[31mbad [NEEDS_REVIEW]
            <U+001B>[31mRED<U+001B>[0m <script>alert(1)</script> <U+0007>bell
            <U+001B>]0;title<U+0007> end
-           Action: <U+001B>[31mRED<U+001B>[0m <script>alert(1)</script>
+           Not fixed: no automatic fixer for this finding. Action:
+                   <U+001B>[31mRED<U+001B>[0m <script>alert(1)</script>
                    <U+0007>bell <U+001B>]0;title<U+0007> end
            Evidence: EV-110
                     https://github.com/odoo/odoo/blob/17.0/odoo/addons/base/mode
@@ -23,7 +25,8 @@ kbi_hostile/views/<b>x</b>.xml
 
 REJECTED EDITS (1)
   kbi_hostile: reason: <U+001B>[31mRED<U+001B>[0m <script>alert(1)</script>
-      <U+0007>bell <U+001B>]0;title<U+0007> end - file left unchanged
+      <U+0007>bell <U+001B>]0;title<U+0007> end - edit refused (file not
+      recorded)
 
 VERIFICATION SCOPE
   Ran: L1 syntax, L2 static re-scan, L3 dependency integrity

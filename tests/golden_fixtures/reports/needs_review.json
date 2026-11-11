@@ -15,6 +15,7 @@
         {
           "auto_fixable": false,
           "column": 0,
+          "developer_action": "Apply the documented replacement",
           "evidence": [
             {
               "id": "EV-109",
@@ -27,8 +28,14 @@
           ],
           "id": "eebc1873b1dfac32",
           "line": 42,
+          "location": {
+            "column": "UNKNOWN",
+            "line": 42,
+            "path": "views/hr.xml"
+          },
           "message": "attrs domain not convertible",
           "path": "views/hr.xml",
+          "reason_not_fixed": "no automatic fixer for this finding",
           "rejection_reason": "",
           "rule_id": "17-18.xml.attrs-removed",
           "severity": "WARNING",
@@ -87,8 +94,9 @@
       "path": "/work/kbi_hr_extension",
       "processing": "DONE",
       "promoted_files": [],
+      "refused_files": [],
       "rejections": [],
-      "reversible": true,
+      "reversible": false,
       "status": "NEEDS_REVIEW",
       "status_inputs_digest": "771aa93133b5a1e558e409afdea3a9282b0130ddad8fb53f9a5aa78bc1ab52de",
       "status_reasons": [
@@ -98,8 +106,8 @@
     }
   ],
   "recovery": {
-    "reversible": true,
-    "rollback_cmd": "odooflux rollback run-golden",
+    "reversible": false,
+    "rollback_cmd": null,
     "run_log": "/state/runs/run-golden/log/run.jsonl"
   },
   "run": {
@@ -124,7 +132,8 @@
   ],
   "summary": {
     "edits": {
-      "applied": 1,
+      "applied": 0,
+      "planned": 0,
       "rejected": 0
     },
     "files_written": 0,

@@ -89,3 +89,72 @@ These are local, offline runs made while writing the documents. They are not the
 - [ ] **O-11** `docs/reviews/automated/DOC-verification-kap.md` lines about 45 and 75 describe pre-012 behaviour (default `import` refused by P10 with exit 3, and `--downgrade-unverified` changing the release id). Feature 012 inherited trust (D3) changes the import path, so these lines may be stale. Not re-executed in this task. Not edited (not owned here).
 - [ ] **O-12** `README.md` and `docs/TECHNICAL_USAGE.md` have no feature 012 section (other owners).
 - [ ] **O-13** `verification.md` (owner, after the final regression) and the acceptance matrix AC-01 to AC-25 status.
+
+## Automation-First backlog (owner-approved AD-01..AD-06, planned 2026-11-11)
+
+Baseline `knowledge status` (built-in KB): 91 detection rules, DETECT_ONLY=78, DRAFT=3, FIX_ENABLED=10.
+Supersedes automation-roadmap AD-1 and the "certified-only plain --fix" boundary (roadmap section 6) by owner decision.
+Rules: no commit/push, no full regression/wheel/release gates, `sources.json` untouched, no fabricated `auto-cert:` records.
+
+| ID | Title | Depends | Status |
+|---|---|---|---|
+| AF-1 | Default execution: plain `--fix` binds registry (experimental) fixers; `--experimental-fixes` kept as accepted no-op (WS1/AD-01) | - | TODO |
+| AF-2 | Report/plan wording: `fix_class` and counts reflect default execution; dry-run reports no writes/rollback (D3) (WS4/AD-06) | AF-1 | DONE (D3 fixed in reporting/model/model.py; dry run: edits.planned, no rollback cmd; 7 dry-run goldens + report-release hashes re-pinned; 165 focused tests OK; open: modules[].reversible still true on dry run) |
+| AF-3 | Rule-state semantics: FIX_ENABLED = executable availability; loaders/validators/status/compat strategy for existing releases (WS2/AD-02,03) | AF-1 | DONE (effective maturity computed at read time, stored rows unchanged; built-in status 91 rules, DETECT_ONLY 78->76, FIX_ENABLED 10->12 = the 2 registry-bound attrs/states rows; 147 focused tests OK) |
+| AF-4 | Unified validation result VALID/INVALID/UNKNOWN; reject invalid output (WS3/AD-05) | AF-1 | DONE (core/engine/verdict.py; INVALID rejects, UNKNOWN kept+reported; evidence: tests.unit.test_output_verdict, golden + provisional corpus OK; module-level all-or-nothing write kept, owner decision pending) |
+| AF-5 | Known defects D2 (states needs state field), D4 (done in legacy layer; keep), D6 malformed XML, legacy/experimental conflicts (WS5) | AF-1 | DONE (D2: legacy states= rewrite only with verified_state_field; D6: well-formed guard + fixes; one-edit conflict rule; 136 focused tests OK; D3 still xfail -> AF-2) |
+| AF-6 | Inherited-view attrs/states coverage (WS5) | AF-1, AF-5 | DONE (xml_modifiers.py: xpath position=attributes + added elements in inherited form views; refusals reported; 90 focused tests OK; limit: xpath targets not naming `form` are refused) |
+| AF-7 | Focused tests for the above (WS6) | per task | DONE (combined focused re-run: 187 tests OK, 1 expected failure (D4 pinned) + tests/unit/reporting 141 OK; no full regression/wheel/gates run) |
+| AF-8 | Corpus accounting reconciliation (3,835 = 944 + 2,647 + 244 unreconciled) (WS7) | AF-1, AF-6 | DONE (tools/attrs_corpus_accounting.py + rules/experimental/attrs_accounting.py; 15 unit tests OK; independently re-measured on local 16.0 corpus: 3,933 occurrences = 1,037 converted + 2,896 refused + 0 not visited, residual 0, identity holds; old 944/2,647/244 split not reproducible, superseded) |
+| AF-9 | Developer issue locations (AD-06/AC-16): every unresolved issue (DETECT_ONLY, refused, failed validation) in all report formats carries relative path, line (or UNKNOWN), column when known, rule id, description, reason not fixed, developer action; never invented (WS4) | AF-2, AF-4 | DONE (model.py normalises location/reason_not_fixed/developer_action for json/html/terminal/sarif AND legacy console + legacy JSON via shared unresolved_fields; line<1 -> UNKNOWN; column always null (Issue has no column); 21 new tests + reporting suites 141 OK) |
+| AF-10 | CLI: `knowledge` listed in `odooflux --help` (AC-17); `versions` keeps support/research policy values and adds per-step FIX RULES + legend (AC-18); resume printer call fixed (AF-2 regression) | AF-3 | DONE (tests/integration/test_knowledge_cli_visibility.py 4 OK, test_versions_status_consistency.py 5 OK, test_cli_contract/test_resume OK) |
+| AF-11 | Attribution (KnowledgeBI, website, developer, copyright) in `--help`, new `--version`, README, TECHNICAL_USAGE (AC-19) | - | DONE (tests/integration/test_attribution.py 5 OK; license untouched) |
+
+Critical path: AF-1 -> AF-3 -> AF-2. Independent after AF-1: AF-4, AF-5. Each task is verified by its own agent.
+
+## Post-AF backlog (owner-approved, planned 2026-11-11)
+
+| ID | Title | Depends | Owner files | Status |
+|---|---|---|---|---|
+| PA-1 | Restore Medium-article detection rules (detect-only, attributed as community/article, never official) | - | rules/shared/legacy_rules.py, tests/unit/test_legacy_article_detections.py | DONE (article rows + SCSS table + License Missing restored in legacy_rules.py, attributed as community article/unverified, all auto_fixable=False; tests.unit.test_legacy_article_detections 13 OK) |
+| PA-2 | D4: version-pair-correct `<tree>` detection; D4 test passes with no expectedFailure | PA-1 | legacy_rules.py, tests/regression/test_known_defects_d2_d4.py | DONE (16->17 gets NO tree finding; 17->18/16->18 keep v18 wording; D4 test passes with no expectedFailure; 17->18 kbi_demo golden regenerated: +t-esc, +kanban-box findings) |
+| PA-3 | Per-file isolation / partial migration: an INVALID or unresolved file never blocks other files' valid edits; status `PARTIAL — DEVELOPER ACTION REQUIRED` | - | core/orchestrator/run.py, module_plan.py, core/engine/* | DONE (refused file stays byte-identical, other files written; per-stage salvage in module_plan; module status `PARTIAL — DEVELOPER ACTION REQUIRED`; rejected never counted applied; rollback unchanged; tests/integration/test_partial_migration.py 8 OK + 96 focused OK; open: AI path, diff exporter, 3 reporting goldens -> wave 2) |
+| PA-4 | Expand provably-safe xpath attrs/states conversion in inherited views | - | rules/experimental/xml_modifiers.py + its tests | DONE (same-document target proof; 81 focused tests OK incl. tests/unit/test_experimental_xpath_safe.py; corpus 1,037 -> 1,040 converted, inherited-target-not-form 1,016 -> 1,011; limit: ~1,288 sites use qualified `module.view_id` refs, need a document set/module name or a view index recording root type -> owner decision; red-first not verified for the new tests) |
+| PA-5 | Column numbers in issue locations (UNKNOWN when not determinable) | PA-1, PA-3 | Issue record, reporting model/renderers/legacy writers | DONE (legacy scanner records match.start()+1; location.column = int or "UNKNOWN", never invented; knowledge findings / experimental refusals / file-level findings have no source column -> UNKNOWN; json, html, terminal, legacy console + legacy json, sarif startColumn only when known; tests/unit/reporting/test_column_and_dry_run.py 20 OK) |
+| PA-6 | Dry-run: `modules[].reversible=false`, no rollback/applied claims | PA-3 | reporting/model/model.py, goldens/hashes | DONE (modules[].reversible = report.reversible and mode==fix; dry run has no rollback/applied claims; also truthful PARTIAL wording, partial modules exported in diff, goldens/hashes regenerated after checking diffs; tests/unit/reporting 161 OK) |
+| PA-3b | AI path per-file isolation (ai/providers/legacy_anthropic.py, ai/integration.py, core/orchestrator/ai_pass.py): invalid AI edit leaves that file unchanged, siblings written, module PARTIAL end-to-end | PA-3 | - | DONE (tests/integration/ai/test_partial_policy.py 5 OK; unit/ai 127 OK; test_partial_migration 8 OK; test_ai_findings 6 OK; open: tests.integration.ai.test_pipeline_pass schema vs column UNKNOWN -> PA-5 agent) |
+
+Waves: (1) PA-1->PA-2, PA-3, PA-4 in parallel; (2) PA-5 then PA-6 sequentially (shared report model and goldens).
+
+## Verification backlog (owner-approved, planned 2026-11-11)
+
+| ID | Title | Depends | Owner files | Status |
+|---|---|---|---|---|
+| VR-1 | Qualified `module.view_id` xpath resolution, only where target view type is established; no guessing | - | rules/experimental/xml_modifiers.py, core/orchestrator context plumbing, new tests | DONE (qualified refs resolve via per-run ModuleViews over same-module + sibling-module XML; core refs refused because shipped view index has no root type; tests/unit/test_experimental_xpath_qualified.py 23 OK, red-first 20 errors before; fixtures 0->1 converted each for cross-file/cross-module; local corpus 1,040 -> 1,040 (no corpus ref targets a corpus module; 1,005 of 1,011 refusals are qualified refs to core views, 779 not //field[@name]); needs index extension from official source (network) for more -> owner decision) |
+| VR-2 | Verify restored article rules' version gates/severities; record unverified ones | VR-3 | rules/shared/legacy_rules.py, tests/unit/test_legacy_article_detections.py | DONE (article NOT retrievable: one direct WebFetch -> HTTP 403, title search did not return it; no bypass/mirror used; evidence = official docs + public odoo/odoo files; table in verification.md 'VR-3 / VR-2') |
+| VR-3 | Verify Medium article evidence (retrieve, compare, record limits; never present as official) | - | legacy_rules.py comments/messages only | TODO |
+| VR-4 | Verify PA-4 xpath test quality by temporary mutation, restore tree | VR-1 | tests only (temporary edits reverted) | DONE (12 mutants on a /tmp copy, all killed after adding 2 tests: core ref vs same-named local form; markup escaping; weak spot: field-exactly-once and non-//field expr caught only by the aggregate NegativeTargetTests loop; /tmp copy removed, no production file changed) |
+| VR-5 | Audit the 40 re-pinned report-release hashes + goldens | - | tests/golden_fixtures/reports/**, tests/unit/reporting/test_report_release.py | DONE (70 pins audited: 54 changed vs HEAD, all mapped to approved categories A-E, 0 unexpected output changes; 1 renderer defect fixed: HTML status class for PARTIAL, red-first test; header comment corrected; 162 reporting + 36 integration/reporting OK) |
+| VR-6 | Final focused verification of D4, rules, xpath, partial (rule+AI), dry-run, locations, hashes | VR-1..5 | none | DONE (316 focused tests OK across D4, article rules, xpath, partial rule+AI, dry-run, locations, hashes, CLI; + reporting 162, integration/reporting 36, integration/ai 60, unit/ai 127 OK; no full regression/wheel/gates) |
+
+Waves: (1) VR-1, VR-3->VR-2, VR-5 in parallel; (2) VR-4; (3) VR-6.
+
+## Final cleanup backlog (owner-approved, planned 2026-11-11)
+
+| ID | Title | Owner | Status |
+|---|---|---|---|
+| FC-1 | Evidence for invalidate_cache/flush, kanban-box, inline-script/CSP, Feature 011 `17-18.xml.kanban-box-deprecated`; correct only where evidence supports | agent R: legacy_rules.py article rows, tests/unit/test_legacy_article_detections.py, verification.md | DONE with uncertainty (invalidate_cache/flush verified-official: deprecated in 16.0, absent in 17.0 -> gate kept, wording updated; kanban-box verified-official deprecated in 18.0 (kanban_arch_parser.js), replacement is a 'card' template, not 'kanban-card' -> wording updated; Feature 011 rule 17-18.xml.kanban-box-deprecated consistent with that, KB data NOT edited, recommend keep; inline-script/CSP remains UNVERIFIED, rows unchanged; evidence read via WebFetch summaries, tails of 17.0/18.0 models.py not read) |
+| FC-2 | Dedicated tests: field-exactly-once; non-`//field` xpath refused (each shown to fail under mutation) | agent T: tests/unit/test_experimental_xpath_safe.py | DONE (2 dedicated tests in tests/unit/test_experimental_xpath_safe.py; each fails under its own mutant on a temp copy: exactly-once under mutant A, non-//field refusal under mutant B; 46 xpath tests OK; note `/form/field[@name='a']` is accepted by existing code (contains 'form'), untested) |
+| FC-3 | Fix stale D3 entry in verification.md only | agent R | DONE (D3 Known-defects entry marked fixed; D3 test passes) |
+| FC-4 | Inspect `tests/unit/reporting/renderer_hashes.json`; remove only if untracked, stale, unreferenced | agent T | DONE (file untracked, unread by any code/tool/test, stale: 48 of 70 values match neither current nor HEAD pins; only descriptive mentions in specs notes; removed that single file; reporting tests 162 OK) |
+| FC-5 | Focused final verification | coordinator | DONE (130 focused tests OK + reporting 162 OK; sources.json untouched) |
+
+Deferred (not implemented): core-view index rebuild, network rebuild, fixer-contract redesign, more xpath expansion.
+
+## Final verification fixes (owner-approved, 2026-11-11)
+
+| ID | Title | Owner | Status |
+|---|---|---|---|
+| FV-1 | Inline-script and createElement-script/CSP rows: WARNING -> INFO, still UNVERIFIED, gates and auto_fixable unchanged | Haiku | DONE (test_legacy_article_detections 20 OK; no golden contains these categories) |
+| FV-2 | xpath `_FORM_STEP` early return replaced by anchored `_FORM_PATH`/`_FORM_FIELD`; 13 new tests; mutation check fails 14 tests | Haiku | DONE (122 focused tests OK; corpus converted 1,040 -> 1,038, two deeper `...//form//field` refs now refused; refused 2,893 -> 2,895 vs rebuilt baseline, recorded 2,896 not reconciled) |
+| FV-3 | Full-file read of official 16.0/17.0 odoo/models.py + api.py | Haiku | DONE (16.0 models.py:6072/5663 deprecated with warnings at 6080/5673; 17.0 defines neither model method; flush_model 6372, invalidate_model 6749 present; Transaction.flush api.py:870 remains; wording and gates unchanged, no runtime test, 18/19 not checked) |

@@ -66,6 +66,7 @@
         {
           "auto_fixable": false,
           "column": 0,
+          "developer_action": "Apply the documented replacement",
           "evidence": [
             {
               "id": "EV-110",
@@ -74,8 +75,14 @@
           ],
           "id": "05b8e3d4d66b83f3",
           "line": 3,
+          "location": {
+            "column": "UNKNOWN",
+            "line": 3,
+            "path": "views/v.xml"
+          },
           "message": "informational note",
           "path": "views/v.xml",
+          "reason_not_fixed": "no automatic fixer for this finding",
           "rejection_reason": "",
           "rule_id": "17-18.xml.note",
           "severity": "INFO",
@@ -134,8 +141,9 @@
       "path": "/work/kbi_sale_approval",
       "processing": "DONE",
       "promoted_files": [],
+      "refused_files": [],
       "rejections": [],
-      "reversible": true,
+      "reversible": false,
       "status": "STATIC_VALIDATED",
       "status_inputs_digest": "b20c6dca701304594ff1e4b00fdbbcc7bc7a96e7024e275aa4ef14991987f91e",
       "status_reasons": [],
@@ -143,8 +151,8 @@
     }
   ],
   "recovery": {
-    "reversible": true,
-    "rollback_cmd": "odooflux rollback run-golden",
+    "reversible": false,
+    "rollback_cmd": null,
     "run_log": "/state/runs/run-golden/log/run.jsonl"
   },
   "run": {
@@ -169,7 +177,8 @@
   ],
   "summary": {
     "edits": {
-      "applied": 3,
+      "applied": 0,
+      "planned": 1,
       "rejected": 0
     },
     "files_written": 0,

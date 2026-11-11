@@ -11,7 +11,7 @@ MODULE RESULTS
 
 FINDINGS
 kbi_install_ok/models/m.py
-  FIXED    L2  17-18.py.x
+  FIXED    L2:UNKNOWN  17-18.py.x
            fixed
 
 REJECTED EDITS: none

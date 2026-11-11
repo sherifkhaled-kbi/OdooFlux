@@ -78,7 +78,7 @@ class SectionTests(unittest.TestCase):
     def test_per_file_findings_with_evidence_and_action(self):
         text = plain(golden("needs_review"), width=200, show_fixed=True)
         self.assertIn("kbi_hr_extension/views/hr.xml", text)
-        self.assertRegex(text, r"WARNING +L42 +17-18\.xml\.attrs-removed +\[NEEDS_REVIEW\]")
+        self.assertRegex(text, r"WARNING +L42:UNKNOWN +17-18\.xml\.attrs-removed +\[NEEDS_REVIEW\]")
         self.assertIn("Action:", text)
         self.assertIn("EV-109 https://www.odoo.com/documentation/18.0/", text)
         self.assertIn("FIXED", text)

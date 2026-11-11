@@ -228,21 +228,24 @@ class EscalationPass:
             file_edits.append(FileEdit(path=fp, dest=fp, original=text, fixed=result.text, issues=before_issues,
                                        resolved=resolved, edits=diff_to_edits(str(fp), text, result.text)))
             fixed_pairs.extend((fp, issue) for issue in resolved)
-        report.issues.extend(notices)
         if not file_edits:
+            report.issues.extend(notices)
             return 0
+        kept = file_edits
         if self.layer3 is not None and self._layer3_regression(module_path, file_edits, run, to_version, layer3_log):
-            for edit in file_edits:
-                report.issues.append(Issue(
-                    file=str(edit.path), line=0, severity=SEVERITY_WARNING, category="Fix Rejected",
-                    message=f"AI edits for {module_path.name} rejected: validation_failed:layer3. None were written.",
-                    suggestion="Fix by hand; the findings stay open", auto_fixable=False,
-                    rejection_reason="validation_failed:layer3"))
+            kept = self._layer3_per_file(module_path, file_edits, run, to_version, layer3_log, report)
+        # a refused file made no change: its review notice must not claim an AI fix (partial-migration policy)
+        refused = {str(e.path) for e in file_edits} - {str(e.path) for e in kept}
+        report.issues.extend(n for n in notices if not (n.category == "AI Review Required" and n.file in refused))
+        if not kept:
             return 0
-        count = write_module(module_path, file_edits, report)
+        count = write_module(module_path, kept, report)
         if report.blocked:
             return 0
-        for fp, issue in fixed_pairs:  # mirror the re-scan result onto the report's findings
+        kept_paths = {str(e.path) for e in kept}
+        for fp, issue in fixed_pairs:  # mirror the re-scan result onto the report's findings of the written files
+            if str(fp) not in kept_paths:
+                continue
             candidates = [i for i in report.issues if i.file == str(fp) and i.category == issue.category
                           and not i.fix_applied]
             if candidates:
@@ -265,9 +268,31 @@ class EscalationPass:
             category, severity = "AI Rejected", SEVERITY_INFO
         else:
             category, severity = "AI Skip", SEVERITY_INFO
+        refusal = kind if kind.startswith("rejected:") else ""  # a refused AI edit names its reason (never applied)
         return Issue(file=str(fp), line=outcome.line, severity=severity, category=category,
                      message=f"{outcome.rule_id}: {kind}; the finding stays open",
-                     suggestion="Fix by hand, or adjust the AI configuration and re-run", auto_fixable=False)
+                     suggestion="Fix by hand, or adjust the AI configuration and re-run", auto_fixable=False,
+                     rejection_reason=refusal)
+
+    def _layer3_per_file(self, module_path, file_edits, run, to_version, layer3_log, report) -> list:
+        """After a module-level layer-3 regression: keep, in order, each edit that adds no finding to the edits already
+        kept; refuse the others. A refused file keeps its bytes and is recorded, the rest of the module is written."""
+        kept = []
+        for edit in file_edits:
+            if not self._layer3_regression(module_path, kept + [edit], run, to_version, layer3_log):
+                kept.append(edit)
+                continue
+            rel = edit.path.relative_to(module_path).as_posix()
+            report.issues.append(Issue(
+                file=str(edit.path), line=0, severity=SEVERITY_WARNING, category="Fix Rejected",
+                message=f"AI edit for {rel} rejected: validation_failed:layer3. This file was left unchanged; "
+                        f"the other files of {module_path.name} are not affected.",
+                suggestion="Fix this file by hand; its findings stay open", auto_fixable=False,
+                rejection_reason="validation_failed:layer3"))
+            run.log.append("edit_rejected", module=module_path.name, path=str(edit.path),
+                           rules=sorted({i.category for i in edit.issues}),
+                           reason="validation_failed:layer3", source="ai")
+        return kept
 
     def _layer3_regression(self, module_path, file_edits, run, to_version, layer3_log) -> bool:
         """True when staging the AI edits introduces an L3 finding the module did not have."""

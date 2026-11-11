@@ -61,8 +61,9 @@
       "path": "/work/kbi_prov",
       "processing": "DONE",
       "promoted_files": [],
+      "refused_files": [],
       "rejections": [],
-      "reversible": true,
+      "reversible": false,
       "status": "STATIC_VALIDATED",
       "status_inputs_digest": "b20c6dca701304594ff1e4b00fdbbcc7bc7a96e7024e275aa4ef14991987f91e",
       "status_reasons": [],
@@ -76,8 +77,8 @@
     ]
   },
   "recovery": {
-    "reversible": true,
-    "rollback_cmd": "odooflux rollback run-golden",
+    "reversible": false,
+    "rollback_cmd": null,
     "run_log": "/state/runs/run-golden/log/run.jsonl"
   },
   "run": {
@@ -102,7 +103,8 @@
   ],
   "summary": {
     "edits": {
-      "applied": 1,
+      "applied": 0,
+      "planned": 0,
       "rejected": 0
     },
     "files_written": 0,

@@ -83,6 +83,7 @@ class KnowledgeRule:
     def __init__(self, bound, meta: dict, experimental=None):
         self._bound = bound
         self._experimental = experimental  # the registry entry when this rule runs an experimental fixer
+        self._views = bound.fixer_params.get("views")  # the run's module context (VR-1), None when absent
         self.key = bound.rule_id
         self.step = meta.get("step") or "*"
         self.maturity = bound.maturity
@@ -95,7 +96,9 @@ class KnowledgeRule:
 
     def explain(self, document):
         """The experimental plan (conversions and refusals) for ``document``; None for other rules. Pure."""
-        return self._experimental.explain(document) if self._experimental is not None else None
+        if self._experimental is None:
+            return None
+        return self._experimental.explain(document, views=self._views)
 
     def applies_to(self, path: str) -> bool:
         return not self._kinds or file_kind(path) in self._kinds
@@ -118,6 +121,32 @@ class ExperimentalFixers:
 
     entries: object
     modules: object
+    views: object = None  # zero-argument factory of the run's module context (VR-1), None for no module context
+
+
+def experimental_entry(meta: dict, experimental: ExperimentalFixers | None):
+    """The registry entry offered to row ``meta``: only a DETECT_ONLY row whose id has an entry naming the row's own
+    step. A fixer is never offered to another version's row. None when there is no such entry."""
+    if experimental is None or meta.get("maturity") != "DETECT_ONLY":
+        return None
+    entry = experimental.entries.get(meta.get("id"))
+    return entry if entry is not None and entry.step == meta.get("step") else None
+
+
+def effective_maturity(meta: dict, modules, experimental: ExperimentalFixers | None = None) -> str:
+    """The maturity a row executes with, computed at read time (AD-02: FIX_ENABLED means executable availability).
+
+    A DETECT_ONLY row reads as FIX_ENABLED when its offered registry entry binds (no gap, a fixer attached). Every
+    other row reads its stored maturity; DRAFT and RETIRED never change. The stored row is never modified."""
+    stored = meta.get("maturity")
+    entry = experimental_entry(meta, experimental)
+    if entry is None:
+        return stored
+    try:
+        bound = bind_rule(meta, {**modules, **experimental.modules}, None, experimental=entry)
+    except BindingError:
+        return stored
+    return "FIX_ENABLED" if bound.fixer is not None and not bound.gap else stored
 
 
 def bind_knowledge_rules(rows, modules, run_params: dict, steps,
@@ -127,10 +156,9 @@ def bind_knowledge_rules(rows, modules, run_params: dict, steps,
     ``experimental`` (``None`` keeps the default behaviour exactly) offers registry fixers. One is used only for a
     selected DETECT_ONLY row with a matching entry; its fixer resolves through ``experimental.modules``."""
     rules, gaps = [], []
+    views = experimental.views() if experimental is not None and experimental.views is not None else None
     for meta in select_rows(rows, modules, steps):
-        entry = None
-        if experimental is not None and meta.get("maturity") == "DETECT_ONLY":
-            entry = experimental.entries.get(meta.get("id"))
+        entry = experimental_entry(meta, experimental)
         bind_modules = {**modules, **experimental.modules} if entry is not None else modules
         try:
             bound = bind_rule(meta, bind_modules, run_params, experimental=entry)
@@ -140,6 +168,8 @@ def bind_knowledge_rules(rows, modules, run_params: dict, steps,
         if bound.gap:
             gaps.append(bound.gap)
             continue
+        if entry is not None and views is not None:  # the fixer's module context, bound for this run only
+            bound = dataclasses.replace(bound, fixer_params={**bound.fixer_params, "views": views})
         rules.append(KnowledgeRule(bound, meta, entry))
     return rules, gaps
 

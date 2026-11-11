@@ -5,6 +5,7 @@ import re
 import ast
 import textwrap
 import tokenize
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -38,6 +39,7 @@ class Issue:
     rejection_reason: str = ""
     maturity: str = ""  # knowledge-rule findings only (DETECT_ONLY / FIX_ENABLED); '' for legacy rows
     review_required: bool = False
+    column: int = 0  # 1-based column of the match when the source gives one; 0 = not known (never guessed)
 
     @property
     def status(self) -> str:
@@ -252,6 +254,81 @@ PYTHON_RULES = [
     (0, 0, r'\braise\s+Warning\s*\(', SEVERITY_CRITICAL, "Raise Warning",
      "Raising Warning() directly: odoo.exceptions.Warning is deprecated in 14.0–16.0 and removed in 17.0 (EV-110)",
      "Replace raise Warning(...) with raise UserError(...)", True),
+
+    # Rows derived from the community article "Odoo Migration Decoded 16->17->18->19" (Medium). The article is NOT
+    # official Odoo documentation and could not be retrieved (HTTP 403). Each row states its evidence status here:
+    #   verified-official: confirmed by the official Odoo or Python source cited in the comment;
+    #   contradicted:      official evidence differs from the article; the gate or severity was corrected or lowered;
+    #   unverified:        no official evidence found; the gate is marked "gate unverified".
+    # verified-official: 17.0 models.py name_get() warns "Since 17.0, deprecated method, read display_name instead";
+    # 17.0 ORM changelog, entry "Odoo Online 16.4". The replacement is the display_name field, not _compute_display_name.
+    (17, 0, r'def name_get\(', SEVERITY_WARNING, "name_get Deprecated",
+     "name_get() is deprecated in Odoo 17.0 (DeprecationWarning); read the display_name field instead",
+     "Read the display_name field instead of calling name_get()", False),
+
+    # contradicted for 17: 17.0 and 18.0 models.py define a public read_group() with no deprecation note.
+    # verified-official: the ORM changelog marks read_group() deprecated in its "Odoo Online 18.2" entry (in the 19.0
+    # docs) and points backend code to _read_group(). Gate moved from 17 to the 19 target.
+    (0, 19, r'(?<!_)\bread_group\s*\(', SEVERITY_WARNING, "read_group Deprecated",
+     "read_group() is deprecated for backend use in Odoo 19.0 (ORM changelog, Odoo Online 18.2 entry)",
+     "Use _read_group() for backend code and verify the call against the 19.0 source", False),
+
+    # verified-official: 16.0 mail_thread.py message_post passes body through unchanged; 17.0 escapes a plain str body
+    # (escape(body)) and keeps Markup unescaped. The 17 gate is confirmed by that difference.
+    (17, 0, r'\bbody\s*=\s*f?["\'][^"\']*<', SEVERITY_WARNING, "HTML Body Not Markup",
+     "HTML passed as a plain string to body= is escaped by message_post() from Odoo 17.0 and shows as text",
+     "Wrap trusted HTML in Markup(...) from markupsafe; leave untrusted values as plain strings", False),
+
+    # contradicted for the article's CRITICAL/17 claim: 17.0 odoo/__init__.py itself imports Command from odoo.fields,
+    # so the path still works there. Kept as INFO for all source versions; the gate was removed.
+    (0, 0, r'from\s+odoo\.fields\s+import\b[^\n]*\bCommand\b', SEVERITY_INFO, "Command Import Path",
+     "Command imported from odoo.fields still works in Odoo 17.0; this is not an error",
+     "Optional: import Command from odoo (from odoo import Command)", False),
+
+    # verified-official: 16.0 loading.py calls post_init_hook(cr, registry); 17.0 loading.py calls post_init_hook(env).
+    (17, 0, r'def post_init_hook\(cr,\s*registry', SEVERITY_CRITICAL, "post_init_hook Signature",
+     "post_init_hook(cr, registry) is the 16.0 signature; Odoo 17.0 calls post_init_hook(env)",
+     "Change the signature to def post_init_hook(env)", False),
+
+    # verified-official (Python, not Odoo-specific): Python 3.12 what's new, PEP 632.
+    (0, 0, r'^\s*(?:import\s+distutils\b|from\s+distutils\b)', SEVERITY_WARNING, "distutils Removed",
+     "distutils was removed from the standard library in Python 3.12 (PEP 632); not an Odoo-specific change",
+     "Replace distutils with setuptools, packaging or a standard-library equivalent", False),
+
+    # verified-official (Python, not Odoo-specific): Python 3.12 what's new, Deprecated section.
+    (0, 0, r'\.utcnow\(\)', SEVERITY_INFO, "utcnow Deprecated",
+     "datetime.utcnow() is deprecated since Python 3.12; not an Odoo-specific change",
+     "Use datetime.now(timezone.utc) or an aware datetime", False),
+
+    # verified-official: the 19.0 branch odoo/upgrade_code/18.1-02-route-jsonrpc.py rewrites type="json" to "jsonrpc" in
+    # controllers. The 18.0 HTTP docs list only 'json' and 'http', so the rename lands in 18.1; both targets are kept.
+    (0, 18, r"@http\.route\([^)]*\btype\s*=\s*['\"]json['\"]", SEVERITY_WARNING, "Route type json",
+     "type='json' route is renamed to 'jsonrpc' by Odoo's 18.1 upgrade script (the 18.0 docs list only 'json')",
+     "Change type='json' to type='jsonrpc' in controllers", False),
+
+    (0, 19, r"@http\.route\([^)]*\btype\s*=\s*['\"]json['\"]", SEVERITY_WARNING, "Route type json",
+     "type='json' route is renamed to 'jsonrpc' by Odoo's 18.1 upgrade script",
+     "Change type='json' to type='jsonrpc' in controllers; verify against the 19.0 source", False),
+
+    # verified-official: 16.0 models.py defines invalidate_cache() and flush() with DeprecationWarning ("use
+    # invalidate_model(), invalidate_recordset() or env.invalidate_all()" / "use flush_model(), flush_recordset() or
+    # env.flush_all()"); 17.0 models.py defines neither method (https://raw.githubusercontent.com/odoo/odoo/16.0/odoo/models.py
+    # and .../17.0/odoo/models.py). Gate kept at from < 17.
+    (17, 0, r'\.invalidate_cache\(', SEVERITY_WARNING, "invalidate_cache Renamed",
+     "invalidate_cache() is deprecated in Odoo 16.0 and not defined in 17.0; use invalidate_model() or "
+     "invalidate_recordset()",
+     "Replace with invalidate_model() or invalidate_recordset() (or env.invalidate_all())", False),
+
+    # verified-official: same evidence as invalidate_cache(); flush() is deprecated in 16.0 and not a model method in 17.0.
+    (17, 0, r'\.flush\(\)', SEVERITY_WARNING, "flush Renamed",
+     "flush() is deprecated in Odoo 16.0 and not defined as a model method in 17.0; use flush_model() or "
+     "flush_recordset()",
+     "Replace with flush_model() or flush_recordset() (or env.flush_all())", False),
+
+    # contradicted: 17.0 ir_actions_report.py defines _render_qweb_pdf with no deprecation note. Kept as INFO.
+    (17, 0, r'\b_render_qweb_pdf\(', SEVERITY_INFO, "_render_qweb_pdf Deprecated",
+     "_render_qweb_pdf() is still defined in Odoo 17.0 without a deprecation notice (article claim not confirmed)",
+     "No change is needed for 17.0 unless the article's claim is confirmed against your target source", False),
 ]
 
 XML_RULES = [
@@ -265,11 +342,12 @@ XML_RULES = [
      "Rewrite as a Python expression, e.g. invisible=\"state == 'done'\"; automatic conversion is planned for a later release",
      False),
 
-    # CHANGED: auto_fixable=True — _convert_states_to_invisible() handles this automatically
+    # D2: not auto-fixable by the legacy fixer (it rewrites only with a verified state field, which a plain run
+    # never has). The experimental registry fixes it on request (--experimental-fixes).
     (0, 0, r'\bstates\s*=\s*["\'](?!\s*["\'])', SEVERITY_WARNING, "States Attribute",
      "'states' shorthand removed in v17+; show-only-when-state-in-list semantics replaced by "
-     "invisible= domain. Auto-fix uses field name 'state' — verify if your field differs.",
-     "Replace states= with invisible=\"state not in [...]\" condition", True),
+     "invisible= domain. The field name 'state' is assumed — verify it on the view's model.",
+     "Replace states= with invisible=\"state not in [...]\" condition", False),
 
     (0, 0, r'<act_window\b', SEVERITY_WARNING, "Shorthand Tag",
      "<act_window> shorthand removed; use <record model='ir.actions.act_window'>",
@@ -305,8 +383,15 @@ XML_RULES = [
      "monetary widget requires currency_field; verify field exists in v19 model",
      "Ensure currency_field= is set and present on the model", False),
 
-    # FIX: min_src_ver=18 — <tree> was renamed IN v18
-    (18, 0, r'<tree\b', SEVERITY_CRITICAL, "Tree Tag Renamed",
+    # D4 / PA-2: the <tree> -> <list> change is placed at v18 by the community article, and <tree> is valid for a v17
+    # target, so a 16 -> 17 run gets no <tree> finding. Two rows keep the "from < 18" gate for the 18 and 19 targets.
+    # verified-official: the 18.0 branch odoo/upgrade_code/17.5-01-tree-to-list.py converts <tree> to <list> (17.5 -> 18.0
+    # transition), so the v18 gate is confirmed by an official upgrade script (https://raw.githubusercontent.com/odoo/odoo/18.0/odoo/upgrade_code/17.5-01-tree-to-list.py).
+    (18, 18, r'<tree\b', SEVERITY_CRITICAL, "Tree Tag Renamed",
+     "<tree> view tag deprecated in v18 and replaced by <list>",
+     "Replace <tree ...> with <list ...> and </tree> with </list>", True),
+
+    (18, 19, r'<tree\b', SEVERITY_CRITICAL, "Tree Tag Renamed",
      "<tree> view tag deprecated in v18 and replaced by <list>",
      "Replace <tree ...> with <list ...> and </tree> with </list>", True),
 
@@ -347,6 +432,32 @@ XML_RULES = [
     (17, 0, r'<header\b', SEVERITY_INFO, "Header Buttons",
      "<header> button bar placement rules changed in v17+",
      "Ensure <header> is the first child of <form>, not inside <sheet>", False),
+
+    # Rows derived from the community article "Odoo Migration Decoded 16->17->18->19" (Medium); status per row as in
+    # PYTHON_RULES. t-raw: verified-official (17.0 QWeb docs). The article's 17 gate is contradicted (deprecated since 15.0);
+    # t-raw still works, so WARNING for all sources.
+    (0, 0, r'\bt-raw\s*=', SEVERITY_WARNING, "t-raw Deprecated",
+     "t-raw is deprecated since Odoo 15.0 (QWeb docs); it still works and never escapes its content",
+     "Replace t-raw with t-out on a markupsafe.Markup value", False),
+
+    # contradicted: the 17.0, 18.0 and 19.0 QWeb docs call t-esc an alias of t-out and "Not yet formally deprecated".
+    # Kept as INFO for the 18 target only; the article's warning is not confirmed.
+    (0, 18, r'\bt-esc\s*=', SEVERITY_INFO, "t-esc Deprecated",
+     "t-esc is an alias of t-out and not formally deprecated in the Odoo 18.0 QWeb docs (article warning not confirmed)",
+     "t-out is the documented directive and escapes by default; t-esc still works", False),
+
+    # gate unverified: no official 18.0 evidence found; the article is the only source for this row. Severity is INFO
+    # because no official Odoo breaking change was found for inline scripts; the article's flag is not a confirmed break.
+    (0, 18, r'<script\b', SEVERITY_INFO, "Inline Script in QWeb",
+     "Inline <script> in a view or QWeb template is flagged for v18 by a community article; no official Odoo 18.0 breaking change was found (unverified)",
+     "Move the script into an asset bundle; verify against the 18.0 source", False),
+
+    # verified-official: 18.0 odoo/addons/web/static/src/views/kanban/kanban_arch_parser.js line 11 says '"kanban-box" is
+    # deprecated' and line 153 warns at runtime; the replacement is a "card" template. 17.0 has only a NOTE comment. 19.0
+    # reads only "card" (see the 18-19 KB rule). Gate kept at the 18 target.
+    (0, 18, r'''t-name\s*=\s*["']kanban-box["']''', SEVERITY_WARNING, "kanban-box Template Renamed",
+     "kanban-box template name is deprecated in Odoo 18.0 in favour of a 'card' template",
+     "Rename the kanban-box template to t-name=\"card\"", False),
 ]
 
 MANIFEST_RULES = [
@@ -393,6 +504,13 @@ JS_TS_RULES = [
     (15, 0, r'useRef\(', SEVERITY_INFO, "OWL useRef",
      "Verify useRef() API compatibility with v19 OWL version",
      "Check OWL changelog for any useRef API changes", False),
+
+    # Row derived from the community article "Odoo Migration Decoded 16->17->18->19" (Medium); community evidence, NOT
+    # official Odoo documentation. gate unverified: no official evidence found for this v18 claim. Severity is INFO because
+    # no official Odoo breaking change was found; the article's CSP flag is not a confirmed break.
+    (0, 18, r'createElement\(\s*["\']script["\']', SEVERITY_INFO, "Script Injection (CSP)",
+     "Runtime creation of a script element is flagged for v18 by a community article (CSP compatibility); no official Odoo 18.0 breaking change was found (unverified)",
+     "Load the script through an asset bundle instead of injecting it at runtime", False),
 ]
 
 CSS_RULES = [
@@ -403,6 +521,21 @@ CSS_RULES = [
     (0, 0, r'\.o_list_view\b', SEVERITY_WARNING, "CSS Class",
      ".o_list_view class restructured in v16+",
      "Check class hierarchy in v19", False),
+]
+
+# Rows derived from the community article "Odoo Migration Decoded 16->17->18->19" (Medium); community evidence, NOT
+# official Odoo documentation. Applied in addition to CSS_RULES for .scss files only (see _rules_for_file).
+# contradicted for Odoo 17.0: its assets compile SCSS with libsass (odoo/addons/base/models/assetsbundle.py), not dart-sass.
+# The Dart Sass deprecations are real (sass-lang.com): @import deprecated since Dart Sass 1.80.0; '/' division replaced by
+# math.div (1.33.0). Severity lowered to INFO for all targets.
+SCSS_RULES = [
+    (0, 0, r'^\s*@import\s', SEVERITY_INFO, "SCSS @import",
+     "@import is deprecated in Dart Sass since 1.80.0 (removal in 3.0.0); Odoo 17.0 compiles SCSS with libsass",
+     "If the asset is compiled with Dart Sass, check the import and consider @use", False),
+
+    (0, 0, r'\$[\w-]+\s*/\s*\d|\b\d+(\.\d+)?(px|em|rem)\s*/\s*\d', SEVERITY_INFO, "SCSS Division",
+     "Division with '/' is deprecated in Dart Sass (math.div since 1.33.0); Odoo 17.0 compiles SCSS with libsass",
+     "If the asset is compiled with Dart Sass, replace a / b with math.div(a, b)", False),
 ]
 
 
@@ -686,62 +819,91 @@ def apply_python_fixes(content: str, from_version: int, to_version: int = 19) ->
     return content
 
 
+_STATES_TAG = re.compile(
+    r"""<(?P<name>button|field|notebook|group|div|span|page|label|separator)\b"""
+    r"""(?P<body>(?:"[^"]*"|'[^']*'|[^>"'])*)>"""  # quoted values may contain '>' (D6)
+)
+_STATES_ATTR = re.compile(r"""\sstates\s*=\s*(["'])([^"']*)\1""")
+_INVISIBLE_ATTR = re.compile(r"""\sinvisible\s*=""")
+_ATTRS_ATTR = re.compile(r"""\sattrs\s*=""")
+
+
 def _convert_states_to_invisible(content: str) -> str:
     """
     Convert the legacy states= attribute to an invisible= domain expression.
 
     states="draft,open" means "show only when the record's state is in the list", which is
     equivalent to invisible="state not in ['draft', 'open']". The controlling field is assumed to
-    be ``state``; the rule message says so, so a reviewer can check it.
+    be ``state``, so the caller must have verified that the view's model has one (D2); this function
+    is never reached otherwise.
 
-    A tag that already has invisible= is left untouched and its finding stays open (F-XML-4).
-    No comment is written into the tag (F-XML-1).
+    A tag that already has invisible= or attrs= is left untouched: its finding stays open (F-XML-4),
+    or the experimental fixer decides it (one editor per element). No comment is written into the
+    tag (F-XML-1).
     """
     def _replace(m: re.Match) -> str:
-        full_tag   = m.group(0)
-        states_val = m.group(1)
+        body = m.group("body")
+        states = _STATES_ATTR.search(body)
+        if states is None:
+            return m.group(0)
+        if _INVISIBLE_ATTR.search(body) or _ATTRS_ATTR.search(body):
+            return m.group(0)
 
-        if re.search(r'\binvisible\s*=', full_tag):
-            return full_tag
-
-        state_list = [s.strip().strip("'\"") for s in states_val.split(',') if s.strip()]
+        state_list = [s.strip().strip("'\"") for s in states.group(2).split(',') if s.strip()]
         if not state_list:
-            return full_tag
+            return m.group(0)
 
         # Odoo 17+ new-style domain expression (Python-like, not JSON)
         states_repr = "[" + ", ".join(f"'{s}'" for s in state_list) + "]"
         invisible_expr = f"state not in {states_repr}"
 
-        # Remove states="..." from the tag (including any leading whitespace)
-        tag_fixed = re.sub(r"""\s*\bstates\s*=\s*["'][^"']*["']""", '', full_tag)
-
-        # Insert invisible= just before the closing > or />
-        tag_fixed = re.sub(
-            r'(\s*/?\s*)>$',
-            lambda tm: f' invisible="{invisible_expr}"' + tm.group(0),
-            tag_fixed,
+        # Splice states="..." out by position (a similar string inside another value is not matched)
+        remaining = body[:states.start()] + body[states.end():]
+        # Insert invisible= before the closing "/" of a self-closing tag, or at the end of the tag
+        remaining = re.sub(
+            r'(\s*/?)$',
+            lambda tm: f' invisible="{invisible_expr}"' + tm.group(1),
+            remaining,
+            count=1,
         )
-        return tag_fixed
+        return f"<{m.group('name')}{remaining}>"
 
-    pattern = re.compile(
-        r"""<(?:button|field|notebook|group|div|span|page|label|separator)\b[^>]*"""
-        r"""\bstates\s*=\s*["']([^"']*)["'][^>]*>""",
-        re.DOTALL,
-    )
-    return pattern.sub(_replace, content)
+    return _STATES_TAG.sub(_replace, content)
 
 
-def apply_xml_fixes(content: str, from_version: int, to_version: int = 19) -> str:
+def _well_formed(text: str) -> bool:
+    try:
+        ET.fromstring(text.encode("utf-8"))
+    except ET.ParseError:
+        return False
+    return True
+
+
+def apply_xml_fixes(content: str, from_version: int, to_version: int = 19, *,
+                    verified_state_field: bool = False) -> str:
     """
     Legacy XML fixes. Conversions that Odoo 18 introduced (<tree> -> <list>, view_type/view_mode
     'tree' -> 'list', the chatter block) run only for to_version >= 18; the others run for every target.
+
+    ``verified_state_field`` (D2): states= is rewritten only when the caller has verified that the view's
+    model has a ``state`` field. Without it states= is left as written, for the experimental fixer or review.
+
+    D6: if the rewritten text is not well-formed XML, the original text is returned unchanged.
     """
+    fixed = _apply_xml_rewrites(content, to_version, verified_state_field)
+    if fixed != content and not _well_formed(fixed):
+        return content
+    return fixed
+
+
+def _apply_xml_rewrites(content: str, to_version: int, verified_state_field: bool) -> str:
     # <openerp> → <odoo>
     content = re.sub(r'<openerp>', '<odoo>', content)
     content = re.sub(r'</openerp>', '</odoo>', content)
 
-    # ── states= → invisible= domain expression (Odoo 17+) ───────────────────
-    content = _convert_states_to_invisible(content)
+    # ── states= → invisible= domain expression (Odoo 17+; only with a verified state field, D2) ──
+    if verified_state_field:
+        content = _convert_states_to_invisible(content)
 
     # groups_id= → groups=
     content = re.sub(r'\bgroups_id\s*=', 'groups=', content)
@@ -749,7 +911,7 @@ def apply_xml_fixes(content: str, from_version: int, to_version: int = 19) -> st
     if to_version >= 18:
         # v18+: <tree> → <list>
         content = re.sub(r'<tree\b', '<list', content)
-        content = re.sub(r'</tree>', '</list>', content)
+        content = re.sub(r'</tree(\s*)>', r'</list\1>', content)
         content = re.sub(
             r'(\bview_type\s*=\s*["\'])tree(["\'])',
             r'\1list\2',
@@ -782,26 +944,28 @@ def apply_xml_fixes(content: str, from_version: int, to_version: int = 19) -> st
         # to avoid eating nested </div> tags
         content = _replace_chatter_div(content)
 
+        # Self-closing fields are matched by "/>" (a "/" inside an attribute value does not stop the match), and
+        # the paired form must not end on a self-closing start tag, or it would consume the next </field> (D6).
         for _chatter_field in ('message_ids', 'activity_ids', 'message_follower_ids'):
             content = re.sub(
-                r'<field[^>]+name=["\']' + _chatter_field + r'["\'][^/]*/\s*>',
+                r'<field\b[^>]*?\sname=["\']' + _chatter_field + r'["\'][^>]*?/\s*>',
                 '',
                 content,
             )
             content = re.sub(
-                r'<field[^>]+name=["\']' + _chatter_field + r'["\'][^>]*>.*?</field>',
+                r'<field\b[^>]*?\sname=["\']' + _chatter_field + r'["\'][^>]*?(?<!/)>.*?</field>',
                 '',
                 content,
                 flags=re.DOTALL,
             )
 
         content = re.sub(
-            r'<field[^>]+widget=["\']mail_thread["\'][^/]*/\s*>',
+            r'<field\b[^>]*?\swidget=["\']mail_thread["\'][^>]*?/\s*>',
             '<chatter/>',
             content,
         )
         content = re.sub(
-            r'<field[^>]+widget=["\']mail_thread["\'][^>]*>.*?</field>',
+            r'<field\b[^>]*?\swidget=["\']mail_thread["\'][^>]*?(?<!/)>.*?</field>',
             '<chatter/>',
             content,
             flags=re.DOTALL,
@@ -811,42 +975,45 @@ def apply_xml_fixes(content: str, from_version: int, to_version: int = 19) -> st
     return content
 
 
+_DIV_TOKEN = re.compile(r"""<div\b(?:"[^"]*"|'[^']*'|[^>"'])*?(/?)>|</div\s*>""", re.IGNORECASE)
+_CHATTER_DIV = re.compile(r'<div[^>]+class=["\'][^"\']*oe_chatter[^"\']*["\'][^>]*>', re.IGNORECASE)
+
+
+def _matching_div_end(content: str, pos: int):
+    """End offset of the </div> that closes the element opened just before ``pos``, or None if unbalanced.
+    Only real <div> tags count: <divider/> and other names that start with "div" do not (D6)."""
+    depth = 1
+    for token in _DIV_TOKEN.finditer(content, pos):
+        if token.group(0).startswith('</'):
+            depth -= 1
+        elif not token.group(1):  # an opening tag; "<div/>" is self-closing and changes nothing
+            depth += 1
+        if depth == 0:
+            return token.end()
+    return None
+
+
 def _replace_chatter_div(content: str) -> str:
     """
-    FIX: Replace <div class="oe_chatter">...</div> with <chatter/> using a
-    depth-counter to correctly handle nested divs rather than a greedy regex.
+    Replace <div class="oe_chatter">...</div> with <chatter/>. The end of the block is found with a depth
+    counter over <div> tags, so nested divs are handled and a self-closing chatter div is replaced on its own.
+    A block whose end cannot be found is left exactly as written.
     """
     result = []
     i = 0
-    pattern = re.compile(
-        r'<div[^>]+class=["\'][^"\']*oe_chatter[^"\']*["\'][^>]*>',
-        re.IGNORECASE
-    )
-    while i < len(content):
-        m = pattern.search(content, i)
-        if not m:
+    while True:
+        m = _CHATTER_DIV.search(content, i)
+        if m is None:
             result.append(content[i:])
             break
         result.append(content[i:m.start()])
-        depth = 1
-        pos = m.end()
-        while pos < len(content) and depth > 0:
-            open_tag  = content.find('<div', pos)
-            close_tag = content.find('</div>', pos)
-            if close_tag == -1:
-                pos = len(content)
-                break
-            if open_tag != -1 and open_tag < close_tag:
-                depth += 1
-                pos = open_tag + 4
-            else:
-                depth -= 1
-                if depth == 0:
-                    pos = close_tag + len('</div>')
-                else:
-                    pos = close_tag + len('</div>')
+        end = m.end() if m.group(0).endswith('/>') else _matching_div_end(content, m.end())
+        if end is None:
+            result.append(m.group(0))
+            i = m.end()
+            continue
         result.append('<chatter/>')
-        i = pos
+        i = end
     return ''.join(result)
 
 
@@ -877,6 +1044,7 @@ XML_RULES_C      = _compile_rules(XML_RULES)
 MANIFEST_RULES_C = _compile_rules(MANIFEST_RULES)
 JS_TS_RULES_C    = _compile_rules(JS_TS_RULES)
 CSS_RULES_C      = _compile_rules(CSS_RULES)
+SCSS_RULES_C     = _compile_rules(SCSS_RULES)
 PYTHON_RULES_V18_C   = _compile_rules(PYTHON_RULES_V18)
 XML_RULES_V18_C      = _compile_rules(XML_RULES_V18)
 MANIFEST_RULES_V18_C = _compile_rules(MANIFEST_RULES_V18)
@@ -886,6 +1054,7 @@ MANIFEST_RULES_V19_C = _compile_rules(MANIFEST_RULES_V19)
 
 
 MANIFEST_NAMES = ("__manifest__.py", "__openerp__.py")
+_MANIFEST_LICENSE_KEY = re.compile(r"""['"]license['"]\s*:""")
 
 
 def check_content(content: str, filepath: str, compiled_rules: list,
@@ -900,13 +1069,25 @@ def check_content(content: str, filepath: str, compiled_rules: list,
     lines = content.splitlines()
     seen: set = set()
 
+    # File-level check. contradicted: the Odoo 17.0 manifest docs give 'license' a default of LGPL-3, so a missing key is
+    # not an error and the article's "expected from v17" gate is not kept. Reported as INFO for every source version.
+    if Path(filepath).name.lower() in MANIFEST_NAMES \
+            and not _MANIFEST_LICENSE_KEY.search(content):
+        report.issues.append(Issue(
+            file=filepath, line=1, severity=SEVERITY_INFO, category="License Missing",
+            message="No 'license' key in the manifest; Odoo 17.0 documents a default of LGPL-3",
+            suggestion="Set 'license' explicitly if the module is not LGPL-3",
+            auto_fixable=False,
+        ))
+
     for min_ver, exact_tgt_ver, pattern, severity, category, message, suggestion, auto_fixable in compiled_rules:
         if min_ver != 0 and from_version >= min_ver:
             continue
         if exact_tgt_ver != 0 and report.to_version != exact_tgt_ver:
             continue
         for i, line in enumerate(lines, 1):
-            if pattern.search(line):
+            match = pattern.search(line)
+            if match:
                 key = (i, category)
                 if key in seen:
                     continue
@@ -914,6 +1095,7 @@ def check_content(content: str, filepath: str, compiled_rules: list,
                 report.issues.append(Issue(
                     file=filepath,
                     line=i,
+                    column=match.start() + 1,  # the match start on this line, 1-based (PA-5)
                     severity=severity,
                     category=category,
                     message=message,
@@ -981,7 +1163,9 @@ def _rules_for_file(filepath: Path, to_version: int = 19) -> Optional[list]:
         return base
     if ext in (".js", ".ts"):
         return JS_TS_RULES_C
-    if ext in (".css", ".scss", ".less"):
+    if ext == ".scss":
+        return CSS_RULES_C + SCSS_RULES_C
+    if ext in (".css", ".less"):
         return CSS_RULES_C
     return None
 

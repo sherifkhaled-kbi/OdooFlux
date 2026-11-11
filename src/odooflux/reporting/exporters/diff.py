@@ -6,8 +6,8 @@ run that did not write); nothing is guessed. A rename (``__openerp__.py`` to ``_
 create, which plain ``patch`` applies without git extensions. Lines are split on ``\\n`` only, so CRLF content and a
 missing final newline survive byte for byte (``\\ No newline at end of file``).
 
-Only kept edits are exported. A module with rejected edits or a blocked module is excluded as a whole (promotion is all or
-nothing per module) and listed in the index with its reasons."""
+Only kept edits are exported. A blocked module is excluded as a whole (it was not written) and listed in the index with its
+reasons. A partial module (some edits refused) exports its accepted edits; a refused file is absent from the patch."""
 
 import difflib
 import json
@@ -106,12 +106,13 @@ def export_diff(report: dict, read_original) -> DiffExport:
         edits = module.get("edits") or []
         if not edits:
             continue
-        if module.get("rejections") or module.get("blocked"):
+        if module.get("blocked"):  # a blocked module was not written: nothing of it is exported
             reasons = [r if isinstance(r, str) else str(r) for r in module.get("rejections", [])]
-            if module.get("blocked"):
-                reasons.insert(0, module.get("block_reason") or "blocked")
+            reasons.insert(0, module.get("block_reason") or "blocked")
             excluded.append({"module": module["name"], "reasons": reasons})
             continue
+        # A module with refused edits is partial (PA-3): its kept edits are exported. A refused file that keeps its
+        # bytes has no entry in ``edits``, so it is absent from the patch.
         root = Path(module["path"])
         for edit in sorted(edits, key=lambda e: e["path"]):
             spans = sorted(edit["spans"], key=lambda s: s["start"])

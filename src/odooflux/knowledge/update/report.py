@@ -111,21 +111,26 @@ def render_update(result) -> str:
     return "\n".join(lines) + "\n"
 
 
-def status_limitations(completeness) -> list:
-    """The known limitations of the installed knowledge, always in this order."""
+def status_limitations(completeness, registry_bound=0) -> list:
+    """The known limitations of the installed knowledge, always in this order. `registry_bound` is the number of
+    DETECT_ONLY rows counted as FIX_ENABLED at read time because a registry fixer binds (stored rows are unchanged)."""
     items = []
     if completeness == "PARTIAL":
         items.append("knowledge completeness is PARTIAL: some pipeline steps are not covered by the active release")
     items.append("migration support not established")
     items.append("production certification not granted")
     items.append("Enterprise freshness unknown without a check")
+    if registry_bound:
+        items.append(f"fix-enabled count includes {registry_bound} DETECT_ONLY rule(s) bound to an experimental "
+                     "registry fixer (effective maturity at read time; stored maturity unchanged)")
     return items
 
 
 def status_payload(*, release_id, digest, completeness, steps, revisions, rules_by_maturity, certification_governed,
-                   last_successful) -> dict:
+                   last_successful, registry_bound=0) -> dict:
     """`odooflux.knowledge-status/1`. `release_id` None means built-in knowledge only. `rules_by_maturity` must already
-    use each row's effective maturity (a capped row counts as DETECT_ONLY). `last_successful` is a dict or None."""
+    use each row's effective maturity (a capped row counts as DETECT_ONLY; see `knowledge_rules.effective_maturity`).
+    `registry_bound` counts the rows promoted that way. `last_successful` is a dict or None."""
     by_maturity = {str(k): int(v) for k, v in sorted(rules_by_maturity.items())}
     return {
         "schema": STATUS_SCHEMA,
@@ -139,7 +144,7 @@ def status_payload(*, release_id, digest, completeness, steps, revisions, rules_
                   "fix_enabled": by_maturity.get("FIX_ENABLED", 0),
                   "certification_governed": int(certification_governed)},
         "last_successful_update": last_successful,
-        "limitations": status_limitations(completeness),
+        "limitations": status_limitations(completeness, registry_bound),
     }
 
 

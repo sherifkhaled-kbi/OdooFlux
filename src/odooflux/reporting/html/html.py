@@ -10,7 +10,7 @@ import html as _html
 from string import Template
 
 from odooflux.reporting.options import sanitize_text
-from odooflux.reporting.terminal.ansi import LAYER_NAMES, num
+from odooflux.reporting.terminal.ansi import LAYER_NAMES, location_text, num, refusal_outcome
 
 CSS = """
 body{font-family:system-ui,sans-serif;margin:0;color:#1b1f23;background:#fff;line-height:1.45}
@@ -27,7 +27,7 @@ summary{cursor:pointer;font-weight:600}
 .badge{border:1px solid;border-radius:3px;padding:0 .35rem;font-weight:700}
 .status-VERIFIED_SUCCESS,.status-INSTALL_VERIFIED,.pass{color:#116329}
 .status-STATIC_VALIDATED{color:#0550ae}
-.status-NEEDS_REVIEW,.unavailable{color:#8a4600}
+.status-NEEDS_REVIEW,.status-PARTIAL,.unavailable{color:#8a4600}
 .status-FAILED,.status-BLOCKED,.fail{color:#a40e26}
 .skipped{color:#57606a}
 .provisional{border:2px solid #8a4600;background:#fff8c5;padding:.5rem .8rem;margin:.5rem 1.2rem;font-weight:600}
@@ -66,6 +66,12 @@ def esc(value) -> str:
     return _html.escape(sanitize_text(value), quote=True)
 
 
+def _status_css_class(status) -> str:
+    """The status CSS class: its first word, so a multi-word status (PARTIAL — DEVELOPER ACTION REQUIRED) stays one
+    class token. The status text itself is still printed in full."""
+    return "status-" + esc(str(status).split(" ")[0])
+
+
 def _metric(name: str, value) -> str:
     return f'<span data-metric="{name}">{int(value)}</span>'
 
@@ -85,10 +91,16 @@ def _outcome(layer: dict) -> str:
     return f'<span class="outcome {cls}">{layer["outcome"]}</span>{reason}'
 
 
+def _edits_label(summary: dict) -> str:
+    """A dry run's edits are planned, not applied (AD-06)."""
+    return "Edits planned / rejected" if "planned" in summary["edits"] else "Edits applied / rejected"
+
+
 def _summary(report: dict) -> str:
     s, mods = report["summary"], report["modules"]
     st, op, tot = s["findings_by_status"], s["open_findings"], s["findings"]
-    tiles = "".join(f'<span class="tile status-{k}">{esc(k)}: {v}</span>' for k, v in sorted(s["modules_by_status"].items()))
+    tiles = "".join(f'<span class="tile {_status_css_class(k)}">{esc(k)}: {v}</span>'
+                    for k, v in sorted(s["modules_by_status"].items()))
     return f"""<section id="summary">
 <h2>Summary</h2>
 <p class="tiles">{tiles}</p>
@@ -102,7 +114,7 @@ def _summary(report: dict) -> str:
 <tr><th>Fixed</th><td>{_metric("fixed", st["fixed"])}</td></tr>
 <tr><th>Rejected</th><td>{_metric("rejected", st["rejected"])}</td></tr>
 <tr><th>Needs review</th><td>{_metric("needs_review", st["needs_review"])}</td></tr>
-<tr><th>Edits applied / rejected</th><td>{s["edits"]["applied"]} / {s["edits"]["rejected"]}</td></tr>
+<tr><th>{_edits_label(s)}</th><td>{s["edits"].get("planned", s["edits"]["applied"])} / {s["edits"]["rejected"]}</td></tr>
 <tr><th>Files written</th><td>{s["files_written"]}</td></tr>
 </table>
 </section>"""
@@ -121,7 +133,7 @@ def _module(index: int, m: dict) -> str:
     for f in m["findings"]:
         if f["status"] in ("OPEN", "NEEDS_REVIEW"):
             open_c[f["severity"]] += 1
-    head = (f'<summary><span class="badge status-{esc(m["status"])}">{esc(m["status"])}</span> {esc(m["name"])} '
+    head = (f'<summary><span class="badge {_status_css_class(m["status"])}">{esc(m["status"])}</span> {esc(m["name"])} '
             f'&middot; open C/W/I {open_c["CRITICAL"]}/{open_c["WARNING"]}/{open_c["INFO"]}</summary>')
     reasons = ("<p>Reasons: " + ", ".join(f"<code>{esc(r)}</code>" for r in m["status_reasons"]) + "</p>"
                if m["status_reasons"] else "")
@@ -136,14 +148,15 @@ def _module(index: int, m: dict) -> str:
         for f in items:
             label = f["severity"] if f["status"] in ("OPEN", "NEEDS_REVIEW") else f["status"]
             extra = ""
-            if f.get("suggestion") and f["status"] != "FIXED":
-                extra += f"<br>Action: {esc(f['suggestion'])}"
-            if f.get("rejection_reason"):
-                extra += f"<br>Rejected: {esc(f['rejection_reason'])}"
+            if f["status"] != "FIXED":  # AD-06: why it was not fixed and what the developer does
+                if f.get("reason_not_fixed"):
+                    extra += f"<br>Not fixed: {esc(f['reason_not_fixed'])}"
+                if f.get("developer_action"):
+                    extra += f"<br>Action: {esc(f['developer_action'])}"
             ev = " ".join(_evidence(e) for e in f.get("evidence", []))
             if ev and f["status"] != "FIXED":
                 extra += f"<br>Evidence: {ev}"
-            loc = f"L{f['line']}" + (f":{f['column']}" if f.get("column") else "")
+            loc = location_text(f)
             rows += (f"<tr><td><strong>{esc(label)}</strong></td><td>{esc(loc)}</td><td><code>{esc(f['rule_id'])}</code></td>"
                      f"<td>{esc(f['status'])}</td><td>{esc(f['message'])}{extra}</td></tr>")
         files += (f"<h3><code>{esc(path)}</code></h3><table><thead><tr><th>Severity</th><th>Location</th><th>Rule</th>"
@@ -173,9 +186,16 @@ def _modules(report: dict) -> str:
 
 
 def _rejected(report: dict) -> str:
-    items = [(m["name"], r) for m in report["modules"] for r in m["rejections"]]
-    body = ("<ul>" + "".join(f"<li><code>{esc(n)}</code>: {esc(r if isinstance(r, str) else str(r))} "
-                             f"&mdash; file left unchanged</li>" for n, r in items) + "</ul>") if items else "<p>None.</p>"
+    """Each refused file with its reason and what became of it (PA-3: a partial module keeps its valid changes)."""
+    items = [(m, r) for m in report["modules"] for r in m["rejections"]]
+    rows = []
+    for m in report["modules"]:
+        refused = m.get("refused_files") or []
+        rows += [f"<li><code>{esc(m['name'])}/{esc(item['path'])}</code>: {esc(item['reason'])} "
+                 f"&mdash; {esc(refusal_outcome(item, report['run']['mode']))}</li>" for item in refused]
+        rows += [f"<li><code>{esc(m['name'])}</code>: {esc(r if isinstance(r, str) else str(r))} "
+                 f"&mdash; edit refused (file not recorded)</li>" for r in m["rejections"][len(refused):]]
+    body = ("<ul>" + "".join(rows) + "</ul>") if items else "<p>None.</p>"
     return f'<section id="rejected">\n<h2>Rejected edits ({len(items)})</h2>\n{body}\n</section>'
 
 

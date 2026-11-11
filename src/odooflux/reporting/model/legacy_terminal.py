@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 from typing import Optional
 
+from odooflux.reporting.model.model import UNKNOWN, _line, known_column, legacy_unresolved
 from odooflux.rules.shared.legacy_rules import (
     MigrationReport, SEVERITY_CRITICAL, SEVERITY_WARNING, SEVERITY_INFO)
 
@@ -22,7 +23,7 @@ YELLOW = '\033[93m'
 
 
 def print_report(report: MigrationReport, no_color: bool = False, show_fixed: bool = False,
-                 filter_severity: Optional[str] = None):
+                 filter_severity: Optional[str] = None, *, entry: Optional[dict] = None, mode: str = "fix"):
     def c(color, text):
         return text if no_color else f"{color}{text}{RESET}"
 
@@ -62,6 +63,7 @@ def print_report(report: MigrationReport, no_color: bool = False, show_fixed: bo
     by_file: dict = {}
     for issue in display_issues:
         by_file.setdefault(issue.file, []).append(issue)
+    unresolved = {id(i): f for i, f in zip(report.issues, legacy_unresolved(report, entry, mode))}
 
     for filepath, issues in sorted(by_file.items()):
         rel = os.path.relpath(filepath, report.module_path)
@@ -72,14 +74,18 @@ def print_report(report: MigrationReport, no_color: bool = False, show_fixed: bo
             tag = (c(GREEN, ' ✓ FIXED') if issue.fix_applied
                    else c(GREEN, ' [AUTO-FIX]') if issue.auto_fixable
                    else '')
+            line = _line(issue.line)  # AD-06: a line below 1 is shown as UNKNOWN, never as a number
+            loc = f"L{line}:{known_column(issue) or UNKNOWN}" if line != UNKNOWN else UNKNOWN  # PA-5: same rule
             print(
                 f"  {c(sev_color, f'[{issue.severity:<8}]')} "
-                f"L{issue.line:<5} "
+                f"{loc:<6} "
                 f"{c(BOLD, issue.category)}{tag}"
             )
             print(f"           {issue.message}")
             if not issue.fix_applied:
-                print(f"           → {issue.suggestion}")
+                fields = unresolved[id(issue)]
+                print(f"           → {fields['developer_action']}")
+                print(f"           Not fixed: {fields['reason_not_fixed']}")
 
     remaining_crit = sum(1 for i in open_issues if i.severity == SEVERITY_CRITICAL)
     remaining_warn = sum(1 for i in open_issues if i.severity == SEVERITY_WARNING)

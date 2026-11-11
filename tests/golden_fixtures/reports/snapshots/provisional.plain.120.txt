@@ -10,7 +10,7 @@ MODULE RESULTS
 
 FINDINGS
 kbi_prov/views/v.xml
-  FIXED    L1  17-18.xml.x
+  FIXED    L1:UNKNOWN  17-18.xml.x
            fixed
 
 REJECTED EDITS: none

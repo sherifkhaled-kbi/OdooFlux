@@ -44,8 +44,9 @@
       "path": "/work/kbi_old_portal",
       "processing": "BLOCKED",
       "promoted_files": [],
+      "refused_files": [],
       "rejections": [],
-      "reversible": true,
+      "reversible": false,
       "status": "BLOCKED",
       "status_inputs_digest": "35580605f996f12b20c42c6f7ee6bd850d8eec9ddae8bafdc676a38fadfb7eda",
       "status_reasons": [
@@ -59,8 +60,8 @@
     }
   ],
   "recovery": {
-    "reversible": true,
-    "rollback_cmd": "odooflux rollback run-golden",
+    "reversible": false,
+    "rollback_cmd": null,
     "run_log": "/state/runs/run-golden/log/run.jsonl"
   },
   "run": {
@@ -86,6 +87,7 @@
   "summary": {
     "edits": {
       "applied": 0,
+      "planned": 0,
       "rejected": 0
     },
     "files_written": 0,

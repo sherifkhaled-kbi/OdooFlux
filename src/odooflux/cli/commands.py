@@ -20,14 +20,33 @@ def _modules(args):
     return [module_ref(p, i) for i, p in enumerate(paths)]
 
 
+def _executable_fixers(ctx) -> dict:
+    """Step key (``16-17``) -> number of knowledge rules that can edit files in that step: effective maturity
+    FIX_ENABLED (AF-3, includes registry-bound fixers). Legacy fixers are not knowledge rules and are not counted."""
+    from odooflux.knowledge.loader import load_knowledge
+    maturity = getattr(ctx.registries, "rule_maturity", None)
+    counts = {}
+    for rule in load_knowledge().rules:
+        value = rule.get("maturity") if maturity is None else maturity(rule)
+        if value == "FIX_ENABLED":
+            counts[rule.get("step")] = counts.get(rule.get("step"), 0) + 1
+    return counts
+
+
 def cmd_versions(graph, ctx) -> int:
     print(f"{'VERSION':<10}{'PYTHON MIN':<12}{'SUPPORT':<14}")
     for vid in graph.versions:
         version = ctx.registries.versions.get(vid)
         print(f"{vid:<10}{(version.python_min or '-'):<12}{version.support_status:<14}")
-    print("\nSTEP                    RESEARCH")
+    fixers = _executable_fixers(ctx)
+    print(f"\n{'STEP':<24}{'RESEARCH':<18}FIX RULES")
     for step in _all_steps(graph):
-        print(f"{step.id:<24}{step.research_status}")
+        key = "-".join(p.split(".")[0] for p in step.id.split("->"))
+        print(f"{step.id:<24}{step.research_status:<18}{fixers.get(key, 0)}")
+    print("\nSUPPORT is the declared support policy per version (SUPPORTED needs every inbound step RULES_TESTED and "
+          "the version RUNTIME_VALIDATED); RESEARCH is how far a step's knowledge research has progressed. "
+          "Neither is a statement about what `migrate --fix` can edit. FIX RULES counts knowledge rules that can "
+          "edit files in a step (legacy fixers are not counted). A fix existing does not make a version SUPPORTED.")
     return 0
 
 
@@ -77,7 +96,7 @@ def cmd_resume(args, ctx) -> int:
         state = resume(state_dir, args.run_id, ctx.registries,
                        api_key=args.api_key or os.environ.get("ANTHROPIC_API_KEY"),
                        validate_text=make_validate_text(ctx.registries),
-                       on_module=_module_printer(view, len(run.read_state()["modules"])),
+                       on_module=_module_printer(view, len(run.read_state()["modules"]), run.read_state()),
                        layer3=ctx.layer3)
     except Exception as exc:  # resume refusals are reported, not raised
         print(f"ERROR: {type(exc).__name__}: {exc}", file=sys.stderr)

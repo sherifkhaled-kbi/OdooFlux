@@ -21,7 +21,11 @@
               "end": 55,
               "start": 26
             }
-          ]
+          ],
+          "validation": {
+            "reason": "",
+            "status": "VALID"
+          }
         },
         {
           "dest": "<ROOT>/module/kbi_demo/models/demo.py",
@@ -39,7 +43,11 @@
               "end": 817,
               "start": 779
             }
-          ]
+          ],
+          "validation": {
+            "reason": "",
+            "status": "VALID"
+          }
         },
         {
           "dest": "<ROOT>/module/kbi_demo/views/demo_views.xml",
@@ -63,18 +71,29 @@
               "end": 1132,
               "start": 1075
             }
-          ]
+          ],
+          "validation": {
+            "reason": "",
+            "status": "VALID"
+          }
         }
       ],
       "findings": [
         {
           "auto_fixable": true,
-          "column": 0,
+          "column": 5,
+          "developer_action": "Update 'version' key to the correct target version prefix",
           "evidence": [],
           "id": "5547a827c0f81825",
           "line": 3,
+          "location": {
+            "column": 5,
+            "line": 3,
+            "path": "__manifest__.py"
+          },
           "message": "Module version in manifest should be updated to match the target version",
           "path": "__manifest__.py",
+          "reason_not_fixed": "automatic fix not applied: the finding is still present after the fix pass",
           "rejection_reason": "",
           "rule_id": "Manifest Version",
           "severity": "INFO",
@@ -83,7 +102,7 @@
         },
         {
           "auto_fixable": true,
-          "column": 0,
+          "column": 5,
           "evidence": [],
           "id": "9b9e0cae2b806d72",
           "line": 3,
@@ -98,14 +117,21 @@
         {
           "auto_fixable": false,
           "column": 0,
+          "developer_action": "Review the cron record and its repeat semantics (ir.cron has no numbercall in 18.0). Not edited automatically.",
           "evidence": [
             "EV-113"
           ],
           "id": "88248e807033fcea",
           "line": 11,
+          "location": {
+            "column": "UNKNOWN",
+            "line": 11,
+            "path": "data/cron.xml"
+          },
           "maturity": "DETECT_ONLY",
           "message": "ir.cron.numbercall was removed in 18.0; the cron record sets this field.",
           "path": "data/cron.xml",
+          "reason_not_fixed": "no automatic fixer for this rule (DETECT_ONLY)",
           "rejection_reason": "",
           "review_required": true,
           "rule_id": "17-18.xml.cron-numbercall-removed",
@@ -154,14 +180,21 @@
         {
           "auto_fixable": false,
           "column": 0,
+          "developer_action": "Update the reference to mail.canned.response. Detect-only and review required: field names, XML ids and tables that follow the rename are not edited automatically.",
           "evidence": [
             "EV-508"
           ],
           "id": "f3819f70800120e1",
           "line": 11,
+          "location": {
+            "column": "UNKNOWN",
+            "line": 11,
+            "path": "models/demo.py"
+          },
           "maturity": "DETECT_ONLY",
           "message": "The model mail.shortcode was renamed mail.canned.response in 18.0.",
           "path": "models/demo.py",
+          "reason_not_fixed": "no automatic fixer for this rule (DETECT_ONLY)",
           "rejection_reason": "",
           "review_required": true,
           "rule_id": "17-18.python.model-renamed-mail-canned-response",
@@ -172,14 +205,21 @@
         {
           "auto_fixable": false,
           "column": 0,
+          "developer_action": "Review the override and move the label logic to display_name. Not edited automatically.",
           "evidence": [
             "EV-104"
           ],
           "id": "825175bd134e5d94",
           "line": 13,
+          "location": {
+            "column": "UNKNOWN",
+            "line": 13,
+            "path": "models/demo.py"
+          },
           "maturity": "DETECT_ONLY",
           "message": "BaseModel.name_get was removed in 18.0; this override is no longer called.",
           "path": "models/demo.py",
+          "reason_not_fixed": "no automatic fixer for this rule (DETECT_ONLY)",
           "rejection_reason": "",
           "review_required": true,
           "rule_id": "17-18.python.name-get-removed",
@@ -190,15 +230,22 @@
         {
           "auto_fixable": false,
           "column": 0,
+          "developer_action": "Review the override and port its search logic to _search_display_name. Not edited automatically.",
           "evidence": [
             "EV-008",
             "EV-106"
           ],
           "id": "1f96075a068cd122",
           "line": 17,
+          "location": {
+            "column": "UNKNOWN",
+            "line": 17,
+            "path": "models/demo.py"
+          },
           "maturity": "DETECT_ONLY",
           "message": "Searching by name is implemented as _search_display_name in 18.0; this _name_search override needs review.",
           "path": "models/demo.py",
+          "reason_not_fixed": "no automatic fixer for this rule (DETECT_ONLY)",
           "rejection_reason": "",
           "review_required": true,
           "rule_id": "17-18.python.name-search-to-search-display-name",
@@ -209,6 +256,7 @@
         {
           "auto_fixable": false,
           "column": 0,
+          "developer_action": "Review the call. has_groups takes a comma-separated spec with optional '!' negation, so the rewrite is not mechanical. Not edited automatically.",
           "evidence": [
             "EV-105",
             "EV-308",
@@ -218,9 +266,15 @@
           ],
           "id": "468b8ce4139e2079",
           "line": 21,
+          "location": {
+            "column": "UNKNOWN",
+            "line": 21,
+            "path": "models/demo.py"
+          },
           "maturity": "DETECT_ONLY",
           "message": "res.users.user_has_groups was removed in 18.0; use has_groups(group_spec) or has_group(xmlid).",
           "path": "models/demo.py",
+          "reason_not_fixed": "no automatic fixer for this rule (DETECT_ONLY)",
           "rejection_reason": "",
           "review_required": true,
           "rule_id": "17-18.python.user-has-groups-removed",
@@ -253,15 +307,22 @@
         {
           "auto_fixable": false,
           "column": 0,
+          "developer_action": "Change model_id:id to mail.model_mail_canned_response. Detect-only and review required; unqualified ids and the ACL row id are not covered.",
           "evidence": [
             "EV-508",
             "EV-515"
           ],
           "id": "f9ce32eb80374fb9",
           "line": 3,
+          "location": {
+            "column": "UNKNOWN",
+            "line": 3,
+            "path": "security/ir.model.access.csv"
+          },
           "maturity": "DETECT_ONLY",
           "message": "An ACL row references the model external id mail.model_mail_shortcode (model mail.shortcode renamed mail.canned.response in 18.0).",
           "path": "security/ir.model.access.csv",
+          "reason_not_fixed": "no automatic fixer for this rule (DETECT_ONLY)",
           "rejection_reason": "",
           "review_required": true,
           "rule_id": "17-18.csv.model-renamed-mail-canned-response",
@@ -272,15 +333,22 @@
         {
           "auto_fixable": false,
           "column": 0,
+          "developer_action": "Import rpc from @web/core/network/rpc and call it directly. Not edited automatically.",
           "evidence": [
             "EV-120",
             "EV-394"
           ],
           "id": "2aad0955979e38fc",
           "line": 11,
+          "location": {
+            "column": "UNKNOWN",
+            "line": 11,
+            "path": "static/src/js/demo.js"
+          },
           "maturity": "DETECT_ONLY",
           "message": "The rpc service is not registered in 18.0; rpc is an exported function.",
           "path": "static/src/js/demo.js",
+          "reason_not_fixed": "no automatic fixer for this rule (DETECT_ONLY)",
           "rejection_reason": "",
           "review_required": true,
           "rule_id": "17-18.js.rpc-service-removed",
@@ -290,12 +358,40 @@
         },
         {
           "auto_fixable": false,
-          "column": 0,
+          "column": 19,
+          "developer_action": "t-out is the documented directive and escapes by default; t-esc still works",
+          "evidence": [],
+          "id": "7c2c8e13d1cd86da",
+          "line": 6,
+          "location": {
+            "column": 19,
+            "line": 6,
+            "path": "static/src/xml/demo.xml"
+          },
+          "message": "t-esc is an alias of t-out and not formally deprecated in the Odoo 18.0 QWeb docs (article warning not confirmed)",
+          "path": "static/src/xml/demo.xml",
+          "reason_not_fixed": "no automatic fixer for this finding",
+          "rejection_reason": "",
+          "rule_id": "t-esc Deprecated",
+          "severity": "INFO",
+          "status": "NEEDS_REVIEW",
+          "suggestion": "t-out is the documented directive and escapes by default; t-esc still works"
+        },
+        {
+          "auto_fixable": false,
+          "column": 9,
+          "developer_action": "Review widget= attributes against v19 widget list",
           "evidence": [],
           "id": "fca6e7ecc778cfde",
           "line": 6,
+          "location": {
+            "column": 9,
+            "line": 6,
+            "path": "views/demo_views.xml"
+          },
           "message": "Ensure view arch is valid for v19 field widgets",
           "path": "views/demo_views.xml",
+          "reason_not_fixed": "no automatic fixer for this finding",
           "rejection_reason": "",
           "rule_id": "View Arch",
           "severity": "INFO",
@@ -304,7 +400,7 @@
         },
         {
           "auto_fixable": true,
-          "column": 0,
+          "column": 13,
           "evidence": [],
           "id": "01982b3f562a712d",
           "line": 7,
@@ -318,12 +414,19 @@
         },
         {
           "auto_fixable": false,
-          "column": 0,
+          "column": 9,
+          "developer_action": "Review widget= attributes against v19 widget list",
           "evidence": [],
           "id": "8206e48147c0619d",
           "line": 17,
+          "location": {
+            "column": 9,
+            "line": 17,
+            "path": "views/demo_views.xml"
+          },
           "message": "Ensure view arch is valid for v19 field widgets",
           "path": "views/demo_views.xml",
+          "reason_not_fixed": "no automatic fixer for this finding",
           "rejection_reason": "",
           "rule_id": "View Arch",
           "severity": "INFO",
@@ -333,20 +436,48 @@
         {
           "auto_fixable": false,
           "column": 0,
+          "developer_action": "Plan the rename to the card template. Not edited automatically.",
           "evidence": [
             "EV-119"
           ],
           "id": "5224e1798e52b99b",
           "line": 21,
+          "location": {
+            "column": "UNKNOWN",
+            "line": 21,
+            "path": "views/demo_views.xml"
+          },
           "maturity": "DETECT_ONLY",
           "message": "The kanban t-name 'kanban-box' is deprecated in 18.0 in favour of 'card'.",
           "path": "views/demo_views.xml",
+          "reason_not_fixed": "no automatic fixer for this rule (DETECT_ONLY)",
           "rejection_reason": "",
           "review_required": false,
           "rule_id": "17-18.xml.kanban-box-deprecated",
           "severity": "WARNING",
           "status": "NEEDS_REVIEW",
           "suggestion": "Plan the rename to the card template. Not edited automatically."
+        },
+        {
+          "auto_fixable": false,
+          "column": 24,
+          "developer_action": "Rename the kanban-box template to t-name=\"card\"",
+          "evidence": [],
+          "id": "fc43e2411f39358b",
+          "line": 21,
+          "location": {
+            "column": 24,
+            "line": 21,
+            "path": "views/demo_views.xml"
+          },
+          "message": "kanban-box template name is deprecated in Odoo 18.0 in favour of a 'card' template",
+          "path": "views/demo_views.xml",
+          "reason_not_fixed": "no automatic fixer for this finding",
+          "rejection_reason": "",
+          "rule_id": "kanban-box Template Renamed",
+          "severity": "WARNING",
+          "status": "NEEDS_REVIEW",
+          "suggestion": "Rename the kanban-box template to t-name=\"card\""
         },
         {
           "auto_fixable": true,
@@ -407,6 +538,7 @@
         "<ROOT>/module/kbi_demo/models/demo.py",
         "<ROOT>/module/kbi_demo/views/demo_views.xml"
       ],
+      "refused_files": [],
       "rejections": [],
       "reversible": true,
       "risk_inventory": {
@@ -449,7 +581,7 @@
         "total": 2
       },
       "status": "NEEDS_REVIEW",
-      "status_inputs_digest": "9eaf5d16e790f833ce792adba4a7c26fa6c22d76ef770f9439d191663deaf7bf",
+      "status_inputs_digest": "d0a1218d75a22e12632c04cad7178f66b317f30cdcc32bc3a86589971a6f8dcc",
       "status_reasons": [
         "open_review_findings"
       ],
@@ -492,12 +624,12 @@
     "files_written": 3,
     "findings": {
       "critical": 3,
-      "info": 3,
-      "warning": 11
+      "info": 4,
+      "warning": 12
     },
     "findings_by_status": {
       "fixed": 6,
-      "needs_review": 10,
+      "needs_review": 12,
       "open": 1,
       "rejected": 0
     },
@@ -506,8 +638,8 @@
     },
     "open_findings": {
       "critical": 0,
-      "info": 3,
-      "warning": 8
+      "info": 4,
+      "warning": 9
     }
   },
   "verification_scope": {

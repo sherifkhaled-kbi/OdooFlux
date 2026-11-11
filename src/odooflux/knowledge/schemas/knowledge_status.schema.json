@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "odooflux.knowledge-status/1",
   "title": "OdooFlux knowledge status (feature 012, `odooflux knowledge status --json`)",
-  "description": "Read-only status of the installed knowledge. by_maturity counts each rule row at its effective maturity (a capped row counts as DETECT_ONLY).",
+  "description": "Read-only status of the installed knowledge. by_maturity counts each rule row at its effective maturity (a capped row counts as DETECT_ONLY; a DETECT_ONLY row whose experimental registry fixer binds counts as FIX_ENABLED; stored rows are not changed).",
   "type": "object",
   "required": ["schema", "kind", "release_id", "digest", "completeness", "steps_covered", "installed_sources", "rules", "last_successful_update", "limitations"],
   "additionalProperties": false,

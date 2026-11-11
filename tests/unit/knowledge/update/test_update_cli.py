@@ -16,6 +16,7 @@ import subprocess
 import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
+from functools import partial
 from pathlib import Path
 from types import SimpleNamespace
 from unittest import mock
@@ -32,10 +33,17 @@ from odooflux.knowledge.update import credentials as cred
 from odooflux.knowledge.update.history import UpdateHistory
 from odooflux.knowledge.update.model import UpdateResult
 from odooflux.cli import kap_release
+from odooflux.core.orchestrator import knowledge_rules as kr
+from odooflux.rules.bindable import BINDABLE_MODULES
+from odooflux.rules.experimental import registry as experimental_registry
 
 FIXTURE_RELEASE = Path(__file__).resolve().parents[3] / "fixtures" / "kap" / "fixture_release"
 TOKEN = "tok-TEST-1234567890"  # dummy
-TOOLKIT = SimpleNamespace(extract_toolkit=object())
+EXPERIMENTAL = kr.ExperimentalFixers(entries=experimental_registry.ENTRIES, modules=experimental_registry.MODULES)
+# the composition root injects the read-time maturity function (builtins.build_context): same wiring here
+TOOLKIT = SimpleNamespace(
+    extract_toolkit=object(),
+    rule_maturity=partial(kr.effective_maturity, modules=BINDABLE_MODULES, experimental=EXPERIMENTAL))
 PREVIOUS = "rel-previous"
 NEW = "rel-new"
 DIGEST = "d" * 64
@@ -374,7 +382,8 @@ class StatusTests(CliTestCase):
         loaded = load_active_knowledge(resolve_knowledge(self.home))
         rules = [r for r in loaded.rules if isinstance(r, dict)]
         expected_total = len(rules)
-        expected_fix = len([r for r in rules if r.get("maturity") == "FIX_ENABLED"])
+        expected_fix = len([r for r in rules
+                            if kr.effective_maturity(r, BINDABLE_MODULES, EXPERIMENTAL) == "FIX_ENABLED"])
         code, out, err, _ = self.run_cli(["status", "--kb-home", str(self.home), "--json"])
         self.assertEqual(code, 0, err)
         payload = json.loads(out)
@@ -382,6 +391,24 @@ class StatusTests(CliTestCase):
         self.assertEqual(payload["rules"]["fix_enabled"], expected_fix)
         self.assertEqual(payload["installed_sources"], {"community-12.0": SHA_A})
         self.assertEqual(v.check(payload, STATUS_SCHEMA), [])
+
+    def test_builtin_fix_enabled_counts_registry_bound_detect_only_rows(self):
+        # AF-3: two DETECT_ONLY rows (16-17 attrs/states) bind a registry fixer, so they count as FIX_ENABLED
+        stored = [r for r in load_knowledge(KNOWLEDGE_ROOT).rules if isinstance(r, dict)]
+        stored_fix = sum(1 for r in stored if r.get("maturity") == "FIX_ENABLED")
+        code, out, err, _ = self.run_cli(["status", "--kb-home", str(self.home), "--json"])
+        self.assertEqual(code, 0, err)
+        payload = json.loads(out)
+        self.assertEqual(payload["rules"]["fix_enabled"], stored_fix + 2)
+        self.assertEqual(sum(payload["rules"]["by_maturity"].values()), payload["rules"]["total"])
+        self.assertEqual(payload["rules"]["by_maturity"]["DRAFT"], 3)
+        self.assertIn("16-17.xml.attrs-removed", [r["id"] for r in stored if r.get("maturity") == "DETECT_ONLY"])
+
+    def test_registry_bound_rows_are_disclosed_in_the_limitations(self):
+        code, out, err, _ = self.run_cli(["status", "--kb-home", str(self.home)])
+        self.assertEqual(code, 0, err)
+        self.assertIn("fix-enabled rules: 12", out)
+        self.assertIn("includes 2 DETECT_ONLY rule(s) bound to an experimental registry fixer", out)
 
     def test_partial_release_adds_the_completeness_limitation(self):
         self.install_release({"community-12.0": SHA_A}, completeness="PARTIAL")

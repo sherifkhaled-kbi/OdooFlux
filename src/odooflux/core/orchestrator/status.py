@@ -21,6 +21,9 @@ TOOL_STATES = ("ok", "backup_failed", "workspace_failed", "promotion_failed", "t
 COVERAGE = (None, "full", "partial")
 ALWAYS_REQUIRED = (1, 2, 3)
 NOT_RUN = "not_run"
+# A module with refused (INVALID) edits: its other files were processed and kept, the refused change was not applied,
+# so the migration is incomplete until a developer acts. Shown as the module status only when nothing is BLOCKED.
+PARTIAL_STATUS = "PARTIAL — DEVELOPER ACTION REQUIRED"
 
 
 @dataclass(frozen=True)

@@ -105,6 +105,21 @@ def diff_paths(a, b, path=()) -> list:
     return [] if a == b else [path]
 
 
+def _lookup(obj, path):
+    for key in path:
+        obj = obj[key]
+    return obj
+
+
+def _is_af1_addition(path) -> bool:
+    """A key path AF-1 (default execution) may add to a report: summary.experimental, or fix_class on a module's
+    finding or edit (modules[i].findings[j].fix_class / modules[i].edits[j].fix_class)."""
+    if path == ("summary", "experimental"):
+        return True
+    return (len(path) == 5 and path[0] == "modules" and path[2] in ("findings", "edits")
+            and path[4] == "fix_class")
+
+
 class MigrateCoverageTests(unittest.TestCase):
     def setUp(self):
         self._tmp = tempfile.TemporaryDirectory()
@@ -185,8 +200,17 @@ class MigrateCoverageTests(unittest.TestCase):
             actual["recovery"].pop(key, None)
         actual["run"].pop("run_id", None)
         expected = json.loads((GOLDEN / "expected" / "18.0" / "report.json").read_text(encoding="utf-8"))
-        changed = {path[0] for path in diff_paths(expected, actual)}
-        self.assertEqual(changed, {"schema_version", "knowledge_release"}, diff_paths(expected, actual))
+        diffs = diff_paths(expected, actual)
+        # AF-1 default execution adds exactly two kinds of key: fix_class on a finding or edit, and
+        # summary.experimental. Each must be a pure addition (absent from the golden); anything else still fails.
+        af1_added = [p for p in diffs if _is_af1_addition(p)]
+        for path in af1_added:
+            self.assertNotIn(path[-1], _lookup(expected, path[:-1]), path)
+        unexpected = [p for p in diffs if p not in af1_added]
+        self.assertEqual(sorted(unexpected), [("knowledge_release",), ("schema_version",)], unexpected)
+        self.assertIn(("summary", "experimental"), af1_added)
+        self.assertTrue(all(_lookup(actual, p) in ("certified", "experimental", "legacy")
+                            for p in af1_added if p[-1] == "fix_class"))
         self.assertEqual(actual["schema_version"], "1.1.0")
         self.assertTrue(actual["knowledge_release"]["builtin"])
 

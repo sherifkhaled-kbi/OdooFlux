@@ -34,7 +34,10 @@ def _reference(name):
     reports = reports_from_state(state)
     with tempfile.TemporaryDirectory() as tmp, contextlib.redirect_stdout(io.StringIO()):
         out = Path(tmp) / "r.json"
-        (save_json_report(reports[0], out) if len(reports) == 1 else save_combined_json_report(reports, out))
+        if len(reports) == 1:  # the CLI passes the run-state record and the run mode (PA-6: reversible per mode)
+            save_json_report(reports[0], out, entry=state["modules"][0], mode=state["mode"])
+        else:
+            save_combined_json_report(reports, out, entries=state["modules"], mode=state["mode"])
         return json.loads(out.read_text(encoding="utf-8"))
 
 

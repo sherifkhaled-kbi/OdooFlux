@@ -28,6 +28,7 @@
         {
           "auto_fixable": false,
           "column": 0,
+          "developer_action": "Apply the documented replacement",
           "evidence": [
             {
               "id": "EV-110",
@@ -36,8 +37,14 @@
           ],
           "id": "295a1e3c2ea084c2",
           "line": 3,
+          "location": {
+            "column": "UNKNOWN",
+            "line": 3,
+            "path": "views/v.xml"
+          },
           "message": "note",
           "path": "views/v.xml",
+          "reason_not_fixed": "no automatic fixer for this finding",
           "rejection_reason": "",
           "rule_id": "17-18.xml.note",
           "severity": "INFO",
@@ -66,6 +73,7 @@
         {
           "auto_fixable": true,
           "column": 0,
+          "developer_action": "Apply the documented replacement",
           "evidence": [
             {
               "id": "EV-110",
@@ -74,8 +82,14 @@
           ],
           "id": "c3bf23a5a11924b8",
           "line": 11,
+          "location": {
+            "column": "UNKNOWN",
+            "line": 11,
+            "path": "views/v.xml"
+          },
           "message": "t2",
           "path": "views/v.xml",
+          "reason_not_fixed": "automatic fix not applied: the finding is still present after the fix pass",
           "rejection_reason": "",
           "rule_id": "17-18.xml.tree-to-list",
           "severity": "WARNING",
@@ -115,6 +129,7 @@
       "path": "/work/kbi_sale_approval",
       "processing": "DONE",
       "promoted_files": [],
+      "refused_files": [],
       "rejections": [],
       "reversible": true,
       "status": "NEEDS_REVIEW",
@@ -132,6 +147,7 @@
         {
           "auto_fixable": false,
           "column": 0,
+          "developer_action": "Apply the documented replacement",
           "evidence": [
             {
               "id": "EV-110",
@@ -140,8 +156,14 @@
           ],
           "id": "b87ffe48aa4fb9f4",
           "line": 42,
+          "location": {
+            "column": "UNKNOWN",
+            "line": 42,
+            "path": "views/hr.xml"
+          },
           "message": "attrs",
           "path": "views/hr.xml",
+          "reason_not_fixed": "no automatic fixer for this finding",
           "rejection_reason": "",
           "rule_id": "17-18.xml.attrs-removed",
           "severity": "WARNING",
@@ -151,6 +173,7 @@
         {
           "auto_fixable": true,
           "column": 0,
+          "developer_action": "Apply the documented replacement",
           "evidence": [
             {
               "id": "EV-110",
@@ -159,8 +182,14 @@
           ],
           "id": "51453aa0b3693f3b",
           "line": 50,
+          "location": {
+            "column": "UNKNOWN",
+            "line": 50,
+            "path": "views/hr.xml"
+          },
           "message": "bad edit",
           "path": "views/hr.xml",
+          "reason_not_fixed": "validation_failed:L1-xml",
           "rejection_reason": "validation_failed:L1-xml",
           "rule_id": "17-18.xml.x",
           "severity": "WARNING",
@@ -200,13 +229,15 @@
       "path": "/work/kbi_hr_extension",
       "processing": "DONE",
       "promoted_files": [],
+      "refused_files": [],
       "rejections": [
         "validation_failed:L1-xml"
       ],
       "reversible": true,
-      "status": "FAILED",
+      "status": "PARTIAL — DEVELOPER ACTION REQUIRED",
       "status_inputs_digest": "2ec510d16f978cd15e59837c7d424377fc1b83ff0a1a952b9ab711a98a822cf1",
       "status_reasons": [
+        "rejected_edits:1",
         "layer_failed:L1"
       ],
       "status_row": 2
@@ -219,6 +250,7 @@
         {
           "auto_fixable": false,
           "column": 0,
+          "developer_action": "Apply the documented replacement",
           "evidence": [
             {
               "id": "EV-110",
@@ -227,8 +259,14 @@
           ],
           "id": "546de9700086a17b",
           "line": 118,
+          "location": {
+            "column": "UNKNOWN",
+            "line": 118,
+            "path": "models/stock.py"
+          },
           "message": "api",
           "path": "models/stock.py",
+          "reason_not_fixed": "no automatic fixer for this finding",
           "rejection_reason": "",
           "rule_id": "17-18.py.api",
           "severity": "CRITICAL",
@@ -268,6 +306,7 @@
       "path": "/work/kbi_stock_custom",
       "processing": "DONE",
       "promoted_files": [],
+      "refused_files": [],
       "rejections": [],
       "reversible": true,
       "status": "FAILED",
@@ -314,6 +353,7 @@
       "path": "/work/kbi_old_portal",
       "processing": "BLOCKED",
       "promoted_files": [],
+      "refused_files": [],
       "rejections": [],
       "reversible": true,
       "status": "BLOCKED",
@@ -370,8 +410,9 @@
     },
     "modules_by_status": {
       "BLOCKED": 1,
-      "FAILED": 2,
-      "NEEDS_REVIEW": 1
+      "FAILED": 1,
+      "NEEDS_REVIEW": 1,
+      "PARTIAL — DEVELOPER ACTION REQUIRED": 1
     },
     "open_findings": {
       "critical": 1,

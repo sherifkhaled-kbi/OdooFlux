@@ -8,7 +8,7 @@ MODULE RESULTS
  NEEDS_REVIEW  kbi_sale_approval
    open C/W/I 0/1/1   fixed 1   rejected 0
    layers: L1 PASS L2 PASS L3 PASS L4 SKIPPED L5 SKIPPED
- FAILED  kbi_hr_extension
+ PARTIAL — DEVELOPER ACTION REQUIRED  kbi_hr_extension
    open C/W/I 0/1/0   fixed 0   rejected 1
    layers: L1 FAIL L2 PASS L3 PASS L4 SKIPPED L5 SKIPPED
  FAILED  kbi_stock_custom
@@ -19,7 +19,8 @@ MODULE RESULTS
    layers: L1 PASS L2 PASS L3 UNAVAILABLE L4 SKIPPED L5
            SKIPPED
   Reasons  kbi_sale_approval: open_warning_findings
-  Reasons  kbi_hr_extension: layer_failed:L1
+  Reasons  kbi_hr_extension: rejected_edits:1,
+           layer_failed:L1
   Reasons  kbi_stock_custom: open_critical_findings
   Reasons  kbi_old_portal: workspace failed,
            tool_state:tool_error,
@@ -27,45 +28,51 @@ MODULE RESULTS
 
 FINDINGS
 kbi_sale_approval/views/v.xml
-  INFO     L3  17-18.xml.note [NEEDS_REVIEW]
+  INFO     L3:UNKNOWN  17-18.xml.note [NEEDS_REVIEW]
            note
-           Action: Apply the documented replacement
+           Not fixed: no automatic fixer for this finding.
+                   Action: Apply the documented replacement
            Evidence: EV-110
                     https://github.com/odoo/odoo/blob/17.0/o
                     doo/addons/base/models/ir_ui_view.py
-  FIXED    L9  17-18.xml.tree-to-list
+  FIXED    L9:UNKNOWN  17-18.xml.tree-to-list
            t
-  WARNING  L11  17-18.xml.tree-to-list [OPEN]
+  WARNING  L11:UNKNOWN  17-18.xml.tree-to-list [OPEN]
            t2
-           Action: Apply the documented replacement
+           Not fixed: automatic fix not applied: the finding
+                   is still present after the fix pass.
+                   Action: Apply the documented replacement
            Evidence: EV-110
                     https://github.com/odoo/odoo/blob/17.0/o
                     doo/addons/base/models/ir_ui_view.py
 kbi_hr_extension/views/hr.xml
-  WARNING  L42  17-18.xml.attrs-removed [NEEDS_REVIEW]
+  WARNING  L42:UNKNOWN  17-18.xml.attrs-removed
+      [NEEDS_REVIEW]
            attrs
-           Action: Apply the documented replacement
+           Not fixed: no automatic fixer for this finding.
+                   Action: Apply the documented replacement
            Evidence: EV-110
                     https://github.com/odoo/odoo/blob/17.0/o
                     doo/addons/base/models/ir_ui_view.py
-  REJECTED L50  17-18.xml.x [REJECTED]
+  REJECTED L50:UNKNOWN  17-18.xml.x [REJECTED]
            bad edit
-           Action: Apply the documented replacement
-           Rejected: validation_failed:L1-xml
+           Not fixed: validation_failed:L1-xml. Action:
+                   Apply the documented replacement
            Evidence: EV-110
                     https://github.com/odoo/odoo/blob/17.0/o
                     doo/addons/base/models/ir_ui_view.py
 kbi_stock_custom/models/stock.py
-  CRITICAL L118  17-18.py.api [NEEDS_REVIEW]
+  CRITICAL L118:UNKNOWN  17-18.py.api [NEEDS_REVIEW]
            api
-           Action: Apply the documented replacement
+           Not fixed: no automatic fixer for this finding.
+                   Action: Apply the documented replacement
            Evidence: EV-110
                     https://github.com/odoo/odoo/blob/17.0/o
                     doo/addons/base/models/ir_ui_view.py
 
 REJECTED EDITS (1)
-  kbi_hr_extension: reason: validation_failed:L1-xml - file
-      left unchanged
+  kbi_hr_extension: reason: validation_failed:L1-xml - edit
+      refused (file not recorded)
 
 VERIFICATION SCOPE
   Ran: L1 syntax, L2 static re-scan, L3 dependency integrity

@@ -32,38 +32,48 @@ class _Case(unittest.TestCase):
 
 
 class ValidationGateTests(_Case):
-    def _assert_rejected_module(self, code, out, before, category_hint):
-        self.assertEqual(tree_digest(self.module), before, "a rejected module must not be written")
+    # Approved partial-migration policy (PA-3): a refused file keeps its original bytes (and name); the other files of
+    # the module are still processed and written. Only the refused file is pinned here, not the whole module.
+    def _snapshot(self) -> dict:
+        return {p.relative_to(self.module).as_posix(): p.read_bytes() for p in self.module.rglob("*") if p.is_file()}
+
+    def _assert_refused_file_kept(self, code, out, before, refused_rel, category_hint):
+        after = self._snapshot()
+        self.assertEqual(after.get(refused_rel), before.get(refused_rel), f"{refused_rel} must stay byte-identical")
         self.assertEqual(code, 3, out)
         self.assertIn("Fix Rejected", out)
         self.assertIn(category_hint, out)
         events = [e["event"] for e in read_runlog(self.state)]
         self.assertIn("edit_rejected", events)
-        self.assertNotIn("file_written", events)
+        self.assertTrue({"file_written", "file_created"} & set(events), "the other files must still be written")
+        changed = {rel for rel in before if after.get(rel) != before[rel]}
+        self.assertTrue(changed and refused_rel not in changed, changed)
+        return after
 
     def test_invalid_python_not_written(self):
-        """F-VAL-1 / FR-002: a Python fixer output that does not parse is not written."""
-        before = tree_digest(self.module)
+        """F-VAL-1 / FR-002: a Python fixer output that does not parse is not written; the XML and manifest are."""
+        before = self._snapshot()
         with mock.patch.object(adapter, "apply_python_fixes",
                                side_effect=lambda content, *a, **k: "def broken(:\n"):
             code, out = self._fix()
-        self._assert_rejected_module(code, out, before, "SyntaxError")
+        self._assert_refused_file_kept(code, out, before, "models/demo.py", "SyntaxError")
 
     def test_invalid_xml_not_written(self):
-        """F-VAL-1 / FR-002: an XML fixer output that is not well-formed is not written."""
-        before = tree_digest(self.module)
+        """F-VAL-1 / FR-002: an XML fixer output that is not well-formed is not written; the rest of the module is."""
+        before = self._snapshot()
         with mock.patch.object(adapter, "apply_xml_fixes",
                                side_effect=lambda content, *a, **k: "<odoo><form></odoo>"):
             code, out = self._fix()
-        self._assert_rejected_module(code, out, before, "XML")
+        self._assert_refused_file_kept(code, out, before, "views/demo_views.xml", "XML")
 
     def test_invalid_manifest_not_written(self):
-        """F-VAL-1 / FR-002: a manifest that is not a literal dict is not written."""
-        before = tree_digest(self.module)
+        """F-VAL-1 / FR-002: a manifest that is not a literal dict is not written: it keeps its old name, no rename."""
+        before = self._snapshot()
         with mock.patch.object(adapter, "apply_manifest_fixes",
                                side_effect=lambda content, *a, **k: "{'version': 1 +}\n"):
             code, out = self._fix()
-        self._assert_rejected_module(code, out, before, "Manifest")
+        after = self._assert_refused_file_kept(code, out, before, "__openerp__.py", "Manifest")
+        self.assertNotIn("__manifest__.py", after)
 
 
 class AiOutputGateTests(_Case):

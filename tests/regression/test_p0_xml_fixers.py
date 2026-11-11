@@ -14,7 +14,7 @@ class StatesFixTests(unittest.TestCase):
 
     def test_states_fix_well_formed(self):
         src = '<root><button name="a" states="draft" type="object"/></root>'
-        out = apply_xml_fixes(src, 14)
+        out = apply_xml_fixes(src, 14, verified_state_field=True)
         ET.fromstring(out)
         self.assertNotIn("<!--", out)
         self.assertIn('invisible="state not in [\'draft\']"', out)

@@ -4,10 +4,11 @@ import json
 from datetime import datetime
 from pathlib import Path
 
+from odooflux.reporting.model.model import known_column, legacy_unresolved
 from odooflux.rules.shared.legacy_rules import (
     MigrationReport, SEVERITY_CRITICAL, SEVERITY_INFO, SEVERITY_WARNING)
 
-def save_json_report(report: MigrationReport, output_path: Path):
+def save_json_report(report: MigrationReport, output_path: Path, *, entry: dict = None, mode: str = "fix"):
     data = {
         "module_path": report.module_path,
         "from_version": report.from_version,
@@ -23,13 +24,14 @@ def save_json_report(report: MigrationReport, output_path: Path):
             "fixed": sum(1 for i in report.issues if i.fix_applied),
             "rejected": report.rejected_count,
             "blocked": report.blocked,
-            "reversible": report.reversible,
+            "reversible": report.reversible and mode == "fix",  # PA-6: a dry run wrote nothing
             "elapsed_seconds": round(report.elapsed_seconds, 2),
         },
         "issues": [
             {
                 "file": i.file,
                 "line": i.line,
+                "column": known_column(i),  # PA-5: 0 = not known
                 "severity": i.severity,
                 "category": i.category,
                 "message": i.message,
@@ -39,8 +41,9 @@ def save_json_report(report: MigrationReport, output_path: Path):
                 "status": i.status,
                 "evidence": i.evidence,
                 "rejection_reason": i.rejection_reason,
+                **fields,  # AD-06 (unresolved issues only): location, reason_not_fixed, developer_action
             }
-            for i in report.issues
+            for i, fields in zip(report.issues, legacy_unresolved(report, entry, mode))
         ]
     }
     output_path.write_text(json.dumps(data, indent=2), encoding='utf-8')
@@ -50,7 +53,8 @@ def save_json_report(report: MigrationReport, output_path: Path):
 # ─────────────────────────────────────────────
 
 
-def save_combined_json_report(reports: list, output_path: Path):
+def save_combined_json_report(reports: list, output_path: Path, *, entries: list = None, mode: str = "fix"):
+    entries = entries or [None] * len(reports)  # aligned with reports: each module's run-state record
     data = {
         "timestamp": datetime.now().isoformat(),
         "total_modules": len(reports),
@@ -82,17 +86,19 @@ def save_combined_json_report(reports: list, output_path: Path):
                     {
                         "file": i.file,
                         "line": i.line,
+                        "column": known_column(i),  # PA-5: 0 = not known
                         "severity": i.severity,
                         "category": i.category,
                         "message": i.message,
                         "suggestion": i.suggestion,
                         "auto_fixable": i.auto_fixable,
                         "fix_applied":  i.fix_applied,
+                        **fields,  # AD-06 (unresolved issues only): location, reason_not_fixed, developer_action
                     }
-                    for i in r.issues
+                    for i, fields in zip(r.issues, legacy_unresolved(r, entry, mode))
                 ],
             }
-            for r in reports
+            for r, entry in zip(reports, entries)
         ],
     }
     output_path.write_text(json.dumps(data, indent=2), encoding="utf-8")

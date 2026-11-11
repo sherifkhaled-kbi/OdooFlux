@@ -54,9 +54,11 @@ def export_sarif(report: dict, *, include_fixed: bool = False, exit_code=None) -
     for module, f in pairs:
         fixed = f["status"] == "FIXED"
         text = sanitize_text(f["message"])
-        if f.get("suggestion") and not fixed:
-            text += f" Action: {sanitize_text(f['suggestion'])}"
+        if not fixed and f.get("developer_action"):  # AD-06: the action and the reason it was not fixed
+            text += f" Action: {sanitize_text(f['developer_action'])}"
         props = {"status": f["status"], "module": module["name"]}
+        if not fixed and f.get("reason_not_fixed"):
+            props["reason_not_fixed"] = sanitize_text(f["reason_not_fixed"])
         if f.get("rejection_reason"):
             props["rejection_reason"] = sanitize_text(f["rejection_reason"])
         rid = sanitize_text(f["rule_id"])

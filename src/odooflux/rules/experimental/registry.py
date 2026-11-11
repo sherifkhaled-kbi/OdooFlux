@@ -11,15 +11,18 @@ from dataclasses import dataclass, field
 from odooflux.rules.experimental import xml_modifiers
 
 MODULES = {"odooflux.rules.experimental.xml_modifiers": xml_modifiers}
+# VR-1: the run's module context (sibling modules of the addons root), created once per run by the orchestrator
+MODULE_VIEWS = xml_modifiers.ModuleViews
 
 
 @dataclass(frozen=True)
 class ExperimentalFix:
     rule_id: str
     fixer_ref: str  # module:function, resolved through MODULES
-    explain: object  # (document) -> Plan with converted and refused records; pure, no edits
+    explain: object  # (document, views=None) -> Plan with converted and refused records; pure, no edits
     description: str
     params: dict = field(default_factory=dict)  # extra keyword params for the bound functions (none today)
+    step: str = ""  # the rule step key (N-M) this fixer converts; a row of any other step is never offered it
 
 
 ENTRIES = {
@@ -28,10 +31,12 @@ ENTRIES = {
         fixer_ref="odooflux.rules.experimental.xml_modifiers:convert_attrs",
         explain=xml_modifiers.explain_attrs,
         description="attrs= to invisible/readonly/required for the strict subset (plain form, literal non-falsy "
-                    "leaves, & | ! only); everything else refused with a reason"),
+                    "leaves, & | ! only); everything else refused with a reason",
+        step="16-17"),
     "16-17.xml.states-attribute-removed": ExperimentalFix(
         rule_id="16-17.xml.states-attribute-removed",
         fixer_ref="odooflux.rules.experimental.xml_modifiers:convert_states",
         explain=xml_modifiers.explain_states,
-        description="states= to invisible=\"state not in [...]\" when the element has no invisible and no attrs"),
+        description="states= to invisible=\"state not in [...]\" when the element has no invisible and no attrs",
+        step="16-17"),
 }

@@ -12,16 +12,18 @@ Stages: Discover > Plan > Workspace > Step N/M > Validate
 
 [1mFINDINGS[0m
 kbi_hr_extension/views/hr.xml
-  [33;1mWARNING[0m  L42  17-18.xml.attrs-removed [NEEDS_REVIEW]
+  [33;1mWARNING[0m  L42:UNKNOWN  17-18.xml.attrs-removed
+      [NEEDS_REVIEW]
            attrs domain not convertible
-           Action: Apply the documented replacement
+           Not fixed: no automatic fixer for this finding.
+                   Action: Apply the documented replacement
            Evidence: EV-109
                     https://www.odoo.com/documentation/18.0/
                     developer/reference/backend/views.html
            Evidence: EV-110
                     https://github.com/odoo/odoo/blob/17.0/o
                     doo/addons/base/models/ir_ui_view.py
-  [32;1mFIXED[0m    L57  17-18.xml.tree-to-list
+  [32;1mFIXED[0m    L57:UNKNOWN  17-18.xml.tree-to-list
            tree renamed
 
 [1mREJECTED EDITS: none[0m

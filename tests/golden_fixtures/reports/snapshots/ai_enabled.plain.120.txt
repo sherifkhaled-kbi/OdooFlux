@@ -9,9 +9,9 @@ MODULE RESULTS
 
 FINDINGS
 kbi_ai_mod/models/m.py
-  WARNING  L4  ai:provider/model [NEEDS_REVIEW]
+  WARNING  L4:UNKNOWN  ai:provider/model [NEEDS_REVIEW]
            ai proposed
-           Action: Apply the documented replacement
+           Not fixed: no automatic fixer for this finding. Action: Apply the documented replacement
            Evidence: EV-110
 
 REJECTED EDITS: none

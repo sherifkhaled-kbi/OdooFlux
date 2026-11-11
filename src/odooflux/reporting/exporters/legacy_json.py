@@ -5,6 +5,7 @@
 import json
 from datetime import datetime
 
+UNRESOLVED_KEYS = ("location", "reason_not_fixed", "developer_action")
 DEPRECATION_NOTICE = ("WARNING: --report-format legacy-json is deprecated (D-10) and will be removed after one minor "
                       "release. Use --report-format json (schema v1) instead.")
 
@@ -15,12 +16,14 @@ def _major(version: str) -> int:
 
 def _issue(module: dict, f: dict, full: bool) -> dict:
     root = module["path"].rstrip("/")
-    out = {"file": f"{root}/{f['path']}" if f["path"] else root, "line": f["line"], "severity": f["severity"],
+    out = {"file": f"{root}/{f['path']}" if f["path"] else root, "line": f["line"], "column": f["column"],
+           "severity": f["severity"],
            "category": f["rule_id"], "message": f["message"], "suggestion": f["suggestion"],
            "auto_fixable": f["auto_fixable"], "fix_applied": f["status"] == "FIXED"}
     if full:
         out.update(status=f["status"], evidence=[e["id"] if isinstance(e, dict) else e for e in f["evidence"]],
                    rejection_reason=f["rejection_reason"])
+    out.update({k: f[k] for k in UNRESOLVED_KEYS if k in f})  # AD-06: present only for an unresolved finding
     return out
 
 

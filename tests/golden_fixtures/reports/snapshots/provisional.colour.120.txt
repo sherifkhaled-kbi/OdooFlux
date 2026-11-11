@@ -10,7 +10,7 @@ Stages: Discover > Plan > Workspace > Step N/M > Validate L1-L5 > Promote > Repo
 
 [1mFINDINGS[0m
 kbi_prov/views/v.xml
-  [32;1mFIXED[0m    L1  17-18.xml.x
+  [32;1mFIXED[0m    L1:UNKNOWN  17-18.xml.x
            fixed
 
 [1mREJECTED EDITS: none[0m

@@ -15,9 +15,9 @@ EVIDENCE_URLS = {"EV-110": "https://github.com/odoo/odoo/blob/17.0/odoo/addons/b
 
 
 def issue(file, line, severity, category, message, *, auto_fixable=True, fix_applied=False,
-          evidence=("EV-110",), rejection_reason="", suggestion="Apply the documented replacement"):
-    return {"file": file, "line": line, "severity": severity, "category": category, "message": message,
-            "suggestion": suggestion, "auto_fixable": auto_fixable, "fix_applied": fix_applied,
+          evidence=("EV-110",), rejection_reason="", suggestion="Apply the documented replacement", column=0):
+    return {"file": file, "line": line, "column": column, "severity": severity, "category": category,
+            "message": message, "suggestion": suggestion, "auto_fixable": auto_fixable, "fix_applied": fix_applied,
             "evidence": list(evidence), "rejection_reason": rejection_reason}
 
 

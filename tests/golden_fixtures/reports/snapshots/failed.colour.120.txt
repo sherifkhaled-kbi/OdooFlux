@@ -3,25 +3,25 @@ Plan  17.0->18.0   status: READY
 Stages: Discover > Plan > Workspace > Step N/M > Validate L1-L5 > Promote > Report
 
 [1mMODULE RESULTS[0m
- Status           Module           Open C/W/I Fixed Rejected Layers
- [31;1mFAILED[0m           kbi_stock_custom 1/0/0      0     1        L1 FAIL L2 PASS L3 PASS L4 SKIPPED L5 SKIPPED
-  Reasons  kbi_stock_custom: layer_failed:L1, open_critical_findings
+ [33;1mPARTIAL — DEVELOPER ACTION REQUIRED[0m  kbi_stock_custom
+   open C/W/I 1/0/0   fixed 0   rejected 1
+   layers: L1 FAIL L2 PASS L3 PASS L4 SKIPPED L5 SKIPPED
+  Reasons  kbi_stock_custom: rejected_edits:2, layer_failed:L1, open_critical_findings
 
 [1mFINDINGS[0m
 kbi_stock_custom/models/stock.py
-  [31;1mCRITICAL[0m L118  17-18.py.api-removed [NEEDS_REVIEW]
+  [31;1mCRITICAL[0m L118:UNKNOWN  17-18.py.api-removed [NEEDS_REVIEW]
            removed API used
-           Action: Apply the documented replacement
+           Not fixed: no automatic fixer for this finding. Action: Apply the documented replacement
            Evidence: EV-110
-  [31;1mREJECTED[0m L203  17-18.py.field [REJECTED]
+  [31;1mREJECTED[0m L203:UNKNOWN  17-18.py.field [REJECTED]
            protected identifier
-           Action: Apply the documented replacement
-           Rejected: protected_identifier_changed (field 'qty_done' renamed)
+           Not fixed: protected_identifier_changed (field 'qty_done' renamed). Action: Apply the documented replacement
            Evidence: EV-110
 
 [1mREJECTED EDITS (2)[0m
-  kbi_stock_custom: reason: validation_failed:L1-python (IndentationError line 119) - file left unchanged
-  kbi_stock_custom: reason: protected_identifier_changed (field 'qty_done' renamed) - file left unchanged
+  kbi_stock_custom: reason: validation_failed:L1-python (IndentationError line 119) - edit refused (file not recorded)
+  kbi_stock_custom: reason: protected_identifier_changed (field 'qty_done' renamed) - edit refused (file not recorded)
 
 [1mVERIFICATION SCOPE[0m
   Ran: L1 syntax, L2 static re-scan, L3 dependency integrity

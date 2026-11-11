@@ -8,7 +8,8 @@ from ._setup import SRC  # noqa: F401
 from . import fixtures
 from .helpers import GOLDEN_DIR, all_goldens, build
 
-STATUSES = {"VERIFIED_SUCCESS", "INSTALL_VERIFIED", "STATIC_VALIDATED", "NEEDS_REVIEW", "FAILED", "BLOCKED"}
+STATUSES = {"VERIFIED_SUCCESS", "INSTALL_VERIFIED", "STATIC_VALIDATED", "NEEDS_REVIEW", "FAILED", "BLOCKED",
+            "PARTIAL \u2014 DEVELOPER ACTION REQUIRED"}  # PA-3: refused edits, the other files are still written
 
 
 class GoldenTests(unittest.TestCase):

@@ -1,8 +1,9 @@
 """T0 (AD-5): the legacy XML fixer is gated by the target version.
 
 Odoo 18+ conversions (<tree> -> <list>, view_type/view_mode tree -> list, chatter block) must not run
-for a 16 -> 17 target. Targets 18 and 19 keep today's output; the <openerp>, states= and groups_id
-conversions are unchanged for every target.
+for a 16 -> 17 target. Targets 18 and 19 keep today's output; the <openerp> and groups_id conversions are
+unchanged for every target. states= is rewritten only when the caller verifies the view's model has a state field
+(D2), so it is left as written in these snippets.
 """
 
 import unittest
@@ -49,7 +50,7 @@ EXPECTED_17 = """<odoo>
     <record id="view_form" model="ir.ui.view">
       <field name="arch" type="xml">
         <form>
-          <field name="name" invisible="state not in ['draft', 'open']"/>
+          <field name="name" states="draft,open"/>
           <field name="message_ids" widget="mail_thread"/>
           <field name="note" widget="mail_thread"/>
           <div class="oe_chatter">
@@ -84,7 +85,7 @@ EXPECTED_18_19 = (
     "    <record id=\"view_form\" model=\"ir.ui.view\">\n"
     "      <field name=\"arch\" type=\"xml\">\n"
     "        <form>\n"
-    "          <field name=\"name\" invisible=\"state not in ['draft', 'open']\"/>\n"
+    "          <field name=\"name\" states=\"draft,open\"/>\n"
     "          \n"  # the removed message_ids field leaves its indentation behind (existing behaviour)
     "          <chatter/>\n"
     "          <chatter/>\n"
@@ -137,18 +138,23 @@ class TargetGatingTests(unittest.TestCase):
 
 
 class VersionIndependentConversionTests(unittest.TestCase):
-    """<openerp> -> <odoo>, states= -> invisible= and groups_id= -> groups= apply for every target."""
+    """<openerp> -> <odoo> and groups_id= -> groups= apply for every target; states= needs a verified state field (D2)."""
 
     def test_openerp_root_converted_for_every_target(self):
         for target in (17, 18, 19):
             out = apply_xml_fixes("<openerp><data/></openerp>\n", 16, to_version=target)
             self.assertEqual(out, "<odoo><data/></odoo>\n", target)
 
-    def test_states_converted_for_every_target(self):
+    def test_states_left_alone_without_a_verified_state_field_for_every_target(self):
+        src = '<form><button name="x" states="draft,open"/></form>'
+        for target in (17, 18, 19):
+            self.assertEqual(apply_xml_fixes(src, 16, to_version=target), src, target)
+
+    def test_states_converted_for_every_target_when_the_state_field_is_verified(self):
         src = '<form><button name="x" states="draft,open"/></form>'
         expected = "<form><button name=\"x\" invisible=\"state not in ['draft', 'open']\"/></form>"
         for target in (17, 18, 19):
-            self.assertEqual(apply_xml_fixes(src, 16, to_version=target), expected, target)
+            self.assertEqual(apply_xml_fixes(src, 16, to_version=target, verified_state_field=True), expected, target)
 
     def test_groups_id_converted_for_every_target(self):
         src = '<menuitem id="m" name="M" groups_id="base.group_user"/>'

@@ -10,18 +10,19 @@ Stages: Discover > Plan > Workspace > Step N/M > Validate L1-L5 > Promote >
 
 [1mFINDINGS[0m
 kbi_sale_approval/models/a.py
-  [32;1mFIXED[0m    L5  17-18.py.attrs
+  [32;1mFIXED[0m    L5:UNKNOWN  17-18.py.attrs
            attr changed
-  [32;1mFIXED[0m    L7  17-18.py.attrs
+  [32;1mFIXED[0m    L7:UNKNOWN  17-18.py.attrs
            attr changed
 kbi_sale_approval/views/v.xml
-  [34;1mINFO[0m     L3  17-18.xml.note [NEEDS_REVIEW]
+  [34;1mINFO[0m     L3:UNKNOWN  17-18.xml.note [NEEDS_REVIEW]
            informational note
-           Action: Apply the documented replacement
+           Not fixed: no automatic fixer for this finding. Action: Apply the
+                   documented replacement
            Evidence: EV-110
                     https://github.com/odoo/odoo/blob/17.0/odoo/addons/base/mode
                     ls/ir_ui_view.py
-  [32;1mFIXED[0m    L9  17-18.xml.tree-to-list
+  [32;1mFIXED[0m    L9:UNKNOWN  17-18.xml.tree-to-list
            tree renamed
 
 [1mREJECTED EDITS: none[0m

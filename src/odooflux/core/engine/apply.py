@@ -8,7 +8,9 @@ from odooflux.core.contracts.records import Edit
 
 @dataclass
 class FileEdit:
-    """Planned change to one module file. Written only after the module passed validation."""
+    """Planned change to one module file. Written only after its text passed validation. ``fixed`` is the text the
+    file keeps: the full fix, the valid stages of it when a later stage was refused (``rejection`` names the refused
+    stage), or the original text (nothing kept, nothing written)."""
 
     path: object  # Path of the file as it is in the source module
     dest: object  # Path after the change (differs only for the manifest rename)
@@ -18,6 +20,7 @@ class FileEdit:
     resolved: list = field(default_factory=list)
     rejection: str = ""
     edits: list = field(default_factory=list)
+    validation: object = None  # FileVerdict of the fixed text (AD-05); None when the file had no transform
 
 
 def _line_offsets(text: str):

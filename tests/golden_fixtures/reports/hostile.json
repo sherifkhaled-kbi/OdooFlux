@@ -15,6 +15,7 @@
         {
           "auto_fixable": false,
           "column": 0,
+          "developer_action": "\u001b[31mRED\u001b[0m <script>alert(1)</script> \u0007bell \u001b]0;title\u0007 end",
           "evidence": [
             {
               "id": "EV-110",
@@ -24,8 +25,14 @@
           ],
           "id": "96c8eea69e7e6183",
           "line": 1,
+          "location": {
+            "column": "UNKNOWN",
+            "line": 1,
+            "path": "views/<b>x</b>.xml"
+          },
           "message": "\u001b[31mRED\u001b[0m <script>alert(1)</script> \u0007bell \u001b]0;title\u0007 end",
           "path": "views/<b>x</b>.xml",
+          "reason_not_fixed": "no automatic fixer for this finding",
           "rejection_reason": "",
           "rule_id": "r.\u001b[31mbad",
           "severity": "CRITICAL",
@@ -65,13 +72,15 @@
       "path": "/work/kbi_hostile",
       "processing": "FAILED",
       "promoted_files": [],
+      "refused_files": [],
       "rejections": [
         "\u001b[31mRED\u001b[0m <script>alert(1)</script> \u0007bell \u001b]0;title\u0007 end"
       ],
-      "reversible": true,
-      "status": "FAILED",
+      "reversible": false,
+      "status": "PARTIAL — DEVELOPER ACTION REQUIRED",
       "status_inputs_digest": "70dd37ecd9e0b47bfb3337cc01b822111bda664749ebfaccb728aa5f4bf0e741",
       "status_reasons": [
+        "rejected_edits:1",
         "layer_failed:L1",
         "open_critical_findings"
       ],
@@ -79,8 +88,8 @@
     }
   ],
   "recovery": {
-    "reversible": true,
-    "rollback_cmd": "odooflux rollback run-golden",
+    "reversible": false,
+    "rollback_cmd": null,
     "run_log": "/state/runs/run-golden/log/run.jsonl"
   },
   "run": {
@@ -106,6 +115,7 @@
   "summary": {
     "edits": {
       "applied": 0,
+      "planned": 0,
       "rejected": 1
     },
     "files_written": 0,
@@ -121,7 +131,7 @@
       "rejected": 0
     },
     "modules_by_status": {
-      "FAILED": 1
+      "PARTIAL — DEVELOPER ACTION REQUIRED": 1
     },
     "open_findings": {
       "critical": 1,

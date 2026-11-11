@@ -98,23 +98,37 @@ class FlagValidationTests(unittest.TestCase):
         self.assertIsNotNone(data)
 
 
-class FlagOffTests(unittest.TestCase):
+class PlainFixTests(unittest.TestCase):
     def test_plain_fix_runs_are_deterministic_and_add_no_experimental_keys(self):
         first, second = new_tmp(), new_tmp()
         module_a, module_b = _copy(first), _copy(second)
         _ca, _oa, data_a = _migrate(first, module_a, "--fix")
         _cb, _ob, data_b = _migrate(second, module_b, "--fix")
         self.assertEqual(_normalised(data_a, first), _normalised(data_b, second))
-        self.assertFalse(_keys_anywhere(data_a, "fix_class"))
-        self.assertFalse(_keys_anywhere(data_a, "experimental"))
+        self.assertTrue(_keys_anywhere(data_a, "fix_class"))  # AD-01: plain --fix runs the registry fixers and says so
 
-    def test_plain_fix_leaves_the_attrs_attribute_alone(self):
+    def test_plain_fix_converts_the_supported_attrs_attribute(self):
         root = new_tmp()
         module = _copy(root)
         _migrate(root, module, "--fix")
         text = (module / VIEW).read_text(encoding="utf-8")
-        self.assertIn("""attrs="{'invisible': [('state', '=', 'done')]}\"""", text)
-        self.assertIn("""attrs="{'readonly': [('amount', '=', 0)]}\"""", text)
+        self.assertIn("""invisible="state == 'done'\"""", text)  # AD-01: converted without --experimental-fixes
+        self.assertIn("""attrs="{'readonly': [('amount', '=', 0)]}\"""", text)  # falsy literal: refused, left alone
+
+
+class StatesSingleEditTests(unittest.TestCase):
+    """The legacy layer no longer rewrites states= without a verified state field (D2), so the experimental fixer is
+    the only editor of that element: one conversion, and a second pass changes nothing."""
+
+    def test_states_element_is_converted_once_and_a_second_pass_is_a_no_op(self):
+        root = new_tmp()
+        module = _copy(root)
+        _migrate(root, module, "--fix", "--experimental-fixes")
+        first = (module / VIEW).read_text(encoding="utf-8")
+        self.assertEqual(first.count('name="go"'), 1)
+        self.assertEqual(first.count("state not in ['draft','sent']"), 1)
+        _migrate(root, module, "--fix", "--experimental-fixes")
+        self.assertEqual((module / VIEW).read_text(encoding="utf-8"), first)
 
 
 class FlagOnTests(unittest.TestCase):

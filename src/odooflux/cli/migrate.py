@@ -24,7 +24,7 @@ from odooflux.knowledge.release.model import KnowledgeReleaseError
 from odooflux.knowledge.release.resolver import resolve_knowledge
 from odooflux.reporting.model.legacy_json import save_combined_json_report, save_json_report
 from odooflux.reporting.model.legacy_terminal import print_combined_summary, print_report
-from odooflux.reporting.model.model import build_report
+from odooflux.reporting.model.model import build_report, edit_classes
 from odooflux.versions.graph.graph import normalize
 
 SEVERITY_FLOOR = {"critical": "CRITICAL", "warning": "WARNING", "info": "INFO"}
@@ -66,8 +66,9 @@ def make_validate_text(registries):
     return lambda path, text: validate_output(registries.validators.all(), path, text)
 
 
-def _module_printer(args, total: int):
+def _module_printer(args, total: int, state: dict):
     counter = {"n": 0}
+    dry_run = bool(args.fix and args.dry_run)
 
     def printer(entry: dict) -> None:
         counter["n"] += 1
@@ -76,19 +77,32 @@ def _module_printer(args, total: int):
         print(f"        Path: {entry['path']}")
         if report.blocked:
             print(f"        BLOCKED ({report.block_reason})")
+        elif dry_run:  # nothing is written: detected issues are never reported as fixed (AD-06)
+            print(f"        planned  [crit={report.critical_count} warn={report.warning_count} "
+                  f"info={report.info_count}]")
         else:
             print(f"        done  [crit={report.critical_count} warn={report.warning_count} "
                   f"info={report.info_count}"
                   + (f" fixed={report.fixed_count}" if args.fix else "") + "]")
+        if entry.get("migration_status"):  # refused edits: the migration is incomplete (never shown when all resolved)
+            print(f"        {entry['migration_status']}")
         for done, text in report.actions:
             print(f"        [{'done' if done else 'planned'}] {text}")
-        if args.fix and args.dry_run:
-            names = ", ".join(Path(p).name for p in report.planned_files)
+        if dry_run:
+            classes = edit_classes(entry, report.issues, _experimental_ids(state))  # state is read at print time
+            fix_class = {edit["dest"]: classes.get(edit["path"], "legacy") for edit in entry.get("edits", [])}
+            names = ", ".join(f"{Path(p).name} [{fix_class.get(p, 'legacy')}]" for p in report.planned_files)
             print(f"        Dry run: would change {len(report.planned_files)} file(s)"
                   + (f": {names}" if names else ""))
         print_report(report, no_color=args.no_color, show_fixed=args.show_fixed,
-                     filter_severity=args.filter_severity)
+                     filter_severity=args.filter_severity, entry=entry, mode=state["mode"])
     return printer
+
+
+def _experimental_ids(state: dict):
+    """The experimental rule ids this run bound (None when the run has no experimental block), for fix_class."""
+    block = state.get("experimental")
+    return frozenset(block.get("rules") or []) if block is not None else None
 
 
 def _usage(message: str) -> int:
@@ -189,7 +203,7 @@ def run_migrate(args, ctx, graph, failures) -> int:
         backup=not args.no_backup, fail_on=args.fail_on, ai=do_ai or new_ai, ai_verbose=args.ai_verbose,
         allow_unverified=args.allow_unverified, module_paths=[str(p) for p in paths],
         addons_paths=[str(a) for a in addons], skip=list(args.skip),
-        enable_rules=list(getattr(args, "enable_rule", None) or []), experimental_fixes=experimental)
+        enable_rules=list(getattr(args, "enable_rule", None) or []), experimental_fixes=experimental or bool(args.fix))  # AD-01: --fix runs every bindable fixer; the flag stays accepted
     run = RunDir.create(state_dir, reversible=options.backup, with_backup=write_mode)
     state = new_state(run, plan, options, plan.modules)
     label = provisional_for(options.module_paths, options.from_version, options.to_version,
@@ -264,7 +278,7 @@ def run_migrate(args, ctx, graph, failures) -> int:
     try:
         run_pipeline(run, state, ctx.registries, api_key=api_key,
                      validate_text=make_validate_text(ctx.registries),
-                     on_module=_module_printer(args, len(refs)), layer3=ctx.layer3, jobs=jobs, incremental=index)
+                     on_module=_module_printer(args, len(refs), state), layer3=ctx.layer3, jobs=jobs, incremental=index)
     except SourceChangedError as exc:
         print(f"ERROR: {exc}")
         return 4
@@ -282,9 +296,10 @@ def print_state_reports(state: dict, run, args, registries) -> int:
     report_path = getattr(args, "report", None)
     legacy = bool(report_path) and getattr(args, "report_format", "legacy") == "legacy"
     if legacy:
+        entries = [m for m in state["modules"] if m["report"]]  # aligned with reports (reports_from_state)
         if len(reports) == 1:
-            save_json_report(reports[0], Path(report_path))
+            save_json_report(reports[0], Path(report_path), entry=entries[0], mode=state["mode"])
         else:
-            save_combined_json_report(reports, Path(report_path))
+            save_combined_json_report(reports, Path(report_path), entries=entries, mode=state["mode"])
         run.audit.append("report_written", Path(report_path).name, details={"format": "legacy"})
     return finish_outputs(state, run, args, registries, reports, legacy)

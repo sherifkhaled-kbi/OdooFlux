@@ -32,13 +32,20 @@
         {
           "auto_fixable": false,
           "column": 0,
+          "developer_action": "Apply the documented replacement",
           "evidence": [
             "EV-110"
           ],
           "id": "b8340daa185029c0",
           "line": 4,
+          "location": {
+            "column": "UNKNOWN",
+            "line": 4,
+            "path": "models/m.py"
+          },
           "message": "ai proposed",
           "path": "models/m.py",
+          "reason_not_fixed": "no automatic fixer for this finding",
           "rejection_reason": "",
           "rule_id": "ai:provider/model",
           "severity": "WARNING",
@@ -78,6 +85,7 @@
       "path": "/work/kbi_ai_mod",
       "processing": "DONE",
       "promoted_files": [],
+      "refused_files": [],
       "rejections": [],
       "reversible": true,
       "status": "NEEDS_REVIEW",

@@ -4,6 +4,7 @@ and the L1 validator runs before any output is accepted (FR-009, FR-015)."""
 from dataclasses import dataclass, field
 
 from odooflux.core.contracts.records import Document, Finding
+from odooflux.core.engine.verdict import judge_output
 from odooflux.dependencies.graph import topo_order
 
 
@@ -22,6 +23,7 @@ class StepOutcome:
     rejected: bool = False
     rejection: str = ""
     errors: list = field(default_factory=list)
+    verdict: object = None  # FileVerdict of the transform's output (None when there is no transform)
 
 
 _ORDER_CACHE: dict = {}  # (keys, dependency edges) -> ordered keys; the same rule set is ordered once per file
@@ -63,14 +65,12 @@ def run_step(step: Step, path: str, text: str, validators: list) -> StepOutcome:
         outcome.output = text
         return outcome
     candidate = step.transform(path, text)
-    for validator in validators:
-        if validator.layer == 1 and validator.applies_to(path):
-            result = validator.validate(path, candidate)
-            if result.outcome == "FAIL":
-                outcome.rejected = True
-                outcome.rejection = result.reason
-                outcome.output = text
-                return outcome
+    outcome.verdict = judge_output(validators, path, candidate)
+    if not outcome.verdict.keep:
+        outcome.rejected = True
+        outcome.rejection = f"{outcome.verdict.status}: {outcome.verdict.reason}"
+        outcome.output = text
+        return outcome
     outcome.output = candidate
     return outcome
 
@@ -88,10 +88,6 @@ def run_steps(steps: list, path: str, text: str, validators: list) -> list:
 
 
 def validate_output(validators: list, path: str, text: str):
-    """Run the L1 validators that apply to *path*. Returns the first failure reason, or None."""
-    for validator in validators:
-        if validator.layer == 1 and validator.applies_to(path):
-            result = validator.validate(path, text)
-            if result.outcome == "FAIL":
-                return result.reason
-    return None
+    """The refusal for *text* (``STATUS: reason``) when its verdict does not keep it, or None to accept it."""
+    verdict = judge_output(validators, path, text)
+    return None if verdict.keep else f"{verdict.status}: {verdict.reason}"

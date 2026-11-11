@@ -109,6 +109,7 @@ with static validation layers, and writes reports you can keep as evidence.
    - [12.14 Experimental fixes (`migrate --fix --experimental-fixes`)](#1214-experimental-fixes-migrate---fix---experimental-fixes)
    - [12.15 Where to read more](#1215-where-to-read-more)
 13. [Project documentation](#13-project-documentation)
+14. [About and attribution](#14-about-and-attribution)
 
 ---
 
@@ -565,6 +566,7 @@ Dispatch rules, verified:
 
 - If the first argument is not a command name, the arguments are passed to `migrate`. So `odooflux --fix --from-version 17 ...` runs `migrate`.
 - `odooflux --help` (or `-h`) prints the top-level help and exits 0.
+- `odooflux --version` prints `odooflux <version>` and the attribution lines (Section 14), and exits 0.
 - `odooflux` with no arguments runs `migrate` and fails with a usage error (`--from-version` is required), exit 2.
 - `knowledge` and `support-statement` are handled before argparse. Each has its own help: `odooflux knowledge --help`, `odooflux support-statement --help`.
 - Any argument `--api-key` (or an unambiguous prefix of it) is checked before parsing. It is rejected only from version 0.3.0 onwards (see [6.2](#62-migrate)).
@@ -2004,3 +2006,15 @@ odooflux migrate --addons-path ./custom_addons --from-version 16 --to-version 17
 | [docs/reviews/ODOO_MODULE_UPGRADER_AUDIT.md](docs/reviews/ODOO_MODULE_UPGRADER_AUDIT.md) | Audit of the module upgrader. |
 | [tests/golden_fixtures/17.0/PROVISIONAL.md](tests/golden_fixtures/17.0/PROVISIONAL.md) | The PROVISIONAL marker for the 17.0 golden corpus. |
 | [tests/golden_fixtures/17.0/kbi_demo/expected/18.0/PROVISIONAL.md](tests/golden_fixtures/17.0/kbi_demo/expected/18.0/PROVISIONAL.md) | Status of the expected 18.0 output for the sample module. |
+
+## 14. About and attribution
+
+| Item | Value |
+|---|---|
+| Company | KnowledgeBI |
+| Website | https://www.knowledgebi.net |
+| Developer | Sherif Khaled |
+| Copyright | © 2026 KnowledgeBI. All rights reserved. |
+
+`odooflux --version` prints the version followed by these lines and exits 0. The same attribution appears at the end of
+`odooflux --help`.

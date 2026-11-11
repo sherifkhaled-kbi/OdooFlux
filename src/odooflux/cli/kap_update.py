@@ -293,8 +293,9 @@ def _verified_history(home: Path) -> UpdateHistory:
     return history
 
 
-def _status_payload(home: Path) -> dict:
-    """Facts for `knowledge status`. Reads only: no network, no directory creation, no write."""
+def _status_payload(home: Path, rule_maturity=None) -> dict:
+    """Facts for `knowledge status`. Reads only: no network, no directory creation, no write. `rule_maturity` is the
+    composition root's read-time maturity function (`registries.rule_maturity`); None reports the stored maturities."""
     try:
         handle = resolve_knowledge(home)
         kb = load_active_knowledge(handle)
@@ -305,7 +306,9 @@ def _status_payload(home: Path) -> dict:
         raise _InvalidState(installed.problem or "installed release state is invalid")
     tree = Path(handle.root) if handle.builtin else Path(handle.root) / RELEASE_TREE
     rules = [rule for rule in kb.rules if isinstance(rule, dict)]
-    by_maturity = Counter(str(rule.get("maturity") or "UNSPECIFIED") for rule in rules)  # effective maturity
+    effective = [rule.get("maturity") if rule_maturity is None else rule_maturity(rule) for rule in rules]
+    by_maturity = Counter(str(value or "UNSPECIFIED") for value in effective)  # effective maturity (AF-3)
+    registry_bound = sum(1 for rule, value in zip(rules, effective) if value != rule.get("maturity"))
     governed = sum(1 for rule in rules if _has_certification(tree, rule.get("id")))
     history = _verified_history(home)
     try:
@@ -318,12 +321,13 @@ def _status_payload(home: Path) -> dict:
     return report.status_payload(
         release_id=None if handle.builtin else handle.release_id, digest=handle.digest,
         completeness=handle.completeness, steps=dict(handle.steps or {}), revisions=dict(installed.revisions),
-        rules_by_maturity=dict(by_maturity), certification_governed=governed, last_successful=last_payload)
+        rules_by_maturity=dict(by_maturity), certification_governed=governed, last_successful=last_payload,
+        registry_bound=registry_bound)
 
 
 def cmd_status(args) -> int:
     try:
-        payload = _status_payload(_kb_home(args))
+        payload = _status_payload(_kb_home(args), attached(args, "rule_maturity"))
     except _InvalidState as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return EXIT_VALIDATION

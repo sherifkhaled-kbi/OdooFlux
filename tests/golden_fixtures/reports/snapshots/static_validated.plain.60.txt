@@ -11,18 +11,19 @@ MODULE RESULTS
 
 FINDINGS
 kbi_sale_approval/models/a.py
-  FIXED    L5  17-18.py.attrs
+  FIXED    L5:UNKNOWN  17-18.py.attrs
            attr changed
-  FIXED    L7  17-18.py.attrs
+  FIXED    L7:UNKNOWN  17-18.py.attrs
            attr changed
 kbi_sale_approval/views/v.xml
-  INFO     L3  17-18.xml.note [NEEDS_REVIEW]
+  INFO     L3:UNKNOWN  17-18.xml.note [NEEDS_REVIEW]
            informational note
-           Action: Apply the documented replacement
+           Not fixed: no automatic fixer for this finding.
+                   Action: Apply the documented replacement
            Evidence: EV-110
                     https://github.com/odoo/odoo/blob/17.0/o
                     doo/addons/base/models/ir_ui_view.py
-  FIXED    L9  17-18.xml.tree-to-list
+  FIXED    L9:UNKNOWN  17-18.xml.tree-to-list
            tree renamed
 
 REJECTED EDITS: none
