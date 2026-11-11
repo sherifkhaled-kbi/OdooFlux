@@ -175,9 +175,10 @@ class Ledger:
         entry = {"seq": len(current["history"]) + 1, "at": self.clock(), "actor": actor, "action": action,
                  "from": from_value, "to": to_value, "prev_hash": digest_obj(current["history"][-1])}
         new["history"] = copy.deepcopy(current["history"]) + [entry]
-        candidate = dict(self._entries)
-        candidate[cid] = new
-        body = _body(self.step, self.from_id, self.to_id, candidate)
+        # Only `new` can break the schema: every other entry is unchanged and was valid when it entered the ledger
+        # (create and load validate the whole document). Validating the one entry is the same decision without
+        # re-validating and re-hashing a ledger of ~157k entries on every mutation.
+        body = _body(self.step, self.from_id, self.to_id, {cid: new})
         problems = _schema_problems({**body, "ledger_digest": digest_obj(body)})
         if problems:
             raise LedgerError(f"mutation of {cid} refused: {problems[:3]}")

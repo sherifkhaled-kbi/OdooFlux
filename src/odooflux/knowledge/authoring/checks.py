@@ -99,23 +99,28 @@ def _a005(active: list, a002_pairs: set) -> list:
 
     ERROR only when both rules are FIX_ENABLED (possible double edit); otherwise WARNING (duplicate reporting).
     """
+    # Rules that can collide share step, detector and selector: group them once (one key per rule, not per pair) and
+    # visit only the pairs inside a group. Findings come out in the order of the all-pairs scan: by later rule, then
+    # by earlier rule.
+    groups = defaultdict(list)
+    for index, row in enumerate(active):
+        if row.get("detector_ref"):
+            groups[(row.get("step"), row["detector_ref"], _params_key(selector_params(row.get("params"))))].append(index)
+    pairs = []
+    for members in groups.values():
+        for i, first in enumerate(members):
+            for second in members[i + 1:]:
+                if (first, second) in a002_pairs or not _overlap(active[first], active[second]):
+                    continue
+                pairs.append((second, first))
     out = []
-    for second in range(len(active)):
-        for first in range(second):
-            a, b = active[first], active[second]
-            if (first, second) in a002_pairs or not a.get("detector_ref"):
-                continue
-            if a.get("step") != b.get("step") or a.get("detector_ref") != b.get("detector_ref"):
-                continue
-            if _params_key(selector_params(a.get("params"))) != _params_key(selector_params(b.get("params"))):
-                continue
-            if not _overlap(a, b):
-                continue
-            both_fix = a.get("maturity") == FIX_ENABLED and b.get("maturity") == FIX_ENABLED
-            severity = "ERROR" if both_fix else "WARNING"
-            out.append(_error("A005", b["id"],
-                              f"{b['id']} and {a['id']} match the same selector and may edit the same files "
-                              f"(same step and detector)", severity))
+    for second, first in sorted(pairs):
+        a, b = active[first], active[second]
+        both_fix = a.get("maturity") == FIX_ENABLED and b.get("maturity") == FIX_ENABLED
+        severity = "ERROR" if both_fix else "WARNING"
+        out.append(_error("A005", b["id"],
+                          f"{b['id']} and {a['id']} match the same selector and may edit the same files "
+                          f"(same step and detector)", severity))
     return out
 
 

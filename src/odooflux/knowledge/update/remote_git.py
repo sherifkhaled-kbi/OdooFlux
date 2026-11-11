@@ -142,7 +142,19 @@ _GIT_OPTIONS = (
 # Added only for calls that carry Enterprise credentials: a redirect must not carry them to another host.
 _ATTACHED_OPTIONS = ("-c", "credential.helper=", "-c", "http.followRedirects=false")
 # Added to the fetch: a stalled transfer fails instead of hanging until the wall-clock timeout.
-_FETCH_OPTIONS = ("-c", "http.lowSpeedLimit=1000", "-c", "http.lowSpeedTime=60")
+LOW_SPEED_TIME_ENV = "ODOOFLUX_FETCH_LOW_SPEED_TIME"
+
+
+def _low_speed_time(default: int = 60, low: int = 60, high: int = 900) -> int:
+    """Seconds a transfer may stay under 1000 bytes/s before git aborts it. `ODOOFLUX_FETCH_LOW_SPEED_TIME` widens the
+    window for links that stall briefly (the setting is passed with `-c` to this one git process, never written to a
+    git config); invalid or out-of-range values are ignored."""
+    raw = os.environ.get(LOW_SPEED_TIME_ENV, "")
+    return int(raw) if raw.isdigit() and low <= int(raw) <= high else default
+
+
+def _fetch_options() -> tuple:
+    return ("-c", "http.lowSpeedLimit=1000", "-c", f"http.lowSpeedTime={_low_speed_time()}")
 
 _home_lock = threading.Lock()
 _home_dir = None
@@ -355,7 +367,7 @@ def _fetch_locked(identity, sha, transport, protocols, extra, token, base: Path,
         _run(["git", *_GIT_OPTIONS, "init", "--quiet", "--template=", str(tmp)],
              protocols=protocols, cwd=_scratch_home(), timeout=timeout)
         opts = _ATTACHED_OPTIONS if token is not None else ()
-        argv = ["git", *_GIT_OPTIONS, *_FETCH_OPTIONS, *opts, "-C", str(tmp), "fetch", "--quiet", "--no-tags",
+        argv = ["git", *_GIT_OPTIONS, *_fetch_options(), *opts, "-C", str(tmp), "fetch", "--quiet", "--no-tags",
                 "--no-recurse-submodules", "--depth", "1", "--", transport, sha]
         watch = (tmp, max_bytes, poll_interval)
         if token is None:

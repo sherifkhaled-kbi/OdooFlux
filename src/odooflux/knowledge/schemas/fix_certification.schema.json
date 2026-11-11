@@ -118,7 +118,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "pattern": "^EV-\\d{3}$"
+            "pattern": "^EV-\\d{3,}$"
           },
           "digest": {
             "$ref": "#/$defs/sha256"

@@ -22,7 +22,7 @@
         "type": "array",
         "items": {
           "type": "string",
-          "pattern": "^EV-\\d{3}$"
+          "pattern": "^EV-\\d{3,}$"
         }
       },
       "proposed_maturity": {

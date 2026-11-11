@@ -22,5 +22,21 @@ class FetchTimeoutTests(unittest.TestCase):
             self.assertEqual(self.value(raw), 300, raw)
 
 
+class LowSpeedWindowTests(unittest.TestCase):
+    def options(self, raw):
+        env = {} if raw is None else {rg.LOW_SPEED_TIME_ENV: raw}
+        with mock.patch.dict(os.environ, env, clear=False):
+            if raw is None:
+                os.environ.pop(rg.LOW_SPEED_TIME_ENV, None)
+            return rg._fetch_options()
+
+    def test_default_override_and_invalid_values(self):
+        self.assertIn("http.lowSpeedTime=60", self.options(None))
+        self.assertIn("http.lowSpeedTime=300", self.options("300"))
+        for raw in ("", "x", "5", "100000"):
+            self.assertIn("http.lowSpeedTime=60", self.options(raw))
+        self.assertIn("http.lowSpeedLimit=1000", self.options("300"))  # the limit itself is not configurable
+
+
 if __name__ == "__main__":
     unittest.main()

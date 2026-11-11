@@ -34,6 +34,8 @@ Public API:
 
 import ast
 import builtins
+import collections
+import contextlib
 import copy
 import hashlib
 import keyword
@@ -315,15 +317,6 @@ def _statement_allowed(stmt, position) -> bool:
             and isinstance(stmt.value, ast.Constant))
 
 
-def _statement_hits(tree, watch) -> list:
-    """Watched names mentioned by a module-level statement that is not an allowed kind (review item 5)."""
-    hits = set()
-    for position, stmt in enumerate(tree.body):
-        if not _statement_allowed(stmt, position):
-            hits |= _mentions(stmt, watch)
-    return sorted(hits)
-
-
 def _warn_of(stmt):
     """`warnings.warn(<str const>, DeprecationWarning|FutureWarning[, stacklevel=<int const>])` or None."""
     if not (isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Call)):
@@ -572,9 +565,48 @@ def _module_effects(tree) -> list:
     return sorted(out)
 
 
-def module_facts(text, path, watch=()):
-    """Structural facts of one module version, or None when the path is not a module or the text does not parse.
-    `watch` names the symbols whose nested definitions are reported in `nested_hits`."""
+class _ModuleView:
+    """The watch-independent analysis of one module text. `project` adds the two facts that depend on the watched names
+    (`nested_hits`, `statement_hits`), so one view serves every pair that cites the module."""
+
+    __slots__ = ("base", "nested", "statements")
+
+    def __init__(self, base, nested, statements):
+        self.base, self.nested, self.statements = base, nested, statements
+
+    def project(self, watch) -> dict:
+        facts = dict(self.base)
+        facts["nested_hits"] = sorted(n for n in watch if n in self.nested)
+        hits = set()
+        if watch:
+            for idents, strings in self.statements:
+                for name in watch:
+                    if name in idents or any(re.search(r"(?<!\w)" + re.escape(name) + r"(?!\w)", t) for t in strings):
+                        hits.add(name)
+        facts["statement_hits"] = sorted(hits)
+        return facts
+
+
+def _statement_index(tree) -> list:
+    """For every module-level statement that is not an allowed kind: the identifiers it mentions (names and attribute
+    names) and its string constants. `_ModuleView.project` answers from this."""
+    out = []
+    for position, stmt in enumerate(tree.body):
+        if _statement_allowed(stmt, position):
+            continue
+        idents, strings = set(), []
+        for sub in ast.walk(stmt):
+            if isinstance(sub, ast.Name):
+                idents.add(sub.id)
+            elif isinstance(sub, ast.Attribute):
+                idents.add(sub.attr)
+            elif isinstance(sub, ast.Constant) and isinstance(sub.value, str):
+                strings.append(sub.value)
+        out.append((idents, strings))
+    return out
+
+
+def _build_view(text, path):
     module = module_name(path)
     if module is None or not isinstance(text, str):
         return None
@@ -586,24 +618,67 @@ def module_facts(text, path, watch=()):
         return None
     bindings, star = _module_bindings(tree)
     top = {id(stmt) for stmt in tree.body}
-    nested = {n.name for n in ast.walk(tree)
-              if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)) and id(n) not in top}
+    nested = frozenset(n.name for n in ast.walk(tree)
+                       if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)) and id(n) not in top)
     all_names = set()
     for stmt in tree.body:
-        if any(isinstance(n, ast.Name) and n.id == "__all__" for n in ast.walk(stmt)):
-            all_names |= {n.value for n in ast.walk(stmt) if isinstance(n, ast.Constant) and isinstance(n.value, str)}
+        sub = list(ast.walk(stmt))
+        if any(isinstance(n, ast.Name) and n.id == "__all__" for n in sub):
+            all_names |= {n.value for n in sub if isinstance(n, ast.Constant) and isinstance(n.value, str)}
     defs = {stmt.name: _def_facts(stmt) for stmt in tree.body if isinstance(stmt, _DEF_TYPES)}
-    return {
+    base = {
         "module": module,
         "star_import": star,
         "bindings": {name: sorted(kinds) for name, kinds in sorted(bindings.items())},
         "all_names": sorted(n for n in all_names if _IDENT.fullmatch(n)),
-        "nested_hits": sorted(n for n in watch if n in nested),
         "defs": dict(sorted(defs.items())),
         "reflective": _reflective_hits(tree),
-        "statement_hits": _statement_hits(tree, watch),
         "module_effects": _module_effects(tree),
     }
+    return _ModuleView(base, nested, _statement_index(tree))
+
+
+_cache = None  # an OrderedDict while `module_view_cache()` is active, else None
+
+
+@contextlib.contextmanager
+def module_view_cache(limit: int = 4096):
+    """Within the block one module text is analysed once however many changes cite it (build step 6 proves tens of
+    thousands of changes over a few thousand modules). The cache is bounded (least recently used goes first), holds only
+    the watch-independent analysis, and is gone after the block; extraction never runs inside it."""
+    global _cache
+    previous, _cache = _cache, collections.OrderedDict()
+    limit = max(int(limit), 1)
+    _cache_limits[id(_cache)] = limit
+    try:
+        yield
+    finally:
+        _cache_limits.pop(id(_cache), None)
+        _cache = previous
+
+
+_cache_limits: dict = {}
+
+
+def _view(text, path):
+    if _cache is None or not isinstance(text, str):
+        return _build_view(text, path)
+    key = (path, hashlib.sha256(text.encode("utf-8", "surrogatepass")).digest())
+    if key in _cache:
+        _cache.move_to_end(key)
+        return _cache[key]
+    view = _build_view(text, path)
+    _cache[key] = view
+    while len(_cache) > _cache_limits.get(id(_cache), 4096):
+        _cache.popitem(last=False)
+    return view
+
+
+def module_facts(text, path, watch=()):
+    """Structural facts of one module version, or None when the path is not a module or the text does not parse.
+    `watch` names the symbols whose nested definitions are reported in `nested_hits`."""
+    view = _view(text, path)
+    return None if view is None else view.project(tuple(watch))
 
 
 def function_proofs(text, path):

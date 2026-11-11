@@ -222,27 +222,30 @@ def plan_pair(ledger, tree, *, prove=None, store=None, author=None, at=None, sou
     tree = Path(tree)
     records = ledger.records()
     reserved = set(eb.used_evidence_ids(tree, records)) | gen._store_evidence_ids(tree)
-    for record in sorted(records, key=lambda r: r["change_id"]):
-        if record.get("disposition") in gen.DISPOSED or record.get("class") not in ELIGIBLE_CLASSES:
-            continue
-        cid = record["change_id"]
-        inputs = ProofInputs(tree=tree, store=store, sides=sources or {}, checked_on=checked_on,
-                             reserved=frozenset(reserved))
-        try:
-            proof = prove(record, inputs)
-        except Refusal as exc:
-            out["refused"].append({"change_id": cid, "code": exc.code, "detail": exc.detail})
-            continue
-        except Exception as exc:  # a prover fault refuses this change only; the build goes on
-            out["refused"].append({"change_id": cid, "code": PROVER_FAULT, "detail": type(exc).__name__})
-            continue
-        try:
-            accepted = _accept_proof(tree, ledger, proof, author=author, at=at)
-        except Exception as exc:  # per change: one refused change never stops the others or the build
-            out["refused"].append({"change_id": cid, "code": ACCEPT_REFUSED, "detail": str(exc)[:200]})
-            continue
-        reserved.add(proof["evidence"]["id"])
-        out["accepted"].append(accepted)
+    # A real pair has tens of thousands of eligible changes over a few thousand modules: each module text is analysed
+    # once for the whole loop (the cache only holds watch-independent facts, so every proof is unchanged).
+    with proofs.module_view_cache():
+        for record in sorted(records, key=lambda r: r["change_id"]):
+            if record.get("disposition") in gen.DISPOSED or record.get("class") not in ELIGIBLE_CLASSES:
+                continue
+            cid = record["change_id"]
+            inputs = ProofInputs(tree=tree, store=store, sides=sources or {}, checked_on=checked_on,
+                                 reserved=frozenset(reserved))
+            try:
+                proof = prove(record, inputs)
+            except Refusal as exc:
+                out["refused"].append({"change_id": cid, "code": exc.code, "detail": exc.detail})
+                continue
+            except Exception as exc:  # a prover fault refuses this change only; the build goes on
+                out["refused"].append({"change_id": cid, "code": PROVER_FAULT, "detail": type(exc).__name__})
+                continue
+            try:
+                accepted = _accept_proof(tree, ledger, proof, author=author, at=at)
+            except Exception as exc:  # per change: one refused change never stops the others or the build
+                out["refused"].append({"change_id": cid, "code": ACCEPT_REFUSED, "detail": str(exc)[:200]})
+                continue
+            reserved.add(proof["evidence"]["id"])
+            out["accepted"].append(accepted)
     return out
 
 

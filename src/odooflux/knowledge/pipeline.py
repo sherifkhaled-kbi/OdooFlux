@@ -57,7 +57,7 @@ from odooflux.knowledge.package.builder import export_package
 from odooflux.knowledge.package.confidentiality import assess
 from odooflux.knowledge.package.validate import validate_package
 from odooflux.knowledge.release.audit import KbAudit
-from odooflux.knowledge.release.canonical import canonical_bytes, digest_obj, write_json_file
+from odooflux.knowledge.release.canonical import canonical_bytes, digest_obj, write_compact_json_file, write_json_file
 from odooflux.knowledge.release.diff import diff_releases
 from odooflux.knowledge.release.manifest import verify_release_tree, write_release_manifest
 from odooflux.knowledge.release.model import KnowledgeReleaseError, ReleaseState
@@ -567,6 +567,25 @@ def _candidate_source(ctx: Ctx, spec: dict) -> dict:
             "repository": repository, "revision": spec["revision"], "branch": spec["branch"]}
 
 
+class _PendingEvidence:
+    """The evidence rows waiting in `candidates/evidence/`, read once. Answers each candidate with the rows it cites,
+    in file-name order (the order the folder listing gave), and forgets rows as they are consumed."""
+
+    def __init__(self, folder: Path):
+        self._rows = {}
+        for path in sorted(folder.glob("EV-*.json")) if folder.is_dir() else []:
+            row = json.loads(path.read_text(encoding="utf-8"))
+            self._rows[path.stem] = row
+
+    def rows(self, evidence_ids) -> list:
+        return [self._rows[eid] for eid in sorted(set(evidence_ids))
+                if eid in self._rows and self._rows[eid].get("id") == eid]
+
+    def drop(self, evidence_ids) -> None:
+        for eid in evidence_ids:
+            self._rows.pop(eid, None)
+
+
 def _candidates(ctx: Ctx) -> dict:
     tree = _stage_tree(ctx)
     store = tree / "candidates"
@@ -616,13 +635,13 @@ def _candidates(ctx: Ctx) -> dict:
         summary["candidates"] += len(result["candidates"])
         summary["evidence"] += len(result["evidence"])
         summary["conflicts"] += len(result["conflicts"])
+        pending = _PendingEvidence(store / "evidence")  # read once; the loop below used to re-read it per candidate
         for cand in result["candidates"]:
             if cand.get("status") != "PROPOSED":
                 continue
             evidence_ids = set(cand.get("rule", {}).get("evidence") or [])
-            pending = [json.loads(p.read_text(encoding="utf-8")) for p in sorted((store / "evidence").glob("EV-*.json"))]
             try:
-                acc.accept(tree, cand, ledger=ledger, evidence=[r for r in pending if r.get("id") in evidence_ids],
+                acc.accept(tree, cand, ledger=ledger, evidence=pending.rows(evidence_ids),
                            author=ctx.plan.author, at=ctx.plan.created_at)
             except acc.AcceptError as exc:
                 summary["refused"].append({"candidate_id": cand["candidate_id"], "code": str(exc)[:60]})
@@ -630,6 +649,7 @@ def _candidates(ctx: Ctx) -> dict:
             write_json_file(store / f"{cand['candidate_id']}.json", cand)
             for eid in evidence_ids:
                 (store / "evidence" / f"{eid}.json").unlink(missing_ok=True)
+            pending.drop(evidence_ids)
             summary["accepted"] += 1
         ledger.save(ctx.path("ledgers", f"{pair_key(pair)}.json"))
     return summary
@@ -779,11 +799,24 @@ def _write_release_provenance(ctx: Ctx) -> None:
     write_provenance(release, snaps, verified)
 
 
+def _compact_changes(changes) -> list:
+    """The ledger changes as the coverage bundle keeps them: only what the coverage metrics, gates and cross-checks
+    read (`change_id`, `class`, `disposition`, `disposition_data.evidence_ids`, `subject_key`, the location paths).
+    A real pair has ~157k changes; their full records (detail, history, hashes) made the bundle 237 MB, over the
+    package validator's per-file limit."""
+    return [{"change_id": c["change_id"], "class": c["class"], "disposition": c["disposition"],
+             "disposition_data": {"evidence_ids": list((c.get("disposition_data") or {}).get("evidence_ids") or [])},
+             "subject_key": c["subject_key"],
+             "locations": [{"path": path} for path in sorted({loc["path"] for loc in c.get("locations") or []})]}
+            for c in changes]
+
+
 def _coverage(ctx: Ctx) -> dict:
     _write_release_provenance(ctx)
     rules_out = {"release_rules": ctx.outputs["rule-tests"]["release_rules"],
                  "safety_findings": ctx.outputs["rule-tests"]["safety_findings"]}
     data = _coverage_data(ctx, rules_out)
+    data["changes"] = _compact_changes(data["changes"])  # the manifest below is built from what the bundle keeps
     try:
         manifest = cm.build_coverage_manifest(data, checked_at=ctx.plan.created_at, tool_version=ctx.plan.tool_version,
                                               schema_versions={"coverage_manifest": "1"})
@@ -796,7 +829,7 @@ def _coverage(ctx: Ctx) -> dict:
         raise StepStop("MANIFEST_INCONSISTENT", _mask(exc, ctx.plan)) from None
     release = ctx.workdir / "release"
     (release / "coverage").mkdir(parents=True, exist_ok=True)
-    write_json_file(release / "coverage" / "inputs.json", data)
+    write_compact_json_file(release / "coverage" / "inputs.json", data)
     write_json_file(release / cm.COVERAGE_FILE[0] / cm.COVERAGE_FILE[1], manifest)
     return {"completeness": manifest["completeness"], "manifest_digest": manifest["manifest_digest"],
             "limits": limits if limits else [], "metrics": [{"id": m["id"], "numerator": m["numerator"],

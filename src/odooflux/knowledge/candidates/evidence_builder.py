@@ -24,7 +24,8 @@ SCHEMA_PATH = KNOWLEDGE_ROOT / "schemas" / "evidence.schema.json"
 ORIGIN = "KAP_DETERMINISTIC"
 STATUS = "DOCUMENTED_NOT_TESTED"
 CHECKER = "odooflux.kap.generator"
-_EV_ID = re.compile(r"^EV-(\d{3})$")
+_MAX_EVIDENCE_NUMBER = 999_999  # ids are `EV-` plus at least three digits; a real Odoo pair exceeds 999 rows
+_EV_ID = re.compile(r"^EV-(\d{3,})$")
 _STEP = re.compile(r"^(\d{2})-(\d{2})$")
 # Ledger domain -> evidence category enum (schemas/evidence.schema.json).
 CATEGORY_BY_DOMAIN = {
@@ -117,15 +118,15 @@ def used_evidence_ids(tree_root, records) -> set:
 
 
 def next_evidence_id(used) -> str:
-    """The next `EV-NNN` above every id in `used` (or EV-001 when none)."""
+    """The next `EV-NNN[N...]` above every id in `used` (or EV-001 when none)."""
     numbers = []
     for ev_id in used:
         match = _EV_ID.match(ev_id)
         if match:
             numbers.append(int(match.group(1)))
     nxt = max(numbers, default=0) + 1
-    if nxt > 999:
-        raise EvidenceError("evidence id space exhausted (EV-999)")
+    if nxt > _MAX_EVIDENCE_NUMBER:
+        raise EvidenceError(f"evidence id space exhausted (EV-{_MAX_EVIDENCE_NUMBER})")
     return f"EV-{nxt:03d}"
 
 

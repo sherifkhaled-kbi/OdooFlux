@@ -45,6 +45,15 @@ def digest_obj(obj) -> str:
     return hashlib.sha256(canonical_bytes(obj)).hexdigest()
 
 
+def write_compact_json_file(path, obj) -> None:
+    """Write `obj` as compact canonical JSON (sorted keys, no indentation, trailing newline) atomically. For the few
+    machine-read bundles that would be several times larger with the repo's `indent=2` convention (the coverage
+    recompute bundle of a real pair). Floats are refused before anything is written."""
+    _check(obj)
+    text = json.dumps(obj, sort_keys=True, separators=(",", ":")) + "\n"
+    atomic_write_text(Path(path), text)
+
+
 def write_json_file(path, obj) -> None:
     """Write `obj` with the repo file convention (indent=2, sort_keys, trailing newline) atomically.
 

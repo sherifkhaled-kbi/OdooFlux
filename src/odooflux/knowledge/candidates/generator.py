@@ -46,7 +46,7 @@ PROBE_EVIDENCE_ID = "EV-000"  # placeholder id used only to compare content; a r
 SUPPLEMENTARY = "Supplementary (unofficial source {sid}, not authoritative): "
 DETECTION_METHOD = "KAP deterministic: ledger change classified and matched to extraction template {tid}"
 TRANSFORMATION = "none; review only, no edit is proposed"
-_EV_ID = re.compile(r"^EV-\d{3}$")
+_EV_ID = re.compile(r"^EV-\d{3,}$")
 
 
 class GeneratorError(ValueError):

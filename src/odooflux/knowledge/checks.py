@@ -1,5 +1,7 @@
 """Validation of the knowledge base (contracts/knowledge-cli.md codes). Pure: KnowledgeBase -> findings."""
 
+import hashlib
+import json
 import re
 from collections import defaultdict
 
@@ -38,12 +40,38 @@ def _allowed(kb: KnowledgeBase, url: str) -> bool:
     return any(url.startswith(prefix) for prefix in kb.allow_list)
 
 
+# (schema digest, record digest) -> the (pointer, message) problems of validating that record against that schema. The
+# schema check is a pure function of both, so a record already checked against the same schema is not checked again:
+# rule creation validates the whole tree twice per rule, which re-ran the schema over thousands of evidence rows.
+_EVIDENCE_SCHEMA_MEMO: dict = {}
+_EVIDENCE_MEMO_LIMIT = 200_000
+
+
+def _digest(value) -> str:
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), default=str).encode("utf-8")).hexdigest()
+
+
+def _evidence_schema_findings(file: str, record, schema: dict, schema_key: str) -> list:
+    memo = _EVIDENCE_SCHEMA_MEMO
+    if memo is None:
+        return _schema_findings(file, record, schema)
+    key = (schema_key, _digest(record))
+    problems = memo.get(key)
+    if problems is None:
+        problems = validator.check(record, schema)
+        if len(memo) >= _EVIDENCE_MEMO_LIMIT:
+            memo.clear()
+        memo[key] = problems
+    return [Finding("E001", file, ptr, msg) for ptr, msg in problems]
+
+
 def check_evidence(kb: KnowledgeBase) -> list:
     out = []
     schema = _schema(kb, "evidence")
+    schema_key = _digest(schema)
     ids_seen = defaultdict(list)
     for file, record in kb.evidence_entries:
-        out += _schema_findings(file, record, schema)
+        out += _evidence_schema_findings(file, record, schema, schema_key)
         stem = file.rsplit("/", 1)[-1][:-5]
         if record.get("id") != stem:
             out.append(Finding("E001", file, "/id", f"file name must equal the id ({stem})"))

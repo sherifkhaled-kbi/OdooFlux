@@ -68,5 +68,37 @@ Production certification: **NOT_GRANTED**. Migration support for any newly disco
 ## RC closure addendum (2026-11-10)
 
 - S1/S2/S3 proofs refuse import-time module effects (`MODULE_EFFECT`); Enterprise symbol names, rule text and source ids/revisions are withheld in shareable output; `knowledge-check/1` and `knowledge-history/1` schemas ship; scoped `update --from N --to M` acquires only that pair (planner), `ODOOFLUX_FETCH_TIMEOUT` added.
-- Full regression: 3782 tests OK (65 skipped opt-in, 1 expected failure). Wheel workflows 29/29 (system python with setuptools). Gates rc=0.
-- Real-source pilot 16.0 to 17.0: NOT COMPLETED. Scoped acquisition fetched only 16.0 (verified, cached) and 17.0 stalled twice (git `curl 28`, under 1000 B/s for 60 s, then `bad pack header`; plain `git fetch` reproduces it). No real-source FIX_ENABLED, DETECT_ONLY or BLOCKED result exists. Production certification: NOT_GRANTED.
+- Final verification on the finished code (2026-11-11, one run): full regression 3827 tests OK (65 skipped opt-in, 1 expected failure), wheel workflows 29/29 (system python with setuptools), gates rc=0 (knowledge validate, matrix and support statement current, requirements traceability PASS). Earlier counts in this file are superseded.
+- Real-source pilot 16.0 to 17.0: SUPERSEDED BY THE SECTION BELOW (completed 2026-11-11). Earlier text: NOT COMPLETED. Scoped acquisition fetched only 16.0 (verified, cached) and 17.0 stalled twice (git `curl 28`, under 1000 B/s for 60 s, then `bad pack header`; plain `git fetch` reproduces it). No real-source FIX_ENABLED, DETECT_ONLY or BLOCKED result exists. Production certification: NOT_GRANTED.
+
+## Real-source pilot, Odoo Community 16.0 to 17.0 (executed 2026-11-11)
+
+Plain `odooflux knowledge update --from 16 --to 17` in an isolated kb-home against `https://github.com/odoo/odoo.git`
+(no Enterprise credentials; the user's KB untouched). Acquired only 16.0 (`cb69381...`) and 17.0 (`8d5d88a...`).
+Outcome `ACTIVE`, release `kr-15b35d46b2a4`, completeness `PARTIAL`, rc 0, 17 pipeline steps.
+
+| Fact | Value |
+|---|---|
+| Ledger changes | 156,921 (ADDED 66,892; UNKNOWN 48,538; REMOVED 30,571; BEHAVIOUR_CHANGED 7,266; other 3,654) |
+| Candidates / accepted / refused | 3,345 / 2,786 / 559 |
+| Refusal code of the 559 | all `A002` (duplicate of an accepted rule: same step, detector and params), verified by replay |
+| Rules in the release | 2,877 = 2,786 generated (`DRAFT`) + 91 shipped; generated FIX_ENABLED: **0** |
+| Automatic-fix proofs | **0** of 37,847 eligible (SIDE_FILE_MISSING 27,924; NO_FORWARD 7,276; ENTRY_SUBJECT 2,591; S3_NOT_IDENTITY 44; NOT_PLAIN_DEF 4; STAR_IMPORT 2) |
+| SIDE_FILE_MISSING (sample 3,000) | 98.7% file absent in 17.0; 1.3% absent at that path (same name elsewhere); 0 mapping defects |
+| Coverage | M1 100%, M2 15.7%, M3 69.0%, M4 1.7%, M5 100%, M6 100%, M7 n/a, M8 100%; G-FILES and G-DISP fail as allowed partial |
+| `coverage/inputs.json` | 52,465,276 bytes (was 237,074,142; limit 67,108,864) |
+| Timings | extract 2 min 20 s; candidates 35 min 9 s; whole build 14:21:28 to 15:02:24 |
+
+`migrate --fix` on a disposable 16.0 module (isolated release): 1 edit applied (manifest version bump, a shipped
+inherited-trust rule), 0 rejected, L1 to L3 PASS; 3 findings `needs_review` (`attrs` removal, `name_get`, info). A second
+run applied 0 edits, wrote 0 files and left the tree byte-identical (it adds a "manifest declares 17.x" warning).
+No generated rule produced a finding or an edit on that fixture.
+
+Defects found by this pilot and fixed (each with failing-first tests): quadratic rename pairing; evidence id space capped at
+`EV-999`; per-candidate re-reads of pending evidence; per-change re-parsing in the automatic-fix prover; whole-ledger
+copy and validation per accepted candidate; cubic authoring check A005; coverage bundle over the package size limit.
+Observed, not changed: the step summary truncates refusal codes (hides `A002`); 559 changes stay `UNRESOLVED` instead of
+being linked to the equivalent accepted rule.
+
+Limits: one pair, Community only, one fixture; machine suspend killed one earlier run (timeout across suspend); not a
+production certification. Production certification: NOT_GRANTED. Migration support for other pairs: NOT_ESTABLISHED.

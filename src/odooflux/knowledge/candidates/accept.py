@@ -27,7 +27,7 @@ from odooflux.knowledge.authoring import ops
 from odooflux.knowledge.candidates import evidence_builder as eb
 from odooflux.knowledge.candidates import generator as gen
 from odooflux.knowledge.ledger import dispositions as dsp
-from odooflux.knowledge.ledger.ledger import LedgerError
+from odooflux.knowledge.ledger.ledger import Ledger, LedgerError
 from odooflux.knowledge.release.canonical import write_json_file
 
 __all__ = ["AcceptError", "accept", "accept_fix_rule", "ship_linked_evidence"]
@@ -107,7 +107,10 @@ def _accept(tree, candidate: dict, *, ledger, evidence, author, at, fix: bool) -
     when = at or ops._now()
     known = {rule_id: rule["maturity"]}
     # Dry run of the disposition on a copy, so a refusal there writes nothing.
-    dsp.set_disposition(copy.deepcopy(ledger), change_id, "RULE_CREATED", actor=actor, rule_ids=[rule_id],
+    # `set_disposition` reads and changes only this one entry, so the dry run uses a one-entry copy of the ledger
+    # (copying a 157k-entry ledger per candidate took about a minute).
+    trial = Ledger(ledger.step, ledger.from_id, ledger.to_id, {change_id: copy.deepcopy(current)}, clock=ledger.clock)
+    dsp.set_disposition(trial, change_id, "RULE_CREATED", actor=actor, rule_ids=[rule_id],
                         evidence_ids=ev_ids, known_rules=known)
     written = []
     try:
